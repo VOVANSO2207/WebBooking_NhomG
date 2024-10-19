@@ -27,7 +27,7 @@ class UsersTableSeeder extends Seeder
                 [
                     'username' => 'jane_smith',
                     'email' => 'jane@example.com',
-                    'password' => bcrypt('password456'), // Mật khẩu đã băm
+                    'password' => bcrypt('Password@456'), // Mật khẩu đã băm
                     'phone_number' => '0987654321',
                     'role_id' => 3, // Vai trò người dùng khác
                     'status' => false, // Người dùng chưa được kích hoạt
