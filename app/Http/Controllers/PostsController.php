@@ -15,4 +15,22 @@ class PostsController extends Controller
     {
         return view('admin.post_add');
     }
+    public function getPostDetail($post_id)
+    {
+        $post = Posts::findPostById($post_id);
+
+        if (!$post) {
+            return response()->json(['error' => 'Bài viết không tồn tại'], 404);
+        }
+
+        return response()->json([
+            'title' => $post->title,
+            'description' => $post->description,
+            'content' => $post->content,
+            'meta_desc' => $post->meta_desc,
+            'url_seo' => $post->url_seo,
+            'status' => $post->status,
+            'img' => $post->img
+        ]);
+    }
 }
