@@ -66,10 +66,116 @@
                 </table>
             </div>
             <div class="d-flex justify-content-center mt-3">
-            {{ $posts->appends(['csrf_token' => csrf_token()])->links('pagination::bootstrap-4') }}
+                {{ $posts->appends(['csrf_token' => csrf_token()])->links('pagination::bootstrap-4') }}
             </div>
         </div>
     </div>
 </div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="postDetailModal" tabindex="-1" aria-labelledby="postDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="postDetailModalLabel">Post Detail</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="post-detail">
+                    <div class="post-detail-item">
+                        <strong>Title:</strong>
+                        <span id="modalTitle"></span>
+                    </div>
+                    <div class="post-detail-item">
+                        <strong>Description:</strong>
+                        <span id="modalDescription"></span>
+                    </div>
+                    <div class="post-detail-item">
+                        <strong>Content:</strong>
+                        <span id="modalContent"></span>
+                    </div>
+                    <div class="post-detail-item">
+                        <strong>Meta Description:</strong>
+                        <span id="modalMetaDesc"></span>
+                    </div>
+                    <div class="post-detail-item">
+                        <strong>URL SEO:</strong>
+                        <span id="modalUrlSeo"></span>
+                    </div>
+                    <div class="post-detail-item">
+                        <strong>Status:</strong>
+                        <span id="modalStatus"></span>
+                    </div>
+                    <div class="post-detail-item">
+                        <strong>Image:</strong>
+                        <img id="modalImage" style="width: 100%; height: auto; max-width: 200px;" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="display: flex; justify-content: space-between;">
+                <a id="editPostButton" class="btn btn-info" href="#">Edit</a>
+                <form id="deleteForm" style="display: inline-block;">
+                    @csrf
+                    <button type="submit" class="btn btn-danger" id="deletePostButton">Delete</button>
+                </form>
+            </div>
+            <div class="modal-footer" style="width: 100%; position: relative; bottom: 0;">
+                <button type="button" class="btn btn-secondary w-100" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // POST.BLADE.PHP - View - Modal Post
+    document.addEventListener('DOMContentLoaded', function () {
+        const postDetailRows = document.querySelectorAll('.post-detail');
+
+        postDetailRows.forEach(row => {
+            row.addEventListener('click', function () {
+                const postId = this.getAttribute('data-id');
+                console.log(`/posts/${postId}/detail`);
+
+                // Gọi AJAX để lấy thông tin chi tiết bài viết
+                fetch(`/posts/${postId}/detail`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(post => {
+                        // Hàm giới hạn ký tự và cập nhật thông tin modal
+                        const limitText = (text, maxLength = 10) => {
+                            return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+                        };
+
+                        document.getElementById('modalTitle').innerText = limitText(post.title);
+                        document.getElementById('modalDescription').innerText = limitText(post.description);
+                        document.getElementById('modalContent').innerText = limitText(post.content);
+                        document.getElementById('modalMetaDesc').innerText = limitText(post.meta_desc);
+                        document.getElementById('modalUrlSeo').innerText = limitText(post.url_seo);
+                        document.getElementById('modalStatus').innerText = post.status ? 'Show' : 'Hidden';
+
+                        // Cập nhật hình ảnh
+                        const imageUrl = post.img ? `/images/${post.img}` : '/path/to/default/image.jpg';
+                        document.getElementById('modalImage').src = imageUrl;
+
+                        // Hiển thị modal
+                        const modal = new bootstrap.Modal(document.getElementById('postDetailModal'));
+                        modal.show();
+                    })
+                    .catch(error => {
+                        console.error('Có vấn đề với yêu cầu fetch:', error);
+                    });
+            });
+        });
+    });
+
+
+</script>
+
+
+
 @endsection

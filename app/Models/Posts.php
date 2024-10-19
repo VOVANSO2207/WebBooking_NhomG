@@ -23,4 +23,8 @@ class Posts extends Model
     {
         return self::orderBy('created_at', 'DESC')->paginate($perPage);
     }
+    public static function findPostById($post_id)
+    {
+        return self::where('post_id', $post_id)->first();
+    }
 }
