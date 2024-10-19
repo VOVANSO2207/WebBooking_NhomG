@@ -37,6 +37,20 @@ class Rooms extends Model
     {
         return self::with('roomType', 'amenities', 'room_images')->get();
     }
-
-  
+    public static function createRoom($data)
+    {
+        return self::create($data);
+    }
+    public static function deleteRoom($roomId)
+    {
+        $room = self::with(['roomImages', 'amenities'])->find($roomId);
+        if ($room) {
+            $room->roomImages()->delete();
+            $room->amenities()->delete();
+            $room->delete();
+            return true;
+        }
+        return false;
+    }
+    
 }
