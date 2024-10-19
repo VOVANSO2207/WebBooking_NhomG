@@ -11,12 +11,18 @@ class Rooms extends Model
     protected $table = 'rooms';
     protected $primaryKey = 'room_id'; // Nếu bạn sử dụng room_id làm khóa chính
     public $timestamps = true;
-        
+    protected $fillable = ['name', 'room_type_id', 'price', 'capacity', 'discount_percent', 'description', 'hotel_id'];
+
     // Định nghĩa mối quan hệ với RoomImage
     public function room_images()
     {
         return $this->hasMany(RoomImages::class, 'room_id', 'room_id');
     }
+      // Định nghĩa mối quan hệ với RoomImages
+    //   public function roomImages()
+    //   {
+    //       return $this->hasMany(RoomImages::class, 'room_id');
+    //   }
     // Mối quan hệ với RoomAmenity
     public function amenities()
     {
@@ -27,4 +33,10 @@ class Rooms extends Model
     {
         return $this->belongsTo(RoomType::class, 'room_type_id'); 
     }
+    public static function getAllRooms()
+    {
+        return self::with('roomType', 'amenities', 'room_images')->get();
+    }
+
+  
 }

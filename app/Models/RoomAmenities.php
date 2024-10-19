@@ -16,4 +16,6 @@ class RoomAmenities extends Model
      {  
          return $this->belongsTo(Rooms::class, 'room_id');
      }
+   
+   
 }
