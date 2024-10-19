@@ -1,4 +1,8 @@
 @extends('layouts.app')
+
+@section('title', 'Kết quả tìm kiếm')
+
+
 @section('content')
 <!DOCTYPE html>
 <html lang="en">
@@ -20,7 +24,7 @@
             margin-bottom: 20px;
 
         }
-        
+
         .filter_price {
             width: 100%;
             margin: 20px 0;
@@ -331,7 +335,7 @@
 
         .hotel-image {
             position: relative;
-            width: 30%; 
+            width: 30%;
             padding: 15px;
         }
 
@@ -447,7 +451,7 @@
         }
 
 
-         swiper-container {
+        swiper-container {
             width: 100%;
             height: 300px;
             margin-left: auto;
@@ -481,52 +485,53 @@
         }
 
         swiper-slide img {
-            display: sw </swiper-slidek;
+            /* display: sw </swiper-slidek; */
             width: 100%;
             height: 100%;
             object-fit: cover;
-        } 
+        }
+
         /* body {
       position: relative;
       height: 100%;
     } */
 
-    body {
-      background: #eee;
-      font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
-      font-size: 14px;
-      color: #000;
-      margin: 0;
-      padding: 0;
-    }
+        body {
+            background: #eee;
+            font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+            font-size: 14px;
+            color: #000;
+            margin: 0;
+            padding: 0;
+        }
 
-    swiper-container {
-      width: 100%;
-      height: 80%;
-    }
+        swiper-container {
+            width: 100%;
+            height: 80%;
+        }
 
-    swiper-slide {
-      text-align: center;
-      font-size: 18px;
-      background: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+        swiper-slide {
+            text-align: center;
+            font-size: 18px;
+            background: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-    swiper-slide img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+        swiper-slide img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
 
-    swiper-container {
-      /* margin-left: auto; */
-      /* margin-right: auto; */
-      margin: 0;
-      padding: 0 10px;
-    }
+        swiper-container {
+            /* margin-left: auto; */
+            /* margin-right: auto; */
+            margin: 0;
+            padding: 0 10px;
+        }
     </style>
 
 </head>
@@ -627,120 +632,147 @@
                         <li><button class="tab_btn" data-tab="rating">Xếp hạng sao</button></li>
                     </ul>
                 </div>
+
                 <div class="tab_content">
                     <div id="low-to-high" class="tab_item active">
-                        <div class="hotel-card">
-                            <div class="hotel-image">
-                            <swiper-container class="mySwiper" pagination="true" pagination-clickable="true"
-                            navigation="true" space-between="30" loop="true">
-                            <swiper-slide>     <img src="https://swiperjs.com/demos/images/nature-1.jpg" /></swiper-slide>
-                            <swiper-slide>     <img src="https://swiperjs.com/demos/images/nature-1.jpg" /></swiper-slide>
-                            <swiper-slide>     <img src="https://swiperjs.com/demos/images/nature-1.jpg" /></swiper-slide>
-                            <swiper-slide>Slide 4</swiper-slide>
-                            <swiper-slide>Slide 5</swiper-slide>
-                            <swiper-slide>Slide 6</swiper-slide>
-                            <swiper-slide>Slide 7</swiper-slide>
-                            <swiper-slide>Slide 8</swiper-slide>
-                            <swiper-slide>Slide 9</swiper-slide>
-                        </swiper-container>
-                            </div>
-                            <div class="hotel-info">
-                                <p class="reviews">Có 200 lượt đánh giá</p>
-                                <h3><i class="fa fa-map-marker"></i> Thành phố Hồ Chí Minh</h3>
-                                <h4><i class="fa fa-hotel"></i> Tên khách sạn</h4>
-                                <div class="price-info">
-                                    <span class="old-price">2.337.999 đ</span>
-                                    <span class="discount">-25%</span>
-                                    <span class="new-price">1.763.668 đ</span>
-                                </div>
-                                <div class="rating">
-                                    <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-                                </div>
-                                <div class="status">
-                                    <span class="status-available">ĐƠN</span>
-                                    <span class="status-soldout">ĐỢI</span>
-                                </div>
-                                <button class="book-now">Đặt Ngay</button>
-                            </div>
+                        <div class="d-flex">
+                            <p>Ngày đi: {{ isset($daterange) ? explode(' - ', $daterange)[0] : '' }} </p>
+                            <p class="ms-2">Ngày về: {{ isset($daterange) ? explode(' - ', $daterange)[1] : '' }} </p>
+                            <p class="ms-2">Số phòng: {{ $rooms }} </p>
+                            <p class="ms-2">Số người lớn: {{ $adults }} </p>
+                            <p class="ms-2">Số trẻ em: {{ $children }} </p>
                         </div>
+                        @if($hotels->isEmpty())
+                            <p>Không tìm thấy khách sạn nào.</p>
+                        @else
+                            @foreach($hotels as $hotel)
+                                <div class="hotel-card">
+                                    <div class="hotel-image">
+                                        <swiper-container class="mySwiper" pagination="true" pagination-clickable="true"
+                                            navigation="true" space-between="30" loop="true">
+                                            <swiper-slide> <img
+                                                    src="https://swiperjs.com/demos/images/nature-1.jpg" /></swiper-slide>
+                                            <swiper-slide> <img
+                                                    src="https://swiperjs.com/demos/images/nature-1.jpg" /></swiper-slide>
+                                            <swiper-slide> <img
+                                                    src="https://swiperjs.com/demos/images/nature-1.jpg" /></swiper-slide>
+                                            <swiper-slide>Slide 4</swiper-slide>
+                                            <swiper-slide>Slide 5</swiper-slide>
+                                            <swiper-slide>Slide 6</swiper-slide>
+                                            <swiper-slide>Slide 7</swiper-slide>
+                                            <swiper-slide>Slide 8</swiper-slide>
+                                            <swiper-slide>Slide 9</swiper-slide>
+                                        </swiper-container>
+                                    </div>
+                                    <div class="hotel-info row">
+                                        <div class="col-md-8">
+                                            <p class="reviews">Có {{ $hotel->rating }} lượt đánh giá</p>
+                                            <h3><i class="fa fa-map-marker"></i>{{ $hotel->hotel_name }}</h3>
+                                            <h4><i class="fa fa-hotel"></i></h4>
+                                            <div class="price-info">
+                                                <span class="old-price">2.337.999 đ</span>
+                                                <span class="discount">-25%</span>
+                                                <span class="new-price">1.763.668 đ</span>
+                                            </div>
+                                            <div class="rating">
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    @if ($i <= $hotel->rating)
+                                                        <span>★</span> <!-- Sao vàng -->
+                                                    @else
+                                                        <span>☆</span> <!-- Sao trống -->
+                                                    @endif
+                                                @endfor
+                                            </div>
+                                            <div class="status">
+                                                <span class="status-available">ĐƠN</span>
+                                                <span class="status-soldout">ĐỢI</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <button class="book-now">Đặt Ngay</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @endif
                     </div>
                     <div id="high-to-low" class="tab_item">
                         <!-- <div class="hotel-card">
-                            <div class="hotel-image">
-                            <swiper-container style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff"
-                            class="mySwiper" thumbs-swiper=".mySwiper2" loop="true" space-between="10"
-                            navigation="true">
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-1.jpg" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-2.jpg" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-3.jpg" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-4.jpg" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-5.jpg" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-6.jpg" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-7.jpg" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-8.jpg" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-9.jpg" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-10.jpg" />
-                            </swiper-slide>
-                        </swiper-container>
-                        <swiper-container class="mySwiper2" loop="true" space-between="10" slides-per-view="4"
-                            free-mode="true" watch-slides-progress="true">
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-1.jpg" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-2.jpg" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-3.jpg" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-4.jpg" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-5.jpg" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-6.jpg" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-7.jpg" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-8.jpg" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-9.jpg" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-10.jpg" />
-                            </swiper-slide>
-                        </swiper-container>
-                            </div>
-                        </div> -->
+                                <div class="hotel-image">
+                                <swiper-container style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff"
+                                class="mySwiper" thumbs-swiper=".mySwiper2" loop="true" space-between="10"
+                                navigation="true">
+                                <swiper-slide>
+                                    <img src="https://swiperjs.com/demos/images/nature-1.jpg" />
+                                </swiper-slide>
+                                <swiper-slide>
+                                    <img src="https://swiperjs.com/demos/images/nature-2.jpg" />
+                                </swiper-slide>
+                                <swiper-slide>
+                                    <img src="https://swiperjs.com/demos/images/nature-3.jpg" />
+                                </swiper-slide>
+                                <swiper-slide>
+                                    <img src="https://swiperjs.com/demos/images/nature-4.jpg" />
+                                </swiper-slide>
+                                <swiper-slide>
+                                    <img src="https://swiperjs.com/demos/images/nature-5.jpg" />
+                                </swiper-slide>
+                                <swiper-slide>
+                                    <img src="https://swiperjs.com/demos/images/nature-6.jpg" />
+                                </swiper-slide>
+                                <swiper-slide>
+                                    <img src="https://swiperjs.com/demos/images/nature-7.jpg" />
+                                </swiper-slide>
+                                <swiper-slide>
+                                    <img src="https://swiperjs.com/demos/images/nature-8.jpg" />
+                                </swiper-slide>
+                                <swiper-slide>
+                                    <img src="https://swiperjs.com/demos/images/nature-9.jpg" />
+                                </swiper-slide>
+                                <swiper-slide>
+                                    <img src="https://swiperjs.com/demos/images/nature-10.jpg" />
+                                </swiper-slide>
+                            </swiper-container>
+                            <swiper-container class="mySwiper2" loop="true" space-between="10" slides-per-view="4"
+                                free-mode="true" watch-slides-progress="true">
+                                <swiper-slide>
+                                    <img src="https://swiperjs.com/demos/images/nature-1.jpg" />
+                                </swiper-slide>
+                                <swiper-slide>
+                                    <img src="https://swiperjs.com/demos/images/nature-2.jpg" />
+                                </swiper-slide>
+                                <swiper-slide>
+                                    <img src="https://swiperjs.com/demos/images/nature-3.jpg" />
+                                </swiper-slide>
+                                <swiper-slide>
+                                    <img src="https://swiperjs.com/demos/images/nature-4.jpg" />
+                                </swiper-slide>
+                                <swiper-slide>
+                                    <img src="https://swiperjs.com/demos/images/nature-5.jpg" />
+                                </swiper-slide>
+                                <swiper-slide>
+                                    <img src="https://swiperjs.com/demos/images/nature-6.jpg" />
+                                </swiper-slide>
+                                <swiper-slide>
+                                    <img src="https://swiperjs.com/demos/images/nature-7.jpg" />
+                                </swiper-slide>
+                                <swiper-slide>
+                                    <img src="https://swiperjs.com/demos/images/nature-8.jpg" />
+                                </swiper-slide>
+                                <swiper-slide>
+                                    <img src="https://swiperjs.com/demos/images/nature-9.jpg" />
+                                </swiper-slide>
+                                <swiper-slide>
+                                    <img src="https://swiperjs.com/demos/images/nature-10.jpg" />
+                                </swiper-slide>
+                            </swiper-container>
+                                </div>
+                            </div> -->
                         <swiper-container class="mySwiper" pagination="true" pagination-clickable="true"
                             navigation="true" space-between="30" loop="true">
-                            <swiper-slide>     <img src="https://swiperjs.com/demos/images/nature-1.jpg" /></swiper-slide>
-                            <swiper-slide>     <img src="https://swiperjs.com/demos/images/nature-1.jpg" /></swiper-slide>
-                            <swiper-slide>     <img src="https://swiperjs.com/demos/images/nature-1.jpg" /></swiper-slide>
+                            <swiper-slide> <img src="https://swiperjs.com/demos/images/nature-1.jpg" /></swiper-slide>
+                            <swiper-slide> <img src="https://swiperjs.com/demos/images/nature-1.jpg" /></swiper-slide>
+                            <swiper-slide> <img src="https://swiperjs.com/demos/images/nature-1.jpg" /></swiper-slide>
                             <swiper-slide>Slide 4</swiper-slide>
                             <swiper-slide>Slide 5</swiper-slide>
                             <swiper-slide>Slide 6</swiper-slide>
@@ -752,73 +784,74 @@
                     <div id="popular" class="tab_item">
                         <div class="hotel-card">
                             <div class="hotel-image">
-                            <swiper-container style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff"
-                            class="mySwiper" thumbs-swiper=".mySwiper2" loop="true" space-between="10"
-                            navigation="true">
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-1.jpg" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-2.jpg" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-3.jpg" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-4.jpg" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-5.jpg" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-6.jpg" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-7.jpg" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-8.jpg" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-9.jpg" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-10.jpg" />
-                            </swiper-slide>
-                        </swiper-container>
-                        <swiper-container class="mySwiper2" loop="true" space-between="10" slides-per-view="4"
-                            free-mode="true" watch-slides-progress="true">
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-1.jpg" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-2.jpg" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-3.jpg" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-4.jpg" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-5.jpg" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-6.jpg" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-7.jpg" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-8.jpg" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-9.jpg" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-10.jpg" />
-                            </swiper-slide>
-                        </swiper-container>
+                                <swiper-container
+                                    style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff"
+                                    class="mySwiper" thumbs-swiper=".mySwiper2" loop="true" space-between="10"
+                                    navigation="true">
+                                    <swiper-slide>
+                                        <img src="https://swiperjs.com/demos/images/nature-1.jpg" />
+                                    </swiper-slide>
+                                    <swiper-slide>
+                                        <img src="https://swiperjs.com/demos/images/nature-2.jpg" />
+                                    </swiper-slide>
+                                    <swiper-slide>
+                                        <img src="https://swiperjs.com/demos/images/nature-3.jpg" />
+                                    </swiper-slide>
+                                    <swiper-slide>
+                                        <img src="https://swiperjs.com/demos/images/nature-4.jpg" />
+                                    </swiper-slide>
+                                    <swiper-slide>
+                                        <img src="https://swiperjs.com/demos/images/nature-5.jpg" />
+                                    </swiper-slide>
+                                    <swiper-slide>
+                                        <img src="https://swiperjs.com/demos/images/nature-6.jpg" />
+                                    </swiper-slide>
+                                    <swiper-slide>
+                                        <img src="https://swiperjs.com/demos/images/nature-7.jpg" />
+                                    </swiper-slide>
+                                    <swiper-slide>
+                                        <img src="https://swiperjs.com/demos/images/nature-8.jpg" />
+                                    </swiper-slide>
+                                    <swiper-slide>
+                                        <img src="https://swiperjs.com/demos/images/nature-9.jpg" />
+                                    </swiper-slide>
+                                    <swiper-slide>
+                                        <img src="https://swiperjs.com/demos/images/nature-10.jpg" />
+                                    </swiper-slide>
+                                </swiper-container>
+                                <swiper-container class="mySwiper2" loop="true" space-between="10" slides-per-view="4"
+                                    free-mode="true" watch-slides-progress="true">
+                                    <swiper-slide>
+                                        <img src="https://swiperjs.com/demos/images/nature-1.jpg" />
+                                    </swiper-slide>
+                                    <swiper-slide>
+                                        <img src="https://swiperjs.com/demos/images/nature-2.jpg" />
+                                    </swiper-slide>
+                                    <swiper-slide>
+                                        <img src="https://swiperjs.com/demos/images/nature-3.jpg" />
+                                    </swiper-slide>
+                                    <swiper-slide>
+                                        <img src="https://swiperjs.com/demos/images/nature-4.jpg" />
+                                    </swiper-slide>
+                                    <swiper-slide>
+                                        <img src="https://swiperjs.com/demos/images/nature-5.jpg" />
+                                    </swiper-slide>
+                                    <swiper-slide>
+                                        <img src="https://swiperjs.com/demos/images/nature-6.jpg" />
+                                    </swiper-slide>
+                                    <swiper-slide>
+                                        <img src="https://swiperjs.com/demos/images/nature-7.jpg" />
+                                    </swiper-slide>
+                                    <swiper-slide>
+                                        <img src="https://swiperjs.com/demos/images/nature-8.jpg" />
+                                    </swiper-slide>
+                                    <swiper-slide>
+                                        <img src="https://swiperjs.com/demos/images/nature-9.jpg" />
+                                    </swiper-slide>
+                                    <swiper-slide>
+                                        <img src="https://swiperjs.com/demos/images/nature-10.jpg" />
+                                    </swiper-slide>
+                                </swiper-container>
                             </div>
                         </div>
                     </div>
