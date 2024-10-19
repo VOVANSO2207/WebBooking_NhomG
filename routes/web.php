@@ -38,3 +38,8 @@ Route::prefix('admin')->group(function () {
     Route::get('/user', [UsersController::class, 'viewUser'])->name('admin.viewuser');
     Route::get('/user/add', [UsersController::class, 'userAdd'])->name('user_add');
 });
+
+
+// Admin - POST
+Route::get('/admin/post', [PostsController::class, 'viewPost'])->name('admin.viewpost');
+
