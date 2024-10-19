@@ -37,7 +37,23 @@ class RoomController extends Controller
         }
         return redirect()->route('admin.viewroom')->with('error', 'Phòng không tồn tại!');
     }
-   
+    public function store(Request $request)
+    {
+        // Tạo dữ liệu phòng
+        $data = $request->only(['name', 'room_type_id', 'price', 'capacity', 'discount_percent', 'description']);
+        $data['hotel_id'] = 0;
+        $room = Rooms::createRoom($data);
+
+        // Thêm tiện nghi vào phòng
+        RoomAmenities::addAmenitiesToRoom($room->room_id, $request->amenities);
+
+        // Upload images
+        if ($request->hasFile('images')) {
+            RoomImages::uploadImages($room->room_id, $request->file('images'));
+        }
+
+        return redirect()->route('admin.viewroom')->with('success', 'Phòng đã được thêm thành công!');
+    }
 
 
 }
