@@ -33,7 +33,6 @@ Route::prefix('admin')->group(function () {
     // Admin - Post
     Route::get('/post', [PostsController::class, 'viewPost'])->name('admin.viewpost');
     Route::get('/post/add', [PostsController::class, 'postAdd'])->name('post_add');
-    Route::get('/posts/{post_id}/detail', action: [PostsController::class, 'getPostDetail'])->name('post.detail');
     Route::post('admin/post/store', action: [PostsController::class, 'store'])->name('admin.post.store');
     // Admin - User
     Route::get('/user', [UsersController::class, 'viewUser'])->name('admin.viewuser');
@@ -42,4 +41,6 @@ Route::prefix('admin')->group(function () {
 
 
 
+// Admin-Post Detail
+Route::get('/posts/{post_id}/detail', action: [PostsController::class, 'getPostDetail'])->name('post.detail');
 
