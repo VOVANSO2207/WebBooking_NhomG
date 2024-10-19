@@ -49,7 +49,7 @@ Route::get('/posts/{post_id}/detail', action: [PostsController::class, 'getPostD
 // Search
 // Route::get('/search', [SearchController::class, 'index'])->name('search');
 Route::get('/hotels', [HotelController::class, 'index'])->name('hotels.index');
-Route::get('hotels/seach', [HotelController::class, 'search'])->name('hotels.search');
+Route::get('hotels/search', [HotelController::class, 'search'])->name('hotels.search');
 
 // Cities
 Route::get('/pages/home', [CitiesController::class, 'index']);
