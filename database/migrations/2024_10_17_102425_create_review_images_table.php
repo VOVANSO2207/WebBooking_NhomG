@@ -17,7 +17,7 @@ return new class extends Migration
             $table->increments('image_id');
             $table->integer('review_id');
             $table->char('image_url');
-            $table->timestamp('uploaded_at');
+            $table->timestamps();
         });
 
         Schema::enableForeignKeyConstraints();

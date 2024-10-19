@@ -4,6 +4,10 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PostsController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\HotelController;
+use App\Http\Controllers\CitiesController;
+
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -33,8 +37,39 @@ Route::prefix('admin')->group(function () {
     // Admin - Post
     Route::get('/post', [PostsController::class, 'viewPost'])->name('admin.viewpost');
     Route::get('/post/add', [PostsController::class, 'postAdd'])->name('post_add');
+    Route::post('admin/post/store', action: [PostsController::class, 'store'])->name('admin.post.store');
 
-    // Admin - User
-    Route::get('/user', [UsersController::class, 'viewUser'])->name('admin.viewuser');
-    Route::get('/user/add', [UsersController::class, 'userAdd'])->name('user_add');
+
 });
+
+// Admin-Post Detail
+Route::get('/posts/{post_id}/detail', action: [PostsController::class, 'getPostDetail'])->name('post.detail');
+
+// Search
+// Route::get('/search', [SearchController::class, 'index'])->name('search');
+Route::get('/hotels', [HotelController::class, 'index'])->name('hotels.index');
+Route::get('hotels/search', [HotelController::class, 'search'])->name('hotels.search');
+
+// Cities
+Route::get('/pages/home', [CitiesController::class, 'index']);
+
+
+
+
+
+
+
+
+
+
+
+
+// Admin - User
+Route::get('/admin/user', [UsersController::class, 'index'])->name('admin.viewuser');
+Route::get('/admin/user/user_add', [UsersController::class, 'userAdd'])->name('user_add');
+Route::post('/admin/user/user_add', [UsersController::class, 'storeUser'])->name('user.store');
+Route::get('/admin/user/search', [UsersController::class, 'searchUsers'])->name('admin.searchUsers');
+Route::get('/admin/user/{id}', [UsersController::class, 'show'])->name('admin.user.show');
+Route::get('/admin/user/{id}/edit', [UsersController::class, 'edit'])->name('admin.user.edit');
+Route::delete('/admin/user/{id}', [UsersController::class, 'destroy'])->name('admin.user.destroy');
+Route::put('/admin/user/{id}', [UsersController::class, 'update'])->name('admin.user.update');

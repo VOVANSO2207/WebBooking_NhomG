@@ -4600,6 +4600,50 @@ textarea.form-control-lg {
   word-wrap: break-word;
 }
 
+/* CUSTOM MODAL DETAIL */
+.post-detail-item {
+  margin-bottom: 15px; 
+  display: flex; 
+  justify-content: space-between;
+  align-items: center; 
+  border-bottom: 1px solid #eaeaea;
+  padding: 10px 0;
+}
+
+.post-detail-item strong {
+  color: #333;
+  font-weight: bold; 
+}
+
+.post-detail-item span {
+  color: #555;
+  flex-grow: 1;
+  text-align: right;
+}
+
+#modalImage {
+  width: 100%; 
+  height: auto;
+  max-width: 300px; 
+  margin-top: 10px; 
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: space-around !important;
+}
+
+.modal-footer button {
+  flex: 1; /* Chiếm toàn bộ chiều rộng */
+  margin: 0 5px; /* Để tạo khoảng cách giữa các nút */
+}
+
+.modal-footer:last-of-type {
+  position: relative;
+  bottom: 0; /* Đảm bảo rằng nó nằm ở dưới cùng */
+}
 .modal {
   position: fixed;
   top: 0;
@@ -4697,8 +4741,8 @@ textarea.form-control-lg {
 }
 
 .modal-title {
-  margin-bottom: 0;
-  line-height: 1.53;
+  font-weight: 700;
+    color: #ffff;
 }
 
 .modal-body {

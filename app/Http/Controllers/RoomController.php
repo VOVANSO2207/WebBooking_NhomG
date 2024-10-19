@@ -14,13 +14,9 @@ class RoomController extends Controller
 {
     public function index()
     {
-        // Lấy tất cả các phòng cùng với tiện nghi, loại phòng và hình ảnh
-        $rooms = Rooms::with('roomType', 'amenities', 'room_images')->get();
-        // dd($rooms);
-        // Trả về view với dữ liệu rooms
+        $rooms = Rooms::getAllRooms();
         return view('admin.room', ['rooms' => $rooms]);
     }
-
     public function show(Request $request)
     {
         // Lấy danh sách loại phòng và tiện nghi
@@ -33,62 +29,31 @@ class RoomController extends Controller
             'amenities' => $amenities,
         ]);
     }
-
-    public function store(Request $request)
-    {
-        // Create a new room
-        $room = new Rooms();
-        $room->name = $request->name;
-        $room->room_type_id = $request->room_type_id;
-        $room->price = $request->price;
-        $room->capacity = $request->capacity;
-        $room->discount_percent = $request->discount_percent;
-        $room->description = $request->description;
-        $room->hotel_id = 0;
-        $room->save();
-
-
-        // Add amenities to room
-        foreach ($request->amenities as $amenity) {
-            RoomAmenities::create([
-                'room_id' => $room->room_id,
-                'amenity_name' => $amenity,
-                'description' => 'null', 
-            ]);
-        }
-        
-        // // Upload images
-        // if ($request->hasFile('images')) {
-        //     foreach ($request->file('images') as $image) {
-        //         $path = $image->store('room_images', 'public'); // Store the image in public storage
-        //         RoomImages::create([
-        //             'room_id' => $room->id,
-        //             'img_url' => $path,
-        //         ]);
-        //     }
-        // }
-        return redirect()->route('admin.viewroom')->with('success', 'Phòng đã được thêm thành côngs!');
-    }
     public function destroy($room_id)
     {
         // Tìm phòng dựa trên ID
-        $room = Rooms::where('room_id', $room_id)->first();
+        if (Rooms::deleteRoom($room_id)) {
+            return redirect()->route('admin.viewroom')->with('success', 'Phòng đã được xóa thành công!');
+        }
+        return redirect()->route('admin.viewroom')->with('error', 'Phòng không tồn tại!');
+    }
+    public function store(Request $request)
+    {
+        // Tạo dữ liệu phòng
+        $data = $request->only(['name', 'room_type_id', 'price', 'capacity', 'discount_percent', 'description']);
+        $data['hotel_id'] = 0;
+        $room = Rooms::createRoom($data);
 
-        // Kiểm tra nếu phòng có tồn tại
-        if (!$room) {
-            return redirect()->route('admin.viewroom')->with('error', 'Phòng không tồn tại!');
+        // Thêm tiện nghi vào phòng
+        RoomAmenities::addAmenitiesToRoom($room->room_id, $request->amenities);
+
+        // Upload images
+        if ($request->hasFile('images')) {
+            RoomImages::uploadImages($room->room_id, $request->file('images'));
         }
 
-        // Xóa phòng
-        $room->delete();
-
-        // Redirect sau khi xóa thành công
-        return redirect()->route('admin.viewroom')->with('success', 'Phòng đã được xóa thành công!');
+        return redirect()->route('admin.viewroom')->with('success', 'Phòng đã được thêm thành công!');
     }
 
-    public function getRoomDetails($id)
-    {
-        $room = Rooms::with(['room_images', 'roomType', 'amenities'])->findOrFail($id);
-        return response()->json($room);
-    }
+
 }

@@ -16,4 +16,15 @@ class RoomAmenities extends Model
      {  
          return $this->belongsTo(Rooms::class, 'room_id');
      }
+     public static function addAmenitiesToRoom($roomId, $amenities)
+     {
+         foreach ($amenities as $amenity) {
+             self::create([
+                 'room_id' => $roomId,
+                 'amenity_name' => $amenity,
+                 'description' => 'null',
+             ]);
+         }
+     }
+   
 }

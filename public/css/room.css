@@ -1,20 +1,31 @@
-swiper-container {
-    width: 100%;
-    height: 100%;
-  }
+.room-swiper {
+  width: 100px;
+  height: 100px;
+}
+.room-swiper .swiper-slide img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover; 
+}
+/* Style cho nút prev/next */
+.room-swiper .swiper-button-next,
+.room-swiper .swiper-button-prev {
+  width: 20px;
+  height: 20px;
+  transform: scale(1.5);
+  color: #000000;
+  border-radius: 76px;
+  position: absolute;
+  top: 65px;
+  background: transparent; 
+  transition: background 0.3s; 
+}
 
-  swiper-slide {
-    text-align: center;
-    font-size: 18px;
-    background: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  swiper-slide img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
+.room-swiper .swiper-button-next:hover,
+.room-swiper .swiper-button-prev:hover {
+  background: #ccc; 
+}
+.room-swiper .swiper-button-next:after,
+.room-swiper .swiper-button-prev:after {
+  font-size: 14px;
+}
