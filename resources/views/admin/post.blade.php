@@ -66,7 +66,7 @@
                 </table>
             </div>
             <div class="d-flex justify-content-center mt-3">
-                {{ $posts->appends(['csrf_token' => csrf_token()])->links('pagination::bootstrap-4') }}
+            {{ $posts->appends(['csrf_token' => csrf_token()])->links('pagination::bootstrap-4') }}
             </div>
         </div>
     </div>
@@ -110,68 +110,68 @@
                     <div class="post-detail-item">
                         <strong>Image:</strong>
                         <img id="modalImage" style="width: 100%; height: auto; max-width: 200px;" alt="">
-                    </div>
+                        </div>
                 </div>
             </div>
             <div class="modal-footer" style="display: flex; justify-content: space-between;">
                 <a id="editPostButton" class="btn btn-info" href="#">Edit</a>
-                <form id="deleteForm" style="display: inline-block;">
+                <form id="deleteForm"  style="display: inline-block;">
                     @csrf
                     <button type="submit" class="btn btn-danger" id="deletePostButton">Delete</button>
                 </form>
             </div>
             <div class="modal-footer" style="width: 100%; position: relative; bottom: 0;">
-                <button type="button" class="btn btn-secondary w-100" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary w-100" data-bs-dismiss="modal">Close</button> 
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    // POST.BLADE.PHP - View - Modal Post
-    document.addEventListener('DOMContentLoaded', function () {
-        const postDetailRows = document.querySelectorAll('.post-detail');
+// POST.BLADE.PHP - View - Modal Post
+document.addEventListener('DOMContentLoaded', function() {
+    const postDetailRows = document.querySelectorAll('.post-detail');
 
-        postDetailRows.forEach(row => {
-            row.addEventListener('click', function () {
-                const postId = this.getAttribute('data-id');
-                console.log(`/posts/${postId}/detail`);
+    postDetailRows.forEach(row => {
+        row.addEventListener('click', function() {
+            const postId = this.getAttribute('data-id'); 
+            console.log(`/posts/${postId}/detail`);
 
-                // Gọi AJAX để lấy thông tin chi tiết bài viết
-                fetch(`/posts/${postId}/detail`)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();
-                    })
-                    .then(post => {
-                        // Hàm giới hạn ký tự và cập nhật thông tin modal
-                        const limitText = (text, maxLength = 10) => {
-                            return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
-                        };
+            // Gọi AJAX để lấy thông tin chi tiết bài viết
+            fetch(`/posts/${postId}/detail`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(post => {
+                    // Hàm giới hạn ký tự và cập nhật thông tin modal
+                    const limitText = (text, maxLength = 10) => {
+                        return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+                    };
 
-                        document.getElementById('modalTitle').innerText = limitText(post.title);
-                        document.getElementById('modalDescription').innerText = limitText(post.description);
-                        document.getElementById('modalContent').innerText = limitText(post.content);
-                        document.getElementById('modalMetaDesc').innerText = limitText(post.meta_desc);
-                        document.getElementById('modalUrlSeo').innerText = limitText(post.url_seo);
-                        document.getElementById('modalStatus').innerText = post.status ? 'Show' : 'Hidden';
+                    document.getElementById('modalTitle').innerText = limitText(post.title);
+                    document.getElementById('modalDescription').innerText = limitText(post.description);
+                    document.getElementById('modalContent').innerText = limitText(post.content);
+                    document.getElementById('modalMetaDesc').innerText = limitText(post.meta_desc);
+                    document.getElementById('modalUrlSeo').innerText = limitText(post.url_seo);
+                    document.getElementById('modalStatus').innerText = post.status ? 'Show' : 'Hidden';
 
-                        // Cập nhật hình ảnh
-                        const imageUrl = post.img ? `/images/${post.img}` : '/path/to/default/image.jpg';
-                        document.getElementById('modalImage').src = imageUrl;
+                    // Cập nhật hình ảnh
+                    const imageUrl = post.img ? `/images/${post.img}` : '/path/to/default/image.jpg';
+                    document.getElementById('modalImage').src = imageUrl;
 
-                        // Hiển thị modal
-                        const modal = new bootstrap.Modal(document.getElementById('postDetailModal'));
-                        modal.show();
-                    })
-                    .catch(error => {
-                        console.error('Có vấn đề với yêu cầu fetch:', error);
-                    });
-            });
+                    // Hiển thị modal
+                    const modal = new bootstrap.Modal(document.getElementById('postDetailModal'));
+                    modal.show();
+                })
+                .catch(error => {
+                    console.error('Có vấn đề với yêu cầu fetch:', error);
+                });
         });
     });
+});
 
 
 </script>
