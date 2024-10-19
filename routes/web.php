@@ -43,13 +43,9 @@ Route::prefix('admin')->group(function () {
     Route::get('/user/add', [UsersController::class, 'userAdd'])->name('user_add');
 });
 
-<<<<<<< HEAD
-
-
 // Admin-Post Detail
 Route::get('/posts/{post_id}/detail', action: [PostsController::class, 'getPostDetail'])->name('post.detail');
 
-=======
 // Search
 // Route::get('/search', [SearchController::class, 'index'])->name('search');
 Route::get('/hotels', [HotelController::class, 'index'])->name('hotels.index');
@@ -57,4 +53,3 @@ Route::get('hotels/seach', [HotelController::class, 'search'])->name('hotels.sea
 
 // Cities
 Route::get('/pages/home', [CitiesController::class, 'index']);
->>>>>>> 5.3-TimKiem-NguyenSon
