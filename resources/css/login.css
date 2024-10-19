@@ -1,0 +1,21 @@
+body {
+    background-color: #f0f2f5;
+}
+.login-container {
+    max-width: 400px;
+}
+.header {
+    background-color: #4267B2;
+    color: white;
+}
+.btn-primary {
+    background-color: #4267B2;
+    border-color: #4267B2;
+}
+.btn-primary:hover {
+    background-color: #365899;
+    border-color: #365899;
+}
+.social-btn {
+    border: 1px solid #ddd;
+}

@@ -1,0 +1,117 @@
+body {
+    background: #EDF2F7;
+}
+
+.filter {
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    background: #ffffff;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.filter_price {
+    width: 100%;
+    margin: 20px 0;
+}
+
+.price_filter p {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.col-9 {
+    padding-left: 15px;
+}
+
+.tab_control {
+    border-radius: 15px;
+    background: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 5px;
+    padding-left: 10px;
+}
+
+.tab_list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.tab_list .text_first {
+    margin-right: 15px;
+    font-weight: bold;
+}
+
+.tab_btn {
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-right: 10px;
+    border: none;
+    background: transparent;
+    border-radius: 999px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    
+}
+
+.tab_btn.active {
+    background-color: #3B79C9;
+    color: white;
+}
+
+.tab_content {
+    margin-top: 20px;
+}
+
+.tab_item {
+    display: none;
+}
+
+.tab_item.active {
+    display: block;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .row {
+        flex-direction: column;
+    }
+
+    .col-3, .col-9 {
+        width: 100%;
+        padding-left: 0;
+    }
+
+    .filter {
+        margin-bottom: 20px;
+    }
+
+    .tab_list {
+        justify-content: space-around;
+    }
+
+    .tab_btn {
+        flex: 1;
+        text-align: center;
+    }
+}
+
+@media (max-width: 576px) {
+    .tab_btn {
+        font-size: 14px;
+        padding: 8px 15px;
+    }
+
+    .tab_list {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .text_first {
+        display: none;
+    }
+}
