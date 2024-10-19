@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Cities extends Model
 {
     use HasFactory;
+    protected $table = 'cities';
+    protected $primaryKey = 'city_id';
+    public $timestamps = false;
 }
