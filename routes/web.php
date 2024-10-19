@@ -39,7 +39,7 @@ Route::prefix('admin')->group(function () {
     Route::get('/post/add', [PostsController::class, 'postAdd'])->name('post_add');
     Route::post('admin/post/store', action: [PostsController::class, 'store'])->name('admin.post.store');
 
-    
+
 });
 
 // Admin-Post Detail
@@ -70,6 +70,6 @@ Route::get('/admin/user/user_add', [UsersController::class, 'userAdd'])->name('u
 Route::post('/admin/user/user_add', [UsersController::class, 'storeUser'])->name('user.store');
 Route::get('/admin/user/search', [UsersController::class, 'searchUsers'])->name('admin.searchUsers');
 Route::get('/admin/user/{id}', [UsersController::class, 'show'])->name('admin.user.show');
-Route::get('/admin/user/{id}/edit', [UsersController::class, 'edit'])->name('admin.user.edit'); 
+Route::get('/admin/user/{id}/edit', [UsersController::class, 'edit'])->name('admin.user.edit');
 Route::delete('/admin/user/{id}', [UsersController::class, 'destroy'])->name('admin.user.destroy');
 Route::put('/admin/user/{id}', [UsersController::class, 'update'])->name('admin.user.update');
