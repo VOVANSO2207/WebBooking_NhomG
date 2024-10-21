@@ -220,6 +220,13 @@
                 contentType: false,
                 processData: false,
                 success: function (response) {
+                    CKEDITOR.replace('content1', {
+                        filebrowserUploadUrl: "path/to/upload/image"
+                    });
+
+                    CKEDITOR.replace('description', {
+                        filebrowserUploadUrl: "path/to/upload/image"
+                    });
                     const updateSuccessModal = new bootstrap.Modal(document.getElementById('updateSuccessModal'));
                     updateSuccessModal.show();
 
