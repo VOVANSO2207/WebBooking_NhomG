@@ -31,4 +31,20 @@ class Posts extends Model
     {
         return self::create($data);
     }
+    public static function searchPost($keyword)
+    {
+        // Nếu không có từ khóa, trả về tất cả
+        if (empty($keyword)) {
+            return static::query(); // Trả về tất cả bài viết
+        }
+
+        return static::where(function ($query) use ($keyword) {
+            $query->where('title', 'LIKE', "%{$keyword}%")
+                  ->orWhere('description', 'LIKE', "%{$keyword}%");
+        });
+    }
+    public function deletePost()
+    {
+        return $this->delete();
+    }
 }
