@@ -92,4 +92,17 @@ class PostsController extends Controller
 
         return view('admin.search_results_post', compact('results'));
     }
+    public function deletePost($post_id)
+    {
+        $post = Posts::find($post_id);
+
+        if (!$post) {
+            return response()->json(['error' => 'Bài viết không tồn tại'], 404);
+        }
+
+        $post->deletePost();
+
+        return response()->json(['success' => 'Bài viết đã được xóa thành công'], 200);
+    }
+
 }
