@@ -38,7 +38,7 @@ class PostsController extends Controller
         $request->validate([
             'title' => 'required|min:30|max:100|regex:/^[^!@#$%^&*()_+=\-{}\[\];:"\'<>,.?\/~`]+$/u|regex:/^(?!.*  )/', 
             'description' => 'required|min:50|max:1000',
-            'content1' => 'required|min:100|max:10000',
+            'content1' => 'required|min:100|max:100000',
             'meta_desc' => 'nullable|min:10|max:50|regex:/^[^!@#$%^&*()_+=\-{}\[\];:"\'<>,.?\/~`]+$/u',
             'status' => 'required|boolean',
             'fileUpload' => 'required|image|max:10240', 
@@ -120,7 +120,7 @@ class PostsController extends Controller
         $request->validate([
             'title' => 'required|min:30|max:100|regex:/^[^!@#$%^&*()_+=\-{}\[\];:"\'<>,.?\/~`]+$/u|regex:/^(?!.*  )/',
             'description' => 'required|min:50|max:1000',
-            'content1' => 'required|min:100|max:10000',
+            'content1' => 'required|min:100|max:100000',
             'meta_desc' => 'nullable|min:10|max:50|regex:/^[^!@#$%^&*()_+=\-{}\[\];:"\'<>,.?\/~`]+$/u',
             'status' => 'required|boolean',
             'fileUpload' => 'nullable|image|max:10240',
