@@ -96,5 +96,41 @@
 
 
 </body>
+<script>
+  $(document).ready(function () {
+    $('#search_post').on('keyup', function () {
+        $value = $(this).val();
+        if ($value) {
+            $('.alldata').hide();
+            $('.searchdata').show();
+            $('.pagination-post').each(function () {
+        this.style.cssText += 'display: none !important;';
+    });
 
+        } else {
+            $('.alldata').show();
+            $('.searchdata').hide();
+            $('.pagination-post').each(function () {
+        this.style.cssText += 'display: flex !important;';
+    });
+        }
+        console.log($value);
+        $.ajax(
+            {
+                type: 'get',
+                url: '{{route("search")}}',
+                data: {
+                    'search': $value
+                },
+                success: function (data) {
+                    console.log(data);
+                    $('#Content').html(data);
+                }
+            }
+        )
+    });
+});
+ 
+
+</script>
 </html>
