@@ -77,6 +77,24 @@
     </div>
 </div>
 
+<!-- Modal Thêm bài viết thành công -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="successModalLabel">Thông báo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Thêm bài viết thành công.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     window.onload = function () {
         CKEDITOR.replace('content1', {
@@ -130,8 +148,14 @@
             contentType: false,
             processData: false,
             success: function (response) {
-                alert('Thêm bài viết thành công.');
-                window.location.href = '{{ route('admin.viewpost') }}';
+                // Hiển thị modal thông báo thành công
+                const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+                successModal.show();
+
+                // Tùy chọn: tự động điều hướng đến trang bài viết sau một khoảng thời gian
+                setTimeout(function() {
+                    window.location.href = '{{ route('admin.viewpost') }}';
+                }, 2000); // Thay đổi thời gian (ms) nếu cần
             },
             error: function (xhr) {
                 // Xóa lỗi cũ trước đó
@@ -143,7 +167,6 @@
                     if (errors.hasOwnProperty(key)) {
                         // Tạo phần tử thông báo lỗi mới
                         var errorDiv = $('<div class="text-danger"></div>').text(errors[key][0]);
-                        
                         // Thêm thông báo lỗi vào trường input tương ứng
                         $('[name="' + key + '"]').after(errorDiv);
                     }
