@@ -44,7 +44,7 @@ Route::prefix('admin')->group(function () {
 
 // Admin-Post Detail
 Route::get('/posts/{post_id}/detail', action: [PostsController::class, 'getPostDetail'])->name('post.detail');
-
+Route::get('/search', [PostsController::class, 'search'])->name('search');
 // Search
 // Route::get('/search', [SearchController::class, 'index'])->name('search');
 Route::get('/hotels', [HotelController::class, 'index'])->name('hotels.index');

@@ -85,4 +85,11 @@ class PostsController extends Controller
 
         return redirect()->route('admin.viewpost')->with('success', 'Thêm bài viết thành công.');
     }
+    public function search(Request $request)
+    {
+        $keyword = $request->get('search');
+        $results = Posts::searchPost($keyword)->paginate(5); 
+
+        return view('admin.search_results_post', compact('results'));
+    }
 }
