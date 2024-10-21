@@ -50,6 +50,8 @@
                     $('#modalStatus').text(post.status ? 'Show' : 'Hidden');
                     const imageUrl = post.img ? `/images/${post.img}` : '/path/to/default/image.jpg';
                     $('#modalImage').attr('src', imageUrl);
+                    const editRoute = "{{ route('post.edit', ['post_id' => ':id']) }}".replace(':id', currentPostId);
+                    document.getElementById('editPostButton').setAttribute('href', editRoute);
                     // Hiển thị modal
                     $('#postDetailModal').modal('show');
                 },
