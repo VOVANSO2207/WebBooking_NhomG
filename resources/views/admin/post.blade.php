@@ -1,5 +1,7 @@
 @extends('admin.layouts.master')
-
+@php
+    use App\Helpers\IdEncoder;
+@endphp
 @section('admin-container')
 <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
     id="layout-navbar">
@@ -44,7 +46,8 @@
                     </thead>
                     <tbody class="table-border-bottom-0 alldata">
                         @forelse ($posts as $index => $post)
-                            <tr class="post-detail" data-id="{{ $post->post_id }}">
+                        
+                            <tr class="post-detail" data-id="{{ IdEncoder::encodeId($post->post_id) }}">
                                 <td>{{ $index + 1 }}</td>
                                 <td>
                                     <img src="{{ asset('images/' . $post->img) }}" alt="{{ $post->title }}"
@@ -209,6 +212,7 @@
             if (currentPostId) {
                 // Sử dụng tên route để tạo URL
                 const deleteRoute = "{{ route('post.delete', ['post_id' => ':id']) }}".replace(':id', currentPostId);
+
 
                 fetch(deleteRoute, {
                     method: 'DELETE',

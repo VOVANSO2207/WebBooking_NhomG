@@ -118,107 +118,116 @@
     </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 <script>
-    window.onload = function () {
+    $(document).ready(function () {
         CKEDITOR.replace('content1', {
             filebrowserUploadUrl: "path/to/upload/image"
         });
-    };
-    
-    CKEDITOR.replace('description', {
-        filebrowserUploadUrl: "path/to/upload/image"
-    });
 
-    function resetForm() {
-        $('#postForm')[0].reset();
-        CKEDITOR.instances['content1'].setData('');
-        CKEDITOR.instances['description'].setData('');
-        $("#fileUpload").attr("src", "{{ asset('/images/img-upload.jpg') }}");
-        $("#url_seo").val('');
-    }
+        CKEDITOR.replace('description', {
+            filebrowserUploadUrl: "path/to/upload/image"
+        });
 
-    $("#title").on("keyup input", function () {
-        var inputValue = $(this).val();
-        var trimmedValue = inputValue.replace(/\s+$/, "");
-        var formattedValue = trimmedValue
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "")
-            .replace(/\s+/g, "-");
+        let isChanged = false; // Biến để theo dõi sự thay đổi
 
-        $("#url_seo").val(formattedValue);
-    });
-
-    let isChanged = false; // Biến để theo dõi sự thay đổi
-
-    // Thêm sự kiện cho các trường input để theo dõi thay đổi
-    $('#title, #description, #content1, #meta_desc, #status').on('input change', function() {
-        isChanged = true; // Đánh dấu là đã có sự thay đổi
-    });
-
-    // Gửi form qua AJAX
-    $('#postForm').on('submit', function (event) {
-        event.preventDefault();
-
-        // Kiểm tra xem có sự thay đổi không
-        if (!isChanged) {
-            // Hiển thị modal nếu không có sự thay đổi
-            const noUpdateModal = new bootstrap.Modal(document.getElementById('noUpdateModal'));
-            noUpdateModal.show();
-            return; // Dừng việc gửi form
+        function resetForm() {
+            $('#postForm')[0].reset();
+            CKEDITOR.instances['content1'].setData('');
+            CKEDITOR.instances['description'].setData('');
+            $("#upload").val(''); // Reset input file
+            $("#url_seo").val('');
+            isChanged = false; // Reset biến isChanged khi reset form
         }
 
-        // Nếu có sự thay đổi, tiếp tục gửi form
-        var img = $('#upload')[0].files[0];
-        var title = $('#title').val();
-        var description = CKEDITOR.instances.description.getData();
-        var content = CKEDITOR.instances.content1.getData();
-        var meta_desc = $('#meta_desc').val();
-        var statusValue = $('#status option:selected').val();
-        var url_seo = $('#url_seo').val();
+        $("#title").on("keyup input", function () {
+            var inputValue = $(this).val();
+            var trimmedValue = inputValue.replace(/\s+$/, "");
+            var formattedValue = trimmedValue
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .replace(/\s+/g, "-");
+            $("#url_seo").val(formattedValue);
+        });
 
-        var formData = new FormData();
-        formData.append('_token', '{{ csrf_token() }}');
-        formData.append('_method', 'PUT'); // Chỉ định phương thức PUT
-        formData.append('title', title);
-        formData.append('description', description);
-        formData.append('content1', content);
-        formData.append('meta_desc', meta_desc);
-        formData.append('status', statusValue);
-        formData.append('url_seo', url_seo);
-        if (img) {
-            formData.append('fileUpload', img);
+        function checkForChanges() {
+            var title = $('#title').val();
+            var description = CKEDITOR.instances.description.getData();
+            var content = CKEDITOR.instances.content1.getData();
+            var meta_desc = $('#meta_desc').val();
+            var statusValue = $('#status option:selected').val();
+
+            if (
+                title !== '{{ addslashes(old('title', $post->title)) }}' ||
+                description !== '{{ addslashes(old('description', $post->description)) }}' ||
+                content !== '{{ addslashes(old('content1', $post->content)) }}' ||
+                meta_desc !== '{{ addslashes(old('meta_desc', $post->meta_desc)) }}' ||
+                statusValue !== '{{ $post->status }}'
+            ) {
+                isChanged = true;
+            } else {
+                isChanged = false;
+            }
         }
 
-        // Gửi dữ liệu qua AJAX
-        $.ajax({
-            url: "{{ route('admin.post.update', $post->post_id) }}",
-            method: 'POST',
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function (response) {
-                // Hiển thị modal thông báo cập nhật thành công
-                const updateSuccessModal = new bootstrap.Modal(document.getElementById('updateSuccessModal'));
-                updateSuccessModal.show();
-                
-                // Tùy chọn: tự động điều hướng đến trang bài viết sau một khoảng thời gian
-                setTimeout(function() {
-                    window.location.href = '{{ route('admin.viewpost') }}';
-                }, 2000); // Thay đổi thời gian (ms) nếu cần
-            },
-            error: function (xhr) {
-                // Xóa lỗi cũ trước đó
-                $('.text-danger').remove();
+      
+        $('#title, #meta_desc, #status').on('input change', function() {
+            checkForChanges(); 
+        });
 
-                // Xử lý lỗi
-                var errors = xhr.responseJSON.errors;
-                for (var key in errors) {
-                    if (errors.hasOwnProperty(key)) {
-                        var errorDiv = $('<div class="text-danger"></div>').text(errors[key][0]);
-                        $('[name="' + key + '"]').after(errorDiv);
+   
+        CKEDITOR.instances['description'].on('change', checkForChanges);
+        CKEDITOR.instances['content1'].on('change', checkForChanges);
+
+   
+        $('#upload').on('change', function() {
+            isChanged = true; 
+        });
+
+ 
+        $('#postForm').on('submit', function (event) {
+            event.preventDefault();
+
+        
+            if (!isChanged) {
+             
+                const noUpdateModal = new bootstrap.Modal(document.getElementById('noUpdateModal'));
+                noUpdateModal.show(); 
+                return; 
+            }
+
+         
+            var formData = new FormData(this);
+          
+            $.ajax({
+                url: "{{ route('admin.post.update', $post->post_id) }}",
+                method: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    const updateSuccessModal = new bootstrap.Modal(document.getElementById('updateSuccessModal'));
+                    updateSuccessModal.show(); 
+                    
+                    setTimeout(function() {
+                        window.location.href = '{{ route('admin.viewpost') }}';
+                    }, 2000);
+                },
+                error: function (xhr) {
+                    // Xóa lỗi cũ trước đó
+                    $('.text-danger').remove();
+
+                    // Xử lý lỗi
+                    var errors = xhr.responseJSON.errors;
+                    for (var key in errors) {
+                        if (errors.hasOwnProperty(key)) {
+                            var errorDiv = $('<div class="text-danger"></div>').text(errors[key][0]);
+                            $('[name="' + key + '"]').after(errorDiv);
+                        }
                     }
                 }
-            }
+            });
         });
     });
 </script>
