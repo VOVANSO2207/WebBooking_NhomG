@@ -104,5 +104,67 @@ class PostsController extends Controller
 
         return response()->json(['success' => 'Bài viết đã được xóa thành công'], 200);
     }
+    public function editPost($post_id)
+    {
+        // Lấy bài viết từ ID
+        $post = Posts::findPostById($post_id);
+        if (!$post) {
+            return redirect()->route('admin.viewpost')->with('error', 'Bài viết không tồn tại.');
+        }
+
+        return view('admin.post_edit', compact('post'));
+    }
+    public function update(Request $request, $post_id)
+    {
+        // Xác thực các dữ liệu đầu vào
+        $request->validate([
+            'title' => 'required|min:30|max:100|regex:/^[^!@#$%^&*()_+=\-{}\[\];:"\'<>,.?\/~`]+$/u|regex:/^(?!.*  )/',
+            'description' => 'required|min:50|max:1000',
+            'content1' => 'required|min:100|max:10000',
+            'meta_desc' => 'nullable|min:10|max:50|regex:/^[^!@#$%^&*()_+=\-{}\[\];:"\'<>,.?\/~`]+$/u',
+            'status' => 'required|boolean',
+            'fileUpload' => 'nullable|image|max:10240',
+        ], [
+            'title.required' => 'Vui lòng nhập tiêu đề bài viết',
+            'title.min' => 'Tiêu đề bài viết phải trên 30 ký tự',
+            'title.max' => 'Tiêu đề bài viết không được quá 100 ký tự',
+            'title.regex' => 'Tiêu đề bài viết không hợp lệ',
+            'description.required' => 'Mô tả là bắt buộc.',
+            'description.max' => 'Mô tả không quá 1000 ký tự.',
+            'description.min' => 'Mô tả bài viết không được dưới 50 ký tự',
+            'content1.required' => 'Nội dung bài viết không được để trống',
+            'content1.min' => 'Nội dung bài viết không được dưới 100 ký tự',
+            'content1.max' => 'Nội dung bài viết không được quá 10000 ký tự',
+            'meta_desc.min' => 'Từ khoá mô tả bài viết không được dưới 10 ký tự',
+            'meta_desc.max' => 'Từ khoá mô tả bài viết không được quá 50 ký tự',
+            'meta_desc.regex' => 'Từ khoá mô tả bài viết không chứa kí tự đặc biệt',
+            'status.required' => 'Trạng thái là bắt buộc.',
+            'fileUpload.image' => 'Tệp không hợp lệ, chỉ cho phép PNG, JPEG, JPG',
+            'fileUpload.max' => 'Dung lượng tệp không được vượt quá 10MB',
+        ]);
+
+        $post = Posts::findPostById($post_id);
+        if (!$post) {
+            return redirect()->route('admin.viewpost')->with('error', 'Bài viết không tồn tại.');
+        }
+
+        $post->title = $request->title;
+        $post->description = $request->description;
+        $post->content = $request->content1; 
+        $post->meta_desc = $request->meta_desc;
+        $post->url_seo = $request->url_seo;
+        $post->status = $request->status === '1' ? 1 : 0; 
+
+        if ($request->hasFile('fileUpload')) {
+            $file = $request->file('fileUpload');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('images'), $filename);
+            $post->img = $filename; 
+        }
+
+        $post->save();
+
+        return redirect()->route('admin.viewpost')->with('success', 'Cập nhật bài viết thành công.');
+    }
 
 }

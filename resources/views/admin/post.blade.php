@@ -55,7 +55,9 @@
                                 <td>{{ Str::limit($post->content, 10) }}</td>
                                 <td>{{ Str::limit($post->meta_desc, 10) }}</td>
                                 <td>{{ $post->url_seo }}</td>
-                                <td>{{ $post->status ? 'Show' : 'Hidden' }}</td>
+                                <td class="{{ $post->status ? 'badge bg-success' : 'badge bg-danger' }}">
+                                    {{ $post->status ? 'Show' : 'Hidden' }}
+                                </td>
                             </tr>
                         @empty
                             <tr>
@@ -180,6 +182,10 @@
                         const imageUrl = post.img ? `/images/${post.img}` : '/path/to/default/image.jpg';
                         document.getElementById('modalImage').src = imageUrl;
 
+                        // Thiết lập đường dẫn cho nút Edit
+                        const editRoute = "{{ route('post.edit', ['post_id' => ':id']) }}".replace(':id', currentPostId);
+                        document.getElementById('editPostButton').setAttribute('href', editRoute);
+
                         // Hiển thị modal
                         const modal = new bootstrap.Modal(document.getElementById('postDetailModal'));
                         modal.show();
@@ -190,14 +196,18 @@
             });
         });
 
+        // Đường dẫn đến route xóa bài viết
 
+        // Khi người dùng nhấn nút "Delete"
         document.getElementById('deletePostButton').addEventListener('click', function () {
             const confirmDeleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
             confirmDeleteModal.show();
         });
 
+        // Khi người dùng nhấn nút "OK" trong modal xác nhận
         document.getElementById('confirmDeleteButton').addEventListener('click', function () {
             if (currentPostId) {
+                // Sử dụng tên route để tạo URL
                 const deleteRoute = "{{ route('post.delete', ['post_id' => ':id']) }}".replace(':id', currentPostId);
 
                 fetch(deleteRoute, {
@@ -209,7 +219,7 @@
                     .then(response => {
                         if (response.ok) {
                             alert("Xoá Bài Viết Thành Công");
-                            location.reload(); 
+                            location.reload(); // Tải lại trang sau khi xóa thành công
                         } else {
                             console.error('Có lỗi xảy ra khi xóa bài viết');
                         }
@@ -220,17 +230,26 @@
             }
         });
     });
+    // Lắng nghe sự kiện khi modal đã hoàn toàn đóng
     document.getElementById('confirmDeleteModal').addEventListener('hidden.bs.modal', function () {
         const backdrop = document.querySelector('.modal-backdrop');
         if (backdrop) {
-            backdrop.remove(); 
+            backdrop.remove(); // Loại bỏ lớp mờ
         }
     });
 
+    // Đảm bảo nút Cancel đóng modal
     document.getElementById('cancelButton').addEventListener('click', function () {
         const confirmDeleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
-        confirmDeleteModal.hide(); 
+        confirmDeleteModal.hide(); // Ẩn modal
     });
 
+
+
+
+
+
+
 </script>
+
 @endsection

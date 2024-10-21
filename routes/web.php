@@ -46,7 +46,8 @@ Route::prefix('admin')->group(function () {
 Route::get('/posts/{post_id}/detail', action: [PostsController::class, 'getPostDetail'])->name('post.detail');
 Route::get('/search', [PostsController::class, 'search'])->name('search');
 Route::delete('/posts/{post_id}/delete', [PostsController::class, 'deletePost'])->name('post.delete');
-
+Route::get('/posts/{post_id}/edit', [PostsController::class, 'editPost'])->name('post.edit');
+Route::put('/admin/posts/{id}', [PostsController::class, 'update'])->name('admin.post.update');
 // Search
 // Route::get('/search', [SearchController::class, 'index'])->name('search');
 Route::get('/hotels', [HotelController::class, 'index'])->name('hotels.index');
