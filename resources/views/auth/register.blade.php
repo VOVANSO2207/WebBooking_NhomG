@@ -136,7 +136,7 @@
             } else {
                 passwordError.textContent = "";
             }
-
+            
             // Kiểm tra xác nhận mật khẩu
             const passwordConfirmation = document.getElementById('password_confirmation').value;
             const passwordConfirmError = document.getElementById('passwordConfirmError');

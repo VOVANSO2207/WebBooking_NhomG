@@ -608,21 +608,4 @@ input[type="range"]::-moz-range-thumb {
     clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%); 
 }
 
-.swiper-button-prev, 
-.swiper-button-next {
-    color: black !important; /* Đặt màu nút là đen */
-    background-color: rgba(0, 0, 0, 0.1); /* Tùy chọn: thêm nền màu đen mờ */
-    padding: 10px; /* Tùy chọn: thêm khoảng đệm */
-    border-radius: 50%; /* Tùy chọn: hình dạng tròn */
-}
 
-.swiper-button-prev:hover, 
-.swiper-button-next:hover {
-    background-color: black !important; /* Đổi màu nền khi hover */
-    color: white; /* Đổi màu chữ khi hover */
-}
-
-.swiper-button-prev::after, 
-.swiper-button-next::after {
-    font-size: 20px; /* Điều chỉnh kích thước icon mũi tên */
-}

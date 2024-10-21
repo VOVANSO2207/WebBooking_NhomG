@@ -165,15 +165,16 @@
                                                         <span>☆</span>
                                                     @endif
                                                 @endfor
+                                                
                                             </div>
 
                                         </div>
                                         <div class="col-md-3 status-button">
-
                                             <div class="status">
                                                 <span class="status-available">ĐƠN</span>
                                                 <span class="status-soldout">ĐÔI</span>
                                             </div>
+                                            
                                             <button class="book-now">Đặt Ngay</button>
                                         </div>
                                     </div>
@@ -228,15 +229,16 @@
                                                 <span>☆</span>
                                             @endif
                                         @endfor
+                                        <div class="status">
+                                            <span class="status-available">ĐƠN</span>
+                                            <span class="status-soldout">ĐÔI</span>
+                                        </div>  
                                     </div>
 
                                 </div>
                                 <div class="col-md-3 status-button">
 
-                                    <div class="status">
-                                        <span class="status-available">ĐƠN</span>
-                                        <span class="status-soldout">ĐÔI</span>
-                                    </div>
+                                  
                                     <button class="book-now">Đặt Ngay</button>
                                 </div>
                             </div>
@@ -291,7 +293,7 @@
 
                                 </div>
                                 <div class="col-md-3 status-button">
-
+                                    
                                     <div class="status">
                                         <span class="status-available">ĐƠN</span>
                                         <span class="status-soldout">ĐÔI</span>
