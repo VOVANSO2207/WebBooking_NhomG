@@ -1,0 +1,92 @@
+body {
+    background-color: #f0f2f5;
+}
+
+.login-container {
+    max-width: 100%;
+    padding: 15px;
+}
+
+.header {
+    background: rgb(23, 85, 164);
+    background: linear-gradient(93deg, rgba(23, 85, 164, 1) 42%, rgba(24, 157, 216, 1) 87%);
+    color: white;
+    width: 100%;
+}
+
+.btn-primary {
+    background-color: #4267B2;
+    border-color: #4267B2;
+}
+
+.btn-primary:hover {
+    background-color: #365899;
+    border-color: #365899;
+}
+
+.social-btn {
+    border: 1px solid #ddd;
+}
+
+.social-btn:hover {
+    border: 1px solid #ddd;
+}
+
+.icon-facebook,
+.icon-goole {
+    width: 20px;
+    height: 20px;
+    object-fit: cover;
+}
+
+.typing-effect {
+    font-size: 1.5em;
+    font-weight: 600;
+    white-space: nowrap;
+    border-right: 3px solid;
+    width: 100%;
+    overflow: hidden;
+    color: #333;
+    margin-bottom: 15px;
+}
+h4, label {
+    font-weight: 600;
+    color: #333;
+}
+.position-relative {
+    position: relative;
+}
+.text-danger.password{
+    margin-bottom: 16px;
+}
+.text-danger.confirmpass{
+    margin-bottom: 16px;
+}
+.password-toggle-icon {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 1.2em;
+    color: #6c757d;
+    z-index: 1;
+}
+
+.password-toggle-icon:hover {
+    color: #007bff;
+}
+
+.form-control {
+    padding-right: 40px; /* Để tránh bị icon đè lên văn bản */
+    line-height: 1.5; /* Điều chỉnh để nội dung trong ô input hiển thị đẹp */
+}
+
+.text-danger {
+    display: block;
+    color: red;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+

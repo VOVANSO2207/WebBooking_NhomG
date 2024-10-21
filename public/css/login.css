@@ -1,0 +1,49 @@
+body {
+    background-color: #f0f2f5;
+}
+
+.login-container {
+    max-width: 100%;
+    padding: 15px;
+}
+
+.header {
+    background: rgb(23, 85, 164);
+    background: linear-gradient(93deg, rgba(23, 85, 164, 1) 42%, rgba(24, 157, 216, 1) 87%);
+    color: white !important;
+    width: 100%;
+}
+
+.btn-primary {
+    background-color: #4267B2 !important;
+    border-color: #4267B2 !important;
+}
+
+.btn-primary:hover {
+    background-color: #365899;
+    border-color: #365899;
+}
+
+.social-btn {
+    border: 1px solid #ddd;
+}
+
+.social-btn:hover {
+    border: 1px solid #ddd;
+}
+
+.icon-facebook,
+.icon-goole {
+    width: 20px;
+    height: 20px;
+    object-fit: cover;
+}
+
+.typing-effect {
+    font-size: 24px;
+    /* font-family: 'Time', Courier, monospace; */
+    white-space: nowrap;
+    border-right: 2px solid;
+    width: 100%;
+    overflow: hidden;
+}

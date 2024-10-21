@@ -17,8 +17,8 @@ class RoomController extends Controller
         $rooms = Rooms::getAllRooms();
         return view('admin.room', ['rooms' => $rooms]);
     }
-
-   
+    
+    
 
 
 }

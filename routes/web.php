@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostsController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\UsersController;
@@ -12,14 +13,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
 Route::get('/login', function () {
     return view('auth.login');
 })->name('login');
-
+Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
 Route::get('/register', function () {
     return view('auth.register');
 });
+Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::get('/search_result', function () {
     return view('search_result');
 });
@@ -51,8 +53,11 @@ Route::get('/hotels', [HotelController::class, 'index'])->name('hotels.index');
 Route::get('hotels/search', [HotelController::class, 'search'])->name('hotels.search');
 
 // Cities
-Route::get('/pages/home', [CitiesController::class, 'index']);
+Route::get('/pages/home', [CitiesController::class, 'index'])->name('home');
 
+Route::get('/error', function () {
+    return view('error');
+})->name('error');
 
 
 
