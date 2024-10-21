@@ -8,17 +8,20 @@
             <div class="card mb-4">
                 <hr class="my-0" />
                 <div class="card-body">
-                    <form method="POST" id="postForm" action="{{ route('admin.post.update', $post->post_id) }}" enctype="multipart/form-data">
+                    <form method="POST" id="postForm" action="{{ route('admin.post.update', $post->post_id) }}"
+                        enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div class="card-body">
                             <div class="d-flex align-items-start align-items-sm-center gap-4">
-                                <img src="{{ asset('images/' . $post->img) }}" alt="user-avatar" class="d-block rounded" height="100" width="100" id="fileUpload" />
+                                <img src="{{ asset('images/' . $post->img) }}" alt="user-avatar" class="d-block rounded"
+                                    height="100" width="100" id="fileUpload" />
                                 <div class="button-wrapper">
                                     <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
                                         <span class="d-none d-sm-block">Upload</span>
                                         <i class="bx bx-upload d-block d-sm-none"></i>
-                                        <input type="file" id="upload" name="fileUpload" class="account-file-input" hidden accept="image/png, image/jpeg, image/jpg" />
+                                        <input type="file" id="upload" name="fileUpload" class="account-file-input"
+                                            hidden accept="image/png, image/jpeg, image/jpg" />
                                     </label>
                                 </div>
                             </div>
@@ -27,28 +30,32 @@
                         <div class="row">
                             <div class="mb-3 col-md-12">
                                 <label class="form-label">Title</label>
-                                <input class="form-control" type="text" name="title" id="title" value="{{ old('title', $post->title) }}" placeholder="Title" required />
+                                <input class="form-control" type="text" name="title" id="title"
+                                    value="{{ old('title', $post->title) }}" placeholder="Title" required />
                                 @error('title')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="mb-3 col-md-12">
                                 <label class="form-label">Description</label>
-                                <textarea name="description" id="description" required>{{ old('description', $post->description) }}</textarea>
+                                <textarea name="description" id="description"
+                                    required>{{ old('description', $post->description) }}</textarea>
                                 @error('description')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="mb-3 col-md-12">
                                 <label class="form-label">Content</label>
-                                <textarea name="content1" id="content1" required>{{ old('content1', $post->content) }}</textarea>
+                                <textarea name="content1" id="content1"
+                                    required>{{ old('content1', $post->content) }}</textarea>
                                 @error('content1')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="mb-3 col-md-12">
                                 <label class="form-label">Meta Desc</label>
-                                <input class="form-control" type="text" id="meta_desc" name="meta_desc" value="{{ old('meta_desc', $post->meta_desc) }}" placeholder="Meta Desc" />
+                                <input class="form-control" type="text" id="meta_desc" name="meta_desc"
+                                    value="{{ old('meta_desc', $post->meta_desc) }}" placeholder="Meta Desc" />
                                 @error('meta_desc')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -65,13 +72,15 @@
                             </div>
                             <div class="mb-3 col-md-12">
                                 <label class="form-label">Url Seo</label>
-                                <input class="form-control" type="text" id="url_seo" name="url_seo" value="{{ old('url_seo', $post->url_seo) }}" placeholder="Url Seo" readonly />
+                                <input class="form-control" type="text" id="url_seo" name="url_seo"
+                                    value="{{ old('url_seo', $post->url_seo) }}" placeholder="Url Seo" readonly />
                             </div>
                         </div>
 
                         <div class="mt-2" style="text-align: right">
                             <button type="reset" class="btn btn-outline-secondary" onclick="resetForm()">Reset</button>
-                            <button type="button" class="btn btn-outline-danger" onclick="window.location.href='{{ route('admin.viewpost') }}'">Close</button>
+                            <button type="button" class="btn btn-outline-danger"
+                                onclick="window.location.href='{{ route('admin.viewpost') }}'">Close</button>
                             <button type="submit" class="btn btn-outline-success me-2">Save</button>
                         </div>
                     </form>
@@ -101,7 +110,8 @@
 </div>
 
 <!-- Modal Cập nhật thành công -->
-<div class="modal fade" id="updateSuccessModal" tabindex="-1" aria-labelledby="updateSuccessModalLabel" aria-hidden="true">
+<div class="modal fade" id="updateSuccessModal" tabindex="-1" aria-labelledby="updateSuccessModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -121,14 +131,15 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 <script>
-    $(document).ready(function () {
-        CKEDITOR.replace('content1', {
-            filebrowserUploadUrl: "path/to/upload/image"
-        });
+    CKEDITOR.replace('content1', {
+        filebrowserUploadUrl: "path/to/upload/image"
+    });
 
-        CKEDITOR.replace('description', {
-            filebrowserUploadUrl: "path/to/upload/image"
-        });
+    CKEDITOR.replace('description', {
+        filebrowserUploadUrl: "path/to/upload/image"
+    });
+    $(document).ready(function () {
+
 
         let isChanged = false; // Biến để theo dõi sự thay đổi
 
@@ -171,35 +182,37 @@
             }
         }
 
-      
-        $('#title, #meta_desc, #status').on('input change', function() {
-            checkForChanges(); 
+
+        $('#title, #meta_desc, #status').on('input change', function () {
+            checkForChanges();
         });
 
-   
+
         CKEDITOR.instances['description'].on('change', checkForChanges);
         CKEDITOR.instances['content1'].on('change', checkForChanges);
 
-   
-        $('#upload').on('change', function() {
-            isChanged = true; 
+        $('#upload').on('change', function () {
+            isChanged = true;
         });
 
- 
+
         $('#postForm').on('submit', function (event) {
             event.preventDefault();
 
-        
+
             if (!isChanged) {
-             
+
                 const noUpdateModal = new bootstrap.Modal(document.getElementById('noUpdateModal'));
-                noUpdateModal.show(); 
-                return; 
+                noUpdateModal.show();
+                return;
             }
 
-         
+
             var formData = new FormData(this);
-          
+            // Lấy dữ liệu từ CKEditor và thêm vào FormData
+            formData.append('description', CKEDITOR.instances['description'].getData());
+            formData.append('content1', CKEDITOR.instances['content1'].getData());
+
             $.ajax({
                 url: "{{ route('admin.post.update', $post->post_id) }}",
                 method: 'POST',
@@ -208,9 +221,9 @@
                 processData: false,
                 success: function (response) {
                     const updateSuccessModal = new bootstrap.Modal(document.getElementById('updateSuccessModal'));
-                    updateSuccessModal.show(); 
-                    
-                    setTimeout(function() {
+                    updateSuccessModal.show();
+
+                    setTimeout(function () {
                         window.location.href = '{{ route('admin.viewpost') }}';
                     }, 2000);
                 },
