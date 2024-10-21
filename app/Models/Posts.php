@@ -43,4 +43,8 @@ class Posts extends Model
                   ->orWhere('description', 'LIKE', "%{$keyword}%");
         });
     }
+    public function deletePost()
+    {
+        return $this->delete();
+    }
 }

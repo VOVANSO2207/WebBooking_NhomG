@@ -4636,7 +4636,7 @@ textarea.form-control-lg {
 }
 
 .modal-footer button {
-  flex: 1; /* Chiếm toàn bộ chiều rộng */
+  
   margin: 0 5px; /* Để tạo khoảng cách giữa các nút */
 }
 
