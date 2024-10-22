@@ -20,6 +20,9 @@
                                 <input type="text" class="form-control" id="username" name="username"
                                     value="{{ old('username') }}" required>
                                 <span class="text-danger" id="usernameError"></span>
+                                @error('username')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <label for="email">Email</label>
@@ -27,6 +30,9 @@
                                 <input type="email" class="form-control" id="email" name="email"
                                     value="{{ old('email') }}" required>
                                 <span class="text-danger" id="emailError"></span>
+                                @error('email')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <label for="phone">Số điện thoại</label>
@@ -35,14 +41,14 @@
                                     value="{{ old('phone_number') }}">
                                 <span class="text-danger" id="phoneError"></span>
                             </div>
-
+                            
                             <label for="password">Mật khẩu</label>
                             <div class="position-relative">
                                 <input type="password" class="form-control" id="password" name="password" required>
                                 <span class="password-toggle-icon" id="togglePassword">
                                     <i class="fa fa-eye" aria-hidden="true"></i>
                                 </span>
-                             
+
                             </div>
                             <span class="text-danger password" id="passwordError"></span>
 
@@ -53,7 +59,7 @@
                                 <span class="password-toggle-icon" id="togglePasswordConfirm">
                                     <i class="fa fa-eye" aria-hidden="true"></i>
                                 </span>
-                             
+
                             </div>
                             <span class="text-danger confirmpass" id="passwordConfirmError"></span>
                             <button class="w-100 btn btn-lg btn-primary" type="submit">Đăng ký tài khoản</button>
@@ -126,7 +132,7 @@
             } else {
                 phoneError.textContent = "";
             }
-            
+
             // Kiểm tra mật khẩu
             const password = document.getElementById('password').value;
             const passwordError = document.getElementById('passwordError');
@@ -136,7 +142,7 @@
             } else {
                 passwordError.textContent = "";
             }
-            
+
             // Kiểm tra xác nhận mật khẩu
             const passwordConfirmation = document.getElementById('password_confirmation').value;
             const passwordConfirmError = document.getElementById('passwordConfirmError');
