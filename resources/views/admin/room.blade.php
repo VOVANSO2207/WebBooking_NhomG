@@ -237,7 +237,7 @@
                 callback(false);
             };
         }
-
+        
         // Thêm sự kiện cho form xóa
         document.getElementById('deleteRoomForm').addEventListener('submit', function(e) {
             var confirmation = confirm("Are you sure you want to delete this room?");
