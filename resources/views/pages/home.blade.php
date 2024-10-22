@@ -8,6 +8,7 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
 
 <link rel="stylesheet" href="{{ asset('css/home.css') }}">
+<link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
 <script src="{{ asset('js/script.js') }}"></script>
 <script src="{{ asset('js/animation.js') }}"></script>
 <script src="{{ asset('js/counter_control.js') }}"></script>
@@ -59,6 +60,8 @@
             <img src="{{ asset('/images/logo_staynest_white_color.png') }}" alt="" width="50px">
             <h1 class="name-logo ms-2">StayNest</h1>
         </a>
+        <!-- Nút hamburger cho mobile -->
+        <div class="hamburger" id="hamburgerBtn">&#9776;</div>
         <div class="menu-header d-flex justify-content-center text-light m-3">
             <div class="container row align-items-center">
                 <div class="social-header col-md-2 text-center">
@@ -77,12 +80,12 @@
                 </div>
                 <div class="profile-header col-md-2">
                     <!-- Nếu chưa đăng nhập -->
-                    <div class="group-left-header">
+                    <!-- <div class="group-left-header">
                         <a href="#" class="login">Đăng nhập/</a>
                         <a href="#" class="register">Đăng ký</a>
-                    </div>
+                    </div> -->
                     <!-- Nếu đã đăng nhập -->
-                    <!-- <div class="loged">
+                    <div class="loged">
                         <div class="group-left-header d-flex align-items-center justify-content-center">
                             <div class="col-md-2 text-center">
                                 <i class="fa-solid fa-bell fa-xl"></i>
@@ -105,13 +108,13 @@
                             <a class="dropdown-item dropdown-item-staynest" href="#">Voucher</a>
                             <a class="dropdown-item dropdown-item-staynest text-danger" href="#">Đăng Xuất</a>
                         </div>
-                    </div> -->
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <section class="middle-staynest container mt-5">
-        <div class="search-bar-staynest color-light">
+    <section class="middle-staynest mt-5">
+        <div class="search-bar-staynest color-light container">
             <form action="{{ route('hotels.search') }}" method="GET" class="row d-flex justify-content-center">
                 @csrf
                 <div class="col-md-3 search-header">
@@ -185,13 +188,18 @@
         </div>
         <div class="solgan-staynest">
             <p>ĐẶT PHÒNG NHANH TẬN HƯỞNG NGAY</p>
+            <p class="header-text-muted">Khám phá du lịch với dịch vụ đặt phòng nhanh chóng và tiện lợi. Hãy bắt đầu
+                hành trình
+                của bạn ngay hôm
+                nay!</p>
+        </div>
+        <div class="button d-flex justify-content-center">
+            <a href="#" class="header-btn-book-now">ĐẶT NGAY</a>
         </div>
     </section>
 </section>
-<style>
 
-</style>
-<section class="top-hotel">
+<section class="famous-hotel">
     <div class="container">
         <div class="title mt-5 mb-2">Khách Sạn Nổi Tiếng</div>
         <div class="carousel-container">
@@ -356,53 +364,312 @@
         </div>
     </div>
 </section>
+
+<section class="popular-destination pb-5">
+    <div class="container">
+        <div class="title mt-5 mb-2">Điểm đến thịnh hànhg</div>
+        <div class="row">
+            <div class="col-md-6">
+                <a href="#" class="link-popular-destination">
+                    <img class="image-destitation-1"
+                        src="https://image.vietnamnews.vn/uploadvnnews/Article/2023/9/28/308010_4651436783396218_vna_potal_thanh_pho_ho_chi_minh_la_1_trong_10_diem_den_tuyet_voi_nhat_o_chau_a_6666855.jpg"
+                        alt="image">
+                    <p class="name-location-1">HỒ CHÍ MINH</p>
+                </a>
+            </div>
+            <div class="col-md-6">
+                <a href="#" class="link-popular-destination">
+                    <img class="image-destitation-1"
+                        src="https://letsflytravel.vn/assets/source/2_5_2024_Up/nha-trang-city-tour/nha-trang-letsflytravel.jpg"
+                        alt="image">
+                    <p class="name-location-1">ĐÀ NẴNG</p>
+            </div>
+            </a>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <a href="#" class="link-popular-destination">
+                    <img class="image-destitation-1"
+                        src="https://static.vinwonders.com/production/gioi-thieu-ve-da-lat-1.jpg" alt="image">
+                    <p class="name-location-1">ĐÀ LẠT</p>
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a href="#" class="link-popular-destination">
+                    <img class="image-destitation-1"
+                        src="https://vcdn1-dulich.vnecdn.net/2022/04/06/dulichCaMau01-1649220925-3009-1649240147.jpg?w=0&h=0&q=100&dpr=2&fit=crop&s=__uuV0wfll0lZgX01LNRsA"
+                        alt="image">
+                    <p class="name-location-1">CÀ MAU</p>
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a href="#" class="link-popular-destination">
+                    <img class="image-destitation-1"
+                        src="https://vcdn1-dulich.vnecdn.net/2022/06/03/cauvang-1654247842-9403-1654247849.jpg?w=1200&h=0&q=100&dpr=1&fit=crop&s=Swd6JjpStebEzT6WARcoOA"
+                        alt="image">
+                    <p class="name-location-1">ĐÀ NẴNG</p>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="our-offers pb-5">
+    <div class="container">
+        <div class="title mt-5 mb-2">Ưu đãi của chúng tôi</div>
+        <div class="carousel-container">
+            <div class="carousel-wrapper">
+                <div class="card">
+                    <a href="#" class="group-offers">
+                        <div class="shape-in">
+                            <img class="image-hotel-2"
+                                src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/209890188.jpg?k=882e748be3114714efa7f001b6ffa97425b1a52a458d3166dea3c1af7c66ac09&o=&hp=1"
+                                alt="">
+                            <div class="group-info-hotel">
+                                <p class="info-hotel-name m-0">Grand Wahlla Hotel</p>
+                                <p class="info-hotel-location m-0">Ho Chi Minh City, Viet Nam</p>
+                                <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i> 294 Đánh giá</p>
+                                <p class="info-hotel-price-old mb-0 mt-5 pt-5">1,710,000 đ</p>
+                                <div class="row group-heart-price">
+                                    <div class="col-md-6"><a href="#"><i class="fa-regular fa-heart"></i></a>
+                                        <!--<i class="fa-solid fa-heart"></i>-->
+                                    </div>
+                                    <div class="col-md-6 text-right"><span class="info-hotel-price-new">1,504,800
+                                            đ</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sale-hotel">-10%</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="card">
+                    <a href="#" class="group-offers">
+                        <div class="shape-in">
+                            <img class="image-hotel-2"
+                                src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/209890188.jpg?k=882e748be3114714efa7f001b6ffa97425b1a52a458d3166dea3c1af7c66ac09&o=&hp=1"
+                                alt="">
+                            <div class="group-info-hotel">
+                                <p class="info-hotel-name m-0">Grand Wahlla Hotel</p>
+                                <p class="info-hotel-location m-0">Ho Chi Minh City, Viet Nam</p>
+                                <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i> 294 Đánh giá</p>
+                                <p class="info-hotel-price-old mb-0 mt-5 pt-5">1,710,000 đ</p>
+                                <div class="row group-heart-price">
+                                    <div class="col-md-6"><a href="#"><i class="fa-regular fa-heart"></i></a>
+                                        <!--<i class="fa-solid fa-heart"></i>-->
+                                    </div>
+                                    <div class="col-md-6 text-right"><span class="info-hotel-price-new">1,504,800
+                                            đ</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sale-hotel">-10%</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="card">
+                    <a href="#" class="group-offers">
+                        <div class="shape-in">
+                            <img class="image-hotel-2"
+                                src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/209890188.jpg?k=882e748be3114714efa7f001b6ffa97425b1a52a458d3166dea3c1af7c66ac09&o=&hp=1"
+                                alt="">
+                            <div class="group-info-hotel">
+                                <p class="info-hotel-name m-0">Grand Wahlla Hotel</p>
+                                <p class="info-hotel-location m-0">Ho Chi Minh City, Viet Nam</p>
+                                <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i> 294 Đánh giá</p>
+                                <p class="info-hotel-price-old mb-0 mt-5 pt-5">1,710,000 đ</p>
+                                <div class="row group-heart-price">
+                                    <div class="col-md-6"><a href="#"><i class="fa-regular fa-heart"></i></a>
+                                        <!--<i class="fa-solid fa-heart"></i>-->
+                                    </div>
+                                    <div class="col-md-6 text-right"><span class="info-hotel-price-new">1,504,800
+                                            đ</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sale-hotel">-10%</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="card">
+                    <a href="#" class="group-offers">
+                        <div class="shape-in">
+                            <img class="image-hotel-2"
+                                src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/209890188.jpg?k=882e748be3114714efa7f001b6ffa97425b1a52a458d3166dea3c1af7c66ac09&o=&hp=1"
+                                alt="">
+                            <div class="group-info-hotel">
+                                <p class="info-hotel-name m-0">Grand Wahlla Hotel</p>
+                                <p class="info-hotel-location m-0">Ho Chi Minh City, Viet Nam</p>
+                                <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i> 294 Đánh giá</p>
+                                <p class="info-hotel-price-old mb-0 mt-5 pt-5">1,710,000 đ</p>
+                                <div class="row group-heart-price">
+                                    <div class="col-md-6"><a href="#"><i class="fa-regular fa-heart"></i></a>
+                                        <!--<i class="fa-solid fa-heart"></i>-->
+                                    </div>
+                                    <div class="col-md-6 text-right"><span class="info-hotel-price-new">1,504,800
+                                            đ</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sale-hotel">-10%</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="card">
+                    <a href="#" class="group-offers">
+                        <div class="shape-in">
+                            <img class="image-hotel-2"
+                                src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/209890188.jpg?k=882e748be3114714efa7f001b6ffa97425b1a52a458d3166dea3c1af7c66ac09&o=&hp=1"
+                                alt="">
+                            <div class="group-info-hotel">
+                                <p class="info-hotel-name m-0">Grand Wahlla Hotel</p>
+                                <p class="info-hotel-location m-0">Ho Chi Minh City, Viet Nam</p>
+                                <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i> 294 Đánh giá</p>
+                                <p class="info-hotel-price-old mb-0 mt-5 pt-5">1,710,000 đ</p>
+                                <div class="row group-heart-price">
+                                    <div class="col-md-6"><a href="#"><i class="fa-regular fa-heart"></i></a>
+                                        <!--<i class="fa-solid fa-heart"></i>-->
+                                    </div>
+                                    <div class="col-md-6 text-right"><span class="info-hotel-price-new">1,504,800
+                                            đ</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sale-hotel">-10%</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="card">
+                    <a href="#" class="group-offers">
+                        <div class="shape-in">
+                            <img class="image-hotel-2"
+                                src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/209890188.jpg?k=882e748be3114714efa7f001b6ffa97425b1a52a458d3166dea3c1af7c66ac09&o=&hp=1"
+                                alt="">
+                            <div class="group-info-hotel">
+                                <p class="info-hotel-name m-0">Grand Wahlla Hotel</p>
+                                <p class="info-hotel-location m-0">Ho Chi Minh City, Viet Nam</p>
+                                <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i> 294 Đánh giá</p>
+                                <p class="info-hotel-price-old mb-0 mt-5 pt-5">1,710,000 đ</p>
+                                <div class="row group-heart-price">
+                                    <div class="col-md-6"><a href="#"><i class="fa-regular fa-heart"></i></a>
+                                        <!--<i class="fa-solid fa-heart"></i>-->
+                                    </div>
+                                    <div class="col-md-6 text-right"><span class="info-hotel-price-new">1,504,800
+                                            đ</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sale-hotel">-10%</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="card">
+                    <a href="#" class="group-offers">
+                        <div class="shape-in">
+                            <img class="image-hotel-2"
+                                src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/209890188.jpg?k=882e748be3114714efa7f001b6ffa97425b1a52a458d3166dea3c1af7c66ac09&o=&hp=1"
+                                alt="">
+                            <div class="group-info-hotel">
+                                <p class="info-hotel-name m-0">Grand Wahlla Hotel</p>
+                                <p class="info-hotel-location m-0">Ho Chi Minh City, Viet Nam</p>
+                                <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i> 294 Đánh giá</p>
+                                <p class="info-hotel-price-old mb-0 mt-5 pt-5">1,710,000 đ</p>
+                                <div class="row group-heart-price">
+                                    <div class="col-md-6"><a href="#"><i class="fa-regular fa-heart"></i></a>
+                                        <!--<i class="fa-solid fa-heart"></i>-->
+                                    </div>
+                                    <div class="col-md-6 text-right"><span class="info-hotel-price-new">1,504,800
+                                            đ</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sale-hotel">-10%</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="card">
+                    <a href="#" class="group-offers">
+                        <div class="shape-in">
+                            <img class="image-hotel-2"
+                                src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/209890188.jpg?k=882e748be3114714efa7f001b6ffa97425b1a52a458d3166dea3c1af7c66ac09&o=&hp=1"
+                                alt="">
+                            <div class="group-info-hotel">
+                                <p class="info-hotel-name m-0">Grand Wahlla Hotel</p>
+                                <p class="info-hotel-location m-0">Ho Chi Minh City, Viet Nam</p>
+                                <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i> 294 Đánh giá</p>
+                                <p class="info-hotel-price-old mb-0 mt-5 pt-5">1,710,000 đ</p>
+                                <div class="row group-heart-price">
+                                    <div class="col-md-6"><a href="#"><i class="fa-regular fa-heart"></i></a>
+                                        <!--<i class="fa-solid fa-heart"></i>-->
+                                    </div>
+                                    <div class="col-md-6 text-right"><span class="info-hotel-price-new">1,504,800
+                                            đ</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sale-hotel">-10%</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <button class="prev-btn"><i class="fa-solid fa-arrow-right"></i></button>
+            <button class="next-btn"><i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+    </div>
+</section>
+
+@section('footer')
+@include('partials.footer') 
+@endsection
+
 <script>
-    const carouselWrapper = document.querySelector('.carousel-wrapper');
-    const cards = document.querySelectorAll('.card');
-    const nextBtn = document.querySelector('.next-btn');
-    const prevBtn = document.querySelector('.prev-btn');
-    let index = 0;
-    const visibleCards = 4; // Number of cards visible at a time
+    const carousels = document.querySelectorAll('.carousel-wrapper');
 
-    function updateCarousel() {
-        const cardWidth = cards[0].clientWidth;
-        carouselWrapper.style.transform = `translateX(${-index * cardWidth}px)`;
+    carousels.forEach(carousel => {
+        const cards = carousel.querySelectorAll('.card');
+        const nextBtn = carousel.parentElement.querySelector('.next-btn');
+        const prevBtn = carousel.parentElement.querySelector('.prev-btn');
+        let index = 0;
+        const visibleCards = 4; // Number of cards visible at a time
 
-        // Hide prev button if at the start
-        if (index === 0) {
-            prevBtn.classList.add('hidden');
-        } else {
-            prevBtn.classList.remove('hidden');
+        function updateCarousel() {
+            const cardWidth = cards[0].clientWidth;
+            carousel.style.transform = `translateX(${-index * cardWidth}px)`;
+
+            // Hide prev button if at the start
+            if (index === 0) {
+                prevBtn.classList.add('hidden');
+            } else {
+                prevBtn.classList.remove('hidden');
+            }
+
+            // Hide next button if at the end
+            if (index >= cards.length - visibleCards) {
+                nextBtn.classList.add('hidden');
+            } else {
+                nextBtn.classList.remove('hidden');
+            }
         }
 
-        // Hide next button if at the end
-        if (index >= cards.length - visibleCards) {
-            nextBtn.classList.add('hidden');
-        } else {
-            nextBtn.classList.remove('hidden');
-        }
-    }
+        nextBtn.addEventListener('click', () => {
+            if (index < cards.length - visibleCards) {
+                index++;
+                updateCarousel();
+            }
+        });
 
-    nextBtn.addEventListener('click', () => {
-        if (index < cards.length - visibleCards) {
-            index++;
-            updateCarousel();
-        }
+        prevBtn.addEventListener('click', () => {
+            if (index > 0) {
+                index--;
+                updateCarousel();
+            }
+        });
+
+        window.addEventListener('resize', updateCarousel); // Adjust on window resize
+
+        // Initial call to hide prev button on load
+        updateCarousel();
     });
-
-    prevBtn.addEventListener('click', () => {
-        if (index > 0) {
-            index--;
-            updateCarousel();
-        }
-    });
-
-    window.addEventListener('resize', updateCarousel); // Adjust on window resize
-
-    // Initial call to hide prev button on load
-    updateCarousel();
 </script>
 
-
-<!-- Thêm các nội dung khác cho trang chủ ở đây -->
 @endsection

@@ -41,44 +41,33 @@
      /* background: rgb(29,60,99);
 background: linear-gradient(90deg, rgba(29,60,99,1) 0%, rgba(59,121,201,1) 100%); */
      position: relative;
-     /* Đặt vị trí tương đối cho header */
      background-image: url('../images/banner_01.png');
      background-repeat: no-repeat;
      background-size: cover;
      width: 100%;
-     height: 100vh;
-     /* Chiều cao 100% viewport */
+     height: 110vh !important;
  }
 
  .banner {
      position: absolute;
-     /* Đặt banner ở vị trí tuyệt đối */
      top: 0;
      left: 0;
      width: 100%;
-     /* Chiếm toàn bộ chiều rộng */
-     height: 100%;
-     /* Chiếm toàn bộ chiều cao */
      z-index: 1;
      /* Đặt z-index thấp hơn để bg-in-image nằm trên */
  }
 
  .bg-in-image {
      position: absolute;
-     /* Đặt bg-in-image ở vị trí tuyệt đối */
      background: black;
      opacity: 0.5;
-     /* Độ mờ 50% */
      inset: 0;
-     /* Lấp đầy toàn bộ phần tử cha */
+     height: 110vh;
      z-index: 2;
-     /* Đặt z-index cao hơn banner */
  }
 
  .header-staynest>* {
-     /* Các phần tử con bên trong header */
      position: relative;
-     /* Đặt vị trí tương đối cho các phần tử con */
      z-index: 3;
      /* Đặt z-index cao hơn bg-in-image để nó nằm trên cùng */
  }
@@ -221,14 +210,28 @@ background: linear-gradient(90deg, rgba(29,60,99,1) 0%, rgba(59,121,201,1) 100%)
  }
 
  .solgan-staynest p {
-     /* display: flex; */
-     /* justify-content: center; */
      text-align: center;
      color: #fff;
      font-weight: 900;
      font-size: 90px;
-     padding: 15px;
-     margin: 50px;
+ }
+
+ .solgan-staynest .header-text-muted {
+     font-weight: 300;
+     font-size: 16px;
+ }
+
+ .header-btn-book-now {
+     color: #fff;
+     text-decoration: none;
+     border: 1px solid #fff;
+     border-radius: 50px;
+     padding: 10px 20px;
+     transition: background 300ms ease;
+ }
+
+ .header-btn-book-now:hover {
+     background: #3B79C9;
  }
 
  .input-search-header {
@@ -419,6 +422,32 @@ outline: none;
      object-fit: cover;
  }
 
+ .image-destitation-1 {
+     width: 100%;
+     height: 300px;
+     object-fit: cover;
+     border-radius: 30px;
+     transition: all 300ms ease;
+ }
+
+ .image-destitation-1:hover {
+     box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+ }
+
+ .link-popular-destination {
+     text-decoration: none;
+     font-size: 30px;
+     font-weight: 700;
+     color: #fff;
+     position: relative;
+ }
+
+ .link-popular-destination .name-location-1 {
+     position: absolute;
+     top: 10px;
+     left: 30px;
+ }
+
  .next-btn,
  .prev-btn {
      position: absolute;
@@ -539,11 +568,93 @@ outline: none;
      color: #ffff;
  }
 
+
+ .our-offers-card {
+     box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+     padding: 10px !important;
+     position: relative;
+ }
+
+ .group-offers {
+     color: black;
+     text-decoration: none;
+ }
+
+ .group-heart-price i {
+     font-size: 30px;
+ }
+
+ .info-hotel-price-old {
+     text-align: right;
+ }
+
+ .shape-in:hover {
+     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+ }
+
+ .shape-in {
+     position: relative;
+     box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+     border-radius: 10px;
+     width: 100%;
+     height: 100%;
+     transition: all 300ms ease;
+ }
+
+ .image-hotel-2 {
+     border-top-left-radius: 10px;
+     border-top-right-radius: 10px;
+ }
+
+ .group-info-hotel .group-heart-price .text-right {
+     text-align: right;
+ }
+
+ .group-info-hotel {
+     margin: 15px;
+ }
+
+ .sale-hotel {
+     position: absolute;
+     background: #FFFA7A;
+     top: 0;
+     right: 0;
+     left: 85%;
+     bottom: 92%;
+     border-top-right-radius: 10px;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     border-bottom-left-radius: 50%;
+     color: #FF2F2F;
+     font-weight: 600;
+ }
+
+ .info-hotel-name {
+     font-size: 20px;
+     font-weight: 700;
+ }
+
+ .info-hotel-location,
+ .info-hotel-reviews {
+     font-size: 16px;
+ }
+
+ .info-hotel-price-old {
+     font-size: 15px;
+     color: red;
+     text-decoration: line-through;
+ }
+
+ .info-hotel-price-new {
+     font-size: 20px;
+     font-weight: 700;
+ }
+
  /* Responsive adjustments */
  @media (max-width: 768px) {
      .card {
          flex: 0 0 50%;
-         /* Show 2 cards at a time on smaller screens */
          max-width: 50%;
      }
  }
@@ -551,7 +662,6 @@ outline: none;
  @media (max-width: 480px) {
      .card {
          flex: 0 0 100%;
-         /* Show 1 card at a time on mobile */
          max-width: 100%;
      }
  }
