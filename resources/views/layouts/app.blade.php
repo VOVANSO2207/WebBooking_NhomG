@@ -13,14 +13,12 @@
     <!-- Gắn Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-   
+
 </head>
 
 <body>
-<<<<<<< HEAD
-    @yield('content')
     <script src="{{asset('js/search_result.js')}}"></script>
-=======
+
     <!-- content page home -->
     <div class="content">
         @yield('content')
@@ -28,7 +26,6 @@
 
     <!-- footer -->
     @yield('footer')
->>>>>>> UI-Home-NguyenSon
 </body>
 
 </html>
