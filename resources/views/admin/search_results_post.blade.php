@@ -1,5 +1,8 @@
+@php
+    use App\Helpers\IdEncoder;
+@endphp
 @forelse ($results as $index => $post)
-    <tr class="post-detail1" data-id="{{ $post->post_id }}">
+    <tr class="post-detail1" data-id="{{ IdEncoder::encodeId($post->post_id) }}">
         <td>{{ $index + 1 }}</td>
         <td>
             <img src="{{ asset('images/' . $post->img) }}" alt="{{ $post->title }}" style="width: 100px; height: auto;">
