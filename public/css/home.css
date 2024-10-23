@@ -37,7 +37,7 @@
      box-sizing: border-box;
  }
 
- .header-staynest {
+ .header-staynest-home {
      /* background: rgb(29,60,99);
 background: linear-gradient(90deg, rgba(29,60,99,1) 0%, rgba(59,121,201,1) 100%); */
      position: relative;
@@ -48,7 +48,7 @@ background: linear-gradient(90deg, rgba(29,60,99,1) 0%, rgba(59,121,201,1) 100%)
      height: 110vh !important;
  }
 
- .banner {
+ .banner-home {
      position: absolute;
      top: 0;
      left: 0;
@@ -57,7 +57,7 @@ background: linear-gradient(90deg, rgba(29,60,99,1) 0%, rgba(59,121,201,1) 100%)
      /* Đặt z-index thấp hơn để bg-in-image nằm trên */
  }
 
- .bg-in-image {
+ .bg-in-image-home {
      position: absolute;
      background: black;
      opacity: 0.5;
@@ -66,7 +66,7 @@ background: linear-gradient(90deg, rgba(29,60,99,1) 0%, rgba(59,121,201,1) 100%)
      z-index: 2;
  }
 
- .header-staynest>* {
+ .header-staynest-home>* {
      position: relative;
      z-index: 3;
      /* Đặt z-index cao hơn bg-in-image để nó nằm trên cùng */
@@ -194,7 +194,7 @@ background: linear-gradient(90deg, rgba(29,60,99,1) 0%, rgba(59,121,201,1) 100%)
      padding: 0;
  }
 
- .middle-staynest {
+ .middle-staynest-home {
      z-index: 2;
  }
 
