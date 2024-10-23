@@ -24,14 +24,14 @@
                         <div class="row">
                             <div class="mb-3 col-md-12">
                                 <label class="form-label">Title</label>
-                                <input class="form-control" type="text" name="title" id="title" placeholder="Title" required />
+                                <input class="form-control" type="text" name="title" id="title" placeholder="Title"/>
                                 @error('title')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="mb-3 col-md-12">
                                 <label class="form-label">Description</label>
-                                <textarea name="description" id="description" required></textarea>
+                                <textarea name="description" id="description"></textarea>
                                 @error('description')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror

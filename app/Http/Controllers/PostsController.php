@@ -147,7 +147,7 @@ class PostsController extends Controller
             'title.min' => 'Tiêu đề bài viết phải trên 30 ký tự',
             'title.max' => 'Tiêu đề bài viết không được quá 100 ký tự',
             'title.regex' => 'Tiêu đề bài viết không hợp lệ',
-            'description.required' => 'Mô tả là bắt buộc.',
+            'description.required' => 'Vui lòng nhập mô tả bài viết',
             'description.max' => 'Mô tả không quá 1000 ký tự.',
             'description.min' => 'Mô tả bài viết không được dưới 50 ký tự',
             'content1.required' => 'Nội dung bài viết không được để trống',
