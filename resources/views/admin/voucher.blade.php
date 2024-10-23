@@ -103,10 +103,6 @@
                         <strong>End Date:</strong>
                         <span id="modalEndDate"></span>
                     </div>
-                    <div class="voucher-detail-item detail-item">
-                        <strong>Last Updated:</strong>
-                        <span id="modalUpdatedAt"></span>
-                    </div>
                 </div>
             </div>
             <div class="modal-footer" style="display: flex; justify-content: space-between;">
@@ -121,6 +117,43 @@
     </div>
 </div>
 
+<!-- Modal for confirm delete -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">XÁC NHẬN XOÁ</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Bạn có muốn xoá voucher này không?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteButton">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal for notifications -->
+<div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="notificationModalLabel">Thông Báo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="notificationModalBody">
+                <!-- Nội dung thông báo sẽ được chèn vào đây -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -128,13 +161,11 @@
         let currentVoucherId = null;
         let currentUpdatedAt = null;
 
-        // Handle row click for details
         voucherDetailRows.forEach(row => {
             row.addEventListener('click', function () {
                 currentVoucherId = this.getAttribute('data-id');
                 currentUpdatedAt = this.getAttribute('data-updated-at');
 
-                // Fetch voucher details
                 fetch(`/voucher/${currentVoucherId}/detail`)
                     .then(response => {
                         if (!response.ok) {
@@ -147,8 +178,6 @@
                         document.getElementById('modalDiscountAmount').innerText = voucher.discount_amount;
                         document.getElementById('modalStartDate').innerText = voucher.start_date;
                         document.getElementById('modalEndDate').innerText = voucher.end_date;
-                        document.getElementById('modalUpdatedAt').innerText = voucher.updated_at;
-
                         // Show modal
                         const modal = new bootstrap.Modal(document.getElementById('voucherDetailModal'));
                         modal.show();
@@ -159,7 +188,60 @@
             });
         });
 
-     });
+        const confirmDeleteButton = document.getElementById('confirmDeleteButton');
+        confirmDeleteButton.addEventListener('click', function () {
+            if (currentVoucherId) {
+                const deleteRoute = "{{ route('voucher.delete', ['promotion_id' => ':id']) }}".replace(':id', currentVoucherId);
+
+                fetch(deleteRoute, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ updated_at: currentUpdatedAt }) // Gửi updated_at
+                })
+                    .then(response => {
+                        return response.json().then(data => {
+                            if (!response.ok) {
+                                console.error('Error response:', data);
+                                document.getElementById('notificationModalBody').innerText = 'Lỗi: ' + (data.error || 'Đã xảy ra lỗi không xác định.');
+                                const modal = new bootstrap.Modal(document.getElementById('notificationModal'));
+                                modal.show();
+                            } else {
+                                document.getElementById('notificationModalBody').innerText = 'Xóa Voucher Thành Công';
+                                const modal = new bootstrap.Modal(document.getElementById('notificationModal'));
+                                modal.show();
+
+                                setTimeout(() => {
+                                    location.reload();
+                                }, 1500);
+                            }
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Có lỗi xảy ra:', error);
+                        document.getElementById('notificationModalBody').innerText = 'Có lỗi xảy ra: ' + error.message;
+                        const modal = new bootstrap.Modal(document.getElementById('notificationModal'));
+                        modal.show();
+                    });
+            }
+        });
+
+        document.getElementById('confirmDeleteModal').addEventListener('hidden.bs.modal', function () {
+            const backdrop = document.querySelector('.modal-backdrop');
+            if (backdrop) {
+                backdrop.remove(); 
+            }
+        });
+
+        document.getElementById('cancelButton').addEventListener('click', function () {
+            const confirmDeleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+            confirmDeleteModal.hide(); 
+        });
+    });
 </script>
+
+
 
 @endsection

@@ -4620,7 +4620,25 @@ textarea.form-control-lg {
   flex-grow: 1;
   text-align: right;
 }
+.detail-item {
+  margin-bottom: 15px; 
+  display: flex; 
+  justify-content: space-between;
+  align-items: center; 
+  border-bottom: 1px solid #eaeaea;
+  padding: 10px 0;
+}
 
+.detail-item strong {
+  color: #333;
+  font-weight: bold; 
+}
+
+.detail-item span {
+  color: #555;
+  flex-grow: 1;
+  text-align: right;
+}
 #modalImage {
   width: 100%; 
   height: auto;
