@@ -131,6 +131,34 @@
     });
 });
  
+$(document).ready(function () {
+    $('#search_voucher').on('keyup', function () {
+        $value = $(this).val();
+        if ($value) {
+            $('.alldata').hide();
+            $('.searchdata').show();
+            $('.pagination-voucher').each(function () {
+                this.style.cssText += 'display: none !important';});
+        } else {
+            $('.alldata').show();
+            $('.searchdata').hide();
+            $('.pagination-voucher').each(function () {
+                this.style.cssText += 'display: flex !important;';});
+        }
+
+        $.ajax({
+            type: 'get',
+            url: '{{ route("search.vouchers") }}',
+            data: {
+                'search': $value
+            },
+            success: function (data) {
+                $('#Content').html(data);
+            }
+        });
+    });
+});
+ 
 
 </script>
 </html>
