@@ -31,7 +31,7 @@
                             <div class="mb-3 col-md-12">
                                 <label class="form-label">Title</label>
                                 <input class="form-control" type="text" name="title" id="title"
-                                    value="{{ old('title', $post->title) }}" placeholder="Title" required />
+                                    value="{{ old('title', $post->title) }}" placeholder="Title"/>
                                 @error('title')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
