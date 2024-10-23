@@ -55,7 +55,9 @@ Route::put('/admin/posts/{id}', [PostsController::class, 'update'])->name('admin
 
 // Admin- VOUCHER
 Route::get('/admin/voucher', [PromotionsController::class, 'viewVoucher'])->name('admin.viewvoucher');
+Route::get('/voucher/{promotion_id}/detail', action: [PromotionsController::class, 'getVoucherDetail'])->name('voucher.detail');
 Route::get('/vouchers/search', [PromotionsController::class, 'searchVoucher'])->name('search.vouchers');
+Route::delete('/voucher/{promotion_id}', action: [PromotionsController::class, 'destroy'])->name('voucher.delete');
 
 
 // Search
