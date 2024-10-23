@@ -9,12 +9,13 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HotelController;
 use App\Http\Controllers\CitiesController;
 use App\Http\Controllers\PromotionsController;
+use App\Http\Controllers\PaymentsController;
 
-    
+
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('pages/home');
 })->name('welcome');
 Route::get('/login', function () {
     return view('auth.login');
@@ -28,6 +29,13 @@ Route::get('/search_result', function () {
     return view('search_result');
 });
 
+Route::get('/header', function () {
+    return view('partials/header');
+});
+
+// Route::get('/home', function () {
+//     return view('pages/home');
+// });
 
 // Admin - Home
 Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
@@ -64,11 +72,14 @@ Route::get('/hotels', [HotelController::class, 'index'])->name('hotels.index');
 Route::get('hotels/search', [HotelController::class, 'search'])->name('hotels.search');
 
 // Cities
-Route::get('/pages/home', [CitiesController::class, 'index'])->name('home');
+// Route::get('/partials/search', [CitiesController::class, 'index'])->name('home');
 
 Route::get('/error', function () {
     return view('error');
 })->name('error');
+
+// Pay
+Route::get('/payment', [PaymentsController::class, 'viewPay'])->name('pages.pay');
 
 
 

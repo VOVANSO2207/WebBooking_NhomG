@@ -3,23 +3,17 @@
 
 @section('title', 'Trang chủ')
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
-
-<link rel="stylesheet" href="{{ asset('css/home.css') }}">
-<link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
-<script src="{{ asset('js/script.js') }}"></script>
-<script src="{{ asset('js/animation.js') }}"></script>
-<script src="{{ asset('js/counter_control.js') }}"></script>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script> -->
 
-<script>
+<!-- <script>
     // Datepicker
     function initializeDateRangePicker() {
         const startDate = moment(); // Ngày hiện tại
@@ -49,19 +43,17 @@
     $(document).ready(function () {
         initializeDateRangePicker(); // Gọi hàm khởi tạo
     });
-</script>
+</script> -->
 
 @section('content')
-<div class="banner"></div>
-<div class="bg-in-image"></div>
-<section class="header-staynest">
+<div class="banner-home"></div>
+<div class="bg-in-image-home"></div>
+<section class="header-staynest-home">
     <div class="top-header">
         <a href="#" class="logo-staynest p-3">
             <img src="{{ asset('/images/logo_staynest_white_color.png') }}" alt="" width="50px">
             <h1 class="name-logo ms-2">StayNest</h1>
         </a>
-        <!-- Nút hamburger cho mobile -->
-        <div class="hamburger" id="hamburgerBtn">&#9776;</div>
         <div class="menu-header d-flex justify-content-center text-light m-3">
             <div class="container row align-items-center">
                 <div class="social-header col-md-2 text-center">
@@ -113,8 +105,8 @@
             </div>
         </div>
     </div>
-    <section class="middle-staynest mt-5">
-        <div class="search-bar-staynest color-light container">
+    <section class="middle-staynest-home mt-5">
+        <div class="search-bar-staynest-home color-light container">
             <form action="{{ route('hotels.search') }}" method="GET" class="row d-flex justify-content-center">
                 @csrf
                 <div class="col-md-3 search-header">
@@ -184,9 +176,8 @@
                         Sạn</button>
                 </div>
             </form>
-
         </div>
-        <div class="solgan-staynest">
+        <div class="solgan-staynest container">
             <p>ĐẶT PHÒNG NHANH TẬN HƯỞNG NGAY</p>
             <p class="header-text-muted">Khám phá du lịch với dịch vụ đặt phòng nhanh chóng và tiện lợi. Hãy bắt đầu
                 hành trình
