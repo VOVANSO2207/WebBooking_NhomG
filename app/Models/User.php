@@ -9,13 +9,6 @@ class User extends Model
 {
     use HasFactory;
 
-    // Tên bảng
-    protected $table = 'users';
-
-    // Khóa chính của bảng
-    protected $primaryKey = 'user_id';
-
-    // Các trường được phép fill vào
     protected $fillable = [
         'username',
         'email',
@@ -26,11 +19,38 @@ class User extends Model
         'avatar',
     ];
 
-    // Ẩn các trường khi trả về JSON
-    protected $hidden = [
-        'password',
-    ];
+    protected $primaryKey = 'user_id';
 
-    // Tự động thêm created_at và updated_at
-    public $timestamps = true;
+    public static function getAllUsers($perPage = 10)
+    {
+        return self::orderBy('created_at', 'DESC')->paginate($perPage);
+    }
+
+    public static function findUserById($user_id)
+    {
+        return self::where('user_id', $user_id)->first();
+    }
+
+    public static function createUser(array $data)
+    {
+        return self::create($data);
+    }
+
+    public static function searchUser($keyword)
+    {
+        if (empty($keyword)) {
+            return static::query(); // Trả về tất cả người dùng
+        }
+
+        return static::where(function ($query) use ($keyword) {
+            $query->where('username', 'LIKE', "%{$keyword}%")
+                  ->orWhere('email', 'LIKE', "%{$keyword}%")
+                  ->orWhere('phone_number', 'LIKE', "%{$keyword}%");
+        });
+    }
+
+    public function deleteUser()
+    {
+        return $this->delete();
+    }
 }

@@ -7,5 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Promotions extends Model
 {
-    use HasFactory;
+    protected $table = 'promotions';
+    protected $primaryKey = 'promotion_id'; // Đặt tên cột khóa chính
+
+    public function room()
+    {
+        return $this->belongsTo(Rooms::class, 'promotion_id', 'room_id');
+    }
 }
