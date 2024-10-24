@@ -1,120 +1,218 @@
 @extends('admin.layouts.master')
+
 @section('admin-container')
 <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
     id="layout-navbar">
     <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
-        <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+        <a class="nav-item nav-link px-0 me-xl-4">
             <i class="bx bx-menu bx-sm"></i>
         </a>
     </div>
 
     <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-        <!-- Search -->
         <div class="navbar-nav align-items-center" style="width: 100%;">
-            <form action="{{ route('admin.searchUsers') }}" method="GET" style="width: 100%;">
-                <div class="nav-item d-flex align-items-center" style="width: 100%;">
-                    <i class="bx bx-search fs-4 lh-0"></i>
-                    <input type="text" class="form-control border-0 shadow-none" name="query" placeholder="Search..."
-                        aria-label="Search..." style="width: 100%;" />
-                </div>
+            <form action="{{ route('admin.users.search') }}" method="GET" class="d-flex align-items-center"
+                style="width: 100%;">
+                <i class="bx bx-search fs-4 lh-0"></i>
+                <input type="text" name="search" class="form-control border-0 shadow-none" placeholder="Search..."
+                    aria-label="Search..." style="width: 100%;" />
+                <button type="submit" class="btn btn-primary">Search</button>
             </form>
         </div>
-        <!-- /Search -->
-
     </div>
 </nav>
 
-<!-- Content wrapper -->
 <div class="content-wrapper">
-    <!-- Content -->
     <div class="container-xxl flex-grow-1 container-p-y">
-        <!-- Basic Bootstrap Table -->
         <div class="card">
-            <h5 class="card-header" style="background-color: #696cff; border-color: #696cff; color:#fff">USER</h5>
+            <h5 class="card-header" style="background-color: #696cff; border-color: #696cff; color:#fff">USER MANAGEMENT
+            </h5>
             <div class="add">
-                <a class="btn btn-success" href="{{route(name: 'user_add')}}">Add</a>
+                <a class="btn btn-success" href="{{ route('user_add') }}">Add</a>
             </div>
             <div class="table-responsive text-nowrap content1">
                 <table class="table">
                     <thead>
                         <tr class="color_tr">
                             <th>STT</th>
+                            <th>Avatar</th>
                             <th>Username</th>
                             <th>Email</th>
-                            <th>Phonenumber</th>
+                            <th>Phone Number</th>
                             <th>Role</th>
                             <th>Status</th>
-                            <th>Avatar</th>
-                            <th>Action</th> <!-- Thêm cột Action -->
                         </tr>
                     </thead>
                     <tbody class="table-border-bottom-0 alldata">
-                        @forelse ($users as $index => $user)
-                            <tr>
+                        @forelse ($results ?? $users as $index => $user)
+                            <tr class="user-detail" data-id="{{ $user->user_id }}">
                                 <td>{{ $index + 1 }}</td>
+                                <td>
+                                    <img src="{{ asset('images/' . $user->avatar) }}" alt="{{ $user->username }}"
+                                        style="width: 100px; height: auto;">
+                                </td>
                                 <td>{{ $user->username }}</td>
                                 <td>{{ $user->email }}</td>
                                 <td>{{ $user->phone_number }}</td>
-                                <td>{{ $user->role_id == 2 ? 'User' : ($user->role_id == 3 ? 'Admin' : 'Unknown') }}</td>
-                                <td>
-                                    @if($user->status == 1)
-                                        <span class="badge bg-success">Active</span>
-                                    @else
-                                        <span class="badge bg-danger">Inactive</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    <img src="{{ asset('images/' . $user->avatar) }}"
-                                        onerror="this.onerror=null; this.src='{{ asset('images/default-avatar.png') }}'"
-                                        alt="Avatar" style="width: 50px; height: 50px;">
-                                </td>
-                                <td>
-                                    <!-- Thêm các nút Action -->
-                                    <a href="{{ route('admin.user.show', $user->user_id) }}"
-                                        class="btn btn-info btn-sm">View</a>
-                                    <a href="{{ route('admin.user.edit', $user->user_id) }}"
-                                        class="btn btn-warning btn-sm">Edit</a>
-                                    <form action="{{ route('admin.user.destroy', $user->user_id) }}" method="POST"
-                                        style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm"
-                                            onclick="return confirm('Are you sure you want to delete this user?');">Delete</button>
-                                    </form>
+                                <td>{{ $user->role->role_name ?? 'N/A' }}</td>
+                                <td class="{{ $user->status ? 'badge bg-success' : 'badge bg-danger' }}">
+                                    {{ $user->status ? 'Active' : 'Inactive' }}
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="text-center">Không có user nào để hiển thị.</td>
+                                <td colspan="7" class="text-center">Không có người dùng nào để hiển thị.</td>
                             </tr>
                         @endforelse
                     </tbody>
-
                 </table>
-
-                <!-- Phân trang -->
-                <div class="d-flex justify-content-center mt-3">
-                    {{$users->links('pagination::bootstrap-4')}}
-                </div>
+            </div>
+            <div class="d-flex justify-content-center mt-3 pagination-user">
+                {{ (isset($results) ? $results : $users)->links('pagination::bootstrap-4') }}
             </div>
         </div>
-        <!--/ Basic Bootstrap Table -->
     </div>
 </div>
 
-@if(session('success'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <strong>Success!</strong> {{ session('success') }}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
+<!-- Modal chi tiết người dùng -->
+<div class="modal fade" id="userDetailModal" tabindex="-1" aria-labelledby="userDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="userDetailModalLabel">User Detail</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="user-detail">
+                    <div class="user-detail-item">
+                        <strong>Username:</strong>
+                        <span id="modalUsername"></span>
+                    </div>
+                    <div class="user-detail-item">
+                        <strong>Email:</strong>
+                        <span id="modalEmail"></span>
+                    </div>
+                    <div class="user-detail-item">
+                        <strong>Phone Number:</strong>
+                        <span id="modalPhoneNumber"></span>
+                    </div>
+                    <div class="user-detail-item">
+                        <strong>Role Name:</strong>
+                        <span id="modalRoleId"></span>
+                    </div>
+                    <div class="user-detail-item">
+                        <strong>Status:</strong>
+                        <span id="modalStatus"></span>
+                    </div>
+                    <div class="user-detail-item">
+                        <strong>Avatar:</strong>
+                        <img id="modalAvatar" style="width: 100%; height: auto; max-width: 200px;" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="display: flex; justify-content: space-between;">
+                <a id="editUserButton" class="btn btn-info">Edit</a>
+                <button type="button" class="btn btn-danger" id="deleteUserButton" data-bs-toggle="modal"
+                    data-bs-target="#confirmDeleteUserModal">Delete</button>
+            </div>
+            <div class="modal-footer" style="width: 100%; position: relative; bottom: 0;">
+                <button type="button" class="btn btn-secondary w-100" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
     </div>
-@endif
+</div>
+
+<!-- Modal xác nhận xóa -->
+<div class="modal fade" id="confirmDeleteUserModal" tabindex="-1" aria-labelledby="confirmDeleteUserModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteUserModalLabel">Xác nhận xóa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc chắn muốn xóa người dùng này không?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteUserButton">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
-    var successMessage = document.getElementById('deleteSuccessMessage');
-    if (successMessage) {
-        swal(successMessage.innerText, "You clicked the button!", "success");
-    }
+    document.addEventListener('DOMContentLoaded', function () {
+        const userDetailRows = document.querySelectorAll('.user-detail');
+        let currentUserId = null; // Lưu ID người dùng hiện tại
+
+        // Khi người dùng nhấn vào một người dùng
+        userDetailRows.forEach(row => {
+            row.addEventListener('click', function () {
+                currentUserId = this.getAttribute('data-id'); // Lưu ID người dùng hiện tại
+                console.log(`/users/${currentUserId}/detail`);
+
+                // Gọi AJAX để lấy thông tin chi tiết người dùng
+                fetch(`/users/${currentUserId}/detail`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(user => {
+                        // Cập nhật nội dung modal
+                        document.getElementById('modalUsername').innerText = user.username;
+                        document.getElementById('modalEmail').innerText = user.email;
+                        document.getElementById('modalPhoneNumber').innerText = user.phone_number;
+                        document.getElementById('modalRoleId').innerText = user.role_id;
+                        document.getElementById('modalStatus').innerText = user.status ? 'Active' : 'Inactive';
+                        const avatarUrl = user.avatar ? `/images/${user.avatar}` : '/path/to/default/avatar.jpg';
+                        document.getElementById('modalAvatar').src = avatarUrl;
+
+                        // Thiết lập đường dẫn cho nút Edit
+                        const editRoute = "{{ route('user.edit', ['user_id' => ':id']) }}".replace(':id', currentUserId);
+                        document.getElementById('editUserButton').setAttribute('href', editRoute);
+
+                        // Hiển thị modal
+                        new bootstrap.Modal(document.getElementById('userDetailModal')).show();
+                    })
+                    .catch(error => {
+                        console.error('Error fetching user details:', error);
+                    });
+            });
+        });
+
+        // Xử lý sự kiện nhấn nút Delete trong modal
+        document.getElementById('deleteUserButton').addEventListener('click', function () {
+            new bootstrap.Modal(document.getElementById('confirmDeleteUserModal')).show();
+        });
+
+        // Xác nhận xóa người dùng
+        document.getElementById('confirmDeleteUserButton').addEventListener('click', function () {
+            fetch(`/users/${currentUserId}/delete`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}', // Thêm CSRF token
+                },
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // Xóa người dùng khỏi bảng
+                        const rowToDelete = document.querySelector(`.user-detail[data-id="${currentUserId}"]`);
+                        rowToDelete.remove();
+                        new bootstrap.Modal(document.getElementById('confirmDeleteUserModal')).hide();
+                        alert('User deleted successfully.');
+                    } else {
+                        throw new Error('Failed to delete user.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error deleting user:', error);
+                    alert('An error occurred while deleting the user.');
+                });
+        });
+    });
 </script>
 @endsection
