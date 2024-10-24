@@ -74,11 +74,11 @@ class UsersController extends Controller
 
     // Xử lý upload ảnh
     if ($request->hasFile('avatar')) {
-        $avatarName = $request->file('avatar')->getClientOriginalName(); // Lấy tên gốc của ảnh
-        $request->file('avatar')->storeAs('images', $avatarName, 'public'); // Lưu ảnh vào thư mục public/images
+        // Lưu ảnh vào thư mục public/images
+        $avatarName = time() . '.' . $request->avatar->extension();
+        $request->avatar->move(public_path('images'), $avatarName);
         $user->avatar = $avatarName; // Lưu tên ảnh vào cơ sở dữ liệu
     } else {
-        // Nếu không có ảnh, sử dụng ảnh mặc định
         $user->avatar = 'default-avatar.png';
     }
 
