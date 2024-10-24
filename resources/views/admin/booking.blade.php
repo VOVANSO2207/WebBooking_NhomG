@@ -21,7 +21,7 @@
 <div class="content-wrapper">
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="card">
-            <h5 class="card-header" style="background-color: #696cff; border-color: #696cff; color:#fff">BOOKING</h5>
+            <h5 class="card-header text-white" style="background-color: #696cff; border-color: #696cff;">BOOKING</h5>
             <div class="table-responsive text-nowrap content1">
                 <table class="table">
                     <thead>
@@ -138,47 +138,47 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const bookingDetailRows = document.querySelectorAll('.booking-detail');
-        let currentBookingId = null; // Lưu ID đặt phòng hiện tại
+        let currentBookingId = null;
 
-        // Khi người dùng nhấn vào một đặt phòng
+        // Khi người dùng nhấn vào một dòng đặt phòng
         bookingDetailRows.forEach(row => {
             row.addEventListener('click', function () {
-                currentBookingId = this.getAttribute('data-id'); // Lưu ID đặt phòng hiện tại
+                currentBookingId = this.getAttribute('data-id');
 
-                // Gọi AJAX để lấy thông tin chi tiết đặt phòng
+                // Fetch thông tin chi tiết đặt phòng
                 fetch(`/bookings/${currentBookingId}/detail`)
-                    .then(response => response.json())
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
                     .then(booking => {
-                        // Cập nhật nội dung modal
-                        document.getElementById('modalUserId').innerText = booking.user_id;
-                        document.getElementById('modalRoomId').innerText = booking.room_id;
-                        document.getElementById('modalPromotionId').innerText = booking.promotion_id;
-                        document.getElementById('modalCheckIn').innerText = booking.check_in;
-                        document.getElementById('modalCheckOut').innerText = booking.check_out;
-                        document.getElementById('modalTotalPrice').innerText = booking.total_price;
-                        document.getElementById('modalStatus').innerText = booking.status.charAt(0).toUpperCase() + booking.status.slice(1);
+                        // Kiểm tra thông tin đã nhận được
+                        if (booking) {
+                            document.getElementById('modalUserId').innerText = booking.user_id;
+                            document.getElementById('modalRoomId').innerText = booking.room_id;
+                            document.getElementById('modalPromotionId').innerText = booking.promotion_id;
+                            document.getElementById('modalCheckIn').innerText = booking.check_in;
+                            document.getElementById('modalCheckOut').innerText = booking.check_out;
+                            document.getElementById('modalTotalPrice').innerText = booking.total_price;
+                            document.getElementById('modalStatus').innerText = booking.status.charAt(0).toUpperCase() + booking.status.slice(1);
 
-                        // Thiết lập đường dẫn cho nút Edit
-                        const editRoute = "{{ route('booking.edit', ['booking_id' => ':id']) }}".replace(':id', currentBookingId);
-                        document.getElementById('editBookingButton').setAttribute('href', editRoute);
+                            const editRoute = "{{ route('booking.edit', ['booking_id' => ':id']) }}".replace(':id', currentBookingId);
+                            document.getElementById('editBookingButton').setAttribute('href', editRoute);
 
-                        // Hiển thị modal
-                        const modal = new bootstrap.Modal(document.getElementById('bookingDetailModal'));
-                        modal.show();
+                            new bootstrap.Modal(document.getElementById('bookingDetailModal')).show();
+                        } else {
+                            console.error('Không có thông tin đặt phòng.');
+                        }
                     })
                     .catch(error => {
-                        console.error('Có vấn đề với yêu cầu fetch:', error);
+                        console.error('Lỗi khi lấy thông tin đặt phòng:', error);
                     });
             });
         });
 
-        // Khi người dùng nhấn nút "Delete"
-        document.getElementById('deleteBookingButton').addEventListener('click', function () {
-            const confirmDeleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
-            confirmDeleteModal.show();
-        });
-
-        // Khi người dùng nhấn nút "OK" trong modal xác nhận
+        // Xác nhận xóa
         document.getElementById('confirmDeleteButton').addEventListener('click', function () {
             if (currentBookingId) {
                 const deleteRoute = "{{ route('booking.delete', ['booking_id' => ':id']) }}".replace(':id', currentBookingId);
@@ -191,16 +191,17 @@
                 })
                 .then(response => {
                     if (response.ok) {
-                        location.reload(); // Tải lại trang để cập nhật danh sách đặt phòng
+                        location.reload(); // Cập nhật danh sách sau khi xóa
                     } else {
-                        console.error('Có vấn đề khi xóa đặt phòng:', response.statusText);
+                        console.error('Lỗi khi xóa đặt phòng:', response.statusText);
                     }
                 })
                 .catch(error => {
-                    console.error('Có vấn đề với yêu cầu fetch:', error);
+                    console.error('Lỗi khi thực hiện yêu cầu xóa:', error);
                 });
             }
         });
     });
 </script>
+
 @endsection

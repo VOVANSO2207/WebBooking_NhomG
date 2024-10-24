@@ -37,44 +37,59 @@ class UsersController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'username' => 'required|min:3|max:50|unique:users,username',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:8|confirmed',
-            'phone_number' => 'required|regex:/^0[0-9]{9}$/',
-            'role_id' => 'required|integer',
-            'status' => 'required|boolean',
-            'avatar' => 'nullable|string',
-        ], [
-            'username.required' => 'Vui lòng nhập tên người dùng',
-            'username.min' => 'Tên người dùng phải có ít nhất 3 ký tự',
-            'username.max' => 'Tên người dùng không được quá 50 ký tự',
-            'username.unique' => 'Tên người dùng đã tồn tại',
-            'email.required' => 'Vui lòng nhập email',
-            'email.email' => 'Email không hợp lệ',
-            'email.unique' => 'Email đã tồn tại',
-            'password.required' => 'Vui lòng nhập mật khẩu',
-            'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự',
-            'password.confirmed' => 'Mật khẩu không khớp',
-            'phone_number.required' => 'Vui lòng nhập số điện thoại',
-            'phone_number.regex' => 'Số điện thoại không hợp lệ',
-            'role_id.required' => 'Vui lòng chọn vai trò',
-            'status.required' => 'Trạng thái là bắt buộc',
-        ]);
+{
+    $request->validate([
+        'username' => 'required|min:3|max:50|unique:users,username',
+        'email' => 'required|email|unique:users,email',
+        'password' => 'required|min:8',
+        'phone_number' => 'required|regex:/^0[0-9]{9}$/',
+        'role_id' => 'required|integer',
+        'status' => 'required|boolean',
+        'avatar' => 'nullable|image|mimes:jpeg,png,jpg|max:20480', // Kích thước tối đa 20MB
+    ], [
+        'username.required' => 'Vui lòng nhập tên người dùng',
+        'username.min' => 'Tên người dùng phải có ít nhất 3 ký tự',
+        'username.max' => 'Tên người dùng không được quá 50 ký tự',
+        'username.unique' => 'Tên người dùng đã tồn tại',
+        'email.required' => 'Vui lòng nhập email',
+        'email.email' => 'Email không hợp lệ',
+        'email.unique' => 'Email đã tồn tại',
+        'password.required' => 'Vui lòng nhập mật khẩu',
+        'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự',
+        'phone_number.required' => 'Vui lòng nhập số điện thoại',
+        'phone_number.regex' => 'Số điện thoại không hợp lệ',
+        'role_id.required' => 'Vui lòng chọn vai trò',
+        'status.required' => 'Trạng thái là bắt buộc',
+        'avatar.image' => 'Ảnh phải là định dạng JPEG, PNG, hoặc JPG.',
+        'avatar.max' => 'Kích thước ảnh không được vượt quá 20MB.',
+    ]);
 
-        $user = new User();
-        $user->username = $request->username;
-        $user->email = $request->email;
-        $user->password = bcrypt($request->password);
-        $user->phone_number = $request->phone_number;
-        $user->role_id = $request->role_id;
-        $user->status = $request->status;
+    $user = new User();
+    $user->username = $request->username;
+    $user->email = $request->email;
+    $user->password = bcrypt($request->password);
+    $user->phone_number = $request->phone_number;
+    $user->role_id = $request->role_id;
+    $user->status = $request->status;
 
-        $user->save();
-
-        return redirect()->route('admin.viewuser')->with('success', 'Thêm người dùng thành công.');
+    // Xử lý upload ảnh
+    if ($request->hasFile('avatar')) {
+        $avatarName = $request->file('avatar')->getClientOriginalName(); // Lấy tên gốc của ảnh
+        $request->file('avatar')->storeAs('images', $avatarName, 'public'); // Lưu ảnh vào thư mục public/images
+        $user->avatar = $avatarName; // Lưu tên ảnh vào cơ sở dữ liệu
+    } else {
+        // Nếu không có ảnh, sử dụng ảnh mặc định
+        $user->avatar = 'default-avatar.png';
     }
+
+    $user->save();
+
+    return redirect()->route('admin.viewuser')->with('success', 'Thêm người dùng thành công.');
+}
+
+
+
+
 
     public function deleteUser($user_id)
     {
@@ -107,46 +122,58 @@ class UsersController extends Controller
     }
 
     public function update(Request $request, $user_id)
-    {
-        $request->validate([
-            'username' => 'required|min:3|max:50|unique:users,username,' . $user_id . ',user_id',
-            'email' => 'required|email|unique:users,email,' . $user_id . ',user_id',
-            'password' => 'nullable|min:8|confirmed',
-            'phone_number' => 'required|regex:/^0[0-9]{9}$/',
-            'role_id' => 'required|integer',
-            'status' => 'required|boolean',
-        ], [
-            'username.required' => 'Vui lòng nhập tên người dùng',
-            'username.min' => 'Tên người dùng phải có ít nhất 3 ký tự',
-            'username.max' => 'Tên người dùng không được quá 50 ký tự',
-            'username.unique' => 'Tên người dùng đã tồn tại',
-            'email.required' => 'Vui lòng nhập email',
-            'email.email' => 'Email không hợp lệ',
-            'email.unique' => 'Email đã tồn tại',
-            'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự',
-            'password.confirmed' => 'Mật khẩu không khớp',
-            'phone_number.required' => 'Vui lòng nhập số điện thoại',
-            'phone_number.regex' => 'Số điện thoại không hợp lệ',
-            'role_id.required' => 'Vui lòng chọn vai trò',
-            'status.required' => 'Trạng thái là bắt buộc',
-        ]);
+{
+    $request->validate([
+        'username' => 'required|min:3|max:50|unique:users,username,' . $user_id . ',user_id',
+        'email' => 'required|email|unique:users,email,' . $user_id . ',user_id',
+        'password' => 'nullable|min:8|confirmed',
+        'phone_number' => 'required|regex:/^0[0-9]{9}$/',
+        'role_id' => 'required|integer',
+        'status' => 'required|boolean',
+        'avatar' => 'nullable|image|mimes:jpeg,png,jpg|max:20480', // Kích thước tối đa 20MB
+    ], [
+        'username.required' => 'Vui lòng nhập tên người dùng',
+        'username.min' => 'Tên người dùng phải có ít nhất 3 ký tự',
+        'username.max' => 'Tên người dùng không được quá 50 ký tự',
+        'username.unique' => 'Tên người dùng đã tồn tại',
+        'email.required' => 'Vui lòng nhập email',
+        'email.email' => 'Email không hợp lệ',
+        'email.unique' => 'Email đã tồn tại',
+        'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự',
+        'password.confirmed' => 'Mật khẩu không khớp',
+        'phone_number.required' => 'Vui lòng nhập số điện thoại',
+        'phone_number.regex' => 'Số điện thoại không hợp lệ',
+        'role_id.required' => 'Vui lòng chọn vai trò',
+        'status.required' => 'Trạng thái là bắt buộc',
+        'avatar.image' => 'Ảnh phải là định dạng JPEG, PNG, hoặc JPG.',
+        'avatar.max' => 'Kích thước ảnh không được vượt quá 20MB.',
+    ]);
 
-        $user = User::findUserById($user_id);
-        if (!$user) {
-            return redirect()->route('admin.viewuser')->with('error', 'Người dùng không tồn tại.');
-        }
-
-        $user->username = $request->username;
-        $user->email = $request->email;
-        if ($request->password) {
-            $user->password = bcrypt($request->password);
-        }
-        $user->phone_number = $request->phone_number;
-        $user->role_id = $request->role_id;
-        $user->status = $request->status;
-
-        $user->save();
-
-        return redirect()->route('admin.viewuser')->with('success', 'Cập nhật người dùng thành công.');
+    $user = User::find($user_id);
+    if (!$user) {
+        return redirect()->route('admin.viewuser')->with('error', 'Người dùng không tồn tại.');
     }
+
+    $user->username = $request->username;
+    $user->email = $request->email;
+    if ($request->password) {
+        $user->password = bcrypt($request->password);
+    }
+    $user->phone_number = $request->phone_number;
+    $user->role_id = $request->role_id;
+    $user->status = $request->status;
+
+    // Xử lý avatar
+    if ($request->hasFile('avatar')) {
+        // Lưu ảnh vào thư mục public/images
+        $avatarName = time() . '.' . $request->avatar->extension();
+        $request->avatar->move(public_path('images'), $avatarName);
+        $user->avatar = $avatarName; // Cập nhật tên ảnh vào trường avatar
+    }
+
+    $user->save();
+
+    return redirect()->route('admin.viewuser')->with('success', 'Cập nhật người dùng thành công.');
+}
+
 }

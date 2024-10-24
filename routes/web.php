@@ -40,7 +40,7 @@ Route::prefix('admin')->group(function () {
     Route::get('/booking', [BookingController::class, 'viewBooking'])->name('admin.viewbooking');
     Route::post('admin/booking/store', action: [BookingController::class, 'store'])->name('admin.booking.store');
     // Admin - User
-    Route::get('/user', [UsersController::class, 'viewUser'])->name('admin.viewuser');
+    Route::get('/user', action: [UsersController::class, 'viewUser'])->name('admin.viewuser');
     Route::get('/user/add', [UsersController::class, 'userAdd'])->name('user_add');
     Route::post('admin/user/store', action: [UsersController::class, 'store'])->name('admin.user.store');
 });
@@ -64,7 +64,7 @@ Route::get('/users/{user_id}/detail', action: [UsersController::class, 'getUserD
 Route::get('/searchUser', [UsersController::class, 'search'])->name('searchUser');
 Route::delete('/users/{user_id}/delete', [UsersController::class, 'deleteUser'])->name('user.delete');
 Route::get('/users/{user_id}/edit', [UsersController::class, 'editUser'])->name('user.edit');
-Route::put('/admin/users/{id}', [UsersController::class, 'updateUser'])->name('admin.user.update');
+Route::put('/admin/users/{id}', [UsersController::class, 'update'])->name('admin.user.update');
 
 // Search
 // Route::get('/search', [SearchController::class, 'index'])->name('search');

@@ -152,7 +152,12 @@
 
                 // Gọi AJAX để lấy thông tin chi tiết người dùng
                 fetch(`/users/${currentUserId}/detail`)
-                    .then(response => response.json())
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
                     .then(user => {
                         // Cập nhật nội dung modal
                         document.getElementById('modalUsername').innerText = user.username;
@@ -168,49 +173,41 @@
                         document.getElementById('editUserButton').setAttribute('href', editRoute);
 
                         // Hiển thị modal
-                        const modal = new bootstrap.Modal(document.getElementById('userDetailModal'));
-                        modal.show();
+                        new bootstrap.Modal(document.getElementById('userDetailModal')).show();
                     })
                     .catch(error => {
-                        console.error('Có vấn đề với yêu cầu fetch:', error);
+                        console.error('Error fetching user details:', error);
                     });
             });
         });
 
-        // Khi người dùng nhấn nút "Delete"
+        // Xử lý sự kiện nhấn nút Delete trong modal
         document.getElementById('deleteUserButton').addEventListener('click', function () {
-            const confirmDeleteUserModal = new bootstrap.Modal(document.getElementById('confirmDeleteUserModal'));
-            confirmDeleteUserModal.show();
+            new bootstrap.Modal(document.getElementById('confirmDeleteUserModal')).show();
         });
 
-        // Khi người dùng nhấn nút "OK" trong modal xác nhận
+        // Xác nhận xóa người dùng
         document.getElementById('confirmDeleteUserButton').addEventListener('click', function () {
-            if (currentUserId) {
-                const deleteRoute = "{{ route('user.delete', ['user_id' => ':id']) }}".replace(':id', currentUserId);
-                fetch(deleteRoute, {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    }
-                })
+            fetch(`/users/${currentUserId}/delete`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}', // Chuyển token CSRF
+                },
+            })
                 .then(response => {
-                    if (response.ok) {
-                        // Xóa hàng người dùng khỏi bảng
-                        const rowToDelete = document.querySelector(`.user-detail[data-id="${currentUserId}"]`);
-                        if (rowToDelete) {
-                            rowToDelete.remove();
-                        }
-                        // Đóng modal xác nhận xóa
-                        const modal = bootstrap.Modal.getInstance(document.getElementById('confirmDeleteUserModal'));
-                        modal.hide();
-                    } else {
-                        console.error('Có vấn đề khi xóa người dùng');
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
                     }
+                    return response.json();
+                })
+                .then(data => {
+                    // Xử lý phản hồi thành công
+                    alert(data.message); // Hiển thị thông báo
+                    location.reload(); // Tải lại trang
                 })
                 .catch(error => {
-                    console.error('Có vấn đề với yêu cầu fetch:', error);
+                    console.error('Error deleting user:', error);
                 });
-            }
         });
     });
 </script>

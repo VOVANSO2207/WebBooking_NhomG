@@ -1,4 +1,4 @@
-@extends('admin.layouts.master')
+@extends('admin.layouts.master') 
 @section('admin-container')
 
 <!-- Content -->
@@ -61,7 +61,7 @@
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Role</label>
-                                <select id="role_id" name="role_id" class="select2 form-select">
+                                <select id="role_id" name="role_id" class="form-select">
                                     <option value="1" {{ $user->role_id == 1 ? 'selected' : '' }}>Admin</option>
                                     <option value="2" {{ $user->role_id == 2 ? 'selected' : '' }}>User</option>
                                 </select>
@@ -71,7 +71,7 @@
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Status</label>
-                                <select id="status" name="status" class="select2 form-select">
+                                <select id="status" name="status" class="form-select">
                                     <option value="1" {{ $user->status == 1 ? 'selected' : '' }}>Active</option>
                                     <option value="0" {{ $user->status == 0 ? 'selected' : '' }}>Inactive</option>
                                 </select>
@@ -112,81 +112,5 @@
         </div>
     </div>
 </div>
-
-<!-- Modal Cập nhật thành công -->
-<div class="modal fade" id="updateSuccessModal" tabindex="-1" aria-labelledby="updateSuccessModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="updateSuccessModalLabel">Thông báo</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Cập nhật người dùng thành công.
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-<script>
-    $(document).ready(function () {
-        let isChanged = false; // Biến để theo dõi sự thay đổi
-
-        function resetForm() {
-            $('#userForm')[0].reset();
-            $("#upload").val(''); // Reset input file
-            isChanged = false; // Reset biến isChanged khi reset form
-        }
-
-        $('#username, #email, #phone_number, #password, #role_id, #status').on('input change', function () {
-            isChanged = true;
-        });
-
-        $('#userForm').on('submit', function (event) {
-            event.preventDefault();
-
-            if (!isChanged) {
-                const noUpdateModal = new bootstrap.Modal(document.getElementById('noUpdateModal'));
-                noUpdateModal.show();
-                return;
-            }
-
-            var formData = new FormData(this);
-
-            $.ajax({
-                url: "{{ route('admin.user.update', $user->user_id) }}",
-                method: 'POST',
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function (response) {
-                    const updateSuccessModal = new bootstrap.Modal(document.getElementById('updateSuccessModal'));
-                    updateSuccessModal.show();
-
-                    setTimeout(function () {
-                        window.location.href = '{{ route('admin.viewuser') }}';
-                    }, 2000);
-                },
-                error: function (xhr) {
-                    $('.text-danger').remove();
-
-                    var errors = xhr.responseJSON.errors;
-                    for (var key in errors) {
-                        if (errors.hasOwnProperty(key)) {
-                            var errorDiv = $('<div class="text-danger"></div>').text(errors[key][0]);
-                            $('[name="' + key + '"]').after(errorDiv);
-                        }
-                    }
-                }
-            });
-        });
-    });
-</script>
-
+<!-- / Modal -->
 @endsection

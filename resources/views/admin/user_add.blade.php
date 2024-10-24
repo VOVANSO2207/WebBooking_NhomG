@@ -7,20 +7,20 @@
             <div class="card mb-4">
                 <hr class="my-0" />
                 <div class="card-body">
-                    <form method="post" id="userForm" action="{{ route('admin.user.store') }}" enctype="multipart/form-data">
-                        @csrf
-                        <div class="card-body">
-                            <div class="d-flex align-items-start align-items-sm-center gap-4">
-                                <img src="{{ asset('/images/img-upload.jpg') }}" alt="user-avatar" class="" height="100" width="100" id="fileUpload" />
-                                <div class="button-wrapper">
-                                    <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
-                                        <span class="d-none d-sm-block">Upload</span>
-                                        <i class="bx bx-upload d-block d-sm-none"></i>
-                                        <input type="file" id="upload" name="avatar" class="account-file-input" hidden accept="image/png, image/jpeg, image/jpg" />
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
+                    <form method="POST" id="userForm" action="{{ route('admin.user.store') }}" enctype="multipart/form-data">
+                    @csrf
+    <div class="card-body">
+        <div class="d-flex align-items-start align-items-sm-center gap-4">
+            <img src="{{ asset('images/img-upload.jpg') }}" alt="user-avatar" class="" height="100" width="100" id="fileUpload" />
+            <div class="button-wrapper">
+                <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
+                    <span class="d-none d-sm-block">Upload</span>
+                    <i class="bx bx-upload d-block d-sm-none"></i>
+                    <input type="file" id="upload" name="avatar" class="account-file-input" hidden accept="image/png, image/jpeg, image/jpg" />
+                </label>
+            </div>
+        </div>
+    </div>
                         <div class="row">
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Username</label>
@@ -102,28 +102,12 @@
 </div>
 
 <script>
+    // Sử dụng jQuery để xử lý biểu mẫu
     $('#userForm').on('submit', function (event) {
-        event.preventDefault();
-        var img = $('#upload')[0].files[0];
+        event.preventDefault(); // Ngăn chặn gửi biểu mẫu mặc định
 
-        var username = $('#username').val();
-        var email = $('#email').val();
-        var password = $('#password').val();
-        var phone_number = $('#phone_number').val();
-        var role_id = $('#role_id option:selected').val();
-        var statusValue = $('#status option:selected').val();
-
-        var formData = new FormData();
-        formData.append('_token', '{{ csrf_token() }}');
-        formData.append('username', username);
-        formData.append('email', email);
-        formData.append('password', password);
-        formData.append('phone_number', phone_number);
-        formData.append('role_id', role_id);
-        formData.append('status', statusValue);
-        if (img) {
-            formData.append('avatar', img);
-        }
+        // Lấy dữ liệu từ form
+        var formData = new FormData(this); // Tạo FormData từ biểu mẫu
 
         // Gửi dữ liệu qua AJAX
         $.ajax({
@@ -137,10 +121,10 @@
                 const successModal = new bootstrap.Modal(document.getElementById('successModal'));
                 successModal.show();
 
-                // Tùy chọn: tự động điều hướng đến trang người dùng sau một khoảng thời gian
+                // Tự động điều hướng đến trang người dùng sau 2 giây
                 setTimeout(function() {
                     window.location.href = '{{ route('admin.viewuser') }}';
-                }, 2000); // Thay đổi thời gian (ms) nếu cần
+                }, 2000);
             },
             error: function (xhr) {
                 // Xóa lỗi cũ trước đó
@@ -161,9 +145,21 @@
     });
 
     function resetForm() {
-        $('#userForm')[0].reset();
-        $("#fileUpload").attr("src", "{{ asset('/images/img-upload.jpg') }}");
+        $('#userForm')[0].reset(); // Đặt lại biểu mẫu
+        $("#fileUpload").attr("src", "{{ asset('/images/img-upload.jpg') }}"); // Đặt lại hình ảnh tải lên
     }
+
+    // Xử lý sự kiện upload hình ảnh
+    $('#upload').change(function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                $("#fileUpload").attr("src", e.target.result); // Cập nhật hình ảnh xem trước
+            }
+            reader.readAsDataURL(file);
+        }
+    });
 </script>
 
 @endsection
