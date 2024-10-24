@@ -2,11 +2,8 @@
 @extends('layouts.app')
 
 @section('title', 'Trang chủ')
-<script src="{{ asset('js/script.js') }}"></script>
-<script src="{{ asset('js/animation.js') }}"></script>
-<script src="{{ asset('js/counter_control.js') }}"></script>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
 
@@ -14,395 +11,9 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script> -->
 
-
-
-<!-- CSS -->
-<style>
-    /* Reset CSS*/
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    html,
-    body {
-        height: 100%;
-    }
-
-    body {
-        line-height: 1.5;
-        font-family: sans-serif;
-    }
-
-    img,
-    picture,
-    video,
-    canvas {
-        max-width: 100%;
-        display: block;
-    }
-
-    input,
-    button,
-    textarea,
-    select {
-        font: inherit;
-    }
-
-    /* Đặt lại box-sizing cho tất cả phần tử */
-    *,
-    *::before,
-    *::after {
-        box-sizing: border-box;
-    }
-
-    .header-staynest {
-        /* background: rgb(29,60,99);
-    background: linear-gradient(90deg, rgba(29,60,99,1) 0%, rgba(59,121,201,1) 100%); */
-        position: relative;
-        /* Đặt vị trí tương đối cho header */
-        background-image: url('../images/banner_01.png');
-        background-repeat: no-repeat;
-        background-size: cover;
-        width: 100%;
-        height: 100vh;
-        /* Chiều cao 100% viewport */
-    }
-
-    .banner {
-        position: absolute;
-        /* Đặt banner ở vị trí tuyệt đối */
-        top: 0;
-        left: 0;
-        width: 100%;
-        /* Chiếm toàn bộ chiều rộng */
-        height: 100%;
-        /* Chiếm toàn bộ chiều cao */
-        z-index: 1;
-        /* Đặt z-index thấp hơn để bg-in-image nằm trên */
-    }
-
-    .bg-in-image {
-        position: absolute;
-        /* Đặt bg-in-image ở vị trí tuyệt đối */
-        background: black;
-        opacity: 0.5;
-        /* Độ mờ 50% */
-        inset: 0;
-        /* Lấp đầy toàn bộ phần tử cha */
-        z-index: 2;
-        /* Đặt z-index cao hơn banner */
-    }
-
-    .header-staynest>* {
-        /* Các phần tử con bên trong header */
-        position: relative;
-        /* Đặt vị trí tương đối cho các phần tử con */
-        z-index: 3;
-        /* Đặt z-index cao hơn bg-in-image để nó nằm trên cùng */
-    }
-
-    .logo-staynest {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-decoration: none;
-    }
-
-    .name-logo {
-        font-weight: 900;
-        color: white;
-        margin: 0;
-        font-size: 51px;
-    }
-
-    .top-header {
-        border-bottom: 1px solid gray;
-    }
-
-    .link-social {
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
-        border: 1px solid rgb(255, 255, 255);
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        padding: 0;
-        transition: background-color 0.3s;
-        text-decoration: none;
-        margin-left: 10px;
-        background: #f1f1f158;
-        backdrop-filter: blur(5px);
-        opacity: .7;
-    }
-
-    .link-social:hover {
-        opacity: 1;
-        background-color: rgba(255, 255, 255, 0.821);
-    }
-
-    .link-social:nth-child(2) {
-        color: black;
-    }
-
-    .link-social:nth-child(3) {
-        color: red;
-    }
-
-    .link-social i {
-        font-size: 20px;
-    }
-
-    .menu-attribute {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    .menu-attribute li a,
-    .group-left-header {
-        cursor: pointer;
-        margin: 13px 15px;
-        font-weight: 700;
-        color: #fff;
-        transition: all 300ms ease;
-    }
-
-    .menu-attribute li a:hover {
-        color: #3B79C9;
-
-    }
-
-    .group-left-header a {
-        color: #fff !important;
-
-    }
-
-    .menu-attribute a,
-    .group-left-header a {
-        text-decoration: none;
-        color: black;
-    }
-
-    .menu-attribute li:hover {
-        color: #3B79C9;
-    }
-
-    .group-left-header a:hover {
-        text-decoration: underline;
-        color: #3B79C9;
-    }
-
-    .group-left-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .name-user {
-        flex-grow: 1;
-        text-align: center;
-        /* Căn giữa chữ */
-        white-space: nowrap;
-        /* Ngăn chữ xuống dòng */
-        overflow: hidden;
-        /* Ẩn phần chữ thừa */
-        text-overflow: ellipsis;
-        /* Hiện ba chấm nếu quá dài */
-    }
-
-    .name-user:hover {
-        color: #3B79C9;
-    }
-
-    .dropdown-menu {
-        display: block;
-        background-color: white;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        padding: 0;
-    }
-
-    .middle-staynest {
-        z-index: 2;
-    }
-
-    .dropdown-item-staynest {
-        color: #505050;
-        text-decoration: none;
-        font-weight: 500 !important;
-    }
-
-    .dropdown-item-staynest:hover {
-        background-color: #f1f1f1;
-        color: #3B79C9 !important;
-    }
-
-    .solgan-staynest p {
-        display: flex;
-        color: #fff;
-        font-weight: 900;
-        font-size: 90px;
-        text-align: center;
-        justify-content: center;
-        padding: 15px;
-        margin: 50px;
-    }
-
-    .input-search-header {
-        border-radius: 5px;
-        height: 47px;
-        width: 100%;
-        outline: none;
-        border: none;
-    }
-
-    /* Drop select location */
-    .select2 {
-        border-radius: 10px;
-    }
-
-    .select2-hidden-accessible {
-        border: 0 !important;
-        clip: rect(0 0 0 0) !important;
-        height: 1px !important;
-        margin: -1px !important;
-        overflow: hidden !important;
-        padding: 0 !important;
-        position: absolute !important;
-        width: 1px !important;
-    }
-
-    .select2-search__field {
-        outline: none;
-    }
-
-    .select2-container .select2-selection--single .select2-selection__rendered {
-        padding-left: 0;
-        padding-right: 0;
-        height: auto;
-        margin-top: -3px;
-    }
-
-
-    .select2-container--default .select2-selection--single,
-    .select2-selection .select2-selection--single {
-        border: 1px solid #d2d6de;
-        border-radius: 0 !important;
-        padding: 10px 16px;
-        height: 47px !important;
-        border-radius: 10px !important;
-    }
-
-    .select2-container--default .select2-selection--single .select2-selection__arrow {
-        height: 26px;
-        position: absolute;
-        top: 9px !important;
-        right: 1px;
-        width: 20px
-    }
-
-    /*  */
-
-    /* .datepicker-staynest {
-    height: 47px;
-    width: 100%;
-    border-radius: 10px;
-    border: none;
-    text-align: center;
-    outline: none;
-} */
-    .number {
-        font-weight: 700;
-    }
-
-    .num-people {
-        border-radius: 10px;
-        width: 100%;
-        padding: 0 10px 5px;
-        border: 1px solid black;
-        background: #fff;
-        position: relative;
-        cursor: pointer;
-    }
-
-
-    .date-picker-search {
-        position: relative;
-        background: #fff;
-        border-radius: 10px;
-        height: 50px;
-    }
-
-    .datepicker-staynest:focus {
-        outline: none !important;
-        box-shadow: none !important;
-    }
-
-    .datepicker-staynest {
-        position: absolute;
-        border: none !important;
-        text-align: center;
-        background: transparent !important;
-        border: none;
-        font-weight: 700 !important;
-        cursor: pointer;
-    }
-
-    /*  */
-    .drop-counter {
-        z-index: 10;
-        position: absolute;
-        padding: 15px;
-        border-radius: 10px;
-        box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
-        display: none;
-    }
-
-    .item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 15px;
-    }
-
-    .counter {
-        display: flex;
-        align-items: center;
-    }
-
-    .counter button {
-        background-color: #f0f0f0;
-        border: 1px solid #ccc;
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        font-size: 20px;
-        line-height: 0;
-        text-align: center;
-        cursor: pointer;
-    }
-
-    .counter button:hover {
-        background-color: #ddd;
-    }
-
-    .counter .value-people {
-        width: 30px;
-        text-align: center;
-        border: none;
-        background-color: transparent;
-        font-size: 16px;
-        pointer-events: none;
-    }
-</style>
-<!-- /CSS -->
-
-<script>
+<!-- <script>
     // Datepicker
     function initializeDateRangePicker() {
         const startDate = moment(); // Ngày hiện tại
@@ -432,13 +43,12 @@
     $(document).ready(function () {
         initializeDateRangePicker(); // Gọi hàm khởi tạo
     });
-</script>
-
+</script> -->
 
 @section('content')
-<div class="banner"></div>
-<div class="bg-in-image"></div>
-<section class="header-staynest">
+<div class="banner-home"></div>
+<div class="bg-in-image-home"></div>
+<section class="header-staynest-home">
     <div class="top-header">
         <a href="#" class="logo-staynest p-3">
             <img src="{{ asset('/images/logo_staynest_white_color.png') }}" alt="" width="50px">
@@ -462,12 +72,12 @@
                 </div>
                 <div class="profile-header col-md-2">
                     <!-- Nếu chưa đăng nhập -->
-                    <div class="group-left-header">
+                    <!-- <div class="group-left-header">
                         <a href="#" class="login">Đăng nhập/</a>
                         <a href="#" class="register">Đăng ký</a>
-                    </div>
+                    </div> -->
                     <!-- Nếu đã đăng nhập -->
-                    <!-- <div class="loged">
+                    <div class="loged">
                         <div class="group-left-header d-flex align-items-center justify-content-center">
                             <div class="col-md-2 text-center">
                                 <i class="fa-solid fa-bell fa-xl"></i>
@@ -490,13 +100,13 @@
                             <a class="dropdown-item dropdown-item-staynest" href="#">Voucher</a>
                             <a class="dropdown-item dropdown-item-staynest text-danger" href="#">Đăng Xuất</a>
                         </div>
-                    </div> -->
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <section class="middle-staynest container mt-5">
-        <div class="search-bar-staynest color-light">
+    <section class="middle-staynest-home mt-5">
+        <div class="search-bar-staynest-home color-light container">
             <form action="{{ route('hotels.search') }}" method="GET" class="row d-flex justify-content-center">
                 @csrf
                 <div class="col-md-3 search-header">
@@ -566,16 +176,491 @@
                         Sạn</button>
                 </div>
             </form>
-
         </div>
-        <div class="solgan-staynest">
+        <div class="solgan-staynest container">
             <p>ĐẶT PHÒNG NHANH TẬN HƯỞNG NGAY</p>
+            <p class="header-text-muted">Khám phá du lịch với dịch vụ đặt phòng nhanh chóng và tiện lợi. Hãy bắt đầu
+                hành trình
+                của bạn ngay hôm
+                nay!</p>
+        </div>
+        <div class="button d-flex justify-content-center">
+            <a href="#" class="header-btn-book-now">ĐẶT NGAY</a>
         </div>
     </section>
 </section>
-<section class="top-hotel">
 
+<section class="famous-hotel">
+    <div class="container">
+        <div class="title mt-5 mb-2">Khách Sạn Nổi Tiếng</div>
+        <div class="carousel-container">
+            <div class="carousel-wrapper">
+                <div class="card the-top-khach-san">
+                    <img class="image-hotel-1"
+                        src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/209890188.jpg?k=882e748be3114714efa7f001b6ffa97425b1a52a458d3166dea3c1af7c66ac09&o=&hp=1"
+                        alt="">
+                    <div class="shape">
+                        <p class="country m-0">VIET NAM</p>
+                        <p class="location m-0">NHA TRANG - <span class="name-hotel">Vinpearl Resort</span></p>
+                        <p class="price-old m-0">VNĐ 1.399.000</p>
+                        <div class="row price-top">
+                            <div class="col-md-7">
+                                <span class="price-new">VNĐ 699.500<span>/ Khách</span> </span>
+                            </div>
+                            <div class="col-md-5"><a href="#" class="btn-book-now">ĐẶT NGAY</a></div>
+                        </div>
+                    </div>
+                    <div class="rating-top">
+                        <span>★</span> <span>★</span> <span>★</span> <span>★</span> <span>★</span>
+                    </div>
+                    <div class="sale"><span>-</span>50%</div>
+                </div>
+                <div class="card the-top-khach-san">
+                    <img class="image-hotel-1"
+                        src="https://woodbinedevelopment.com/wp-content/uploads/2019/05/hero-legacy-2000x700.jpg"
+                        alt="">
+                    <div class="shape">
+                        <p class="country m-0">VIET NAM</p>
+                        <p class="location m-0">NHA TRANG - <span class="name-hotel">Vinpearl Resort</span></p>
+                        <p class="price-old m-0">VNĐ 1.399.000</p>
+                        <div class="row price-top">
+                            <div class="col-md-7">
+                                <span class="price-new">VNĐ 699.500<span>/ Khách</span> </span>
+                            </div>
+                            <div class="col-md-5"><a href="#" class="btn-book-now">ĐẶT NGAY</a></div>
+                        </div>
+                    </div>
+                    <div class="rating-top">
+                        <span>★</span> <span>★</span> <span>★</span> <span>★</span> <span>★</span>
+                    </div>
+                    <div class="sale"><span>-</span>50%</div>
+                </div>
+                <div class="card the-top-khach-san">
+                    <img class="image-hotel-1"
+                        src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg" alt="">
+                    <div class="shape">
+                        <p class="country m-0">VIET NAM</p>
+                        <p class="location m-0">NHA TRANG - <span class="name-hotel">Vinpearl Resort</span></p>
+                        <p class="price-old m-0">VNĐ 1.399.000</p>
+                        <div class="row price-top">
+                            <div class="col-md-7">
+                                <span class="price-new">VNĐ 699.500<span>/ Khách</span> </span>
+                            </div>
+                            <div class="col-md-5"><a href="#" class="btn-book-now">ĐẶT NGAY</a></div>
+                        </div>
+                    </div>
+                    <div class="rating-top">
+                        <span>★</span> <span>★</span> <span>★</span> <span>★</span> <span>★</span>
+                    </div>
+                    <div class="sale"><span>-</span>50%</div>
+                </div>
+                <div class="card the-top-khach-san">
+                    <img class="image-hotel-1"
+                        src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg" alt="">
+                    <div class="shape">
+                        <p class="country m-0">VIET NAM</p>
+                        <p class="location m-0">NHA TRANG - <span class="name-hotel">Vinpearl Resort</span></p>
+                        <p class="price-old m-0">VNĐ 1.399.000</p>
+                        <div class="row price-top">
+                            <div class="col-md-7">
+                                <span class="price-new">VNĐ 699.500<span>/ Khách</span> </span>
+                            </div>
+                            <div class="col-md-5"><a href="#" class="btn-book-now">ĐẶT NGAY</a></div>
+                        </div>
+                    </div>
+                    <div class="rating-top">
+                        <span>★</span> <span>★</span> <span>★</span> <span>★</span> <span>★</span>
+                    </div>
+                    <div class="sale"><span>-</span>50%</div>
+                </div>
+                <div class="card the-top-khach-san">
+                    <img class="image-hotel-1"
+                        src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg" alt="">
+                    <div class="shape">
+                        <p class="country m-0">VIET NAM</p>
+                        <p class="location m-0">NHA TRANG - <span class="name-hotel">Vinpearl Resort</span></p>
+                        <p class="price-old m-0">VNĐ 1.399.000</p>
+                        <div class="row price-top">
+                            <div class="col-md-7">
+                                <span class="price-new">VNĐ 699.500<span>/ Khách</span> </span>
+                            </div>
+                            <div class="col-md-5"><a href="#" class="btn-book-now">ĐẶT NGAY</a></div>
+                        </div>
+                    </div>
+                    <div class="rating-top">
+                        <span>★</span> <span>★</span> <span>★</span> <span>★</span> <span>★</span>
+                    </div>
+                    <div class="sale"><span>-</span>50%</div>
+                </div>
+                <div class="card the-top-khach-san">
+                    <img class="image-hotel-1"
+                        src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg" alt="">
+                    <div class="shape">
+                        <p class="country m-0">VIET NAM</p>
+                        <p class="location m-0">NHA TRANG - <span class="name-hotel">Vinpearl Resort</span></p>
+                        <p class="price-old m-0">VNĐ 1.399.000</p>
+                        <div class="row price-top">
+                            <div class="col-md-7">
+                                <span class="price-new">VNĐ 699.500<span>/ Khách</span> </span>
+                            </div>
+                            <div class="col-md-5"><a href="#" class="btn-book-now">ĐẶT NGAY</a></div>
+                        </div>
+                    </div>
+                    <div class="rating-top">
+                        <span>★</span> <span>★</span> <span>★</span> <span>★</span> <span>★</span>
+                    </div>
+                    <div class="sale"><span>-</span>50%</div>
+                </div>
+                <div class="card the-top-khach-san">
+                    <img class="image-hotel-1"
+                        src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg" alt="">
+                    <div class="shape">
+                        <p class="country m-0">VIET NAM</p>
+                        <p class="location m-0">NHA TRANG - <span class="name-hotel">Vinpearl Resort</span></p>
+                        <p class="price-old m-0">VNĐ 1.399.000</p>
+                        <div class="row price-top">
+                            <div class="col-md-7">
+                                <span class="price-new">VNĐ 699.500<span>/ Khách</span> </span>
+                            </div>
+                            <div class="col-md-5"><a href="#" class="btn-book-now">ĐẶT NGAY</a></div>
+                        </div>
+                    </div>
+                    <div class="rating-top">
+                        <span>★</span> <span>★</span> <span>★</span> <span>★</span> <span>★</span>
+                    </div>
+                    <div class="sale"><span>-</span>50%</div>
+                </div>
+                <div class="card the-top-khach-san">
+                    <img class="image-hotel-1"
+                        src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg" alt="">
+                    <div class="shape">
+                        <p class="country m-0">VIET NAM</p>
+                        <p class="location m-0">NHA TRANG - <span class="name-hotel">Vinpearl Resort</span></p>
+                        <p class="price-old m-0">VNĐ 1.399.000</p>
+                        <div class="row price-top">
+                            <div class="col-md-7">
+                                <span class="price-new">VNĐ 699.500<span>/ Khách</span> </span>
+                            </div>
+                            <div class="col-md-5"><a href="#" class="btn-book-now">ĐẶT NGAY</a></div>
+                        </div>
+                    </div>
+                    <div class="rating-top">
+                        <span>★</span> <span>★</span> <span>★</span> <span>★</span> <span>★</span>
+                    </div>
+                    <div class="sale"><span>-</span>50%</div>
+                </div>
+            </div>
+            <button class="prev-btn"><i class="fa-solid fa-arrow-right"></i></button>
+            <button class="next-btn"><i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+    </div>
 </section>
 
-<!-- Thêm các nội dung khác cho trang chủ ở đây -->
+<section class="popular-destination pb-5">
+    <div class="container">
+        <div class="title mt-5 mb-2">Điểm đến thịnh hànhg</div>
+        <div class="row">
+            <div class="col-md-6">
+                <a href="#" class="link-popular-destination">
+                    <img class="image-destitation-1"
+                        src="https://image.vietnamnews.vn/uploadvnnews/Article/2023/9/28/308010_4651436783396218_vna_potal_thanh_pho_ho_chi_minh_la_1_trong_10_diem_den_tuyet_voi_nhat_o_chau_a_6666855.jpg"
+                        alt="image">
+                    <p class="name-location-1">HỒ CHÍ MINH</p>
+                </a>
+            </div>
+            <div class="col-md-6">
+                <a href="#" class="link-popular-destination">
+                    <img class="image-destitation-1"
+                        src="https://letsflytravel.vn/assets/source/2_5_2024_Up/nha-trang-city-tour/nha-trang-letsflytravel.jpg"
+                        alt="image">
+                    <p class="name-location-1">ĐÀ NẴNG</p>
+            </div>
+            </a>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <a href="#" class="link-popular-destination">
+                    <img class="image-destitation-1"
+                        src="https://static.vinwonders.com/production/gioi-thieu-ve-da-lat-1.jpg" alt="image">
+                    <p class="name-location-1">ĐÀ LẠT</p>
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a href="#" class="link-popular-destination">
+                    <img class="image-destitation-1"
+                        src="https://vcdn1-dulich.vnecdn.net/2022/04/06/dulichCaMau01-1649220925-3009-1649240147.jpg?w=0&h=0&q=100&dpr=2&fit=crop&s=__uuV0wfll0lZgX01LNRsA"
+                        alt="image">
+                    <p class="name-location-1">CÀ MAU</p>
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a href="#" class="link-popular-destination">
+                    <img class="image-destitation-1"
+                        src="https://vcdn1-dulich.vnecdn.net/2022/06/03/cauvang-1654247842-9403-1654247849.jpg?w=1200&h=0&q=100&dpr=1&fit=crop&s=Swd6JjpStebEzT6WARcoOA"
+                        alt="image">
+                    <p class="name-location-1">ĐÀ NẴNG</p>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="our-offers pb-5">
+    <div class="container">
+        <div class="title mt-5 mb-2">Ưu đãi của chúng tôi</div>
+        <div class="carousel-container">
+            <div class="carousel-wrapper">
+                <div class="card">
+                    <a href="#" class="group-offers">
+                        <div class="shape-in">
+                            <img class="image-hotel-2"
+                                src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/209890188.jpg?k=882e748be3114714efa7f001b6ffa97425b1a52a458d3166dea3c1af7c66ac09&o=&hp=1"
+                                alt="">
+                            <div class="group-info-hotel">
+                                <p class="info-hotel-name m-0">Grand Wahlla Hotel</p>
+                                <p class="info-hotel-location m-0">Ho Chi Minh City, Viet Nam</p>
+                                <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i> 294 Đánh giá</p>
+                                <p class="info-hotel-price-old mb-0 mt-5 pt-5">1,710,000 đ</p>
+                                <div class="row group-heart-price">
+                                    <div class="col-md-6"><a href="#"><i class="fa-regular fa-heart"></i></a>
+                                        <!--<i class="fa-solid fa-heart"></i>-->
+                                    </div>
+                                    <div class="col-md-6 text-right"><span class="info-hotel-price-new">1,504,800
+                                            đ</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sale-hotel">-10%</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="card">
+                    <a href="#" class="group-offers">
+                        <div class="shape-in">
+                            <img class="image-hotel-2"
+                                src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/209890188.jpg?k=882e748be3114714efa7f001b6ffa97425b1a52a458d3166dea3c1af7c66ac09&o=&hp=1"
+                                alt="">
+                            <div class="group-info-hotel">
+                                <p class="info-hotel-name m-0">Grand Wahlla Hotel</p>
+                                <p class="info-hotel-location m-0">Ho Chi Minh City, Viet Nam</p>
+                                <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i> 294 Đánh giá</p>
+                                <p class="info-hotel-price-old mb-0 mt-5 pt-5">1,710,000 đ</p>
+                                <div class="row group-heart-price">
+                                    <div class="col-md-6"><a href="#"><i class="fa-regular fa-heart"></i></a>
+                                        <!--<i class="fa-solid fa-heart"></i>-->
+                                    </div>
+                                    <div class="col-md-6 text-right"><span class="info-hotel-price-new">1,504,800
+                                            đ</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sale-hotel">-10%</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="card">
+                    <a href="#" class="group-offers">
+                        <div class="shape-in">
+                            <img class="image-hotel-2"
+                                src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/209890188.jpg?k=882e748be3114714efa7f001b6ffa97425b1a52a458d3166dea3c1af7c66ac09&o=&hp=1"
+                                alt="">
+                            <div class="group-info-hotel">
+                                <p class="info-hotel-name m-0">Grand Wahlla Hotel</p>
+                                <p class="info-hotel-location m-0">Ho Chi Minh City, Viet Nam</p>
+                                <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i> 294 Đánh giá</p>
+                                <p class="info-hotel-price-old mb-0 mt-5 pt-5">1,710,000 đ</p>
+                                <div class="row group-heart-price">
+                                    <div class="col-md-6"><a href="#"><i class="fa-regular fa-heart"></i></a>
+                                        <!--<i class="fa-solid fa-heart"></i>-->
+                                    </div>
+                                    <div class="col-md-6 text-right"><span class="info-hotel-price-new">1,504,800
+                                            đ</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sale-hotel">-10%</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="card">
+                    <a href="#" class="group-offers">
+                        <div class="shape-in">
+                            <img class="image-hotel-2"
+                                src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/209890188.jpg?k=882e748be3114714efa7f001b6ffa97425b1a52a458d3166dea3c1af7c66ac09&o=&hp=1"
+                                alt="">
+                            <div class="group-info-hotel">
+                                <p class="info-hotel-name m-0">Grand Wahlla Hotel</p>
+                                <p class="info-hotel-location m-0">Ho Chi Minh City, Viet Nam</p>
+                                <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i> 294 Đánh giá</p>
+                                <p class="info-hotel-price-old mb-0 mt-5 pt-5">1,710,000 đ</p>
+                                <div class="row group-heart-price">
+                                    <div class="col-md-6"><a href="#"><i class="fa-regular fa-heart"></i></a>
+                                        <!--<i class="fa-solid fa-heart"></i>-->
+                                    </div>
+                                    <div class="col-md-6 text-right"><span class="info-hotel-price-new">1,504,800
+                                            đ</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sale-hotel">-10%</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="card">
+                    <a href="#" class="group-offers">
+                        <div class="shape-in">
+                            <img class="image-hotel-2"
+                                src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/209890188.jpg?k=882e748be3114714efa7f001b6ffa97425b1a52a458d3166dea3c1af7c66ac09&o=&hp=1"
+                                alt="">
+                            <div class="group-info-hotel">
+                                <p class="info-hotel-name m-0">Grand Wahlla Hotel</p>
+                                <p class="info-hotel-location m-0">Ho Chi Minh City, Viet Nam</p>
+                                <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i> 294 Đánh giá</p>
+                                <p class="info-hotel-price-old mb-0 mt-5 pt-5">1,710,000 đ</p>
+                                <div class="row group-heart-price">
+                                    <div class="col-md-6"><a href="#"><i class="fa-regular fa-heart"></i></a>
+                                        <!--<i class="fa-solid fa-heart"></i>-->
+                                    </div>
+                                    <div class="col-md-6 text-right"><span class="info-hotel-price-new">1,504,800
+                                            đ</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sale-hotel">-10%</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="card">
+                    <a href="#" class="group-offers">
+                        <div class="shape-in">
+                            <img class="image-hotel-2"
+                                src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/209890188.jpg?k=882e748be3114714efa7f001b6ffa97425b1a52a458d3166dea3c1af7c66ac09&o=&hp=1"
+                                alt="">
+                            <div class="group-info-hotel">
+                                <p class="info-hotel-name m-0">Grand Wahlla Hotel</p>
+                                <p class="info-hotel-location m-0">Ho Chi Minh City, Viet Nam</p>
+                                <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i> 294 Đánh giá</p>
+                                <p class="info-hotel-price-old mb-0 mt-5 pt-5">1,710,000 đ</p>
+                                <div class="row group-heart-price">
+                                    <div class="col-md-6"><a href="#"><i class="fa-regular fa-heart"></i></a>
+                                        <!--<i class="fa-solid fa-heart"></i>-->
+                                    </div>
+                                    <div class="col-md-6 text-right"><span class="info-hotel-price-new">1,504,800
+                                            đ</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sale-hotel">-10%</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="card">
+                    <a href="#" class="group-offers">
+                        <div class="shape-in">
+                            <img class="image-hotel-2"
+                                src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/209890188.jpg?k=882e748be3114714efa7f001b6ffa97425b1a52a458d3166dea3c1af7c66ac09&o=&hp=1"
+                                alt="">
+                            <div class="group-info-hotel">
+                                <p class="info-hotel-name m-0">Grand Wahlla Hotel</p>
+                                <p class="info-hotel-location m-0">Ho Chi Minh City, Viet Nam</p>
+                                <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i> 294 Đánh giá</p>
+                                <p class="info-hotel-price-old mb-0 mt-5 pt-5">1,710,000 đ</p>
+                                <div class="row group-heart-price">
+                                    <div class="col-md-6"><a href="#"><i class="fa-regular fa-heart"></i></a>
+                                        <!--<i class="fa-solid fa-heart"></i>-->
+                                    </div>
+                                    <div class="col-md-6 text-right"><span class="info-hotel-price-new">1,504,800
+                                            đ</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sale-hotel">-10%</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="card">
+                    <a href="#" class="group-offers">
+                        <div class="shape-in">
+                            <img class="image-hotel-2"
+                                src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/209890188.jpg?k=882e748be3114714efa7f001b6ffa97425b1a52a458d3166dea3c1af7c66ac09&o=&hp=1"
+                                alt="">
+                            <div class="group-info-hotel">
+                                <p class="info-hotel-name m-0">Grand Wahlla Hotel</p>
+                                <p class="info-hotel-location m-0">Ho Chi Minh City, Viet Nam</p>
+                                <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i> 294 Đánh giá</p>
+                                <p class="info-hotel-price-old mb-0 mt-5 pt-5">1,710,000 đ</p>
+                                <div class="row group-heart-price">
+                                    <div class="col-md-6"><a href="#"><i class="fa-regular fa-heart"></i></a>
+                                        <!--<i class="fa-solid fa-heart"></i>-->
+                                    </div>
+                                    <div class="col-md-6 text-right"><span class="info-hotel-price-new">1,504,800
+                                            đ</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sale-hotel">-10%</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <button class="prev-btn"><i class="fa-solid fa-arrow-right"></i></button>
+            <button class="next-btn"><i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+    </div>
+</section>
+
+@section('footer')
+@include('partials.footer') 
+@endsection
+
+<script>
+    const carousels = document.querySelectorAll('.carousel-wrapper');
+
+    carousels.forEach(carousel => {
+        const cards = carousel.querySelectorAll('.card');
+        const nextBtn = carousel.parentElement.querySelector('.next-btn');
+        const prevBtn = carousel.parentElement.querySelector('.prev-btn');
+        let index = 0;
+        const visibleCards = 4; // Number of cards visible at a time
+
+        function updateCarousel() {
+            const cardWidth = cards[0].clientWidth;
+            carousel.style.transform = `translateX(${-index * cardWidth}px)`;
+
+            // Hide prev button if at the start
+            if (index === 0) {
+                prevBtn.classList.add('hidden');
+            } else {
+                prevBtn.classList.remove('hidden');
+            }
+
+            // Hide next button if at the end
+            if (index >= cards.length - visibleCards) {
+                nextBtn.classList.add('hidden');
+            } else {
+                nextBtn.classList.remove('hidden');
+            }
+        }
+
+        nextBtn.addEventListener('click', () => {
+            if (index < cards.length - visibleCards) {
+                index++;
+                updateCarousel();
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (index > 0) {
+                index--;
+                updateCarousel();
+            }
+        });
+
+        window.addEventListener('resize', updateCarousel); // Adjust on window resize
+
+        // Initial call to hide prev button on load
+        updateCarousel();
+    });
+</script>
+
 @endsection

@@ -60,7 +60,7 @@
           </a>
         </li>
         <li class="menu-item">
-          <a href="" class="menu-link">
+          <a href="{{route('admin.viewvoucher')}}" class="menu-link">
             <i class="menu-icon tf-icons bx bx-gift"></i>
             <div data-i18n="Tables">Voucher</div>
           </a>

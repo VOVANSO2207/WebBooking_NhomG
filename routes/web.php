@@ -8,11 +8,14 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HotelController;
 use App\Http\Controllers\CitiesController;
-    
+use App\Http\Controllers\PromotionsController;
+use App\Http\Controllers\PaymentsController;
+
+
 use Illuminate\Support\Facades\Route;
 // Route người dùng 
 Route::get('/', function () {
-    return view('welcome');
+    return view('pages/home');
 })->name('welcome');
 Route::get('/login', function () {
     return view('auth.login');
@@ -26,6 +29,13 @@ Route::get('/search_result', function () {
     return view('search_result');
 });
 
+Route::get('/header', function () {
+    return view('partials/header');
+});
+
+// Route::get('/home', function () {
+//     return view('pages/home');
+// });
 
 // Admin - Home
 Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
@@ -50,19 +60,30 @@ Route::prefix('admin')->group(function () {
 Route::get('/posts/{post_id}/detail', action: [PostsController::class, 'getPostDetail'])->name('post.detail');
 Route::get('/search', [PostsController::class, 'search'])->name('search');
 Route::delete('/posts/{post_id}/delete', [PostsController::class, 'deletePost'])->name('post.delete');
-Route::get('/posts/{post_id}/edit', [PostsController::class, 'editPost'])->name('post.edit');
+Route::get('/posts/{post_id}/edit', action: [PostsController::class, 'editPost'])->name('post.edit');
 Route::put('/admin/posts/{id}', [PostsController::class, 'update'])->name('admin.post.update');
+
+// Admin- VOUCHER
+Route::get('/admin/voucher', [PromotionsController::class, 'viewVoucher'])->name('admin.viewvoucher');
+Route::get('/voucher/{promotion_id}/detail', action: [PromotionsController::class, 'getVoucherDetail'])->name('voucher.detail');
+Route::get('/vouchers/search', [PromotionsController::class, 'searchVoucher'])->name('search.vouchers');
+Route::delete('/voucher/{promotion_id}', action: [PromotionsController::class, 'destroy'])->name('voucher.delete');
+
+
 // Search
 // Route::get('/search', [SearchController::class, 'index'])->name('search');
 Route::get('/hotels', [HotelController::class, 'index'])->name('hotels.index');
 Route::get('hotels/search', [HotelController::class, 'search'])->name('hotels.search');
 
 // Cities
-Route::get('/pages/home', [CitiesController::class, 'index'])->name('home');
+// Route::get('/partials/search', [CitiesController::class, 'index'])->name('home');
 
 Route::get('/error', function () {
     return view('error');
 })->name('error');
+
+// Pay
+Route::get('/payment', [PaymentsController::class, 'viewPay'])->name('pages.pay');
 
 
 
