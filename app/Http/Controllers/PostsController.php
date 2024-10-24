@@ -181,7 +181,7 @@ class PostsController extends Controller
         }
 
         $post->save();
-
+        
         return redirect()->route('admin.viewpost')->with('success', 'Cập nhật bài viết thành công.');
     }
 

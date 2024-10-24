@@ -6,47 +6,56 @@
             <div class="col-md-12">
                 <div class="card mb-4">
                     <div class="card-body">
-                        <form id="formAccountSettings" method="POST" action="{{ route('room_store') }}"
+                        <form id="formAccountSettings" method="POST" action="{{ route('room_update', $room->room_id) }}"
                             enctype="multipart/form-data">
                             @csrf
+                            @method('PUT') <!-- Chỉ định phương thức PUT để cập nhật -->
                             <div class="row">
                                 <div class="mb-3 col-md-5">
                                     <label class="form-label">Name</label>
                                     <input class="form-control" type="text" name="name" placeholder="Room Name"
-                                        required />
+                                        value="{{ $room->name }}" required />
                                 </div>
                                 <div class="mb-3 col-md-5">
                                     <label class="form-label">Room Type</label>
                                     <select name="room_type_id" class="form-select" required>
                                         @foreach ($roomTypes as $roomType)
-                                            <option value="{{ $roomType->room_type_id }}">{{ $roomType->name }}</option>
+                                            <option value="{{ $roomType->room_type_id }}"
+                                                {{ $roomType->room_type_id == $room->room_type_id ? 'selected' : '' }}>
+                                                {{ $roomType->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="mb-3 col-md-5">
                                     <label class="form-label">Price Base</label>
                                     <input class="form-control" type="text" name="price" placeholder="Price Base"
-                                        required />
+                                        value="{{ $room->price }}" required />
                                 </div>
                                 <div class="mb-3 col-md-5">
                                     <label class="form-label">Discount Percent</label>
                                     <input class="form-control" type="text" name="discount_percent"
-                                        placeholder="Discount Percent" required />
+                                        placeholder="Discount Percent" value="{{ $room->discount_percent }}" required />
                                 </div>
                                 <div class="mb-3 col-md-5">
                                     <label class="form-label">Price Sales</label>
                                     <input class="form-control" type="text" name="sales_price" placeholder="Price Sales"
-                                        readonly />
+                                        value="{{ $room->sales_price }}" readonly />
                                 </div>
                                 <div class="mb-3 col-md-5">
                                     <label class="form-label">Capacity</label>
                                     <input class="form-control" type="text" name="capacity" placeholder="Capacity"
-                                        required />
+                                        value="{{ $room->capacity }}" required />
                                 </div>
                                 <div class="mb-3 col-md-5">
                                     <label class="form-label">Upload Images</label>
                                     <div class="d-flex align-items-start align-items-sm-center gap-4">
-                                        <div id="imagePreviewContainer" class="d-flex flex-wrap"></div>
+                                        <div id="imagePreviewContainer" class="d-flex flex-wrap">
+                                            <!-- Hiển thị các ảnh đã lưu từ trước -->
+                                            @foreach ($room->room_images as $image)
+                                                <img src="{{ asset('storage/images/' . $image->image_url) }}" alt="Room Image"
+                                                    style="width: 100px; margin-right: 10px; margin-bottom: 10px; border-radius: 5px;">
+                                            @endforeach
+                                        </div>
                                         <div class="button-wrapper">
                                             <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
                                                 <span class="d-none d-sm-block">Upload</span>
@@ -62,14 +71,15 @@
                                     <label class="form-label">Room Amenities</label>
                                     <select name="amenities[]" class="form-select select2" multiple="multiple" required>
                                         @foreach ($amenities as $amenity)
-                                            <option value="{{ $amenity->amenity_id }}">{{ $amenity->amenity_name }}
-                                            </option>
+                                            <option value="{{ $amenity->amenity_id }}"
+                                                {{ in_array($amenity->amenity_name, $room->amenities->pluck('amenity_name')->toArray()) ? 'selected' : '' }}>
+                                                {{ $amenity->amenity_name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="mb-3 col-md-12">
                                     <label class="form-label">Description</label>
-                                    <textarea name="description" id="description" required></textarea>
+                                    <textarea name="description" id="description" required>{{ $room->description }}</textarea>
                                 </div>
                             </div>
                             <div class="mt-2" style="text-align: right">
@@ -79,7 +89,8 @@
                                 <button type="submit" class="btn btn-outline-success me-2">Save</button>
                             </div>
                         </form>
-                   
+
+
                     </div>
                 </div>
             </div>

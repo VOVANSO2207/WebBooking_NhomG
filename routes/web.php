@@ -10,7 +10,7 @@ use App\Http\Controllers\HotelController;
 use App\Http\Controllers\CitiesController;
     
 use Illuminate\Support\Facades\Route;
-
+// Route người dùng 
 Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
@@ -36,6 +36,8 @@ Route::prefix('admin')->group(function () {
     Route::post('/room/store', [RoomController::class, 'store'])->name('room_store');
     // Route::delete('/room/{room_id}', [RoomController::class, 'destroy'])->name('room_destroy');
     Route::delete('room/{room_id}', [RoomController::class, 'destroy'])->name('room.destroy');
+    Route::get('/room/edit/{id}', [RoomController::class, 'edit'])->name('room.edit');
+    Route::put('/rooms/update/{room_id}', [RoomController::class, 'update'])->name('room_update'); // 
     // Admin - Post
     Route::get('/post', [PostsController::class, 'viewPost'])->name('admin.viewpost');
     Route::get('/post/add', [PostsController::class, 'postAdd'])->name('post_add');
