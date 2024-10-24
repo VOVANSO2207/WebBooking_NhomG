@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Booking;
+use App\Models\User;
+use App\Models\Rooms;
+use App\Models\Promotions;
 use Illuminate\Http\Request;
 
 class BookingController extends Controller
@@ -27,9 +30,9 @@ class BookingController extends Controller
         }
 
         return response()->json([
-            'user_id' => $booking->user_id,
-            'room_id' => $booking->room_id,
-            'promotion_id' => $booking->promotion_id,
+            'user_id' => $booking->user->username ?? 'N/A',
+            'room_id' => $booking->room->name ?? 'N/A',
+            'promotion_id' => $booking->promotion->promotion_code ?? 'N/A',
             'check_in' => $booking->check_in,
             'check_out' => $booking->check_out,
             'total_price' => $booking->total_price,
@@ -67,7 +70,7 @@ class BookingController extends Controller
         $booking->status = $request->status;
 
         Booking::createBooking($booking->toArray());
-        return redirect()->route('admin.viewbookings')->with('success', 'Thêm đặt phòng thành công.');
+        return redirect()->route('admin.viewbooking')->with('success', 'Thêm đặt phòng thành công.');
     }
 
     public function deleteBooking($id)
@@ -91,14 +94,23 @@ class BookingController extends Controller
 
     public function editBooking($booking_id)
     {
+        // Tìm booking theo ID
         $booking = Booking::findBookingById($booking_id);
-
+    
+        // Kiểm tra nếu booking không tồn tại
         if (!$booking) {
             return redirect()->route('admin.viewbookings')->with('error', 'Đặt phòng không tồn tại.');
         }
-
-        return view('admin.booking_edit', compact('booking'));
+    
+        // Lấy danh sách người dùng, phòng, và khuyến mãi
+        $users = User::all(); // Lấy tất cả người dùng
+        $rooms = Rooms::all(); // Lấy tất cả phòng
+        $promotions = Promotions::all(); // Lấy tất cả khuyến mãi
+    
+        // Truyền booking và danh sách dữ liệu vào view
+        return view('admin.booking_edit', compact('booking', 'users', 'rooms', 'promotions'));
     }
+    
 
     public function update(Request $request, $booking_id)
     {
@@ -122,7 +134,7 @@ class BookingController extends Controller
 
         $booking = Booking::findBookingById($booking_id);
         if (!$booking) {
-            return redirect()->route('admin.viewbookings')->with('error', 'Đặt phòng không tồn tại.');
+            return redirect()->route('admin.viewbooking')->with('error', 'Đặt phòng không tồn tại.');
         }
 
         $booking->user_id = $request->user_id;
@@ -135,6 +147,6 @@ class BookingController extends Controller
 
         $booking->save();
 
-        return redirect()->route('admin.viewbookings')->with('success', 'Cập nhật đặt phòng thành công.');
+        return redirect()->route('admin.viewbooking')->with('success', 'Cập nhật đặt phòng thành công.');
     }
 }

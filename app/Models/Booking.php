@@ -54,4 +54,20 @@ class Booking extends Model
     {
         return $this->delete();
     }
+
+    // Các quan hệ
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'user_id');
+    }
+
+    public function room()
+    {
+        return $this->belongsTo(Rooms::class, 'room_id', 'room_id');
+    }
+
+    public function promotion()
+    {
+        return $this->belongsTo(Promotions::class, 'promotion_id', 'promotion_id');
+    }
 }

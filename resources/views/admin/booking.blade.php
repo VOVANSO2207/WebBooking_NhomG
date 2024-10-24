@@ -37,25 +37,26 @@
                         </tr>
                     </thead>
                     <tbody class="table-border-bottom-0 alldata">
-                        @forelse ($bookings as $index => $booking)
-                            <tr class="booking-detail" data-id="{{ $booking->booking_id }}">
-                                <td>{{ $index + 1 }}</td>
-                                <td>{{ $booking->user_id }}</td>
-                                <td>{{ $booking->room_id }}</td>
-                                <td>{{ $booking->promotion_id }}</td>
-                                <td>{{ $booking->check_in }}</td>
-                                <td>{{ $booking->check_out }}</td>
-                                <td>{{ $booking->total_price }}</td>
-                                <td class="{{ $booking->status === 'confirmed' ? 'badge bg-success' : ($booking->status === 'cancelled' ? 'badge bg-danger' : 'badge bg-warning') }}">
-                                    {{ ucfirst($booking->status) }}
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="8" class="text-center">Không có đặt phòng nào để hiển thị.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
+    @forelse ($bookings as $index => $booking)
+        <tr class="booking-detail" data-id="{{ $booking->booking_id }}">
+            <td>{{ $index + 1 }}</td>
+            <td>{{ $booking->user->username ?? 'N/A' }}</td> <!-- Hiển thị tên người dùng -->
+            <td>{{ $booking->room->name ?? 'N/A' }}</td> <!-- Hiển thị tên phòng -->
+            <td>{{ $booking->promotion->promotion_code ?? 'N/A' }}</td> <!-- Hiển thị mã khuyến mãi -->
+            <td>{{ $booking->check_in }}</td>
+            <td>{{ $booking->check_out }}</td>
+            <td>{{ $booking->total_price }}</td>
+            <td class="{{ $booking->status === 'confirmed' ? 'badge bg-success' : ($booking->status === 'cancelled' ? 'badge bg-danger' : 'badge bg-warning') }}">
+                {{ ucfirst($booking->status) }}
+            </td>
+        </tr>
+    @empty
+        <tr>
+            <td colspan="8" class="text-center">Không có đặt phòng nào để hiển thị.</td>
+        </tr>
+    @endforelse
+</tbody>
+
                 </table>
             </div>
             <div class="d-flex justify-content-center mt-3 pagination-booking">

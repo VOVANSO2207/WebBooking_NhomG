@@ -15,27 +15,45 @@
 
                         <div class="row">
                             <div class="mb-3 col-md-6">
-                                <label class="form-label">User ID</label>
-                                <input class="form-control" type="number" name="user_id" id="user_id"
-                                    value="{{ old('user_id', $booking->user_id) }}" placeholder="User ID" required />
+                                <label class="form-label">User</label>
+                                <select class="form-select" name="user_id" id="user_id" required>
+                                    <option value="">Chọn User</option>
+                                    @foreach($users as $user)
+                                        <option value="{{ $user->user_id }}" {{ $user->user_id == old('user_id', $booking->user_id) ? 'selected' : '' }}>
+                                            {{ $user->username }}
+                                        </option>
+                                    @endforeach
+                                </select>
                                 @error('user_id')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
 
                             <div class="mb-3 col-md-6">
-                                <label class="form-label">Room ID</label>
-                                <input class="form-control" type="number" name="room_id" id="room_id"
-                                    value="{{ old('room_id', $booking->room_id) }}" placeholder="Room ID" required />
+                                <label class="form-label">Room</label>
+                                <select class="form-select" name="room_id" id="room_id" required>
+                                    <option value="">Chọn Room</option>
+                                    @foreach($rooms as $room)
+                                        <option value="{{ $room->room_id }}" {{ $room->room_id == old('room_id', $booking->room_id) ? 'selected' : '' }}>
+                                            {{ $room->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
                                 @error('room_id')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
 
                             <div class="mb-3 col-md-6">
-                                <label class="form-label">Promotion ID</label>
-                                <input class="form-control" type="number" name="promotion_id" id="promotion_id"
-                                    value="{{ old('promotion_id', $booking->promotion_id) }}" placeholder="Promotion ID" />
+                                <label class="form-label">Promotion</label>
+                                <select class="form-select" name="promotion_id" id="promotion_id">
+                                    <option value="">Chọn Promotion</option>
+                                    @foreach($promotions as $promotion)
+                                        <option value="{{ $promotion->promotion_id }}" {{ $promotion->promotion_id == old('promotion_id', $booking->promotion_id) ? 'selected' : '' }}>
+                                            {{ $promotion->promotion_code }}
+                                        </option>
+                                    @endforeach
+                                </select>
                                 @error('promotion_id')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -83,7 +101,7 @@
 
                         <div class="mt-2" style="text-align: right">
                             <button type="reset" class="btn btn-outline-secondary" onclick="resetForm()">Reset</button>
-                            <button type="button" class="btn btn-outline-danger" onclick="window.location.href='{{ route('admin.viewpost') }}'">Close</button>
+                            <button type="button" class="btn btn-outline-danger" onclick="window.location.href='{{ route('admin.viewbooking') }}'">Close</button>
                             <button type="submit" class="btn btn-outline-success me-2">Save</button>
                         </div>
                     </form>
@@ -130,73 +148,34 @@
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+@endsection
+
+@section('scripts')
 <script>
-    $(document).ready(function () {
-        let isChanged = false; // Biến để theo dõi sự thay đổi
+    var isChanged = false;
 
-        function resetForm() {
-            $('#bookingForm')[0].reset();
-            isChanged = false; // Reset biến isChanged khi reset form
-        }
+    $('#bookingForm input, #bookingForm select').on('change', function() {
+        isChanged = true;
+    });
 
-        function checkForChanges() {
-            var userId = $('#user_id').val();
-            var roomId = $('#room_id').val();
-            var promotionId = $('#promotion_id').val();
-            var checkIn = $('#check_in').val();
-            var checkOut = $('#check_out').val();
-            var totalPrice = $('#total_price').val();
-            var statusValue = $('#status option:selected').val();
-
-            if (
-                userId !== '{{ addslashes(old('user_id', $booking->user_id)) }}' ||
-                roomId !== '{{ addslashes(old('room_id', $booking->room_id)) }}' ||
-                promotionId !== '{{ addslashes(old('promotion_id', $booking->promotion_id)) }}' ||
-                checkIn !== '{{ addslashes(old('check_in', $booking->check_in)) }}' ||
-                checkOut !== '{{ addslashes(old('check_out', $booking->check_out)) }}' ||
-                totalPrice !== '{{ addslashes(old('total_price', $booking->total_price)) }}' ||
-                statusValue !== '{{ $booking->status }}'
-            ) {
-                isChanged = true;
-            } else {
-                isChanged = false;
-            }
-        }
-
-        $('#user_id, #room_id, #promotion_id, #check_in, #check_out, #total_price, #status').on('input change', function () {
-            checkForChanges();
-        });
-
-        $('#bookingForm').on('submit', function (event) {
-            event.preventDefault();
-
-            if (!isChanged) {
-                const noUpdateModal = new bootstrap.Modal(document.getElementById('noUpdateModal'));
-                noUpdateModal.show();
-                return;
-            }
-
-            var formData = $(this).serialize();
-
+    $('#bookingForm').on('submit', function(e) {
+        e.preventDefault();
+        if (isChanged) {
+            const formData = $(this).serialize();
             $.ajax({
                 url: "{{ route('admin.booking.update', $booking->booking_id) }}",
                 method: 'POST',
-                data: formData,
-                success: function (response) {
+                data: formData + '&_method=PUT', // Đảm bảo phương thức PUT
+                success: function(response) {
                     const updateSuccessModal = new bootstrap.Modal(document.getElementById('updateSuccessModal'));
                     updateSuccessModal.show();
 
-                    setTimeout(function () {
-                        window.location.href = '{{ route('admin.viewpost') }}';
+                    setTimeout(function() {
+                        window.location.href = '{{ route('admin.viewbooking') }}';
                     }, 2000);
                 },
-                error: function (xhr) {
-                    // Xóa lỗi cũ trước đó
-                    $('.text-danger').remove();
-
-                    // Xử lý lỗi
+                error: function(xhr) {
+                    $('.text-danger').remove(); // Xóa lỗi cũ
                     var errors = xhr.responseJSON.errors;
                     for (var key in errors) {
                         if (errors.hasOwnProperty(key)) {
@@ -206,7 +185,15 @@
                     }
                 }
             });
-        });
+        } else {
+            const noUpdateModal = new bootstrap.Modal(document.getElementById('noUpdateModal'));
+            noUpdateModal.show();
+        }
     });
+
+    function resetForm() {
+        isChanged = false; // Đặt lại trạng thái
+        $('#bookingForm')[0].reset(); // Đặt lại form
+    }
 </script>
 @endsection

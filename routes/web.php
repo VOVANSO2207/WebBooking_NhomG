@@ -57,7 +57,7 @@ Route::get('/bookings/{booking_id}/detail', action: [BookingController::class, '
 Route::get('/searchBooking', [BookingController::class, 'searchBooking'])->name('searchBooking');
 Route::delete('/bookings/{booking_id}/delete', [BookingController::class, 'deleteBooking'])->name('booking.delete');
 Route::get('/bookings/{booking_id}/edit', [BookingController::class, 'editBooking'])->name('booking.edit');
-Route::put('/admin/bookings/{id}', [BookingController::class, 'updateBooking'])->name('admin.booking.update');
+Route::put('/admin/bookings/{id}', [BookingController::class, 'update'])->name('admin.booking.update');
 
 // Admin-User Detail
 Route::get('/users/{user_id}/detail', action: [UsersController::class, 'getUserDetail'])->name('user.detail');
