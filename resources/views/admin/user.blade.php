@@ -11,11 +11,13 @@
 
     <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
         <div class="navbar-nav align-items-center" style="width: 100%;">
-            <div class="nav-item d-flex align-items-center" style="width: 100%;">
+            <form action="{{ route('admin.users.search') }}" method="GET" class="d-flex align-items-center"
+                style="width: 100%;">
                 <i class="bx bx-search fs-4 lh-0"></i>
-                <input type="text" class="form-control border-0 shadow-none" id="search_user" name="search_user"
-                    placeholder="Search..." aria-label="Search..." style="width: 100%;" />
-            </div>
+                <input type="text" name="search" class="form-control border-0 shadow-none" placeholder="Search..."
+                    aria-label="Search..." style="width: 100%;" />
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
         </div>
     </div>
 </nav>
@@ -23,7 +25,8 @@
 <div class="content-wrapper">
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="card">
-            <h5 class="card-header" style="background-color: #696cff; border-color: #696cff; color:#fff">USER MANAGEMENT</h5>
+            <h5 class="card-header" style="background-color: #696cff; border-color: #696cff; color:#fff">USER MANAGEMENT
+            </h5>
             <div class="add">
                 <a class="btn btn-success" href="{{ route('user_add') }}">Add</a>
             </div>
@@ -41,7 +44,7 @@
                         </tr>
                     </thead>
                     <tbody class="table-border-bottom-0 alldata">
-                        @forelse ($users as $index => $user)
+                        @forelse ($results ?? $users as $index => $user)
                             <tr class="user-detail" data-id="{{ $user->user_id }}">
                                 <td>{{ $index + 1 }}</td>
                                 <td>
@@ -51,7 +54,7 @@
                                 <td>{{ $user->username }}</td>
                                 <td>{{ $user->email }}</td>
                                 <td>{{ $user->phone_number }}</td>
-                                <td>{{ $user->role_id }}</td>
+                                <td>{{ $user->role->role_name ?? 'N/A' }}</td>
                                 <td class="{{ $user->status ? 'badge bg-success' : 'badge bg-danger' }}">
                                     {{ $user->status ? 'Active' : 'Inactive' }}
                                 </td>
@@ -65,7 +68,7 @@
                 </table>
             </div>
             <div class="d-flex justify-content-center mt-3 pagination-user">
-                {{ $users->links('pagination::bootstrap-4') }}
+                {{ (isset($results) ? $results : $users)->links('pagination::bootstrap-4') }}
             </div>
         </div>
     </div>
@@ -94,7 +97,7 @@
                         <span id="modalPhoneNumber"></span>
                     </div>
                     <div class="user-detail-item">
-                        <strong>Role ID:</strong>
+                        <strong>Role Name:</strong>
                         <span id="modalRoleId"></span>
                     </div>
                     <div class="user-detail-item">
@@ -191,22 +194,23 @@
             fetch(`/users/${currentUserId}/delete`, {
                 method: 'DELETE',
                 headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}', // Chuyển token CSRF
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}', // Thêm CSRF token
                 },
             })
                 .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                    if (response.ok) {
+                        // Xóa người dùng khỏi bảng
+                        const rowToDelete = document.querySelector(`.user-detail[data-id="${currentUserId}"]`);
+                        rowToDelete.remove();
+                        new bootstrap.Modal(document.getElementById('confirmDeleteUserModal')).hide();
+                        alert('User deleted successfully.');
+                    } else {
+                        throw new Error('Failed to delete user.');
                     }
-                    return response.json();
-                })
-                .then(data => {
-                    // Xử lý phản hồi thành công
-                    alert(data.message); // Hiển thị thông báo
-                    location.reload(); // Tải lại trang
                 })
                 .catch(error => {
                     console.error('Error deleting user:', error);
+                    alert('An error occurred while deleting the user.');
                 });
         });
     });

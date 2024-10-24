@@ -54,17 +54,18 @@ Route::put('/admin/posts/{id}', [PostsController::class, 'update'])->name('admin
 
 // Admin-Booking Detail
 Route::get('/bookings/{booking_id}/detail', action: [BookingController::class, 'getBookingDetail'])->name('booking.detail');
-Route::get('/searchBooking', [BookingController::class, 'searchBooking'])->name('searchBooking');
 Route::delete('/bookings/{booking_id}/delete', [BookingController::class, 'deleteBooking'])->name('booking.delete');
 Route::get('/bookings/{booking_id}/edit', [BookingController::class, 'editBooking'])->name('booking.edit');
 Route::put('/admin/bookings/{id}', [BookingController::class, 'update'])->name('admin.booking.update');
+Route::get('/admin/booking/search', [BookingController::class, 'search'])->name('admin.booking.search');
 
 // Admin-User Detail
 Route::get('/users/{user_id}/detail', action: [UsersController::class, 'getUserDetail'])->name('user.detail');
-Route::get('/searchUser', [UsersController::class, 'search'])->name('searchUser');
+Route::get('/users/search', [UsersController::class, 'search'])->name('user.search');
 Route::delete('/users/{user_id}/delete', [UsersController::class, 'deleteUser'])->name('user.delete');
 Route::get('/users/{user_id}/edit', [UsersController::class, 'editUser'])->name('user.edit');
 Route::put('/admin/users/{id}', [UsersController::class, 'update'])->name('admin.user.update');
+Route::get('/admin/users/search', [UsersController::class, 'search'])->name('admin.users.search');
 
 // Search
 // Route::get('/search', [SearchController::class, 'index'])->name('search');

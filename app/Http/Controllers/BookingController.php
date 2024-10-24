@@ -33,9 +33,9 @@ class BookingController extends Controller
             'user_id' => $booking->user->username ?? 'N/A',
             'room_id' => $booking->room->name ?? 'N/A',
             'promotion_id' => $booking->promotion->promotion_code ?? 'N/A',
-            'check_in' => $booking->check_in,
-            'check_out' => $booking->check_out,
-            'total_price' => $booking->total_price,
+            'check_in' => $booking->check_in ? \Carbon\Carbon::parse($booking->check_in)->format('d/m/Y') : 'N/A',
+            'check_out' => $booking->check_out ? \Carbon\Carbon::parse($booking->check_out)->format('d/m/Y') : 'N/A',
+            'total_price' => $booking->total_price !== null ? number_format($booking->total_price, 0, ',', '.') . ' VNĐ' : 'N/A',
             'status' => $booking->status,
         ]);
     }
@@ -86,31 +86,43 @@ class BookingController extends Controller
 
     public function search(Request $request)
     {
-        $keyword = $request->get('search');
-        $results = Booking::searchBooking($keyword)->paginate(5);
+        $keyword = $request->input('search');
+        $bookings = Booking::query()
+            ->when($keyword, function ($query, $keyword) {
+                return $query->whereHas('user', function ($q) use ($keyword) {
+                    $q->where('username', 'LIKE', "%{$keyword}%");
+                })
+                    ->orWhereHas('room', function ($q) use ($keyword) {
+                        $q->where('name', 'LIKE', "%{$keyword}%");
+                    })
+                    ->orWhereHas('promotion', function ($q) use ($keyword): void {
+                        $q->where('promotion_code', 'LIKE', "%{$keyword}%");
+                    });
+            })
+            ->paginate(5);
 
-        return view('admin.search_results_booking', compact('results'));
+        return view('admin.search_results_booking', compact('bookings'));
     }
 
     public function editBooking($booking_id)
     {
         // Tìm booking theo ID
         $booking = Booking::findBookingById($booking_id);
-    
+
         // Kiểm tra nếu booking không tồn tại
         if (!$booking) {
             return redirect()->route('admin.viewbookings')->with('error', 'Đặt phòng không tồn tại.');
         }
-    
+
         // Lấy danh sách người dùng, phòng, và khuyến mãi
         $users = User::all(); // Lấy tất cả người dùng
         $rooms = Rooms::all(); // Lấy tất cả phòng
         $promotions = Promotions::all(); // Lấy tất cả khuyến mãi
-    
+
         // Truyền booking và danh sách dữ liệu vào view
         return view('admin.booking_edit', compact('booking', 'users', 'rooms', 'promotions'));
     }
-    
+
 
     public function update(Request $request, $booking_id)
     {

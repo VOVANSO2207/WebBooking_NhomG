@@ -21,7 +21,7 @@ class User extends Model
 
     protected $primaryKey = 'user_id';
 
-    public static function getAllUsers($perPage = 10)
+    public static function getAllUsers($perPage = 5)
     {
         return self::orderBy('created_at', 'DESC')->paginate($perPage);
     }
@@ -44,13 +44,17 @@ class User extends Model
 
         return static::where(function ($query) use ($keyword) {
             $query->where('username', 'LIKE', "%{$keyword}%")
-                  ->orWhere('email', 'LIKE', "%{$keyword}%")
-                  ->orWhere('phone_number', 'LIKE', "%{$keyword}%");
+                ->orWhere('email', 'LIKE', "%{$keyword}%")
+                ->orWhere('phone_number', 'LIKE', "%{$keyword}%");
         });
     }
 
     public function deleteUser()
     {
         return $this->delete();
+    }
+    public function role()
+    {
+        return $this->belongsTo(Roles::class, 'role_id');
     }
 }

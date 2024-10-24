@@ -21,7 +21,7 @@ class Booking extends Model
 
     protected $primaryKey = 'booking_id';
 
-    public static function getAllBookings($perPage = 5)
+    public static function getAllBookings($perPage = 7)
     {
         return self::orderBy('created_at', 'DESC')->paginate($perPage);
     }
@@ -45,8 +45,8 @@ class Booking extends Model
 
         return static::where(function ($query) use ($keyword) {
             $query->where('user_id', 'LIKE', "%{$keyword}%")
-                  ->orWhere('room_id', 'LIKE', "%{$keyword}%")
-                  ->orWhere('promotion_id', 'LIKE', "%{$keyword}%");
+                ->orWhere('room_id', 'LIKE', "%{$keyword}%")
+                ->orWhere('promotion_id', 'LIKE', "%{$keyword}%");
         });
     }
 
