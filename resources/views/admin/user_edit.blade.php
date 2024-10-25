@@ -14,14 +14,14 @@
                         @method('PUT')
                         <div class="card-body">
                             <div class="d-flex align-items-start align-items-sm-center gap-4">
-                                <img src="{{ asset('images/' . $user->avatar) }}" alt="user-avatar" class="d-block rounded"
-                                    height="100" width="100" id="fileUpload" />
+                                <img src="{{ asset('images/' . $user->avatar) }}" alt="user-avatar"
+                                    class="d-block rounded" height="100" width="100" id="fileUpload" />
                                 <div class="button-wrapper">
                                     <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
                                         <span class="d-none d-sm-block">Upload</span>
                                         <i class="bx bx-upload d-block d-sm-none"></i>
-                                        <input type="file" id="upload" name="avatar" class="account-file-input"
-                                            hidden accept="image/png, image/jpeg, image/jpg" />
+                                        <input type="file" id="upload" name="avatar" class="account-file-input" hidden
+                                            accept="image/png, image/jpeg, image/jpg" />
                                     </label>
                                 </div>
                             </div>
@@ -47,24 +47,30 @@
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Phone Number</label>
                                 <input class="form-control" type="text" name="phone_number" id="phone_number"
-                                    value="{{ old('phone_number', $user->phone_number) }}" placeholder="Phone Number" required />
+                                    value="{{ old('phone_number', $user->phone_number) }}" placeholder="Phone Number"
+                                    required />
                                 @error('phone_number')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Password</label>
-                                <input class="form-control" type="password" name="password" id="password" placeholder="Password" />
+                                <input class="form-control" type="password" name="password" id="password"
+                                    placeholder="Password" />
                                 @error('password')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Role</label>
-                                <select id="role_id" name="role_id" class="form-select">
-                                    <option value="1" {{ $user->role_id == 1 ? 'selected' : '' }}>Admin</option>
-                                    <option value="2" {{ $user->role_id == 2 ? 'selected' : '' }}>User</option>
+                                <select id="role_id" name="role_id" class="form-select" required>
+                                    @foreach ($roles as $role)
+                                        <option value="{{ $role->role_id }}" {{ $user->role_id == $role->role_id ? 'selected' : '' }}>
+                                            {{ $role->role_name }}
+                                        </option>
+                                    @endforeach
                                 </select>
+
                                 @error('role_id')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror

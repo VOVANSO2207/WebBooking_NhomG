@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Roles;
 use Illuminate\Http\Request;
 
 class UsersController extends Controller
@@ -15,8 +16,12 @@ class UsersController extends Controller
 
     public function userAdd()
     {
-        return view('admin.user_add');
+        // Lấy tất cả vai trò từ bảng roles
+        $roles = Roles::all();
+
+        return view('admin.user_add', compact('roles'));
     }
+
 
     public function getUserDetail($user_id)
     {
@@ -87,10 +92,6 @@ class UsersController extends Controller
         return redirect()->route('admin.viewuser')->with('success', 'Thêm người dùng thành công.');
     }
 
-
-
-
-
     public function deleteUser($user_id)
     {
         $user = User::find($user_id);
@@ -121,8 +122,12 @@ class UsersController extends Controller
             return redirect()->route('admin.viewuser')->with('error', 'Người dùng không tồn tại.');
         }
 
-        return view('admin.user_edit', compact('user'));
+        // Lấy tất cả vai trò từ bảng roles
+        $roles = Roles::all();
+
+        return view('admin.user_edit', compact('user', 'roles'));
     }
+
 
     public function update(Request $request, $user_id)
     {
