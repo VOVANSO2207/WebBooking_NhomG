@@ -19,7 +19,7 @@
 @section('header')
 <section class="header-staynest m-0">
     <div class="top-header">
-        <a href="{{asset('home')}}" class="logo-staynest p-3">
+        <a href="{{asset('/')}}" class="logo-staynest p-3">
             <img src="{{ asset('/images/logo_staynest_white_color.png') }}" alt="" width="50px">
             <h1 class="name-logo ms-2">StayNest</h1>
         </a>
@@ -32,7 +32,7 @@
                 </div>
                 <div class="menu-header col-md-8">
                     <ul class="menu-attribute d-flex justify-content-around m-0">
-                        <li><a href="#">TRANG CHỦ</a></li>
+                        <li><a href="{{asset('/')}}">TRANG CHỦ</a></li>
                         <li><a href="#">GIỚI THIỆU</a></li>
                         <li><a href="#">PHÒNG KHÁCH SẠN</a></li>
                         <li><a href="#">TIN TỨC</a></li>
@@ -83,7 +83,6 @@
                 <div class="form-group">
                     <select name="location" class="form-control-staynest select2" style="width: 100%;" tabindex="-1"
                         aria-hidden="true" required>
-                        <option value="">Địa điểm cần tìm</option>
                         @if ($cities->isEmpty())
                             <option value="">Chưa có địa điểm hiển thị</option>
                         @else

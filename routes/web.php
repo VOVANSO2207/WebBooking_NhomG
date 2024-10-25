@@ -100,3 +100,19 @@ Route::get('/admin/user/{id}', [UsersController::class, 'show'])->name('admin.us
 Route::get('/admin/user/{id}/edit', [UsersController::class, 'edit'])->name('admin.user.edit');
 Route::delete('/admin/user/{id}', [UsersController::class, 'destroy'])->name('admin.user.destroy');
 Route::put('/admin/user/{id}', [UsersController::class, 'update'])->name('admin.user.update');
+
+
+
+
+
+
+
+
+
+
+
+
+// TEST
+Route::get('/hotel_detail', function () {
+    return view('pages/hotel_detail');
+});
