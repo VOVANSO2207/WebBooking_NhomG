@@ -113,8 +113,34 @@ Route::get('/payment', [PaymentsController::class, 'viewPay'])->name('pages.pay'
 
 
 
+<<<<<<< HEAD
+=======
+// Admin - User
+Route::get('/admin/user', [UsersController::class, 'index'])->name('admin.viewuser');
+Route::get('/admin/user/user_add', [UsersController::class, 'userAdd'])->name('user_add');
+Route::post('/admin/user/user_add', [UsersController::class, 'storeUser'])->name('user.store');
+Route::get('/admin/user/search', [UsersController::class, 'searchUsers'])->name('admin.searchUsers');
+Route::get('/admin/user/{id}', [UsersController::class, 'show'])->name('admin.user.show');
+Route::get('/admin/user/{id}/edit', [UsersController::class, 'edit'])->name('admin.user.edit');
+Route::delete('/admin/user/{id}', [UsersController::class, 'destroy'])->name('admin.user.destroy');
+Route::put('/admin/user/{id}', [UsersController::class, 'update'])->name('admin.user.update');
+>>>>>>> UI-ThanhToan
 
 
 
 
 
+<<<<<<< HEAD
+=======
+
+
+
+
+
+
+
+// TEST
+Route::get('/hotel_detail', function () {
+    return view('pages/hotel_detail');
+});
+>>>>>>> UI-ThanhToan

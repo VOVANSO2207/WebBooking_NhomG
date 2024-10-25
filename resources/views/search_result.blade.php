@@ -1,17 +1,18 @@
 @extends('layouts.app')
 
 @section('title', 'Kết quả tìm kiếm')
+<link rel="stylesheet" href="{{asset('css/search_result.css')}}">
 
 @section('header')
 @include('partials.header') 
 @endsection
 @section('content')
 <div class="container mt-5 mb-5">
-    <div class="row">
+    <div class="counter-hotel">
         <h3>Có 554 khách sạn tại Thành Phố Hồ Chí Minh</h3>
     </div>
     <div class="row d-flex">
-        <div class="col-3 filter">
+        <div class="col-md-3 filter">
             <div class="header_title">
                 <h3>Bộ lọc</h3>
             </div>
@@ -92,7 +93,6 @@
                 </div>
             </div>
         </div>
-
         <div class="col-9">
             <div class="tab_control">
                 <ul class="tab_list d-flex">
@@ -122,21 +122,18 @@
                                 <div class="hotel-image">
                                     <swiper-container class="mySwiper" pagination="true" pagination-clickable="true"
                                         navigation="true" space-between="30" loop="true" style="height: auto">
-                                        <swiper-slide>
-                                            <img src="https://swiperjs.com/demos/images/nature-1.jpg" alt="Nature Image 1" />
-                                        </swiper-slide>
-                                        <swiper-slide>
-                                            <img src="https://swiperjs.com/demos/images/nature-1.jpg" alt="Nature Image 1" />
-                                        </swiper-slide>
-                                        <swiper-slide>
-                                            <img src="https://swiperjs.com/demos/images/nature-1.jpg" alt="Nature Image 1" />
-                                        </swiper-slide>
-                                        <swiper-slide>
-                                            <img src="https://swiperjs.com/demos/images/nature-1.jpg" alt="Nature Image 1" />
-                                        </swiper-slide>
-                                        <!-- Thêm các slide khác -->
+                                        @foreach ($hotel->images as $image)
+                                            <swiper-slide>
+                                                <img src="{{ asset('images/' . $image->image_url) }}" alt="{{$image->image_url}}" />
+                                            </swiper-slide>
+                                        @endforeach
+                                        <!-- @foreach ($hotel_images->where('hotel_id', $hotel->hotel_id) as $image)
+                                                    <swiper-slide>
+                                                        <img id="{{$image->image_id}}" src="{{ asset('images/' . $image->image_url) }}"
+                                                            alt="{{$image->image_url}}" />
+                                                    </swiper-slide>
+                                                @endforeach -->
                                     </swiper-container>
-
                                 </div>
                                 <div class="hotel-info row">
                                     <div class="col-md-9">
@@ -169,15 +166,12 @@
                                             <span class="status-available">ĐƠN</span>
                                             <span class="status-soldout">ĐÔI</span>
                                         </div>
-
                                         <button class="book-now">Đặt Ngay</button>
                                     </div>
                                 </div>
-
                             </div>
                         @endforeach
                     @endif
-
                 </div>
 
                 <div id="high-to-low" class="tab_item">

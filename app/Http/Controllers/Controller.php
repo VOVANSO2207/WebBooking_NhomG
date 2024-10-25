@@ -8,4 +8,10 @@ abstract class Controller
     {
         return view('partials.header');
     }
+
+    public function hotelDetailTest()
+    {
+        return view('pages.hotel_detail');
+    }
+
 }
