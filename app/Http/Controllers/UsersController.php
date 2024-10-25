@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Roles;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Hash;
@@ -20,7 +21,10 @@ class UsersController extends Controller
 
     public function userAdd()
     {
-        return view('admin.user_add');
+        // Lấy tất cả vai trò từ bảng roles
+        $roles = Roles::all();
+
+        return view('admin.user_add', compact('roles'));
     }
 
     public function getUserDetail($user_id)
@@ -92,10 +96,6 @@ class UsersController extends Controller
         return redirect()->route('admin.viewuser')->with('success', 'Thêm người dùng thành công.');
     }
 
-
-
-
-
     public function deleteUser($user_id)
     {
         $user = User::find($user_id);
@@ -126,7 +126,10 @@ class UsersController extends Controller
             return redirect()->route('admin.viewuser')->with('error', 'Người dùng không tồn tại.');
         }
 
-        return view('admin.user_edit', compact('user'));
+        // Lấy tất cả vai trò từ bảng roles
+        $roles = Roles::all();
+
+        return view('admin.user_edit', compact('user', 'roles'));
     }
 
     public function update(Request $request, $user_id)
@@ -134,7 +137,7 @@ class UsersController extends Controller
         $request->validate([
             'username' => 'required|min:3|max:50|unique:users,username,' . $user_id . ',user_id',
             'email' => 'required|email|unique:users,email,' . $user_id . ',user_id',
-            'password' => 'nullable|min:8|confirmed',
+            'password' => 'nullable|min:8|confirmed', // Chỉ yêu cầu khi có giá trị
             'phone_number' => 'required|regex:/^0[0-9]{9}$/',
             'role_id' => 'required|integer',
             'status' => 'required|boolean',
@@ -162,11 +165,15 @@ class UsersController extends Controller
             return redirect()->route('admin.viewuser')->with('error', 'Người dùng không tồn tại.');
         }
 
+        // Cập nhật các trường khác
         $user->username = $request->username;
         $user->email = $request->email;
-        if ($request->password) {
+
+        // Chỉ cập nhật mật khẩu nếu có giá trị
+        if ($request->filled('password')) {
             $user->password = bcrypt($request->password);
         }
+
         $user->phone_number = $request->phone_number;
         $user->role_id = $request->role_id;
         $user->status = $request->status;

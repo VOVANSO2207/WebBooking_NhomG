@@ -9,21 +9,16 @@
             <div class="card mb-4">
                 <hr class="my-0" />
                 <div class="card-body">
-                    <form method="POST" id="bookingForm" action="{{ route('admin.booking.update', $booking->booking_id) }}">
+                    <form method="POST" id="bookingForm"
+                        action="{{ route('admin.booking.update', $booking->booking_id) }}">
                         @csrf
                         @method('PUT')
 
                         <div class="row">
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">User</label>
-                                <select class="form-select" name="user_id" id="user_id" required>
-                                    <option value="">Chọn User</option>
-                                    @foreach($users as $user)
-                                        <option value="{{ $user->user_id }}" {{ $user->user_id == old('user_id', $booking->user_id) ? 'selected' : '' }}>
-                                            {{ $user->username }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                                <input type="text" class="form-control" value="{{ $booking->user->username }}" readonly>
+                                <input type="hidden" name="user_id" value="{{ $booking->user_id }}">
                                 @error('user_id')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -31,14 +26,8 @@
 
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Room</label>
-                                <select class="form-select" name="room_id" id="room_id" required>
-                                    <option value="">Chọn Room</option>
-                                    @foreach($rooms as $room)
-                                        <option value="{{ $room->room_id }}" {{ $room->room_id == old('room_id', $booking->room_id) ? 'selected' : '' }}>
-                                            {{ $room->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                                <input type="text" class="form-control" value="{{ $booking->room->name }}" readonly>
+                                <input type="hidden" name="room_id" value="{{ $booking->room_id }}">
                                 @error('room_id')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -46,23 +35,19 @@
 
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Promotion</label>
-                                <select class="form-select" name="promotion_id" id="promotion_id">
-                                    <option value="">Chọn Promotion</option>
-                                    @foreach($promotions as $promotion)
-                                        <option value="{{ $promotion->promotion_id }}" {{ $promotion->promotion_id == old('promotion_id', $booking->promotion_id) ? 'selected' : '' }}>
-                                            {{ $promotion->promotion_code }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                                <input type="text" class="form-control"
+                                    value="{{ $booking->promotion->promotion_code }}" readonly>
+                                <input type="hidden" name="promotion_id" value="{{ $booking->promotion_id }}">
                                 @error('promotion_id')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
 
+
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Check-In Date</label>
                                 <input class="form-control" type="date" name="check_in" id="check_in"
-                                    value="{{ old('check_in', $booking->check_in) }}" required />
+                                    value="{{ old('check_in', $booking->check_in) }}" required readonly />
                                 @error('check_in')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -71,7 +56,7 @@
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Check-Out Date</label>
                                 <input class="form-control" type="date" name="check_out" id="check_out"
-                                    value="{{ old('check_out', $booking->check_out) }}" required />
+                                    value="{{ old('check_out', $booking->check_out) }}" required readonly />
                                 @error('check_out')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -79,8 +64,11 @@
 
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Total Price</label>
-                                <input class="form-control" type="number" name="total_price" id="total_price"
-                                    value="{{ old('total_price', $booking->total_price) }}" placeholder="Total Price" required />
+                                <input class="form-control" type="text" name="total_price_display"
+                                    id="total_price_display"
+                                    value="{{ $booking->total_price !== null ? number_format($booking->total_price, 0, ',', '.') . ' VNĐ' : 'N/A' }}"
+                                    placeholder="Total Price" readonly />
+                                <input type="hidden" name="total_price" value="{{ $booking->total_price }}">
                                 @error('total_price')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -89,9 +77,12 @@
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Status</label>
                                 <select id="status" name="status" class="form-select">
-                                    <option value="pending" {{ $booking->status == 'pending' ? 'selected' : '' }}>Pending</option>
-                                    <option value="confirmed" {{ $booking->status == 'confirmed' ? 'selected' : '' }}>Confirmed</option>
-                                    <option value="cancelled" {{ $booking->status == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                                    <option value="pending" {{ $booking->status == 'pending' ? 'selected' : '' }}>Pending
+                                    </option>
+                                    <option value="confirmed" {{ $booking->status == 'confirmed' ? 'selected' : '' }}>
+                                        Confirmed</option>
+                                    <option value="cancelled" {{ $booking->status == 'cancelled' ? 'selected' : '' }}>
+                                        Cancelled</option>
                                 </select>
                                 @error('status')
                                     <div class="text-danger">{{ $message }}</div>
@@ -101,7 +92,8 @@
 
                         <div class="mt-2" style="text-align: right">
                             <button type="reset" class="btn btn-outline-secondary" onclick="resetForm()">Reset</button>
-                            <button type="button" class="btn btn-outline-danger" onclick="window.location.href='{{ route('admin.viewbooking') }}'">Close</button>
+                            <button type="button" class="btn btn-outline-danger"
+                                onclick="window.location.href='{{ route('admin.viewbooking') }}'">Close</button>
                             <button type="submit" class="btn btn-outline-success me-2">Save</button>
                         </div>
                     </form>
@@ -131,7 +123,8 @@
 </div>
 
 <!-- Modal Cập nhật thành công -->
-<div class="modal fade" id="updateSuccessModal" tabindex="-1" aria-labelledby="updateSuccessModalLabel" aria-hidden="true">
+<div class="modal fade" id="updateSuccessModal" tabindex="-1" aria-labelledby="updateSuccessModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -154,11 +147,11 @@
 <script>
     var isChanged = false;
 
-    $('#bookingForm input, #bookingForm select').on('change', function() {
+    $('#bookingForm input, #bookingForm select').on('change', function () {
         isChanged = true;
     });
 
-    $('#bookingForm').on('submit', function(e) {
+    $('#bookingForm').on('submit', function (e) {
         e.preventDefault();
         if (isChanged) {
             const formData = $(this).serialize();
@@ -166,15 +159,15 @@
                 url: "{{ route('admin.booking.update', $booking->booking_id) }}",
                 method: 'POST',
                 data: formData + '&_method=PUT', // Đảm bảo phương thức PUT
-                success: function(response) {
+                success: function (response) {
                     const updateSuccessModal = new bootstrap.Modal(document.getElementById('updateSuccessModal'));
                     updateSuccessModal.show();
 
-                    setTimeout(function() {
+                    setTimeout(function () {
                         window.location.href = '{{ route('admin.viewbooking') }}';
                     }, 2000);
                 },
-                error: function(xhr) {
+                error: function (xhr) {
                     $('.text-danger').remove(); // Xóa lỗi cũ
                     var errors = xhr.responseJSON.errors;
                     for (var key in errors) {
