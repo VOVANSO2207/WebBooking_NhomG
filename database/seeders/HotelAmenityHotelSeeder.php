@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\HotelAmenityHotel;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -12,7 +13,7 @@ class HotelAmenityHotelSeeder extends Seeder
      */
     public function run(): void
     {
-        insert([
+        HotelAmenityHotel::insert([
             ['hotel_id' => 1, 'amenity_id' => 1],
             ['hotel_id' => 1, 'amenity_id' => 2],
             ['hotel_id' => 2, 'amenity_id' => 1],
