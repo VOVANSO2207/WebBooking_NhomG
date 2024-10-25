@@ -31,9 +31,9 @@
                     <thead>
                         <tr class="color_tr">
                             <th>STT</th>
-                            <th>User ID</th>
-                            <th>Room ID</th>
-                            <th>Promotion ID</th>
+                            <th>User</th>
+                            <th>Room</th>
+                            <th>Promotion</th>
                             <th>Check In</th>
                             <th>Check Out</th>
                             <th>Total Price</th>
@@ -86,15 +86,15 @@
             <div class="modal-body">
                 <div class="booking-detail">
                     <div class="booking-detail-item">
-                        <strong>User ID:</strong>
+                        <strong>User:</strong>
                         <span id="modalUserId"></span>
                     </div>
                     <div class="booking-detail-item">
-                        <strong>Room ID:</strong>
+                        <strong>Room:</strong>
                         <span id="modalRoomId"></span>
                     </div>
                     <div class="booking-detail-item">
-                        <strong>Promotion ID:</strong>
+                        <strong>Promotion:</strong>
                         <span id="modalPromotionId"></span>
                     </div>
                     <div class="booking-detail-item">
