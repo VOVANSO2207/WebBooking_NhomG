@@ -25,8 +25,7 @@
 <div class="content-wrapper">
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="card">
-            <h5 class="card-header" style="background-color: #696cff; border-color: #696cff; color:#fff">USER MANAGEMENT
-            </h5>
+            <h5 class="card-header" style="background-color: #696cff; border-color: #696cff; color:#fff">USER</h5>
             <div class="add">
                 <a class="btn btn-success" href="{{ route('user_add') }}">Add</a>
             </div>
@@ -56,7 +55,7 @@
                                 <td>{{ $user->phone_number }}</td>
                                 <td>{{ $user->role->role_name ?? 'N/A' }}</td>
                                 <td class="{{ $user->status ? 'badge bg-success' : 'badge bg-danger' }}">
-                                    {{ $user->status ? 'Active' : 'Inactive' }}
+                                    {{  $user->status ? 'Active' : 'Inactive' }}
                                 </td>
                             </tr>
                         @empty
