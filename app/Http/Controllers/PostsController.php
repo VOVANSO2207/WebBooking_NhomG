@@ -38,14 +38,14 @@ class PostsController extends Controller
             'img' => $post->img
         ]);
     }
-   public function encodeId($id)
+    public function encodeId($id)
     {
         $encodedId = IdEncoder::encodeId($id);
         return response()->json(['encoded_id' => $encodedId]);
     }
 
     public function decodeId($encodedId)
-    { 
+    {
         $decodedId = IdEncoder::decodeId($encodedId);
         return response()->json(['decoded_id' => $decodedId]);
     }
@@ -119,7 +119,7 @@ class PostsController extends Controller
 
         return view('admin.search_results_post', compact('results'));
     }
-  
+
     public function editPost($post_id)
     {
         // Giải mã ID
@@ -147,7 +147,7 @@ class PostsController extends Controller
             'title.min' => 'Tiêu đề bài viết phải trên 30 ký tự',
             'title.max' => 'Tiêu đề bài viết không được quá 100 ký tự',
             'title.regex' => 'Tiêu đề bài viết không hợp lệ',
-            'description.required' => 'Vui lòng nhập mô tả bài viết',
+            'description.required' => 'Mô tả là bắt buộc.',
             'description.max' => 'Mô tả không quá 1000 ký tự.',
             'description.min' => 'Mô tả bài viết không được dưới 50 ký tự',
             'content1.required' => 'Nội dung bài viết không được để trống',
@@ -165,25 +165,33 @@ class PostsController extends Controller
         if (!$post) {
             return redirect()->route('admin.viewpost')->with('error', 'Bài viết không tồn tại.');
         }
+        // Kiểm tra xem updated_at có khớp không
+        if ($post->updated_at != $request->updated_at) {
+            return response()->json(['error' => 'Bài viết đã được cập nhật bởi một người dùng khác. Vui lòng tải lại và thử lại.'], 409);
+        } else {
 
-        $post->title = $request->title;
-        $post->description = $request->description;
-        $post->content = $request->content1;
-        $post->meta_desc = $request->meta_desc;
-        $post->url_seo = $request->url_seo;
-        $post->status = $request->status === '1' ? 1 : 0;
 
-        if ($request->hasFile('fileUpload')) {
-            $file = $request->file('fileUpload');
-            $filename = time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('images'), $filename);
-            $post->img = $filename;
+            $post->title = $request->title;
+            $post->description = $request->description;
+            $post->content = $request->content1;
+            $post->meta_desc = $request->meta_desc;
+            $post->url_seo = $request->url_seo;
+            $post->status = $request->status === '1' ? 1 : 0;
+
+            if ($request->hasFile('fileUpload')) {
+                $file = $request->file('fileUpload');
+                $filename = time() . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path('images'), $filename);
+                $post->img = $filename;
+            }
+
+            $post->save();
+
+            return redirect()->route('admin.viewpost')->with('success', 'Cập nhật bài viết thành công.');
         }
 
-        $post->save();
-
-        return redirect()->route('admin.viewpost')->with('success', 'Cập nhật bài viết thành công.');
     }
+
 
 
 }

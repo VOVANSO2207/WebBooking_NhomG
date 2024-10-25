@@ -106,10 +106,6 @@
                         <strong>End Date:</strong>
                         <span id="modalEndDate"></span>
                     </div>
-                    <div class="voucher-detail-item detail-item">
-                        <strong>Last Updated:</strong>
-                        <span id="modalUpdatedAt"></span>
-                    </div>
                 </div>
             </div>
             <div class="modal-footer" style="display: flex; justify-content: space-between;">
@@ -187,6 +183,10 @@
                         document.getElementById('modalDiscountAmount').innerText = voucher.discount_amount;
                         document.getElementById('modalStartDate').innerText = voucher.start_date;
                         document.getElementById('modalEndDate').innerText = voucher.end_date;
+                        // Thiết lập đường dẫn cho nút Edit
+                        const editRoute = "{{ route('voucher.edit', ['promotion_id' => ':id']) }}".replace(':id', currentVoucherId);
+
+                        document.getElementById('editVoucherButton').setAttribute('href', editRoute);
 
                         // Show modal
                         const modal = new bootstrap.Modal(document.getElementById('voucherDetailModal'));
