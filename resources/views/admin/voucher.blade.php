@@ -34,7 +34,7 @@
         <div class="card">
             <h5 class="card-header" style="background-color: #696cff; border-color: #696cff; color:#fff">VOUCHER</h5>
             <div class="add">
-                <a class="btn btn-success">Add</a>
+                <a href="{{route(name: 'voucher_add')}}" class="btn btn-success">Add</a>
             </div>
             <div class="table-responsive text-nowrap content1">
                 <table class="table">
@@ -61,6 +61,9 @@
                                     <td>{{ $voucher->discount_amount }}</td>
                                     <td>{{ $voucher->start_date }}</td>
                                     <td>{{ $voucher->end_date }}</td>
+
+
+
                                 </tr>
                             @endforeach
                         @endif
@@ -103,6 +106,10 @@
                         <strong>End Date:</strong>
                         <span id="modalEndDate"></span>
                     </div>
+                    <div class="voucher-detail-item detail-item">
+                        <strong>Last Updated:</strong>
+                        <span id="modalUpdatedAt"></span>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer" style="display: flex; justify-content: space-between;">
@@ -127,7 +134,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                Bạn có muốn xoá voucher này không?
+                Bạn có chắc chắn muốn xóa Voucher này không?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -161,11 +168,13 @@
         let currentVoucherId = null;
         let currentUpdatedAt = null;
 
+        // Handle row click for details
         voucherDetailRows.forEach(row => {
             row.addEventListener('click', function () {
                 currentVoucherId = this.getAttribute('data-id');
                 currentUpdatedAt = this.getAttribute('data-updated-at');
 
+                // Fetch voucher details
                 fetch(`/voucher/${currentVoucherId}/detail`)
                     .then(response => {
                         if (!response.ok) {
@@ -178,6 +187,7 @@
                         document.getElementById('modalDiscountAmount').innerText = voucher.discount_amount;
                         document.getElementById('modalStartDate').innerText = voucher.start_date;
                         document.getElementById('modalEndDate').innerText = voucher.end_date;
+
                         // Show modal
                         const modal = new bootstrap.Modal(document.getElementById('voucherDetailModal'));
                         modal.show();
@@ -188,6 +198,7 @@
             });
         });
 
+        // Handle delete button click
         const confirmDeleteButton = document.getElementById('confirmDeleteButton');
         confirmDeleteButton.addEventListener('click', function () {
             if (currentVoucherId) {
@@ -204,15 +215,18 @@
                     .then(response => {
                         return response.json().then(data => {
                             if (!response.ok) {
+                                // Nếu có lỗi từ server, hiển thị thông báo lỗi
                                 console.error('Error response:', data);
                                 document.getElementById('notificationModalBody').innerText = 'Lỗi: ' + (data.error || 'Đã xảy ra lỗi không xác định.');
                                 const modal = new bootstrap.Modal(document.getElementById('notificationModal'));
                                 modal.show();
                             } else {
+                                // Nếu không có lỗi, hiển thị thông báo thành công
                                 document.getElementById('notificationModalBody').innerText = 'Xóa Voucher Thành Công';
                                 const modal = new bootstrap.Modal(document.getElementById('notificationModal'));
                                 modal.show();
 
+                                // Reload the page after a short delay (optional)
                                 setTimeout(() => {
                                     location.reload();
                                 }, 1500);
@@ -228,19 +242,24 @@
             }
         });
 
+        // Lắng nghe sự kiện khi modal đã hoàn toàn đóng
         document.getElementById('confirmDeleteModal').addEventListener('hidden.bs.modal', function () {
             const backdrop = document.querySelector('.modal-backdrop');
             if (backdrop) {
-                backdrop.remove(); 
+                backdrop.remove(); // Loại bỏ lớp mờ
             }
         });
 
+        // Đảm bảo nút Cancel đóng modal
         document.getElementById('cancelButton').addEventListener('click', function () {
             const confirmDeleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
-            confirmDeleteModal.hide(); 
+            confirmDeleteModal.hide(); // Ẩn modal
         });
     });
+
+
 </script>
+
 
 
 
