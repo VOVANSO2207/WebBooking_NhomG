@@ -40,7 +40,7 @@
                     const limitText = (text, maxLength = 10) => {
                         return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
                     };
-
+                    
                     // Cập nhật nội dung modal
                     $('#modalTitle').text(limitText(post.title));
                     $('#modalDescription').text(limitText(post.description));

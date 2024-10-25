@@ -6,6 +6,10 @@
 @section('header')
 @include('partials.header') 
 @endsection
+{{-- Link File CSS  --}}
+@section('css')
+    <link rel="stylesheet" href="{{ asset('css/search_result.css') }}">
+@endsection
 @section('content')
 <div class="container mt-5 mb-5">
     <div class="counter-hotel">
@@ -359,5 +363,11 @@
 @section('footer')
 @include('partials.footer') 
 @endsection
+
+{{-- Link File JS  --}}
+@section('js')
+    <script src="{{ asset('js/search_result.js') }}"></script>
+@endsection
+
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
 @endsection

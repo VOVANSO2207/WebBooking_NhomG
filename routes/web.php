@@ -49,10 +49,11 @@ Route::prefix('admin')->group(function () {
     Route::get('/room', [RoomController::class, 'index'])->name('admin.viewroom');
     Route::get('/room/add', [RoomController::class, 'show'])->name('room_add');
     Route::post('/room/store', [RoomController::class, 'store'])->name('room_store');
-    // Route::delete('/room/{room_id}', [RoomController::class, 'destroy'])->name('room_destroy');
     Route::delete('room/{room_id}', [RoomController::class, 'destroy'])->name('room.destroy');
     Route::get('/room/edit/{id}', [RoomController::class, 'edit'])->name('room.edit');
     Route::put('/rooms/update/{room_id}', [RoomController::class, 'update'])->name('room_update'); // 
+    Route::post('/room/search', [RoomController::class, 'keywordSearch'])->name('room.search');
+    Route::delete('/room/delete-image/{id}', [RoomController::class, 'deleteImage'])->name('room.delete-image');
     // Admin - Post
     Route::get('/post', [PostsController::class, 'viewPost'])->name('admin.viewpost');
     Route::get('/post/add', [PostsController::class, 'postAdd'])->name('post_add');

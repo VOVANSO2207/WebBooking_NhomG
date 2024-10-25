@@ -50,12 +50,20 @@
                                     <label class="form-label">Upload Images</label>
                                     <div class="d-flex align-items-start align-items-sm-center gap-4">
                                         <div id="imagePreviewContainer" class="d-flex flex-wrap">
-                                            <!-- Hiển thị các ảnh đã lưu từ trước -->
                                             @foreach ($room->room_images as $image)
-                                                <img src="{{ asset('storage/images/' . $image->image_url) }}" alt="Room Image"
-                                                    style="width: 100px; margin-right: 10px; margin-bottom: 10px; border-radius: 5px;">
+                                                <div class="image-preview-wrapper" data-id="{{ $image->image_id }}"
+                                                    style="position: relative; margin-right: 10px; margin-bottom: 10px;">
+                                                    <img src="{{ asset('storage/images/' . $image->image_url) }}"
+                                                        alt="Room Image" style="width: 100px; border-radius: 5px;">
+                                                    <!-- Nút x để xóa ảnh -->
+                                                    <span class="remove-image"
+                                                        style="position: absolute; top: -10px; right: 73px; cursor: pointer; color: red; font-size: 32px;">&times;</span>
+                                                    <input type="hidden" name="existing_images[]"
+                                                        value="{{ $image->image_id }}">
+                                                </div>
                                             @endforeach
                                         </div>
+
                                         <div class="button-wrapper">
                                             <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
                                                 <span class="d-none d-sm-block">Upload</span>
@@ -67,6 +75,7 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="mb-3 col-md-5">
                                     <label class="form-label">Room Amenities</label>
                                     <select name="amenities[]" class="form-select select2" multiple="multiple" required>
@@ -101,7 +110,7 @@
     <script>
         window.onload = function() {
             CKEDITOR.replace('description', {
-                filebrowserUploadUrl: "path/to/upload/image" // Sửa đường dẫn này cho đúng
+                filebrowserUploadUrl: "path/to/upload/image"
             });
 
             // Tính toán Price Sales
@@ -110,75 +119,139 @@
             var salesPriceInput = document.querySelector('input[name="sales_price"]');
 
             function formatCurrency(value) {
-                return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' VND'; // Định dạng số với dấu phẩy
+                return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' VND';
             }
 
             function calculateSalesPrice() {
                 var price = parseFloat(priceInput.value) || 0;
                 var discountPercent = parseFloat(discountInput.value) || 0;
                 var salesPrice = price * (1 - discountPercent / 100);
-                salesPriceInput.value = formatCurrency(salesPrice.toFixed(
-                    0)); // Hiển thị giá giảm với định dạng tiền tệ
+                salesPriceInput.value = formatCurrency(salesPrice.toFixed(0));
             }
 
             priceInput.addEventListener('input', calculateSalesPrice);
             discountInput.addEventListener('input', calculateSalesPrice);
 
-            // Preview ảnh
+            // Xử lý xóa ảnh bằng Ajax
+            function handleImageDelete() {
+                document.querySelectorAll('.remove-image').forEach(function(button) {
+                    button.addEventListener('click', function() {
+                        const imageWrapper = this.closest('.image-preview-wrapper');
+                        const imageId = imageWrapper.getAttribute('data-id');
+
+                        if (confirm('Bạn có chắc chắn muốn xóa ảnh này?')) {
+                            // Gửi request Ajax để xóa ảnh
+                            fetch(`/admin/room/delete-image/${imageId}`, {
+                                    method: 'DELETE',
+                                    headers: {
+                                        'X-CSRF-TOKEN': document.querySelector(
+                                            'meta[name="csrf-token"]').content,
+                                        'Accept': 'application/json',
+                                    }
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        imageWrapper.remove();
+                                        if (document.querySelectorAll('.image-preview-wrapper')
+                                            .length === 0 &&
+                                            document.getElementById('upload').files.length === 0) {
+                                            document.getElementById('imagePreviewContainer')
+                                                .innerHTML =
+                                                '<p class="text-muted">No images uploaded</p>';
+                                        }
+                                    } else {
+                                        alert(data.message ||
+                                            'Không thể xóa ảnh. Vui lòng thử lại!');
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                    alert('Đã xảy ra lỗi khi xóa ảnh: ' + error.message);
+                                });
+                        }
+                    });
+                });
+            }
+
+            // Khởi tạo xử lý xóa ảnh cho các ảnh hiện có
+            handleImageDelete();
+
+            // Xử lý preview ảnh mới
             document.getElementById('upload').addEventListener('change', function(event) {
-                var imagePreviewContainer = document.getElementById('imagePreviewContainer');
                 var files = event.target.files;
 
-                // Xóa các ảnh cũ
-                imagePreviewContainer.innerHTML = '';
-
                 if (files.length === 0) {
-                    alert(
-                        "Vui lòng tải lên ảnh của khách sạn (PNG, JPG)"); // Hiển thị thông báo nếu không có ảnh
-                    return; // Dừng lại nếu không có tệp nào
+                    alert("Vui lòng tải lên ảnh của khách sạn (PNG, JPG)");
+                    return;
                 }
 
-                let validFiles = true; // Biến để theo dõi xem tất cả các tệp có hợp lệ không
+                let validFiles = true;
+                // Tạo container tạm thời để lưu các ảnh mới
+                const newImagesContainer = document.createElement('div');
+
                 for (let i = 0; i < files.length; i++) {
                     const file = files[i];
-                    const fileExtension = file.name.split('.').pop().toLowerCase(); // Lấy phần mở rộng của tệp
+                    const fileExtension = file.name.split('.').pop().toLowerCase();
 
-                    // Kiểm tra định dạng tệp
                     if (fileExtension !== 'png' && fileExtension !== 'jpg' && fileExtension !== 'jpeg') {
-                        validFiles = false; // Đánh dấu là không hợp lệ nếu có tệp không hợp lệ
-                        break; // Ngừng kiểm tra khi tìm thấy tệp không hợp lệ
+                        validFiles = false;
+                        break;
                     }
 
-                    // Nếu tệp hợp lệ, hiển thị hình ảnh
                     let reader = new FileReader();
                     reader.onload = function(e) {
-                        var img = document.createElement('img');
+                        const previewWrapper = document.createElement('div');
+                        previewWrapper.className = 'image-preview-wrapper';
+                        previewWrapper.style.position = 'relative';
+                        previewWrapper.style.marginRight = '10px';
+                        previewWrapper.style.marginBottom = '10px';
+
+                        const img = document.createElement('img');
                         img.src = e.target.result;
                         img.style.width = '100px';
-                        img.style.marginRight = '10px';
-                        img.style.marginBottom = '10px'; // Khoảng cách giữa các hình ảnh
-                        img.style.borderRadius = '5px'; // Bo góc cho hình ảnh
-                        imagePreviewContainer.appendChild(img);
+                        img.style.borderRadius = '5px';
+
+                        const removeBtn = document.createElement('span');
+                        removeBtn.className = 'remove-image';
+                        removeBtn.innerHTML = '&times;';
+                        removeBtn.style.position = 'absolute';
+                        removeBtn.style.top = '-10px';
+                        removeBtn.style.right = '73px';
+                        removeBtn.style.cursor = 'pointer';
+                        removeBtn.style.color = 'red';
+                        removeBtn.style.fontSize = '32px';
+
+                        removeBtn.addEventListener('click', function() {
+                            previewWrapper.remove();
+                        });
+
+                        previewWrapper.appendChild(img);
+                        previewWrapper.appendChild(removeBtn);
+                        newImagesContainer.appendChild(previewWrapper);
                     };
                     reader.readAsDataURL(file);
                 }
 
-                // Hiển thị thông báo lỗi nếu có tệp không hợp lệ
                 if (!validFiles) {
-                    alert("Định dạng ảnh không hợp lệ. Vui lòng tải lên ảnh định dạng PNG hoặc JPG."); // 
-                    // Xóa tất cả các ảnh đã được hiển thị
-                    imagePreviewContainer.innerHTML = '';
-                    // Đặt lại input file
+                    alert("Định dạng ảnh không hợp lệ. Vui lòng tải lên ảnh định dạng PNG hoặc JPG.");
                     event.target.value = '';
+                    return;
                 }
+
+                // Thêm ảnh mới vào sau các ảnh hiện có
+                const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+                imagePreviewContainer.appendChild(newImagesContainer);
             });
 
-            // Kiểm tra khi gửi biểu mẫu
+            // Kiểm tra form submit
             document.getElementById('formAccountSettings').addEventListener('submit', function(event) {
-                var files = document.getElementById('upload').files;
-                if (files.length === 0) {
-                    event.preventDefault(); // Ngăn chặn gửi biểu mẫu
-                    alert("Vui lòng tải lên ảnh của khách sạn (PNG, JPG)"); // Hiển thị thông báo lỗi
+                const existingImages = document.querySelectorAll('input[name="existing_images[]"]').length;
+                const newImages = document.getElementById('upload').files.length;
+
+                if (existingImages === 0 && newImages === 0) {
+                    event.preventDefault();
+                    alert("Vui lòng tải lên ít nhất một ảnh cho khách sạn.");
                 }
             });
         };

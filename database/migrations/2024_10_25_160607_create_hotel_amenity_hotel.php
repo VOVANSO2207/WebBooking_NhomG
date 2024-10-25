@@ -11,15 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::disableForeignKeyConstraints();
-
-        Schema::create('hotel_amenities', function (Blueprint $table) {
-            $table->increments('amenity_id');
-            $table->string('amenity_name');
-            $table->text('description');
+        Schema::create('hotel_amenity_hotel', function (Blueprint $table) {
+            $table->unsignedInteger('hotel_id'); 
+            $table->unsignedInteger('amenity_id'); 
         });
-
-        Schema::enableForeignKeyConstraints();
     }
 
     /**
@@ -27,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('hotel_amenities');
+        Schema::dropIfExists('hotel_hotel_amenity_hotel');
     }
 };

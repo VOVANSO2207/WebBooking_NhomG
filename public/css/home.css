@@ -52,6 +52,9 @@
      width: 100%;
      z-index: 1;
      /* Đặt z-index thấp hơn để bg-in-image nằm trên */
+     min-height: 100vh;
+     /* Thay thế height: 100vh */
+     overflow: hidden;
  }
 
  .bg-in-image-home {
