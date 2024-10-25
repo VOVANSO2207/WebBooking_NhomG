@@ -7,8 +7,6 @@ body {
     border-radius: 12px;
     background: #ffffff;
     margin-bottom: 20px;
-
-
 }
 
 .filter_price {
@@ -56,7 +54,6 @@ body {
     border-radius: 999px;
     font-weight: bold;
     transition: background-color 0.3s ease;
-
 }
 
 .tab_btn.active {
@@ -140,9 +137,10 @@ body {
 .price-slider h2 {
     font-size: 16px;
 }
-.Popular_filters h2{
- font-size: 16px;
- margin-bottom: 10px;
+
+.Popular_filters h2 {
+    font-size: 16px;
+    margin-bottom: 10px;
 }
 
 .slider-container {
@@ -252,26 +250,27 @@ body {
     width: 20px;
     height: 20px;
 }
-.Popular_filters .check_filter{
+
+.Popular_filters .check_filter {
     width: 20px;
     height: 20px;
 }
+
 .hotel-card {
+    position: relative;
     display: flex;
     background-color: #fff;
     border-radius: 15px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    height: 100%;
-    position: relative;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    margin: 12px 0;
-    cursor: pointer;
+    margin: 16px 0;
+    /* overflow: hidden; */
+    /* cursor: pointer; */
 }
 
 .hotel-card:hover {
-    transform: translateY(-5px); 
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); 
+    transform: translateY(-1.7px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
 .hotel-image {
@@ -289,18 +288,6 @@ body {
     border-radius: 15px;
 }
 
-.sale-badge {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background-color: red;
-    color: white;
-    font-size: 14px;
-    font-weight: bold;
-    padding: 5px 10px;
-    border-radius: 50%;
-}
-
 .hotel-info {
     padding: 20px;
     width: 70%;
@@ -312,7 +299,7 @@ body {
 .reviews {
     color: #777;
     margin-bottom: 10px;
-    
+
 }
 
 .price-info {
@@ -441,9 +428,6 @@ swiper-slide img {
 
 .name_hotel {
     font-size: 1.2rem;
-}
-.name_hotel:hover {
-    color: #4285f4;
 }
 
 .icon-location {
@@ -589,23 +573,22 @@ input[type="range"]::-moz-range-thumb {
     -moz-appearance: none;
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
 }
+
 .sale-badge {
     position: absolute;
-    top: -7%;
-    right: -1%;
+    top: -10px;
+    right: -10px;
     width: 65px;
     height: 65px;
-    background: linear-gradient(135deg, #ff0000, #ff6363); 
-    color: white;
     display: flex;
     justify-content: center;
+    text-align: center;
     align-items: center;
-    font-size: 16px; 
-    font-weight: bold;
-    border-radius: 50%; /* Hình tròn */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
-    border: 2px solid white;
-    clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%); 
+    color: #fff;
+    font-weight: 900;
+    background: #E91B24;
+    border-bottom-left-radius: 50%;
+    border-top-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-top-right-radius: 20px;
 }
-
-

@@ -14,13 +14,6 @@ class User extends Model implements Authenticatable // Thêm giao diện
 {
     use HasFactory, AuthenticatableTrait; // Thêm trait
 
-    // Tên bảng
-    protected $table = 'users';
-
-    // Khóa chính của bảng
-    protected $primaryKey = 'user_id';
-
-    // Các trường được phép fill vào
     protected $fillable = [
         'username',
         'email',
@@ -31,6 +24,44 @@ class User extends Model implements Authenticatable // Thêm giao diện
         'avatar',
     ];
 
+    protected $primaryKey = 'user_id';
+
+    public static function getAllUsers($perPage = 5)
+    {
+        return self::orderBy('created_at', 'DESC')->paginate($perPage);
+    }
+
+    public static function findUserById($user_id)
+    {
+        return self::where('user_id', $user_id)->first();
+    }
+
+    public static function createUser(array $data)
+    {
+        return self::create($data);
+    }
+
+    public static function searchUser($keyword)
+    {
+        if (empty($keyword)) {
+            return static::query(); // Trả về tất cả người dùng
+        }
+
+        return static::where(function ($query) use ($keyword) {
+            $query->where('username', 'LIKE', "%{$keyword}%")
+                ->orWhere('email', 'LIKE', "%{$keyword}%")
+                ->orWhere('phone_number', 'LIKE', "%{$keyword}%");
+        });
+    }
+
+    public function deleteUser()
+    {
+        return $this->delete();
+    }
+    public function role()
+    {
+        return $this->belongsTo(Roles::class, 'role_id');
+    }
     // Ẩn các trường khi trả về JSON
     protected $hidden = [
         'password',

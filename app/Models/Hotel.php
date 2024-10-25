@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\HotelImages;
 
 class Hotel extends Model
 {
@@ -19,4 +20,8 @@ class Hotel extends Model
 
     // Khai báo các trường được phép fill
     protected $fillable = ['hotel_name', 'location', 'city_id', 'description', 'rating'];
+    public function images()
+    {
+        return $this->hasMany(HotelImages::class, 'hotel_id');
+    }
 }
