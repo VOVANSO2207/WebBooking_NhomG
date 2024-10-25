@@ -94,7 +94,8 @@ Route::get('/vouchers/search', [PromotionsController::class, 'searchVoucher'])->
 Route::delete('/voucher/{promotion_id}', action: [PromotionsController::class, 'destroy'])->name('voucher.delete');
 Route::get('/admin/voucher/add', [PromotionsController::class, 'voucherAdd'])->name('voucher_add');
 Route::post('/admin/voucher/store', [PromotionsController::class, 'storeVoucher'])->name('admin.promotion.store');
-
+Route::get('/admin/voucher/edit/{promotion_id}', [PromotionsController::class, 'editVoucher'])->name('voucher.edit');
+Route::put('/admin/voucher/update/{id}', [PromotionsController::class, 'updateVoucher'])->name('admin.voucher.update');
 // Search
 // Route::get('/search', [SearchController::class, 'index'])->name('search');
 Route::get('/hotels', [HotelController::class, 'index'])->name('hotels.index');
