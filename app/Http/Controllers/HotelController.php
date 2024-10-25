@@ -11,7 +11,7 @@ class HotelController extends Controller
     public function index()
     {
         // Lấy tất cả các hotels từ cơ sở dữ liệu
-        $hotels = Hotel::all();
+        $hotels = Hotel::with('images')->get();
 
         // Truyền dữ liệu qua view
         return view('search_result', compact('hotels'));
@@ -39,7 +39,7 @@ class HotelController extends Controller
         }
 
         // Nếu có thêm điều kiện lọc ngày check-in và check-out
-        // Bạn có thể cần sửa lại nếu có thêm thông tin ngày lưu trữ trong bảng hotels
+        // có thể cần sửa lại nếu có thêm thông tin ngày lưu trữ trong bảng hotels
 
         // Lọc các tiêu chí khác (nếu có)
         // Ví dụ: số phòng, số người lớn, số trẻ em

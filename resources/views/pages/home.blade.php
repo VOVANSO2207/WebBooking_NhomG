@@ -113,7 +113,6 @@
                     <div class="form-group">
                         <select name="location" class="form-control-staynest select2" style="width: 100%;" tabindex="-1"
                             aria-hidden="true" required>
-                            <option value="">Địa điểm cần tìm</option>
                             @if ($cities->isEmpty())
                                 <option value="">Chưa có địa điểm hiển thị</option>
                             @else
