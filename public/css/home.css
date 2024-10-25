@@ -12,7 +12,7 @@
 
  body {
      line-height: 1.5;
-     font-family: sans-serif;
+     font-family: Arial, Helvetica, sans-serif;
  }
 
  img,
@@ -38,8 +38,6 @@
  }
 
  .header-staynest-home {
-     /* background: rgb(29,60,99);
-background: linear-gradient(90deg, rgba(29,60,99,1) 0%, rgba(59,121,201,1) 100%); */
      position: relative;
      background-image: url('../images/banner_01.png');
      background-repeat: no-repeat;
@@ -61,8 +59,13 @@ background: linear-gradient(90deg, rgba(29,60,99,1) 0%, rgba(59,121,201,1) 100%)
      background: black;
      opacity: 0.5;
      inset: 0;
-     height: 110vh;
      z-index: 2;
+ }
+
+ .banner-home,
+ .bg-in-image-home {
+     height: 100%;
+     /* Đặt chiều cao tự động dựa trên phần tử cha */
  }
 
  .header-staynest-home>* {
@@ -201,6 +204,7 @@ background: linear-gradient(90deg, rgba(29,60,99,1) 0%, rgba(59,121,201,1) 100%)
      color: #505050;
      text-decoration: none;
      font-weight: 500 !important;
+     font-size: 16px;
  }
 
  .dropdown-item-staynest:hover {

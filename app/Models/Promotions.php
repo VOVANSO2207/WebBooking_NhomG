@@ -14,14 +14,30 @@ class Promotions extends Model
         'discount_amount',
         'start_date',
         'end_date',
-   
+
+
     ];
+    protected $casts = [
+        'start_date' => 'date:Y-m-d',
+        'end_date' => 'date:Y-m-d',
+    ];
+    public function room()
+    {
+        return $this->belongsTo(Rooms::class, 'promotion_id', 'room_id');
+    }
     protected $primaryKey = 'promotion_id';
     public $timestamps = true;
-
+    public function getStartDateAttribute($value)
+    {
+        return Carbon::parse($value)->format('d/m/Y');
+    }
+    public function getEndDateAttribute($value)
+    {
+        return Carbon::parse($value)->format('d/m/Y');
+    }
     public static function getAllVouchers($perPage = 7)
     {
-        return self::orderBy('created_at', 'DESC')->paginate($perPage);
+        return self::orderBy('promotion_id', 'DESC')->paginate($perPage);
     }
     public static function findVouchersById($promotion_id)
     {
@@ -36,19 +52,30 @@ class Promotions extends Model
 
         return self::where('promotion_code', 'LIKE', "%{$keyword}%");
     }
-    public static function deleteVoucher1($promotion_id, $currentTimestamp)
+    public static function deleteVoucher($promotion_id, $currentTimestamp)
     {
         $voucher = self::find($promotion_id);
-        
+
         if ($voucher) {
             if ($voucher->updated_at->ne($currentTimestamp)) {
-                return false; 
+                return false;
             }
+
+
             $voucher->delete();
             return true; 
         }
-        return false;
+
+        return false; 
     }
-    
-    
+    public static function createVoucher($data)
+    {
+        return self::create([
+            'promotion_code' => $data['promotion_code'],
+            'discount_amount' => $data['discount_amount'],
+            'start_date' => Carbon::parse($data['start_date'])->format('Y-m-d'),
+            'end_date' => Carbon::parse($data['end_date'])->format('Y-m-d'),
+        ]);
+    }
+
 }

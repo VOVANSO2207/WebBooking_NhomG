@@ -1,8 +1,5 @@
-@php
-    use App\Helpers\IdEncoder;
-@endphp
 @forelse ($results as $index => $post)
-    <tr class="post-detail1" data-id="{{ IdEncoder::encodeId($post->post_id) }}">
+    <tr class="post-detail1" data-id="{{ $post->post_id }}">
         <td>{{ $index + 1 }}</td>
         <td>
             <img src="{{ asset('images/' . $post->img) }}" alt="{{ $post->title }}" style="width: 100px; height: auto;">
@@ -53,8 +50,7 @@
                     $('#modalStatus').text(post.status ? 'Show' : 'Hidden');
                     const imageUrl = post.img ? `/images/${post.img}` : '/path/to/default/image.jpg';
                     $('#modalImage').attr('src', imageUrl);
-                    const editRoute = "{{ route('post.edit', ['post_id' => ':id']) }}".replace(':id', currentPostId);
-                    document.getElementById('editPostButton').setAttribute('href', editRoute);
+                 
                     // Hiển thị modal
                     $('#postDetailModal').modal('show');
                 },
@@ -62,46 +58,6 @@
                     console.error('Có vấn đề với yêu cầu AJAX:', error);
                 }
             });
-        });
-
-        // Khi người dùng nhấn nút "Delete"
-        $('#deletePostButton').on('click', function () {
-            $('#confirmDeleteModal').modal('show');
-        });
-
-        // Khi người dùng nhấn nút "OK" trong modal xác nhận
-        $('#confirmDeleteButton').on('click', function () {
-
-            if (currentPostId) {
-                // Sử dụng tên route để tạo URL
-                const deleteRoute = "{{ route('post.delete', ['post_id' => ':id']) }}".replace(':id', currentPostId);
-
-                $.ajax({
-                    url: deleteRoute,
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    success: function (response) {
-                        alert("Xoá Bài Viết Thành Công");
-                        location.reload(); // Tải lại trang sau khi xóa thành công
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('Có lỗi xảy ra khi xóa bài viết:', error);
-                    }
-                });
-            }
-
-        });
-
-        // Lắng nghe sự kiện khi modal đã hoàn toàn đóng
-        $('#confirmDeleteModal').on('hidden.bs.modal', function () {
-            $('.modal-backdrop').remove(); // Loại bỏ lớp mờ
-        });
-
-        // Đảm bảo nút Cancel đóng modal
-        $('#cancelButton').on('click', function () {
-            $('#confirmDeleteModal').modal('hide'); // Ẩn modal
         });
     });
 

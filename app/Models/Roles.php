@@ -8,14 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Roles extends Model
 {
     use HasFactory;
-    protected $table = 'roles';
 
-    // Các trường có thể điền vào
-    protected $fillable = ['name', 'description'];
-
-    // Quan hệ với bảng users
-    public function users()
-    {
-        return $this->hasMany(User::class, 'role_id');
-    }
+    protected $table = 'roles'; // Tên bảng
+    protected $primaryKey = 'role_id'; // Đặt khóa chính
+    public $incrementing = true; // Nếu role_id tự động tăng
+    protected $keyType = 'int'; // Kiểu dữ liệu của khóa chính
+    protected $fillable = ['role_name']; // Thuộc tính có thể được gán hàng loạt
 }
