@@ -22,7 +22,6 @@ class UsersController extends Controller
         return view('admin.user_add', compact('roles'));
     }
 
-
     public function getUserDetail($user_id)
     {
         $user = User::findUserById($user_id);
@@ -128,13 +127,12 @@ class UsersController extends Controller
         return view('admin.user_edit', compact('user', 'roles'));
     }
 
-
     public function update(Request $request, $user_id)
     {
         $request->validate([
             'username' => 'required|min:3|max:50|unique:users,username,' . $user_id . ',user_id',
             'email' => 'required|email|unique:users,email,' . $user_id . ',user_id',
-            'password' => 'nullable|min:8|confirmed',
+            'password' => 'nullable|min:8|confirmed', // Chỉ yêu cầu khi có giá trị
             'phone_number' => 'required|regex:/^0[0-9]{9}$/',
             'role_id' => 'required|integer',
             'status' => 'required|boolean',
@@ -162,11 +160,15 @@ class UsersController extends Controller
             return redirect()->route('admin.viewuser')->with('error', 'Người dùng không tồn tại.');
         }
 
+        // Cập nhật các trường khác
         $user->username = $request->username;
         $user->email = $request->email;
-        if ($request->password) {
+
+        // Chỉ cập nhật mật khẩu nếu có giá trị
+        if ($request->filled('password')) {
             $user->password = bcrypt($request->password);
         }
+
         $user->phone_number = $request->phone_number;
         $user->role_id = $request->role_id;
         $user->status = $request->status;
@@ -183,5 +185,4 @@ class UsersController extends Controller
 
         return redirect()->route('admin.viewuser')->with('success', 'Cập nhật người dùng thành công.');
     }
-
 }
