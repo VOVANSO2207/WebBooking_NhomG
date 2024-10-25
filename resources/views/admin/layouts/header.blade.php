@@ -53,11 +53,32 @@
             <div data-i18n="Tables">Post</div>
           </a>
         </li>
-        <li class="menu-item">
-          <a href="{{route('admin.viewroom')}}" class="menu-link">
+        <li class="menu-item has-dropdown">
+          <a href="#" class="menu-link" data-bs-toggle="collapse" data-bs-target="#room-dropdown" aria-expanded="false">
             <i class="menu-icon tf-icons bx bx-home"></i>
             <div data-i18n="Tables">Room</div>
+            <i class="bx bx-chevron-down arrow-icon"></i>
           </a>
+          <ul class="collapse" id="room-dropdown">
+            <li class="menu-item">
+              <a href="{{route('admin.viewroom')}}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-list-ul"></i>
+                <div data-i18n="Room List">Danh sách phòng</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="#" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-category"></i>
+                <div data-i18n="Room Type">Loại phòng</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="#" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-bulb"></i> 
+                <div data-i18n="Room Amenities">Tiện Nghi Phòng</div>
+              </a>
+            </li>
+          </ul>
         </li>
         <li class="menu-item">
           <a href="{{route('admin.viewvoucher')}}" class="menu-link">
@@ -78,6 +99,6 @@
     </aside>
     <!-- / Menu -->
 
-    <!-- Layout container -->
+    <!-- Layout container -->   
     <div class="layout-page">
       <!-- Navbar -->

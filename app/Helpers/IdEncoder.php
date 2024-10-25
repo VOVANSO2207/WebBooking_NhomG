@@ -19,7 +19,7 @@ class IdEncoder
             '8' => 'TUV',
             '9' => 'WXY'
         ];
-
+                                    
         // Mã hóa ID
         $encodedId = '';
         foreach (str_split($id) as $digit) {
