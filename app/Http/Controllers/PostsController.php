@@ -10,6 +10,10 @@ class PostsController extends Controller
     public function viewPost()
     {
         $posts = Posts::getAllPosts();
+        foreach ($posts as $post) {
+            $post->description = html_entity_decode(strip_tags($post->description)); 
+            $post->content = html_entity_decode(strip_tags($post->content)); 
+        }
         return view('admin.post', compact('posts'));
     }
 
@@ -30,8 +34,8 @@ class PostsController extends Controller
 
         return response()->json([
             'title' => $post->title,
-            'description' => $post->description,
-            'content' => $post->content,
+            'description' => html_entity_decode(strip_tags($post->description)), 
+            'content' => html_entity_decode(strip_tags($post->content)), 
             'meta_desc' => $post->meta_desc,
             'url_seo' => $post->url_seo,
             'status' => $post->status,
@@ -190,11 +194,24 @@ class PostsController extends Controller
             return redirect()->route('admin.viewpost')->with('success', 'Cập nhật bài viết thành công.');
         }
 
-        $post->save();
-        
-        return redirect()->route('admin.viewpost')->with('success', 'Cập nhật bài viết thành công.');
     }
 
-
+    public function getViewBlog()
+    {
+        $posts = Posts::getViewBlogs(); 
+        foreach ($posts as $post) {
+            $post->description = html_entity_decode(strip_tags($post->description)); 
+            $post->content = html_entity_decode(strip_tags($post->content)); 
+        }
+        return view('view_blog', compact('posts'));
+    }
+    public function searchViewBlog(Request $request)
+    {
+        $query = $request->input('query');
+    
+        $posts = Posts::searchPost($query)->get();
+    
+        return response()->json($posts);
+    }
 
 }

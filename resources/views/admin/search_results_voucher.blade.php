@@ -17,9 +17,7 @@
         <td colspan="8" class="text-center">Không có bài viết nào để hiển thị.</td>
     </tr>
 @endforelse
-<div class="d-flex justify-content-center mt-3">
-    {{ $vouchers->appends(['csrf_token' => csrf_token()])->links('pagination::bootstrap-4') }}
-</div>
+
 <script>
 $(document).ready(function () {
     let currentVoucherId = null; // Lưu ID voucher hiện tại
