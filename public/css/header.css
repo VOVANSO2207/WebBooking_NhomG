@@ -179,6 +179,7 @@
      color: #505050;
      text-decoration: none;
      font-weight: 500 !important;
+     font-size: 16px !important;
  }
 
  .dropdown-item-staynest:hover {
