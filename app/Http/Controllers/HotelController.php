@@ -50,4 +50,98 @@ class HotelController extends Controller
         // Trả dữ liệu về trang search_result
         return view('search_result', compact('hotels', 'location', 'daterange', 'rooms', 'adults', 'children'));
     }
+
+    public function viewHotel()
+    {
+        $hotels = Hotel::getAllHotels();
+        return view('admin.hotel', compact('hotels'));
+    }
+
+    public function create()
+    {
+        return view('admin.hotel_add');
+    }
+
+    public function getHotelDetail($hotel_id)
+    {
+        $hotel = Hotel::findHotelById($hotel_id);
+
+        if (!$hotel) {
+            return response()->json(['error' => 'Khách sạn không tồn tại'], 404);
+        }
+
+        return response()->json([
+            'hotel_name' => $hotel->hotel_name,
+            'location' => $hotel->location,
+            'city_id' => $hotel->city_id,
+            'description' => $hotel->description,
+            'rating' => $hotel->rating,
+        ]);
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'hotel_name' => 'required|string|max:255',
+            'location' => 'required|string|max:255',
+            'city_id' => 'required|integer',
+            'description' => 'nullable|string',
+            'rating' => 'nullable|numeric|min:0|max:5',
+        ]);
+
+        Hotel::createHotel($request->all());
+
+        return redirect()->route('admin.viewhotels')->with('success', 'Thêm khách sạn thành công.');
+    }
+
+    public function deleteHotel($hotel_id)
+    {
+        $hotel = Hotel::find($hotel_id);
+        if ($hotel) {
+            $hotel->delete();
+            return response()->json(['success' => true, 'message' => 'Khách sạn đã được xóa.']);
+        }
+
+        return response()->json(['success' => false, 'message' => 'Khách sạn không tồn tại.'], 404);
+    }
+
+    public function searchAdminHotel(Request $request)
+    {
+        $keyword = $request->get('search');
+        $results = Hotel::searchHotel($keyword)->paginate(5);
+
+        return view('admin.search_results_hotel', compact('results'));
+    }
+
+    public function editHotel($hotel_id)
+    {
+        $hotel = Hotel::findHotelById($hotel_id);
+
+        if (!$hotel) {
+            return redirect()->route('admin.viewhotels')->with('error', 'Khách sạn không tồn tại.');
+        }
+
+        return view('admin.hotel_edit', compact('hotel'));
+    }
+
+    public function update(Request $request, $hotel_id)
+    {
+        $request->validate([
+            'hotel_name' => 'required|string|max:255|unique:hotels,hotel_name,' . $hotel_id . ',hotel_id',
+            'location' => 'required|string|max:255',
+            'city_id' => 'required|integer',
+            'description' => 'nullable|string',
+            'rating' => 'nullable|numeric|min:0|max:5',
+        ]);
+
+        $hotel = Hotel::find($hotel_id);
+        if (!$hotel) {
+            return redirect()->route('admin.viewhotels')->with('error', 'Khách sạn không tồn tại.');
+        }
+
+        $hotel->update($request->all());
+
+        return redirect()->route('admin.viewhotels')->with('success', 'Cập nhật khách sạn thành công.');
+    }
+
 }

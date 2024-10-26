@@ -135,8 +135,8 @@ class UsersController extends Controller
     public function update(Request $request, $user_id)
     {
         $request->validate([
-            'username' => 'required|min:3|max:50|unique:users,username,' . $user_id . ',user_id',
-            'email' => 'required|email|unique:users,email,' . $user_id . ',user_id',
+            'username' => 'required|min:3|max:50|:users,username,' . $user_id . ',user_id',
+            'email' => 'required|email|:users,email,' . $user_id . ',user_id',
             'password' => 'nullable|min:8|confirmed', // Chỉ yêu cầu khi có giá trị
             'phone_number' => 'required|regex:/^0[0-9]{9}$/',
             'role_id' => 'required|integer',
@@ -146,10 +146,8 @@ class UsersController extends Controller
             'username.required' => 'Vui lòng nhập tên người dùng',
             'username.min' => 'Tên người dùng phải có ít nhất 3 ký tự',
             'username.max' => 'Tên người dùng không được quá 50 ký tự',
-            'username.unique' => 'Tên người dùng đã tồn tại',
             'email.required' => 'Vui lòng nhập email',
             'email.email' => 'Email không hợp lệ',
-            'email.unique' => 'Email đã tồn tại',
             'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự',
             'password.confirmed' => 'Mật khẩu không khớp',
             'phone_number.required' => 'Vui lòng nhập số điện thoại',

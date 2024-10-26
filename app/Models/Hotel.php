@@ -4,24 +4,55 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\HotelImages;
 
 class Hotel extends Model
 {
     use HasFactory;
 
-    // Chỉ định tên bảng nếu nó khác với quy tắc mặc định
-    //  protected $table = 'your_custom_table_name';
-    protected $table = 'hotels'; // Tên bảng
-    protected $primaryKey = 'hotel_id'; // Khóa chính
+    protected $fillable = [
+        'hotel_name',
+        'location',
+        'city_id',
+        'description',
+        'rating',
+    ];
 
-    // Nếu không có timestamps trong bảng:
-    public $timestamps = false;
+    protected $primaryKey = 'hotel_id';
 
-    // Khai báo các trường được phép fill
-    protected $fillable = ['hotel_name', 'location', 'city_id', 'description', 'rating'];
-    public function images()
+    // Lấy tất cả khách sạn với phân trang
+    public static function getAllHotels($perPage = 5)
     {
-        return $this->hasMany(HotelImages::class, 'hotel_id');
+        return self::orderBy('created_at', 'DESC')->paginate($perPage);
+    }
+
+    // Tìm khách sạn theo ID
+    public static function findHotelById($hotel_id)
+    {
+        return self::where('hotel_id', $hotel_id)->first();
+    }
+
+    // Tạo khách sạn mới
+    public static function createHotel(array $data)
+    {
+        return self::create($data);
+    }
+
+    // Tìm kiếm khách sạn
+    public static function searchHotel($keyword)
+    {
+        if (empty($keyword)) {
+            return static::query(); // Trả về tất cả khách sạn
+        }
+
+        return static::where(function ($query) use ($keyword) {
+            $query->where('hotel_name', 'LIKE', "%{$keyword}%")
+                  ->orWhere('location', 'LIKE', "%{$keyword}%");
+        });
+    }
+
+    // Xóa khách sạn
+    public function deleteHotel()
+    {
+        return $this->delete();
     }
 }

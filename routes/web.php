@@ -65,6 +65,12 @@ Route::prefix('admin')->group(function () {
     Route::get('/user', action: [UsersController::class, 'viewUser'])->name('admin.viewuser');
     Route::get('/user/add', [UsersController::class, 'userAdd'])->name('user_add');
     Route::post('admin/user/store', action: [UsersController::class, 'store'])->name('admin.user.store');
+    // Admin - Hotel
+    Route::get('/hotel', [HotelController::class, 'viewHotel'])->name('admin.viewhotel');
+    Route::post('/hotel/store', [HotelController::class, 'store'])->name('admin.hotel.store');
+    Route::get('/hotel/edit/{hotel_id}', [HotelController::class, 'editHotel'])->name('hotel.edit');
+    Route::put('/hotel/update/{hotel_id}', [HotelController::class, 'update'])->name('hotel.update');
+    Route::delete('/hotel/{hotel_id}', [HotelController::class, 'destroy'])->name('hotel.destroy');
 });
 
 // Admin-Post Detail
@@ -89,6 +95,11 @@ Route::get('/users/{user_id}/edit', [UsersController::class, 'editUser'])->name(
 Route::put('/admin/users/{id}', [UsersController::class, 'update'])->name('admin.user.update');
 Route::get('/admin/users/search', [UsersController::class, 'search'])->name('admin.users.search');
 
+// Admin - Hotel Detail
+Route::get('/hotels/{hotel_id}/detail', [HotelController::class, 'getHotelDetail'])->name('hotel.detail');
+Route::get('admin/hotels/search', [HotelController::class, 'searchAdminHotel'])->name('admin.hotels.search');
+Route::delete('/hotels/{hotel_id}/delete', [HotelController::class, 'deleteHotel'])->name('hotel.delete');
+Route::get('/hotels/add', [HotelController::class, 'create'])->name('hotel_add');
 
 // Admin- VOUCHER
 Route::get('/admin/voucher', [PromotionsController::class, 'viewVoucher'])->name('admin.viewvoucher');
@@ -112,3 +123,9 @@ Route::get('/error', function () {
 
 // Pay
 Route::get('/payment', [PaymentsController::class, 'viewPay'])->name('pages.pay');
+
+// Admin - Hotel Detail
+// Admin - Hotel Management
+// Xem danh sách khách sạn
+Route::get('/admin/hotel', [HotelController::class, 'viewHotel'])->name('admin.viewhotel');
+
