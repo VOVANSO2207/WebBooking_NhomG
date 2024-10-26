@@ -45,12 +45,16 @@ class Promotions extends Model
     }
     public static function searchVouchers($keyword)
     {
-        // Nếu không có từ khóa, trả về tất cả
-        if (empty($keyword)) {
-            return self::query(); // Trả về tất cả voucher
+        $query = self::query();
+
+        if (!empty($keyword)) {
+            $query->where(function ($query) use ($keyword) {
+                $query->where('promotion_code', 'LIKE', "%{$keyword}%")
+                    ->orWhereRaw('MATCH(promotion_code) AGAINST (? IN BOOLEAN MODE)', [$keyword]);
+            });
         }
 
-        return self::where('promotion_code', 'LIKE', "%{$keyword}%");
+        return $query->get();
     }
     public static function deleteVoucher($promotion_id, $currentTimestamp)
     {
@@ -63,10 +67,10 @@ class Promotions extends Model
 
 
             $voucher->delete();
-            return true; 
+            return true;
         }
 
-        return false; 
+        return false;
     }
     public static function createVoucher($data)
     {

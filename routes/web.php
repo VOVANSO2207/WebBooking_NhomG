@@ -73,7 +73,9 @@ Route::get('/search', [PostsController::class, 'search'])->name('search');
 Route::delete('/posts/{post_id}/delete', [PostsController::class, 'deletePost'])->name('post.delete');
 Route::get('/posts/{post_id}/edit', action: [PostsController::class, 'editPost'])->name('post.edit');
 Route::put('/admin/posts/{id}', [PostsController::class, 'update'])->name('admin.post.update');
-
+// User-Blog
+Route::get('/search1', action: [PostsController::class, 'searchViewBlog'])->name('searchBlog');
+Route::get('/blog', [PostsController::class, 'getViewBlog'])->name('blog');
 // Admin-Booking Detail
 Route::get('/bookings/{booking_id}/detail', action: [BookingController::class, 'getBookingDetail'])->name('booking.detail');
 Route::delete('/bookings/{booking_id}/delete', [BookingController::class, 'deleteBooking'])->name('booking.delete');
