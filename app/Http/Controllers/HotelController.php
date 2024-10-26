@@ -91,7 +91,7 @@ class HotelController extends Controller
 
         Hotel::createHotel($request->all());
 
-        return redirect()->route('admin.viewhotels')->with('success', 'Thêm khách sạn thành công.');
+        return redirect()->route('admin.viewhotel')->with('success', 'Thêm khách sạn thành công.');
     }
 
     public function deleteHotel($hotel_id)
@@ -115,19 +115,14 @@ class HotelController extends Controller
 
     public function editHotel($hotel_id)
     {
-        $hotel = Hotel::findHotelById($hotel_id);
-
-        if (!$hotel) {
-            return redirect()->route('admin.viewhotels')->with('error', 'Khách sạn không tồn tại.');
-        }
-
+        $hotel = Hotel::findOrFail($hotel_id);
         return view('admin.hotel_edit', compact('hotel'));
     }
 
     public function update(Request $request, $hotel_id)
     {
         $request->validate([
-            'hotel_name' => 'required|string|max:255|unique:hotels,hotel_name,' . $hotel_id . ',hotel_id',
+            'hotel_name' => 'required|string|max:255|:hotels,hotel_name,' . $hotel_id . ',hotel_id',
             'location' => 'required|string|max:255',
             'city_id' => 'required|integer',
             'description' => 'nullable|string',
@@ -136,12 +131,12 @@ class HotelController extends Controller
 
         $hotel = Hotel::find($hotel_id);
         if (!$hotel) {
-            return redirect()->route('admin.viewhotels')->with('error', 'Khách sạn không tồn tại.');
+            return redirect()->route('admin.viewhotel')->with('error', 'Khách sạn không tồn tại.');
         }
 
         $hotel->update($request->all());
 
-        return redirect()->route('admin.viewhotels')->with('success', 'Cập nhật khách sạn thành công.');
+        return redirect()->route('admin.viewhotel')->with('success', 'Cập nhật khách sạn thành công.');
     }
 
 }

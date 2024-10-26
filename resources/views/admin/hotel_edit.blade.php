@@ -1,4 +1,4 @@
-@extends('admin.layouts.master') 
+@extends('admin.layouts.master')
 @section('admin-container')
 
 <!-- Content -->
@@ -8,18 +8,24 @@
             <div class="card mb-4">
                 <hr class="my-0" />
                 <div class="card-body">
-                    <form method="POST" id="hotelForm" action="{{ route('admin.hotel.store') }}" enctype="multipart/form-data">
+                    <form method="POST" id="hotelForm" 
+                          action="{{ isset($hotel) ? route('hotel.update', $hotel->hotel_id) : route('admin.hotel.store') }}" 
+                          enctype="multipart/form-data">
                         @csrf
+                        @if(isset($hotel))
+                            @method('PUT')
+                        @endif
+                        
                         <div class="card-body">
                             <div class="d-flex align-items-start align-items-sm-center gap-4">
-                                <img src="{{ asset('images/default_hotel.jpg') }}" alt="hotel-image"
-                                    class="d-block rounded" height="100" width="100" id="fileUpload" />
+                                <img src="{{ isset($hotel) ? asset('images/' . ($hotel->image ?? 'default_hotel.jpg')) : asset('images/default_hotel.jpg') }}" 
+                                     alt="hotel-image" class="d-block rounded" height="100" width="100" id="fileUpload" />
                                 <div class="button-wrapper">
                                     <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
                                         <span class="d-none d-sm-block">Upload</span>
                                         <i class="bx bx-upload d-block d-sm-none"></i>
                                         <input type="file" id="upload" name="image" class="account-file-input" hidden
-                                            accept="image/png, image/jpeg, image/jpg" />
+                                               accept="image/png, image/jpeg, image/jpg" />
                                     </label>
                                 </div>
                             </div>
@@ -29,7 +35,7 @@
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Hotel ID</label>
                                 <input class="form-control" type="text" name="hotel_id" id="hotel_id"
-                                    value="{{ old('hotel_id') }}" placeholder="Hotel ID" required />
+                                       value="{{ old('hotel_id', $hotel->hotel_id ?? '') }}" placeholder="Hotel ID" required />
                                 @error('hotel_id')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -37,7 +43,7 @@
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Hotel Name</label>
                                 <input class="form-control" type="text" name="hotel_name" id="hotel_name"
-                                    value="{{ old('hotel_name') }}" placeholder="Hotel Name" required />
+                                       value="{{ old('hotel_name', $hotel->hotel_name ?? '') }}" placeholder="Hotel Name" required />
                                 @error('hotel_name')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -45,7 +51,7 @@
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Location</label>
                                 <input class="form-control" type="text" name="location" id="location"
-                                    value="{{ old('location') }}" placeholder="Location" required />
+                                       value="{{ old('location', $hotel->location ?? '') }}" placeholder="Location" required />
                                 @error('location')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -53,14 +59,14 @@
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">City ID</label>
                                 <input class="form-control" type="text" name="city_id" id="city_id"
-                                    value="{{ old('city_id') }}" placeholder="City ID" required />
+                                       value="{{ old('city_id', $hotel->city_id ?? '') }}" placeholder="City ID" required />
                                 @error('city_id')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Description</label>
-                                <textarea class="form-control" name="description" id="description" placeholder="Description" required>{{ old('description') }}</textarea>
+                                <textarea class="form-control" name="description" id="description" placeholder="Description" required>{{ old('description', $hotel->description ?? '') }}</textarea>
                                 @error('description')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -68,7 +74,7 @@
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Rating</label>
                                 <input class="form-control" type="number" name="rating" id="rating" min="1" max="5"
-                                    value="{{ old('rating') }}" placeholder="Rating" required />
+                                       value="{{ old('rating', $hotel->rating ?? '') }}" placeholder="Rating" required />
                                 @error('rating')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -76,8 +82,8 @@
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Status</label>
                                 <select id="status" name="status" class="form-select" required>
-                                    <option value="1">Active</option>
-                                    <option value="0">Inactive</option>
+                                    <option value="1" {{ isset($hotel) && $hotel->status == 1 ? 'selected' : '' }}>Active</option>
+                                    <option value="0" {{ isset($hotel) && $hotel->status == 0 ? 'selected' : '' }}>Inactive</option>
                                 </select>
                                 @error('status')
                                     <div class="text-danger">{{ $message }}</div>
@@ -88,7 +94,7 @@
                         <div class="mt-2" style="text-align: right">
                             <button type="reset" class="btn btn-outline-secondary" onclick="resetForm()">Reset</button>
                             <button type="button" class="btn btn-outline-danger"
-                                onclick="window.location.href='{{ route('admin.viewhotel') }}'">Close</button>
+                                    onclick="window.location.href='{{ route('admin.viewhotel') }}'">Close</button>
                             <button type="submit" class="btn btn-outline-success me-2">Save</button>
                         </div>
                     </form>

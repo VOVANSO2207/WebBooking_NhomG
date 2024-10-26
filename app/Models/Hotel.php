@@ -55,4 +55,9 @@ class Hotel extends Model
     {
         return $this->delete();
     }
+    // Định nghĩa mối quan hệ với HotelImages
+    public function hotelImages()
+    {
+        return $this->hasMany(HotelImages::class, 'hotel_id', 'hotel_id');
+    }
 }

@@ -34,31 +34,20 @@
                     <thead>
                         <tr class="color_tr">
                             <th>STT</th>
-                            <th>Avatar</th>
                             <th>Name</th>
                             <th>Location</th>
                             <th>City</th>
-                            <th>Description</th>
                             <th>Rating</th>
-                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody class="table-border-bottom-0 alldata">
                         @forelse ($results ?? $hotels as $index => $hotel)
                             <tr class="hotel-detail" data-id="{{ $hotel->hotel_id }}">
                                 <td>{{ $index + 1 }}</td>
-                                <td>
-                                    <img src="{{ asset('images/' . $hotel->avatar) }}" alt="{{ $hotel->hotel_name }}"
-                                        style="width: 100px; height: auto;">
-                                </td>
                                 <td>{{ $hotel->hotel_name }}</td>
                                 <td>{{ $hotel->location }}</td>
                                 <td>{{ $hotel->city_id }}</td>
-                                <td>{{ $hotel->description }}</td>
                                 <td>{{ $hotel->rating }}</td>
-                                <td class="{{ $hotel->status ? 'badge bg-success' : 'badge bg-danger' }}">
-                                    {{  $hotel->status ? 'Active' : 'Inactive' }}
-                                </td>
                             </tr>
                         @empty
                             <tr>
@@ -109,14 +98,7 @@
                         <strong>Phone Number:</strong>
                         <span id="modalHotelPhoneNumber"></span>
                     </div>
-                    <div class="hotel-detail-item">
-                        <strong>Status:</strong>
-                        <span id="modalHotelStatus"></span>
-                    </div>
-                    <div class="hotel-detail-item">
-                        <strong>Avatar:</strong>
-                        <img id="modalHotelAvatar" style="width: 100%; height: auto; max-width: 200px;" alt="">
-                    </div>
+
                 </div>
             </div>
             <div class="modal-footer" style="display: flex; justify-content: space-between;">
@@ -184,7 +166,7 @@
                         // Thiết lập đường dẫn cho nút Edit
                         const editRoute = "{{ route('hotel.edit', ['hotel_id' => ':hotel_id']) }}";
                         document.getElementById('editHotelButton').setAttribute('href', editRoute.replace(':hotel_id', currentHotelId));
-                        
+
                         // Hiện modal
                         const hotelDetailModal = new bootstrap.Modal(document.getElementById('hotelDetailModal'));
                         hotelDetailModal.show();
