@@ -2,9 +2,15 @@
 
 <link rel="stylesheet" href="{{ asset('css/hotel_detail.css') }}">
 
+<!--  -->
 @section('header')
 @include('partials.header') 
 @endsection
+@section('search')
+@include('partials.search_layout') 
+@endsection
+<!--  -->
+
 @section('content')
 <section class="hotel_detail">
     <div class="container">
