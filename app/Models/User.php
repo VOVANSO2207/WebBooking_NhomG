@@ -100,17 +100,17 @@ class User extends Model implements Authenticatable // Thêm giao diện
         if ($validator->fails()) {
             throw new ValidationException($validator);
         }
-
+        
         $user = self::where('username', $data['login'])
                     ->orWhere('email', $data['login'])
                     ->first();
-       
+        
         if (!$user || !Hash::check($data['password'], $user->password)) {
             throw ValidationException::withMessages([
                 'login' => ['Thông tin đăng nhập không chính xác.'],
             ]);
         }
-
+            
         if ($user->status != 1) {
             throw ValidationException::withMessages([
                 'status' => ['Tài khoản của bạn đã bị khóa hoặc không hoạt động.'],

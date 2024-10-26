@@ -408,7 +408,7 @@ outline: none;
  .card {
      flex: 0 0 25%;
      /* Show 4 cards at a time */
-     max-width: 25%;
+     /* max-width: 25%; */
      padding: 10px;
      border: none !important;
  }
