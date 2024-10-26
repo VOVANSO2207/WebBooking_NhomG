@@ -3,12 +3,18 @@
 @section('title', 'Kết quả tìm kiếm')
 <link rel="stylesheet" href="{{asset('css/search_result.css')}}">
 
+<!--  -->
 @section('header')
 @include('partials.header') 
 @endsection
-{{-- Link File CSS  --}}
+@section('search')
+@include('partials.search_layout') 
+@endsection
+<!--  -->
+
+{{-- Link File CSS --}}
 @section('css')
-    <link rel="stylesheet" href="{{ asset('css/search_result.css') }}">
+<link rel="stylesheet" href="{{ asset('css/search_result.css') }}">
 @endsection
 @section('content')
 <div class="container mt-5 mb-5 filter-hotel">
@@ -132,11 +138,11 @@
                                             </swiper-slide>
                                         @endforeach
                                         <!-- @foreach ($hotel_images->where('hotel_id', $hotel->hotel_id) as $image)
-                                                    <swiper-slide>
-                                                        <img id="{{$image->image_id}}" src="{{ asset('images/' . $image->image_url) }}"
-                                                            alt="{{$image->image_url}}" />
-                                                    </swiper-slide>
-                                                @endforeach -->
+                                                            <swiper-slide>
+                                                                <img id="{{$image->image_id}}" src="{{ asset('images/' . $image->image_url) }}"
+                                                                    alt="{{$image->image_url}}" />
+                                                            </swiper-slide>
+                                                        @endforeach -->
                                     </swiper-container>
                                 </div>
                                 <div class="hotel-info row">
@@ -364,9 +370,9 @@
 @include('partials.footer') 
 @endsection
 
-{{-- Link File JS  --}}
+{{-- Link File JS --}}
 @section('js')
-    <script src="{{ asset('js/search_result.js') }}"></script>
+<script src="{{ asset('js/search_result.js') }}"></script>
 @endsection
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>

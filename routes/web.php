@@ -33,6 +33,11 @@ Route::get('/header', function () {
     return view('partials/header');
 });
 
+Route::get('/search_layout', function () {
+    return view('partials/search_layout');
+});
+
+
 Route::get('/hotel_detail', function () {
     return view('pages/hotel_detail');
 });
