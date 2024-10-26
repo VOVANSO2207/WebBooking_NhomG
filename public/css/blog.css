@@ -1,9 +1,15 @@
 body .blog {
-    scale: 0.93;
+    margin-top: -50px;
+}
+
+.title-blog {
+    background: #ddd;
+    width: 100%;
 }
 
 .container {
     margin-top: 50px;
+    font-weight: 900;
 }
 
 .search-bar {

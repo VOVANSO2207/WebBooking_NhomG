@@ -2,7 +2,7 @@
 @extends('layouts.app')
 
 @section('title', 'Trang chủ')
-
+<link rel="stylesheet" href="{{asset('css/home.css')}}">
 <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
@@ -175,7 +175,7 @@
                 </div>
             </form>
         </div>
-        <div class="solgan-staynest container">
+        <div class="slogan-staynest container">
             <p>ĐẶT PHÒNG NHANH TẬN HƯỞNG NGAY</p>
             <p class="header-text-muted">Khám phá du lịch với dịch vụ đặt phòng nhanh chóng và tiện lợi. Hãy bắt đầu
                 hành trình

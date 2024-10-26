@@ -1,10 +1,8 @@
 @extends('layouts.app')
 
-<!-- <link rel="stylesheet" href="{{ asset('css/home.css') }}">
-<link rel="stylesheet" href="{{ asset('css/responsive.css') }}"> -->
-<link rel="stylesheet" href="{{ asset('css/header.css') }}">
 
 @section('header')
+<link rel="stylesheet" href="{{ asset('css/header.css') }}">
 <section class="header-staynest m-0">
     <div class="top-header">
         <a href="{{asset('/')}}" class="logo-staynest p-3">
