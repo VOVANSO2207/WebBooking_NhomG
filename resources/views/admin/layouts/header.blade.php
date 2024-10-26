@@ -42,7 +42,7 @@
           </a>
         </li>
         <li class="menu-item">
-          <a href="" class="menu-link">
+          <a href="{{route('admin.viewhotel')}}" class="menu-link">
             <i class="menu-icon tf-icons bx bx-hotel"></i>
             <div data-i18n="Tables">Hotel</div>
           </a>

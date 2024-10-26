@@ -109,3 +109,28 @@ Route::get('/error', function () {
 
 // Pay
 Route::get('/payment', [PaymentsController::class, 'viewPay'])->name('pages.pay');
+
+
+
+
+
+
+
+
+
+
+// Admin - Hotel
+Route::get('/hotels', [HotelController::class, 'index'])->name('hotels.index');
+Route::get('/hotels/{hotel_id}/detail', [HotelController::class, 'showHotelDetail'])->name('hotel.detail');
+Route::get('/hotels/search', [HotelController::class, 'search'])->name('hotels.search');
+
+//Admin-Hotel Detail
+Route::prefix('admin')->group(function () {
+    Route::get('/admin/hotel', [HotelController::class, 'index'])->name('admin.viewhotel');
+    Route::get('/admin/hotel/add', [HotelController::class, 'create'])->name('hotel_add');
+    Route::post('/admin/hotel/store', [HotelController::class, 'store'])->name('admin.hotel.store');
+    Route::get('/admin/hotel/{id}/edit', [HotelController::class, 'edit'])->name('hotel.edit');
+    Route::delete('/admin/hotel/{id}', [HotelController::class, 'deleteHotel'])->name('hotel.delete');
+
+    Route::get('/hotels/search', [HotelController::class, 'search'])->name('admin.hotels.search');
+});

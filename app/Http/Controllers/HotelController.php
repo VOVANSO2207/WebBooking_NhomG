@@ -51,3 +51,4 @@ class HotelController extends Controller
         return view('search_result', compact('hotels', 'location', 'daterange', 'rooms', 'adults', 'children'));
     }
 }
+// 
