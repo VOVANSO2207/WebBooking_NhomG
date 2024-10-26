@@ -278,12 +278,10 @@ body {
     width: 30%;
     padding: 15px;
     padding-right: 0;
-    height: auto;
+    height: 250px;
 }
 
 .hotel-image img {
-    width: 100%;
-    height: 100%;
     object-fit: cover;
     border-radius: 15px;
 }
@@ -591,4 +589,8 @@ input[type="range"]::-moz-range-thumb {
     border-top-left-radius: 20px;
     border-bottom-right-radius: 20px;
     border-top-right-radius: 20px;
+}
+
+.filter-hotel {
+    scale: 0.9;
 }

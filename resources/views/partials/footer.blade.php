@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="{{ asset('css/footer.css') }}">
-<footer class="footer bg-light py-4">
-    <div class="container">
+<footer class="footer-f bg-light py-4">
+    <div class="container f-">
         <div class="row">
             <!-- Logo Section -->
             <div class="col-lg-3 col-md-12 text-center mb-3">
