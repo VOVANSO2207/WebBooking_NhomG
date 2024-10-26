@@ -47,7 +47,6 @@
 
 @section('content')
 <div class="banner-home"></div>
-<div class="bg-in-image-home"></div>
 <section class="header-staynest-home">
     <div class="top-header">
         <a href="#" class="logo-staynest p-3">
@@ -105,7 +104,7 @@
             </div>
         </div>
     </div>
-    <section class="middle-staynest-home mt-5">
+    <div class="middle-staynest-home mt-5">
         <div class="search-bar-staynest-home color-light container">
             <form action="{{ route('hotels.search') }}" method="GET" class="row d-flex justify-content-center">
                 @csrf
@@ -183,10 +182,10 @@
                 của bạn ngay hôm
                 nay!</p>
         </div>
-        <div class="button d-flex justify-content-center">
+        <div class="button-book d-flex justify-content-center">
             <a href="#" class="header-btn-book-now">ĐẶT NGAY</a>
         </div>
-    </section>
+    </div>
 </section>
 
 <section class="famous-hotel">
@@ -357,7 +356,7 @@
 
 <section class="popular-destination pb-5">
     <div class="container">
-        <div class="title mt-5 mb-2">Điểm đến thịnh hànhg</div>
+        <div class="title mt-5 mb-2">Điểm đến thịnh hành</div>
         <div class="row">
             <div class="col-md-6">
                 <a href="#" class="link-popular-destination">
@@ -387,7 +386,7 @@
             <div class="col-md-4">
                 <a href="#" class="link-popular-destination">
                     <img class="image-destitation-1"
-                        src="https://vcdn1-dulich.vnecdn.net/2022/04/06/dulichCaMau01-1649220925-3009-1649240147.jpg?w=0&h=0&q=100&dpr=2&fit=crop&s=__uuV0wfll0lZgX01LNRsA"
+                        src="https://th.bing.com/th/id/R.05b072e1b9b939addf7c3f25637efa5e?rik=3F5fed7sbYHisQ&pid=ImgRaw&r=0"
                         alt="image">
                     <p class="name-location-1">CÀ MAU</p>
                 </a>
@@ -608,10 +607,6 @@
     </div>
 </section>
 
-@section('footer')
-@include('partials.footer') 
-@endsection
-
 <script>
     const carousels = document.querySelectorAll('.carousel-wrapper');
 
@@ -661,5 +656,7 @@
         updateCarousel();
     });
 </script>
-
+@endsection
+@section('footer')
+@include('partials.footer') 
 @endsection
