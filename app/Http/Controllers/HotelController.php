@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Hotel;
+use App\Models\Cities;
 
 class HotelController extends Controller
 {
@@ -53,14 +54,18 @@ class HotelController extends Controller
 
     public function viewHotel()
     {
-        $hotels = Hotel::getAllHotels();
+        $hotels = Hotel::with(['images', 'city'])->paginate(5);
         return view('admin.hotel', compact('hotels'));
     }
 
     public function create()
     {
-        return view('admin.hotel_add');
+        // Lấy tất cả các thành phố từ bảng cities
+        $cities = Cities::all(); // Giả sử bạn đã khai báo model City
+
+        return view('admin.hotel_add', compact('cities'));
     }
+
 
     public function getHotelDetail($hotel_id)
     {
@@ -73,7 +78,7 @@ class HotelController extends Controller
         return response()->json([
             'hotel_name' => $hotel->hotel_name,
             'location' => $hotel->location,
-            'city_id' => $hotel->city_id,
+            'city_id' => $hotel->city->city_name ?? 'N/A',
             'description' => $hotel->description,
             'rating' => $hotel->rating,
         ]);
@@ -89,10 +94,18 @@ class HotelController extends Controller
             'rating' => 'nullable|numeric|min:0|max:5',
         ]);
 
-        Hotel::createHotel($request->all());
+        // Tạo bản ghi khách sạn mới
+        Hotel::create([
+            'hotel_name' => $request->hotel_name,
+            'location' => $request->location,
+            'city_id' => $request->city_id,
+            'description' => $request->description,
+            'rating' => $request->rating,
+        ]);
 
         return redirect()->route('admin.viewhotel')->with('success', 'Thêm khách sạn thành công.');
     }
+
 
     public function deleteHotel($hotel_id)
     {

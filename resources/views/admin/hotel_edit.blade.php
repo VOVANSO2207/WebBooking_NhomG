@@ -16,7 +16,7 @@
                             @method('PUT')
                         @endif
                         
-                        <div class="card-body">
+                        <!-- <div class="card-body">
                             <div class="d-flex align-items-start align-items-sm-center gap-4">
                                 <img src="{{ isset($hotel) ? asset('images/' . ($hotel->image ?? 'default_hotel.jpg')) : asset('images/default_hotel.jpg') }}" 
                                      alt="hotel-image" class="d-block rounded" height="100" width="100" id="fileUpload" />
@@ -29,17 +29,9 @@
                                     </label>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
                         <div class="row">
-                            <div class="mb-3 col-md-6">
-                                <label class="form-label">Hotel ID</label>
-                                <input class="form-control" type="text" name="hotel_id" id="hotel_id"
-                                       value="{{ old('hotel_id', $hotel->hotel_id ?? '') }}" placeholder="Hotel ID" required />
-                                @error('hotel_id')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Hotel Name</label>
                                 <input class="form-control" type="text" name="hotel_name" id="hotel_name"
@@ -57,9 +49,13 @@
                                 @enderror
                             </div>
                             <div class="mb-3 col-md-6">
-                                <label class="form-label">City ID</label>
-                                <input class="form-control" type="text" name="city_id" id="city_id"
-                                       value="{{ old('city_id', $hotel->city_id ?? '') }}" placeholder="City ID" required />
+                            <label class="form-label">City ID</label>
+                                <select class="form-control" name="city_id" id="city_id" required>
+                                    <option value="">Chọn thành phố</option> <!-- Tùy chọn mặc định -->
+                                    @foreach($cities as $city)
+                                        <option value="{{ $city->city_id }}">{{ $city->city_name }}</option> <!-- Hiển thị city_name -->
+                                    @endforeach
+                                </select>
                                 @error('city_id')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -73,19 +69,9 @@
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Rating</label>
-                                <input class="form-control" type="number" name="rating" id="rating" min="1" max="5"
-                                       value="{{ old('rating', $hotel->rating ?? '') }}" placeholder="Rating" required />
+                                <input class="form-control" type="number" name="rating" id="rating" min="1" max="5" step="0.1"
+                                    value="{{ old('rating', $hotel->rating ?? '') }}" placeholder="Rating" required />
                                 @error('rating')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="mb-3 col-md-6">
-                                <label class="form-label">Status</label>
-                                <select id="status" name="status" class="form-select" required>
-                                    <option value="1" {{ isset($hotel) && $hotel->status == 1 ? 'selected' : '' }}>Active</option>
-                                    <option value="0" {{ isset($hotel) && $hotel->status == 0 ? 'selected' : '' }}>Inactive</option>
-                                </select>
-                                @error('status')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
