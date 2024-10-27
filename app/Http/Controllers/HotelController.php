@@ -87,6 +87,13 @@ class HotelController extends Controller
             }
         });
 
+        $amenities = $hotel->amenities->map(function ($amenity) {
+            return [
+                'name' => $amenity->amenity_name,
+                'description' => $amenity->description,
+            ];
+        });
+
         return response()->json([
             'hotel_name' => $hotel->hotel_name,
             'location' => $hotel->location,
@@ -94,6 +101,7 @@ class HotelController extends Controller
             'description' => $hotel->description,
             'rating' => $hotel->rating,
             'images' => $images, // Danh sách URL hình ảnh
+            'amenities' => $amenities,
         ]);
     }
 

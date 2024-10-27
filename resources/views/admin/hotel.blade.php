@@ -98,21 +98,26 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+                <!-- Thông tin khách sạn hiện tại -->
                 <div><strong>Name:</strong> <span id="modalHotelName"></span></div>
                 <div><strong>Location:</strong> <span id="modalHotelLocation"></span></div>
                 <div><strong>City:</strong> <span id="modalHotelCity"></span></div>
                 <div><strong>Description:</strong> <span id="modalHotelDescription"></span></div>
                 <div><strong>Rating:</strong> <span id="modalHotelRating"></span></div>
 
+                
                 <!-- Swiper carousel cho hình ảnh -->
                 <div class="swiper room-swiper">
-                    <div class="swiper-wrapper" id="hotelImages">
-                        <!-- Hình ảnh sẽ được thêm động bằng JavaScript -->
-                    </div>
+                    <div class="swiper-wrapper" id="hotelImages"></div>
                     <div class="swiper-button-next"></div>
                     <div class="swiper-button-prev"></div>
                 </div>
+                <!-- Tiện ích khách sạn -->
+                <div><strong>Amenities:</strong>
+                    <ul id="modalHotelAmenities"></ul>
+                </div>
             </div>
+
             <div class="modal-footer">
                 <a id="editHotelButton" class="btn btn-info">Edit</a>
                 <button type="button" class="btn btn-danger" id="deleteHotelButton" data-bs-toggle="modal" data-bs-target="#confirmDeleteHotelModal">Delete</button>
@@ -152,42 +157,49 @@
                 currentHotelId = this.getAttribute('data-id');
 
                 fetch(`/hotels/${currentHotelId}/detail`)
-                    .then(response => response.json())
-                    .then(hotel => {
-                        document.getElementById('modalHotelName').innerText = hotel.hotel_name;
-                        document.getElementById('modalHotelLocation').innerText = hotel.location;
-                        document.getElementById('modalHotelCity').innerText = hotel.city_id;
-                        document.getElementById('modalHotelDescription').innerText = hotel.description;
-                        document.getElementById('modalHotelRating').innerText = hotel.rating;
+                .then(response => response.json())
+                .then(hotel => {
+                    // Cập nhật thông tin khách sạn
+                    document.getElementById('modalHotelName').innerText = hotel.hotel_name;
+                    document.getElementById('modalHotelLocation').innerText = hotel.location;
+                    document.getElementById('modalHotelCity').innerText = hotel.city_id;
+                    document.getElementById('modalHotelDescription').innerText = hotel.description;
+                    document.getElementById('modalHotelRating').innerText = hotel.rating;
 
-                        const editRoute = "{{ route('hotel.edit', ['hotel_id' => ':hotel_id']) }}";
-                        document.getElementById('editHotelButton').setAttribute('href', editRoute.replace(':hotel_id', currentHotelId));
+                    // Hiển thị danh sách tiện ích
+                    const amenitiesContainer = document.getElementById('modalHotelAmenities');
+                    amenitiesContainer.innerHTML = '';
+                    hotel.amenities.forEach(amenity => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = `${amenity.name}: ${amenity.description}`;
+                        amenitiesContainer.appendChild(listItem);
+                    });
 
-                        // Clear existing images
-                        const imageContainer = document.getElementById('hotelImages');
-                        imageContainer.innerHTML = '';
+                    // Hiển thị hình ảnh khách sạn
+                    const imageContainer = document.getElementById('hotelImages');
+                    imageContainer.innerHTML = ''; // Xóa các ảnh cũ trước
+                    hotel.images.forEach(image => {
+                        const slide = document.createElement('div');
+                        slide.classList.add('swiper-slide');
+                        slide.innerHTML = `<img src="${image}" alt="Room Image">`;
+                        imageContainer.appendChild(slide);
+                    });
 
-                        // Append images to swiper container
-                        hotel.images.forEach(image => {
-                            const slide = document.createElement('div');
-                            slide.classList.add('swiper-slide');
-                            slide.innerHTML = `<img src="${image}" alt="Room Image">`;
-                            imageContainer.appendChild(slide);
-                        });
+                    // Khởi tạo Swiper sau khi đã thêm ảnh
+                    new Swiper('.room-swiper', {
+                        navigation: {
+                            nextEl: '.swiper-button-next',
+                            prevEl: '.swiper-button-prev',
+                        },
+                        loop: false,
+                    });
 
-                        // Initialize or update Swiper
-                        new Swiper('.room-swiper', {
-                            navigation: {
-                                nextEl: '.swiper-button-next',
-                                prevEl: '.swiper-button-prev',
-                            },
-                            loop: false,
-                        });
+                    // Hiển thị modal chi tiết khách sạn
+                    const hotelDetailModal = new bootstrap.Modal(document.getElementById('hotelDetailModal'));
+                    hotelDetailModal.show();
+                })
+                .catch(error => console.error('Error fetching hotel details:', error));
 
-                        const hotelDetailModal = new bootstrap.Modal(document.getElementById('hotelDetailModal'));
-                        hotelDetailModal.show();
-                    })
-                    .catch(error => console.error('Error fetching hotel details:', error));
             });
         });
 
