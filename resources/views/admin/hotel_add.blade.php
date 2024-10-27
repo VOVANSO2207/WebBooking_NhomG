@@ -39,6 +39,30 @@
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
+                            <div class="mb-3 col-md-5">
+                            <label class="form-label">Hotel Amenities</label>
+                        <select name="amenities[]" class="form-select select2" id="amenities" multiple="multiple" required>
+                            @php
+                                $amenityNames = []; // Mảng để theo dõi tên tiện nghi đã hiển thị
+                            @endphp
+                            @foreach ($hotelAmenities as $amenity)
+                                @if (!in_array($amenity->amenity_name, $amenityNames)) // Kiểm tra nếu tên chưa được thêm vào
+                                    <option value="{{ $amenity->amenity_id }}" data-name="{{ $amenity->amenity_name }}" data-description="{{ $amenity->description }}">
+                                        {{ $amenity->amenity_name }}
+                                    </option>
+                                    @php
+                                        $amenityNames[] = $amenity->amenity_name; // Thêm tên tiện nghi vào mảng
+                                    @endphp
+                                @endif
+                            @endforeach
+                        </select>
+
+                        </div>
+
+                        <!-- Các trường ẩn để lưu trữ thông tin tiện nghi -->
+                        <input type="hidden" name="amenity_names[]" id="amenity_names">
+                        <input type="hidden" name="descriptions[]" id="descriptions">
+
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Description</label>
                                 <textarea class="form-control" name="description" id="description" placeholder="Description" required>{{ old('description') }}</textarea>
@@ -130,6 +154,22 @@ document.getElementById('upload').addEventListener('change', function(event) {
         reader.readAsDataURL(file);
     }
 });
+
+function updateDescriptions() {
+    const descriptionsInput = document.getElementById('descriptions');
+    const amenitiesSelect = document.getElementById('amenities');
+    const selectedOptions = Array.from(amenitiesSelect.selectedOptions); // Lấy tất cả các tùy chọn đã chọn
+    const descriptions = []; // Khởi tạo mảng để lưu trữ mô tả
+
+    // Lấy mô tả từ các tùy chọn đã chọn
+    selectedOptions.forEach(option => {
+        descriptions.push(option.getAttribute('data-description')); // Lấy description từ bảng tiện nghi
+    });
+
+    // Gán các mô tả vào trường ẩn
+    descriptionsInput.value = descriptions.join(', '); // Nối các mô tả với dấu phẩy
+}
+
 </script>
 
 @endsection

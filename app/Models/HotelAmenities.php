@@ -11,6 +11,7 @@ class HotelAmenities extends Model
 
     protected $table = 'hotel_amenities';
     protected $primaryKey = 'amenity_id';
+    public $timestamps = false;
 
     protected $fillable = [
         'hotel_id',
