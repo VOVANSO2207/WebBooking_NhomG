@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Hotel;
 use App\Models\Cities;
+use App\Models\HotelImages;
 
 class HotelController extends Controller
 {
@@ -96,8 +97,7 @@ class HotelController extends Controller
         ]);
     }
 
-
-    public function store(Request $request)
+    public function store(Request $request) 
     {
         $request->validate([
             'hotel_name' => 'required|string|max:255|regex:/^[\pL\s]+$/u',
@@ -105,6 +105,8 @@ class HotelController extends Controller
             'city_id' => 'required|integer',
             'description' => 'required|string',
             'rating' => 'required|numeric|min:1|max:5',
+            'images' => 'nullable|array',
+            'images.*' => 'image|mimes:jpeg,png,jpg|max:2048', // Kiểm tra định dạng và kích thước ảnh
         ], [
             'hotel_name.required' => 'Vui lòng nhập tên khách sạn',
             'hotel_name.regex' => 'Tên khách sạn không được chứa ký tự đặc biệt',
@@ -112,20 +114,35 @@ class HotelController extends Controller
             'city_id.required' => 'Vui lòng chọn địa điểm',
             'description.required' => 'Vui lòng nhập mô tả cho khách sạn',
             'rating.required' => 'Vui lòng chọn xếp hạng sao cho khách sạn',
+            'images.array' => 'Vui lòng chọn ảnh hợp lệ',
         ]);
-    
-        Hotel::create([
+
+        // Tạo khách sạn mới
+        $hotel = Hotel::create([
             'hotel_name' => $request->hotel_name,
             'location' => $request->location,
             'city_id' => $request->city_id,
             'description' => $request->description,
             'rating' => $request->rating,
-            'phone_number' => $request->phone_number,
+            // Nếu cần, thêm các trường khác như phone_number
         ]);
-    
+
+        // Lưu ảnh vào bảng hotel_images
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $imageName = time() . '_' . $image->getClientOriginalName();
+                $image->move(public_path('images'), $imageName); // Di chuyển ảnh vào thư mục public/images
+
+                // Thêm vào bảng hotel_images
+                HotelImages::create([
+                    'hotel_id' => $hotel->hotel_id, // Sử dụng id của khách sạn vừa được tạo
+                    'image_url' => $imageName,
+                ]);
+            }
+        }
+
         return redirect()->route('admin.viewhotel')->with('success', 'Thêm khách sạn thành công.');
     }
-    
 
 
     public function deleteHotel($hotel_id)
@@ -147,7 +164,6 @@ class HotelController extends Controller
         return view('admin.search_results_hotel', compact('hotels'));
     }
 
-
     public function editHotel($hotel_id)
     {
         $hotel = Hotel::findOrFail($hotel_id);
@@ -155,15 +171,14 @@ class HotelController extends Controller
         return view('admin.hotel_edit', compact('hotel', 'cities'));
     }
 
-
     public function update(Request $request, $hotel_id)
     {
         $request->validate([
-            'hotel_name' => 'required|string|max:255|:hotels,hotel_name,' . $hotel_id . ',hotel_id',
+            'hotel_name' => 'required|string|max:255|regex:/^[^\_]+$/',
             'location' => 'required|string|max:255',
             'city_id' => 'required|integer',
-            'description' => 'nullable|string',
-            'rating' => 'nullable|numeric|min:0|max:5',
+            'description' => 'required|string|min:20|max:8000',
+            'rating' => 'nullable|numeric|min:1|max:5',
         ]);
 
         $hotel = Hotel::find($hotel_id);
@@ -175,6 +190,7 @@ class HotelController extends Controller
 
         return redirect()->route('admin.viewhotel')->with('success', 'Cập nhật khách sạn thành công.');
     }
+
 
 }
 // 

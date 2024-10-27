@@ -28,11 +28,11 @@
                                 @enderror
                             </div>
                             <div class="mb-3 col-md-6">
-                            <label class="form-label">City ID</label>
+                                <label class="form-label">City ID</label>
                                 <select class="form-control" name="city_id" id="city_id" required>
-                                    <option value="">Chọn thành phố</option> <!-- Tùy chọn mặc định -->
+                                    <option value="">Chọn thành phố</option>
                                     @foreach($cities as $city)
-                                        <option value="{{ $city->city_id }}">{{ $city->city_name }}</option> <!-- Hiển thị city_name -->
+                                        <option value="{{ $city->city_id }}">{{ $city->city_name }}</option>
                                     @endforeach
                                 </select>
                                 @error('city_id')
@@ -53,6 +53,21 @@
                                 @error('rating')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label">Upload Images</label>
+                                <div class="d-flex align-items-start align-items-sm-center gap-4">
+                                    <div id="imagePreviewContainer" class="d-flex flex-wrap"></div>
+                                    <div class="button-wrapper">
+                                        <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
+                                            <span class="d-none d-sm-block">Upload</span>
+                                            <i class="bx bx-upload d-block d-sm-none"></i>
+                                            <input type="file" id="upload" name="images[]" multiple
+                                                class="account-file-input" hidden
+                                                accept="image/png, image/jpeg, image/jpg" />
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -88,4 +103,33 @@
     </div>
 </div>
 <!-- / Modal -->
+
+<script>
+document.getElementById('upload').addEventListener('change', function(event) {
+    const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+    imagePreviewContainer.innerHTML = ''; // Clear previous images
+
+    const files = event.target.files; // Get the selected files
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        
+        // Create a FileReader to read the file
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            // Create an image element and set its source
+            const img = document.createElement('img');
+            img.src = e.target.result; // Set the source to the FileReader result
+            img.className = 'img-thumbnail me-2'; // Add styling classes
+            img.style.width = '100px'; // Set width for preview
+            img.style.height = 'auto'; // Maintain aspect ratio
+
+            // Append the image to the preview container
+            imagePreviewContainer.appendChild(img);
+        }
+        // Read the file as a data URL
+        reader.readAsDataURL(file);
+    }
+});
+</script>
+
 @endsection
