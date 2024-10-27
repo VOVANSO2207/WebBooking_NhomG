@@ -1,8 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('admin-container')
-<nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
-    id="layout-navbar">
+<nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
     <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
         <a class="nav-item nav-link px-0 me-xl-4">
             <i class="bx bx-menu bx-sm"></i>
@@ -11,11 +10,9 @@
 
     <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
         <div class="navbar-nav align-items-center" style="width: 100%;">
-            <form action="{{ route('admin.hotels.search') }}" method="GET" class="d-flex align-items-center"
-                style="width: 100%;">
+            <form action="{{ route('admin.hotels.search') }}" method="GET" class="d-flex align-items-center" style="width: 100%;">
                 <i class="bx bx-search fs-4 lh-0"></i>
-                <input type="text" name="search" class="form-control border-0 shadow-none" placeholder="Search..."
-                    aria-label="Search..." style="width: 100%;" />
+                <input type="text" name="search" class="form-control border-0 shadow-none" placeholder="Search..." aria-label="Search..." style="width: 100%;" />
                 <button type="submit" class="btn btn-primary">Search</button>
             </form>
         </div>
@@ -67,13 +64,10 @@
                                                 @endforeach
                                             @endif
                                         </div>
-                                        <!-- Thêm điều hướng -->
                                         <div class="swiper-button-next"></div>
                                         <div class="swiper-button-prev"></div>
                                     </div>
                                 </td>
-
-
                                 <td>{{ $hotel->hotel_name }}</td>
                                 <td>{{ $hotel->location }}</td>
                                 <td>{{ Str::limit($hotel->description, 50, '...') }}</td>
@@ -82,7 +76,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="text-center">Không có khách sạn nào để hiển thị.</td>
+                                <td colspan="7" class="text-center">Không có khách sạn nào để hiển thị.</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -112,10 +106,7 @@
             </div>
             <div class="modal-footer">
                 <a id="editHotelButton" class="btn btn-info">Edit</a>
-                <button type="button" class="btn btn-danger" id="deleteHotelButton" data-bs-toggle="modal"
-                    data-bs-target="#confirmDeleteHotelModal">Delete</button>
-            </div>
-            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id="deleteHotelButton" data-bs-toggle="modal" data-bs-target="#confirmDeleteHotelModal">Delete</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
@@ -173,7 +164,7 @@
             fetch(`/hotels/${currentHotelId}/delete`, {
                 method: 'DELETE',
                 headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}', // Thêm CSRF token nếu cần
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
                 }
             })
             .then(response => {
@@ -198,16 +189,16 @@
                     nextEl: container.querySelector('.swiper-button-next'),
                     prevEl: container.querySelector('.swiper-button-prev'),
                 },
-                loop: false, // Đảm bảo không lặp lại
+                loop: false,
             });
 
             // Ngăn chặn click vào nút điều hướng mở modal
             container.querySelector('.swiper-button-next').addEventListener('click', function (event) {
-                event.stopPropagation(); // Ngăn chặn sự kiện click bùng phát
+                event.stopPropagation();
             });
 
             container.querySelector('.swiper-button-prev').addEventListener('click', function (event) {
-                event.stopPropagation(); // Ngăn chặn sự kiện click bùng phát
+                event.stopPropagation();
             });
         });
     });

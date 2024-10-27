@@ -121,16 +121,19 @@ class HotelController extends Controller
     public function searchAdminHotel(Request $request)
     {
         $keyword = $request->get('search');
-        $results = Hotel::searchHotel($keyword)->paginate(5);
+        $hotels = Hotel::searchHotel($keyword)->paginate(5);
 
-        return view('admin.search_results_hotel', compact('results'));
+        return view('admin.search_results_hotel', compact('hotels'));
     }
+
 
     public function editHotel($hotel_id)
     {
         $hotel = Hotel::findOrFail($hotel_id);
-        return view('admin.hotel_edit', compact('hotel'));
+        $cities = Cities::all(); // Lấy tất cả thành phố để sử dụng trong dropdown
+        return view('admin.hotel_edit', compact('hotel', 'cities'));
     }
+
 
     public function update(Request $request, $hotel_id)
     {

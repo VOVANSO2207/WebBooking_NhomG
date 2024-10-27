@@ -49,17 +49,20 @@
                                 @enderror
                             </div>
                             <div class="mb-3 col-md-6">
-                            <label class="form-label">City ID</label>
+                            <label class="form-label">City</label>
                                 <select class="form-control" name="city_id" id="city_id" required>
-                                    <option value="">Chọn thành phố</option> <!-- Tùy chọn mặc định -->
+                                    <option value="">Chọn thành phố</option>
                                     @foreach($cities as $city)
-                                        <option value="{{ $city->city_id }}">{{ $city->city_name }}</option> <!-- Hiển thị city_name -->
+                                        <option value="{{ $city->city_id }}" {{ $hotel->city_id == $city->city_id ? 'selected' : '' }}>
+                                            {{ $city->city_name }}
+                                        </option>
                                     @endforeach
                                 </select>
                                 @error('city_id')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
+
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Description</label>
                                 <textarea class="form-control" name="description" id="description" placeholder="Description" required>{{ old('description', $hotel->description ?? '') }}</textarea>
