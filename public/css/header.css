@@ -37,6 +37,11 @@
      box-sizing: border-box;
  }
 
+ .top-header,
+ .search-bar-staynest {
+     scale: 0.93;
+ }
+
  .header-staynest {
      background: rgb(29, 60, 99);
      background: linear-gradient(90deg, rgba(29, 60, 99, 1) 0%, rgba(59, 121, 201, 1) 100%);
@@ -174,6 +179,7 @@
      color: #505050;
      text-decoration: none;
      font-weight: 500 !important;
+     font-size: 16px !important;
  }
 
  .dropdown-item-staynest:hover {
@@ -346,6 +352,3 @@
      font-size: 16px;
      pointer-events: none;
  }
-
- 
-  

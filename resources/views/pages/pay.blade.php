@@ -1,8 +1,12 @@
 @extends('layouts.app')
+<!--  -->
 @section('header')
 @include('partials.header') 
 @endsection
-
+@section('search')
+@include('partials.search_layout') 
+@endsection
+<!--  -->
 <link rel="stylesheet" href="{{ asset('css/payment.css') }}">
 
 @section('content')

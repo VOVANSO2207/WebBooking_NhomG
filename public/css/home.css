@@ -37,44 +37,47 @@
      box-sizing: border-box;
  }
 
+ /* Thu Nhỏ giao diện */
+ .top-header,
+ .famous-hotel,
+ .popular-destination,
+ .our-offers {
+     scale: 0.93;
+ }
+
+ .search-bar-staynest-home {
+     scale: .87;
+ }
+
  .header-staynest-home {
      position: relative;
      background-image: url('../images/banner_01.png');
      background-repeat: no-repeat;
      background-size: cover;
      width: 100%;
-     height: 110vh !important;
- }
- .banner-home {
-     position: absolute;
-     top: 0;
-     left: 0;
-     width: 100%;
-     z-index: 1;
-     /* Đặt z-index thấp hơn để bg-in-image nằm trên */
-     min-height: 100vh;
-     /* Thay thế height: 100vh */
-     overflow: hidden;
+     max-height: auto;
  }
 
- .bg-in-image-home {
+ .bg-in-image-home::after {
+     content: '';
      position: absolute;
      background: black;
      opacity: 0.5;
-     inset: 0;
-     z-index: 2;
+     top: 0;
+     right: 0;
+     bottom: 10%;
+     left: 0;
+     z-index: 1;
  }
 
- .banner-home,
- .bg-in-image-home {
-     height: 100%;
-     /* Đặt chiều cao tự động dựa trên phần tử cha */
+ .middle-staynest-home {
+     z-index: 2;
+     padding-bottom: 10%;
  }
 
  .header-staynest-home>* {
      position: relative;
      z-index: 3;
-     /* Đặt z-index cao hơn bg-in-image để nó nằm trên cùng */
  }
 
  .logo-staynest {
@@ -93,6 +96,7 @@
 
  .top-header {
      border-bottom: 1px solid gray;
+     z-index: 4;
  }
 
  .link-social {
@@ -141,12 +145,14 @@
      margin: 13px 15px;
      font-weight: 700;
      color: #fff;
-     transition: all 300ms ease;
+     transition: all 200ms ease;
  }
 
  .menu-attribute li a:hover {
-     color: #3B79C9;
-
+     color: #0057c9;
+     background: rgba(255, 255, 255, 0.5);
+     padding: 15px;
+     border-radius: 50px;
  }
 
  .group-left-header a {
@@ -158,10 +164,6 @@
  .group-left-header a {
      text-decoration: none;
      color: black;
- }
-
- .menu-attribute li:hover {
-     color: #3B79C9;
  }
 
  .group-left-header a:hover {
@@ -178,13 +180,9 @@
  .name-user {
      flex-grow: 1;
      text-align: center;
-     /* Căn giữa chữ */
      white-space: nowrap;
-     /* Ngăn chữ xuống dòng */
      overflow: hidden;
-     /* Ẩn phần chữ thừa */
      text-overflow: ellipsis;
-     /* Hiện ba chấm nếu quá dài */
  }
 
  .name-user:hover {
@@ -197,17 +195,14 @@
      border: 1px solid #ccc;
      border-radius: 4px;
      padding: 0;
- }
-
- .middle-staynest-home {
-     z-index: 2;
+     z-index: 6;
  }
 
  .dropdown-item-staynest {
      color: #505050;
      text-decoration: none;
      font-weight: 500 !important;
-     font-size: 16px;
+     font-size: 16px !important;
  }
 
  .dropdown-item-staynest:hover {
@@ -215,14 +210,15 @@
      color: #3B79C9 !important;
  }
 
- .solgan-staynest p {
+ .slogan-staynest p {
      text-align: center;
      color: #fff;
      font-weight: 900;
      font-size: 90px;
+     padding: 0 50px;
  }
 
- .solgan-staynest .header-text-muted {
+ .slogan-staynest .header-text-muted {
      font-weight: 300;
      font-size: 16px;
  }

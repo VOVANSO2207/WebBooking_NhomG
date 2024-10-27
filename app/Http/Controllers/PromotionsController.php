@@ -35,7 +35,7 @@ class PromotionsController extends Controller
     public function searchVoucher(Request $request)
     {
         $keyword = $request->get('search');
-        $vouchers = Promotions::searchVouchers($keyword)->paginate(7);
+        $vouchers = Promotions::searchVouchers($keyword);
 
         return view('admin.search_results_voucher', compact('vouchers'));
     }
@@ -110,15 +110,15 @@ class PromotionsController extends Controller
     {
         $decodedId = IdEncoder::decodeId($promotion_id);
         $voucher = Promotions::findVouchersById($decodedId);
-    
+
         if (!$voucher) {
             return redirect()->route('admin.viewVoucher')->with('error', 'Voucher không tồn tại.');
         }
-    
+
         // Chuyển đổi ngày tháng từ định dạng dd/mm/yyyy sang Y-m-d
         $start_date = $voucher->start_date ? \Carbon\Carbon::createFromFormat('d/m/Y', $voucher->start_date)->format('Y-m-d') : null;
         $end_date = $voucher->end_date ? \Carbon\Carbon::createFromFormat('d/m/Y', $voucher->end_date)->format('Y-m-d') : null;
-    
+
         return view('admin.voucher_edit', compact('voucher', 'start_date', 'end_date'));
     }
 
