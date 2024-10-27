@@ -132,7 +132,7 @@ class UsersController extends Controller
         $request->validate([
             'username' => 'required|min:3|max:50|:users,username,' . $user_id . ',user_id',
             'email' => 'required|email|:users,email,' . $user_id . ',user_id',
-            'password' => 'nullable|min:8|confirmed', // Chỉ yêu cầu khi có giá trị
+            'password' => 'nullable|min:8|', // Chỉ yêu cầu khi có giá trị
             'phone_number' => 'required|regex:/^0[0-9]{9}$/',
             'role_id' => 'required|integer',
             'status' => 'required|boolean',
@@ -144,7 +144,6 @@ class UsersController extends Controller
             'email.required' => 'Vui lòng nhập email',
             'email.email' => 'Email không hợp lệ',
             'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự',
-            'password.confirmed' => 'Mật khẩu không khớp',
             'phone_number.required' => 'Vui lòng nhập số điện thoại',
             'phone_number.regex' => 'Số điện thoại không hợp lệ',
             'role_id.required' => 'Vui lòng chọn vai trò',

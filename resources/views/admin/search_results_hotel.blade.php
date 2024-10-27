@@ -103,6 +103,15 @@
                 <div><strong>City:</strong> <span id="modalHotelCity"></span></div>
                 <div><strong>Description:</strong> <span id="modalHotelDescription"></span></div>
                 <div><strong>Rating:</strong> <span id="modalHotelRating"></span></div>
+
+                <!-- Swiper carousel cho hình ảnh -->
+                <div class="swiper room-swiper">
+                    <div class="swiper-wrapper" id="hotelImages">
+                        <!-- Hình ảnh sẽ được thêm động bằng JavaScript -->
+                    </div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
             </div>
             <div class="modal-footer">
                 <a id="editHotelButton" class="btn btn-info">Edit</a>
@@ -112,6 +121,7 @@
         </div>
     </div>
 </div>
+
 
 <!-- Modal xác nhận xóa -->
 <div class="modal fade" id="confirmDeleteHotelModal" tabindex="-1" aria-labelledby="confirmDeleteHotelModalLabel" aria-hidden="true">
@@ -153,6 +163,27 @@
                         const editRoute = "{{ route('hotel.edit', ['hotel_id' => ':hotel_id']) }}";
                         document.getElementById('editHotelButton').setAttribute('href', editRoute.replace(':hotel_id', currentHotelId));
 
+                        // Clear existing images
+                        const imageContainer = document.getElementById('hotelImages');
+                        imageContainer.innerHTML = '';
+
+                        // Append images to swiper container
+                        hotel.images.forEach(image => {
+                            const slide = document.createElement('div');
+                            slide.classList.add('swiper-slide');
+                            slide.innerHTML = `<img src="${image}" alt="Room Image">`;
+                            imageContainer.appendChild(slide);
+                        });
+
+                        // Initialize or update Swiper
+                        new Swiper('.room-swiper', {
+                            navigation: {
+                                nextEl: '.swiper-button-next',
+                                prevEl: '.swiper-button-prev',
+                            },
+                            loop: false,
+                        });
+
                         const hotelDetailModal = new bootstrap.Modal(document.getElementById('hotelDetailModal'));
                         hotelDetailModal.show();
                     })
@@ -177,30 +208,29 @@
             .catch(error => console.error('Error deleting hotel:', error));
         });
 
-    });
+        // Initialize Swiper for each Swiper container
+        document.addEventListener('DOMContentLoaded', function () {
+            const swiperContainers = document.querySelectorAll('.room-swiper');
 
-    document.addEventListener('DOMContentLoaded', function () {
-        // Khởi tạo Swiper cho tất cả các swiper
-        const swiperContainers = document.querySelectorAll('.room-swiper');
+            swiperContainers.forEach(container => {
+                const swiper = new Swiper(container, {
+                    navigation: {
+                        nextEl: container.querySelector('.swiper-button-next'),
+                        prevEl: container.querySelector('.swiper-button-prev'),
+                    },
+                    loop: false,
+                });
 
-        swiperContainers.forEach(container => {
-            const swiper = new Swiper(container, {
-                navigation: {
-                    nextEl: container.querySelector('.swiper-button-next'),
-                    prevEl: container.querySelector('.swiper-button-prev'),
-                },
-                loop: false,
-            });
+                container.querySelector('.swiper-button-next').addEventListener('click', function (event) {
+                    event.stopPropagation();
+                });
 
-            // Ngăn chặn click vào nút điều hướng mở modal
-            container.querySelector('.swiper-button-next').addEventListener('click', function (event) {
-                event.stopPropagation();
-            });
-
-            container.querySelector('.swiper-button-prev').addEventListener('click', function (event) {
-                event.stopPropagation();
+                container.querySelector('.swiper-button-prev').addEventListener('click', function (event) {
+                    event.stopPropagation();
+                });
             });
         });
     });
 </script>
+
 @endsection

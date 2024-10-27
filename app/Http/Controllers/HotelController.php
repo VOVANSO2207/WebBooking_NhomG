@@ -75,36 +75,57 @@ class HotelController extends Controller
             return response()->json(['error' => 'Khách sạn không tồn tại'], 404);
         }
 
+        // Lấy URL hình ảnh
+        $images = $hotel->images->map(function ($image) {
+            if (file_exists(public_path('images/' . $image->image_url))) {
+                return asset('images/' . $image->image_url);
+            } elseif (file_exists(public_path('storage/images/' . $image->image_url))) {
+                return asset('storage/images/' . $image->image_url);
+            } else {
+                return asset('images/img-upload.jpg'); // Hình ảnh mặc định
+            }
+        });
+
         return response()->json([
             'hotel_name' => $hotel->hotel_name,
             'location' => $hotel->location,
             'city_id' => $hotel->city->city_name ?? 'N/A',
             'description' => $hotel->description,
             'rating' => $hotel->rating,
+            'images' => $images, // Danh sách URL hình ảnh
         ]);
     }
+
 
     public function store(Request $request)
     {
         $request->validate([
-            'hotel_name' => 'required|string|max:255',
+            'hotel_name' => 'required|string|max:255|regex:/^[\pL\s]+$/u',
             'location' => 'required|string|max:255',
             'city_id' => 'required|integer',
-            'description' => 'nullable|string',
-            'rating' => 'nullable|numeric|min:0|max:5',
+            'description' => 'required|string',
+            'rating' => 'required|numeric|min:1|max:5',
+        ], [
+            'hotel_name.required' => 'Vui lòng nhập tên khách sạn',
+            'hotel_name.regex' => 'Tên khách sạn không được chứa ký tự đặc biệt',
+            'location.required' => 'Vui lòng nhập địa điểm',
+            'city_id.required' => 'Vui lòng chọn địa điểm',
+            'description.required' => 'Vui lòng nhập mô tả cho khách sạn',
+            'rating.required' => 'Vui lòng chọn xếp hạng sao cho khách sạn',
         ]);
-
-        // Tạo bản ghi khách sạn mới
+    
         Hotel::create([
             'hotel_name' => $request->hotel_name,
             'location' => $request->location,
             'city_id' => $request->city_id,
             'description' => $request->description,
             'rating' => $request->rating,
+            'phone_number' => $request->phone_number,
         ]);
-
+    
         return redirect()->route('admin.viewhotel')->with('success', 'Thêm khách sạn thành công.');
     }
+    
 
 
     public function deleteHotel($hotel_id)
