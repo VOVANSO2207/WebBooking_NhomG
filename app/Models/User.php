@@ -59,7 +59,7 @@ class User extends Model implements Authenticatable // Thêm giao diện
         ]);
     }
    
-    public static function login($data)
+    public static function login($data) 
     {
         $validator = Validator::make($data, [
             'login' => 'required|string',
