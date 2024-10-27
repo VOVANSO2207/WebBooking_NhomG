@@ -47,7 +47,7 @@ class AuthController extends Controller
             'login' => 'required|string',
             'password' => 'required|string',
         ]);
-    
+        
         // Thử đăng nhập bằng username hoặc email
         try {
             // Tìm người dùng theo login (email hoặc username)
