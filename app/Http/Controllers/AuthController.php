@@ -6,6 +6,8 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+
 class AuthController extends Controller
 {
 
@@ -45,26 +47,32 @@ class AuthController extends Controller
             'login' => 'required|string',
             'password' => 'required|string',
         ]);
-
+    
         // Thử đăng nhập bằng username hoặc email
         try {
+            // Tìm người dùng theo login (email hoặc username)
             $user = User::login($credentials); // Gọi hàm login từ model
+            
+            // Nếu người dùng tồn tại và mật khẩu chính xác
+            $request->session()->regenerate(); // Tái tạo session ID để ngăn chặn session fixation
+            
             Auth::login($user); // Đăng nhập người dùng
             
             // Kiểm tra vai trò và điều hướng đến trang tương ứng
             switch ($user->role_id) {
                 case 1: // Giả sử role_id 1 là admin
-                    return redirect()->route('admin'); // Chuyển hướng đến trang dashboard
+                    return redirect()->route('admin');
                 case 2: // Giả sử role_id 2 là user
-                    return redirect()->route('home'); // Chuyển hướng đến trang welcome
+                    return redirect()->route('home'); 
                 default: // Các quyền khác
-                    return redirect()->route('error'); // Chuyển hướng đến trang lỗi
+                    return redirect()->route('error'); 
             }
         } catch (ValidationException $e) {
             return back()->withErrors($e->validator->errors())->withInput(); // Trả về lỗi nếu có
         }
     }
-
+    
+   
 }
 
 

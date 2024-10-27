@@ -200,7 +200,7 @@
                 document.getElementById('editRoomButton').onclick = function () {
                     window.location.href = `{{ url('admin/room/edit') }}/${room.room_id}`;
                 };
-        
+                
                 // Update amenities
                 const amenitiesContainer = document.getElementById('modalAmenities');
                 amenitiesContainer.innerHTML = room.amenities.map(amenity => `<span class="amenity-tag">${amenity.amenity_name}</span>`).join(',');

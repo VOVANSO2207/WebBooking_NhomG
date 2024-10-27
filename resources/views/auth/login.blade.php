@@ -13,7 +13,7 @@
                     <div class="card-body p-4">
                         <form method="POST" action="{{ route('auth.login') }}">
                             @csrf <!-- Bảo vệ CSRF -->
-
+                            
                             <h4 class="typing-effect"></h4>
 
                             <label for="floatingInput">Email hoặc Username</label>
@@ -23,6 +23,9 @@
                                 @error('login')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
+                                @error('status')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                             </div>
 
                             <label for="floatingPassword">Mật khẩu</label>
@@ -75,7 +78,7 @@
         function togglePasswordVisibility(fieldId, iconId) {
             const passwordField = document.getElementById(fieldId);
             const icon = document.getElementById(iconId).querySelector('i');
-
+            
             if (passwordField.type === 'password') {
                 passwordField.type = 'text';
                 icon.classList.remove('fa-eye');
