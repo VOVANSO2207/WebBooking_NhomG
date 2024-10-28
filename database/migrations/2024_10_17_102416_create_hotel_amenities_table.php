@@ -15,8 +15,6 @@ return new class extends Migration
 
         Schema::create('hotel_amenities', function (Blueprint $table) {
             $table->increments('amenity_id');
-            $table->integer('hotel_id');
-            $table->foreign('hotel_id')->references('hotel_id')->on('hotels');
             $table->string('amenity_name');
             $table->text('description');
         });

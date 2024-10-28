@@ -10,6 +10,10 @@ class PostsController extends Controller
     public function viewPost()
     {
         $posts = Posts::getAllPosts();
+        foreach ($posts as $post) {
+            $post->description = html_entity_decode(strip_tags($post->description)); 
+            $post->content = html_entity_decode(strip_tags($post->content)); 
+        }
         return view('admin.post', compact('posts'));
     }
 
@@ -30,22 +34,22 @@ class PostsController extends Controller
 
         return response()->json([
             'title' => $post->title,
-            'description' => $post->description,
-            'content' => $post->content,
+            'description' => html_entity_decode(strip_tags($post->description)), 
+            'content' => html_entity_decode(strip_tags($post->content)), 
             'meta_desc' => $post->meta_desc,
             'url_seo' => $post->url_seo,
             'status' => $post->status,
             'img' => $post->img
         ]);
     }
-   public function encodeId($id)
+    public function encodeId($id)
     {
         $encodedId = IdEncoder::encodeId($id);
         return response()->json(['encoded_id' => $encodedId]);
     }
 
     public function decodeId($encodedId)
-    { 
+    {
         $decodedId = IdEncoder::decodeId($encodedId);
         return response()->json(['decoded_id' => $decodedId]);
     }
@@ -119,7 +123,7 @@ class PostsController extends Controller
 
         return view('admin.search_results_post', compact('results'));
     }
-  
+
     public function editPost($post_id)
     {
         // Giải mã ID
@@ -165,25 +169,49 @@ class PostsController extends Controller
         if (!$post) {
             return redirect()->route('admin.viewpost')->with('error', 'Bài viết không tồn tại.');
         }
+        // Kiểm tra xem updated_at có khớp không
+        if ($post->updated_at != $request->updated_at) {
+            return response()->json(['error' => 'Bài viết đã được cập nhật bởi một người dùng khác. Vui lòng tải lại và thử lại.'], 409);
+        } else {
 
-        $post->title = $request->title;
-        $post->description = $request->description;
-        $post->content = $request->content1;
-        $post->meta_desc = $request->meta_desc;
-        $post->url_seo = $request->url_seo;
-        $post->status = $request->status === '1' ? 1 : 0;
 
-        if ($request->hasFile('fileUpload')) {
-            $file = $request->file('fileUpload');
-            $filename = time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('images'), $filename);
-            $post->img = $filename;
+            $post->title = $request->title;
+            $post->description = $request->description;
+            $post->content = $request->content1;
+            $post->meta_desc = $request->meta_desc;
+            $post->url_seo = $request->url_seo;
+            $post->status = $request->status === '1' ? 1 : 0;
+
+            if ($request->hasFile('fileUpload')) {
+                $file = $request->file('fileUpload');
+                $filename = time() . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path('images'), $filename);
+                $post->img = $filename;
+            }
+
+            $post->save();
+
+            return redirect()->route('admin.viewpost')->with('success', 'Cập nhật bài viết thành công.');
         }
 
-        $post->save();
-
-        return redirect()->route('admin.viewpost')->with('success', 'Cập nhật bài viết thành công.');
     }
 
+    public function getViewBlog()
+    {
+        $posts = Posts::getViewBlogs(); 
+        foreach ($posts as $post) {
+            $post->description = html_entity_decode(strip_tags($post->description)); 
+            $post->content = html_entity_decode(strip_tags($post->content)); 
+        }
+        return view('view_blog', compact('posts'));
+    }
+    public function searchViewBlog(Request $request)
+    {
+        $query = $request->input('query');
+    
+        $posts = Posts::searchPost($query)->get();
+    
+        return response()->json($posts);
+    }
 
 }

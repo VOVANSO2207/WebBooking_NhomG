@@ -6,12 +6,14 @@
             <div class="col-md-12">
                 <div class="card mb-4">
                     <div class="card-body">
-                        <form id="formAccountSettings" method="POST" action="{{ route('room_store') }}" enctype="multipart/form-data">
+                        <form id="formAccountSettings" method="POST" action="{{ route('room_store') }}"
+                            enctype="multipart/form-data">
                             @csrf
                             <div class="row">
                                 <div class="mb-3 col-md-5">
                                     <label class="form-label">Name</label>
-                                    <input class="form-control" type="text" name="name" placeholder="Room Name" required />
+                                    <input class="form-control" type="text" name="name" placeholder="Room Name"
+                                        required />
                                 </div>
                                 <div class="mb-3 col-md-5">
                                     <label class="form-label">Room Type</label>
@@ -23,19 +25,23 @@
                                 </div>
                                 <div class="mb-3 col-md-5">
                                     <label class="form-label">Price Base</label>
-                                    <input class="form-control" type="text" name="price" placeholder="Price Base" required />
+                                    <input class="form-control" type="text" name="price" placeholder="Price Base"
+                                        required />
                                 </div>
                                 <div class="mb-3 col-md-5">
                                     <label class="form-label">Discount Percent</label>
-                                    <input class="form-control" type="text" name="discount_percent" placeholder="Discount Percent" required />
+                                    <input class="form-control" type="text" name="discount_percent"
+                                        placeholder="Discount Percent" required />
                                 </div>
                                 <div class="mb-3 col-md-5">
                                     <label class="form-label">Price Sales</label>
-                                    <input class="form-control" type="text" name="sales_price" placeholder="Price Sales" readonly />
+                                    <input class="form-control" type="text" name="sales_price" placeholder="Price Sales"
+                                        readonly />
                                 </div>
                                 <div class="mb-3 col-md-5">
                                     <label class="form-label">Capacity</label>
-                                    <input class="form-control" type="text" name="capacity" placeholder="Capacity" required />
+                                    <input class="form-control" type="text" name="capacity" placeholder="Capacity"
+                                        required />
                                 </div>
                                 <div class="mb-3 col-md-5">
                                     <label class="form-label">Upload Images</label>
@@ -45,7 +51,9 @@
                                             <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
                                                 <span class="d-none d-sm-block">Upload</span>
                                                 <i class="bx bx-upload d-block d-sm-none"></i>
-                                                <input type="file" id="upload" name="images[]" multiple class="account-file-input" hidden accept="image/png, image/jpeg, image/jpg" />
+                                                <input type="file" id="upload" name="images[]" multiple
+                                                    class="account-file-input" hidden
+                                                    accept="image/png, image/jpeg, image/jpg" />
                                             </label>
                                         </div>
                                     </div>
@@ -54,7 +62,8 @@
                                     <label class="form-label">Room Amenities</label>
                                     <select name="amenities[]" class="form-select select2" multiple="multiple" required>
                                         @foreach ($amenities as $amenity)
-                                            <option value="{{ $amenity->amenity_name }}">{{ $amenity->amenity_name }}</option>
+                                            <option value="{{ $amenity->amenity_id }}">{{ $amenity->amenity_name }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -65,10 +74,12 @@
                             </div>
                             <div class="mt-2" style="text-align: right">
                                 <button type="reset" class="btn btn-outline-secondary">Reset</button>
-                                <button type="button" class="btn btn-outline-danger" onclick="window.location.href='{{ route('admin.viewroom') }}'">Close</button>
+                                <button type="button" class="btn btn-outline-danger"
+                                    onclick="window.location.href='{{ route('admin.viewroom') }}'">Close</button>
                                 <button type="submit" class="btn btn-outline-success me-2">Save</button>
                             </div>
                         </form>
+                   
                     </div>
                 </div>
             </div>
@@ -81,50 +92,52 @@
             CKEDITOR.replace('description', {
                 filebrowserUploadUrl: "path/to/upload/image" // Sửa đường dẫn này cho đúng
             });
-    
+
             // Tính toán Price Sales
             var priceInput = document.querySelector('input[name="price"]');
             var discountInput = document.querySelector('input[name="discount_percent"]');
             var salesPriceInput = document.querySelector('input[name="sales_price"]');
-    
+
             function formatCurrency(value) {
                 return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' VND'; // Định dạng số với dấu phẩy
             }
-    
+
             function calculateSalesPrice() {
                 var price = parseFloat(priceInput.value) || 0;
                 var discountPercent = parseFloat(discountInput.value) || 0;
                 var salesPrice = price * (1 - discountPercent / 100);
-                salesPriceInput.value = formatCurrency(salesPrice.toFixed(0)); // Hiển thị giá giảm với định dạng tiền tệ
+                salesPriceInput.value = formatCurrency(salesPrice.toFixed(
+                    0)); // Hiển thị giá giảm với định dạng tiền tệ
             }
-    
+
             priceInput.addEventListener('input', calculateSalesPrice);
             discountInput.addEventListener('input', calculateSalesPrice);
-    
+
             // Preview ảnh
             document.getElementById('upload').addEventListener('change', function(event) {
                 var imagePreviewContainer = document.getElementById('imagePreviewContainer');
                 var files = event.target.files;
-    
+
                 // Xóa các ảnh cũ
                 imagePreviewContainer.innerHTML = '';
-    
+
                 if (files.length === 0) {
-                    alert("Vui lòng tải lên ảnh của khách sạn (PNG, JPG)"); // Hiển thị thông báo nếu không có ảnh
+                    alert(
+                        "Vui lòng tải lên ảnh của khách sạn (PNG, JPG)"); // Hiển thị thông báo nếu không có ảnh
                     return; // Dừng lại nếu không có tệp nào
                 }
-    
+
                 let validFiles = true; // Biến để theo dõi xem tất cả các tệp có hợp lệ không
                 for (let i = 0; i < files.length; i++) {
                     const file = files[i];
                     const fileExtension = file.name.split('.').pop().toLowerCase(); // Lấy phần mở rộng của tệp
-    
+
                     // Kiểm tra định dạng tệp
                     if (fileExtension !== 'png' && fileExtension !== 'jpg' && fileExtension !== 'jpeg') {
                         validFiles = false; // Đánh dấu là không hợp lệ nếu có tệp không hợp lệ
                         break; // Ngừng kiểm tra khi tìm thấy tệp không hợp lệ
                     }
-    
+
                     // Nếu tệp hợp lệ, hiển thị hình ảnh
                     let reader = new FileReader();
                     reader.onload = function(e) {
@@ -138,7 +151,7 @@
                     };
                     reader.readAsDataURL(file);
                 }
-    
+
                 // Hiển thị thông báo lỗi nếu có tệp không hợp lệ
                 if (!validFiles) {
                     alert("Định dạng ảnh không hợp lệ. Vui lòng tải lên ảnh định dạng PNG hoặc JPG."); // 
@@ -148,7 +161,7 @@
                     event.target.value = '';
                 }
             });
-    
+
             // Kiểm tra khi gửi biểu mẫu
             document.getElementById('formAccountSettings').addEventListener('submit', function(event) {
                 var files = document.getElementById('upload').files;
@@ -159,5 +172,4 @@
             });
         };
     </script>
-    
 @endsection

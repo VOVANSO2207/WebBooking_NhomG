@@ -1,0 +1,22 @@
+ /* footer */
+ .text-muted {
+     font-size: 16px;
+     font-weight: 500;
+     opacity: .7;
+ }
+
+ .footer-f a:hover {
+     color: #3B79C9;
+ }
+
+ .footer-f a {
+     text-decoration: none;
+     color: #000;
+     opacity: .7;
+     font-weight: 700;
+     transition: color 200ms ease
+ }
+
+ .f- {
+     scale: 0.9;
+ }

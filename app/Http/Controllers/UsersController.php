@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Roles;
 use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -11,229 +13,183 @@ use Illuminate\Validation\ValidationException;
 class UsersController extends Controller
 
 {
-    // Hiển thị danh sách người dùng
-    // Hiển thị danh sách người dùng với phân trang
-    // Hiển thị danh sách người dùng với phân trang và sắp xếp
-    public function index()
+    public function viewUser()
     {
-        $users = User::orderBy('username')->paginate(5); // Sắp xếp theo username và phân trang 5 người dùng mỗi trang
-        return view('admin.user', ['users' => $users]); // Trả về view với dữ liệu người dùng
+        $users = User::getAllUsers();
+        return view('admin.user', compact('users'));
     }
 
-
-    // Hiển thị form thêm người dùng mới
     public function userAdd()
     {
-        return view('admin.user.user_add'); // Trả về view form thêm người dùng
+        // Lấy tất cả vai trò từ bảng roles
+        $roles = Roles::all();
+
+        return view('admin.user_add', compact('roles'));
     }
 
-    // Xử lý khi thêm người dùng mới
-    public function storeUser(Request $request)
+    public function getUserDetail($user_id)
     {
-        // Xác thực dữ liệu
-        $validator = Validator::make($request->all(), [
-            'username' => 'required|string|regex:/^[a-zA-Z0-9]*$/|min:6|max:25|not_regex:/\s/',
-            'email' => 'required|string|email|max:255|unique:users|regex:/^[^\s@]+@[^\s@]+\.[^\s@]+$/',
-            'password' => 'required|string|min:8|regex:/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/',
-            'phone_number' => 'required|string|min:10|max:15|regex:/^\d+$/',
-            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        $user = User::findUserById($user_id);
+
+        if (!$user) {
+            return response()->json(['error' => 'Người dùng không tồn tại'], 404);
+        }
+
+        return response()->json([
+            'username' => $user->username,
+            'email' => $user->email,
+            'phone_number' => $user->phone_number,
+            'role_id' => $user->role->role_name ?? 'N/A',
+            'status' => $user->status,
+            'avatar' => $user->avatar
+        ]);
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'username' => 'required|min:3|max:50|unique:users,username',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:8',
+            'phone_number' => 'required|regex:/^0[0-9]{9}$/',
+            'role_id' => 'required|integer',
+            'status' => 'required|boolean',
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg|max:20480', // Kích thước tối đa 20MB
         ], [
-            'username.required' => 'Vui lòng nhập tên tài khoản',
-            'username.regex' => 'Tên tài khoản không chứa kí tự đặc biệt',
-            'username.min' => 'Tên đăng nhập phải có từ 6 đến 25 ký tự.',
-            'username.max' => 'Tên đăng nhập phải có từ 6 đến 25 ký tự.',
-            'username.not_regex' => 'Tên đăng nhập không được chứa khoảng trắng.',
-            'email.required' => 'Vui lòng nhập địa chỉ email',
-            'email.email' => 'Địa chỉ email không hợp lệ',
-            'email.unique' => 'Địa chỉ email này đã tồn tại. Vui lòng sử dụng địa chỉ khác.',
+            'username.required' => 'Vui lòng nhập tên người dùng',
+            'username.min' => 'Tên người dùng phải có ít nhất 3 ký tự',
+            'username.max' => 'Tên người dùng không được quá 50 ký tự',
+            'username.unique' => 'Tên người dùng đã tồn tại',
+            'email.required' => 'Vui lòng nhập email',
+            'email.email' => 'Email không hợp lệ',
+            'email.unique' => 'Email đã tồn tại',
             'password.required' => 'Vui lòng nhập mật khẩu',
-            'password.min' => 'Mật khẩu phải chứa ít nhất 8 ký tự, bao gồm cả chữ và số',
-            'password.regex' => 'Mật khẩu phải chứa ít nhất một ký tự đặc biệt (ví dụ: @, #, $, %, etc.)',
+            'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự',
             'phone_number.required' => 'Vui lòng nhập số điện thoại',
-            'phone_number.regex' => 'Số điện thoại không hợp lệ. Vui lòng nhập số điện thoại di động gồm 10 chữ số hoặc số điện thoại cố định theo định dạng đúng. Đảm bảo rằng số điện thoại bao gồm mã mạng và không chứa ký tự đặc biệt'
+            'phone_number.regex' => 'Số điện thoại không hợp lệ',
+            'role_id.required' => 'Vui lòng chọn vai trò',
+            'status.required' => 'Trạng thái là bắt buộc',
+            'avatar.image' => 'Ảnh phải là định dạng JPEG, PNG, hoặc JPG.',
+            'avatar.max' => 'Kích thước ảnh không được vượt quá 20MB.',
         ]);
 
-        // Kiểm tra xem có lỗi xác thực không
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-
-        // Xử lý ảnh đại diện (avatar)
-        if ($request->hasFile('avatar')) {
-            // Tạo tên ảnh duy nhất
-            $avatarName = time() . '_' . $request->file('avatar')->getClientOriginalName();
-            // Di chuyển ảnh đến thư mục 'public/images'
-            $request->file('avatar')->move(public_path('images'), $avatarName);
-        } else {
-            $avatarName = 'default-avatar.png';
-        }
-
-        // Lưu người dùng mới vào CSDL
         $user = new User();
         $user->username = $request->username;
         $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-        $user->phone_number = $request->phone_number;
-        $user->role_id = 2;
-        $user->status = true;
-        $user->avatar = $avatarName;
-        $user->save();
-
-        return redirect()->route('admin.viewuser')->with('success', 'User added successfully!');
-    }
-
-
-    public function searchUsers(Request $request)
-    {
-        $query = $request->input('query');
-
-        // Tìm kiếm người dùng theo username hoặc email và phân trang
-        $users = User::where('username', 'LIKE', "%{$query}%")
-            ->orWhere('email', 'LIKE', "%{$query}%")
-            ->paginate(5); // Phân trang 5 người dùng mỗi trang
-
-        return view('admin.user', ['users' => $users]); // Trả về view với dữ liệu tìm kiếm
-    }
-    public function show($id)
-    {
-        $user = User::findOrFail($id);
-        return view('admin.user.show', compact('user')); // Trả về view chi tiết người dùng
-    }
-
-    public function edit($id)
-    {
-        $user = User::findOrFail($id);
-        return view('admin.user.edit', compact('user')); // Trả về view chỉnh sửa người dùng
-    }
-
-    public function destroy($id)
-    {
-        $user = User::findOrFail($id);
-        $user->delete();
-        return redirect()->route('admin.viewuser')->with('success', 'User deleted successfully!'); // Chuyển hướng về danh sách sau khi xóa
-    }
-    public function update(Request $request, $id)
-    {
-        $user = User::findOrFail($id);
-
-        // Xác thực dữ liệu nhập vào
-        $validator = Validator::make($request->all(), [
-            'username' => 'required|string|regex:/^[a-zA-Z0-9]*$/|min:6|max:25|not_regex:/\s/',
-            'email' => 'required|string|email|max:255|regex:/^[^\s@]+@[^\s@]+\.[^\s@]+$/',
-            'phone_number' => 'required|string|min:10|max:15|regex:/^\d+$/',
-            'role_id' => 'required|integer',
-            'status' => 'required|boolean',
-            'avatar' => 'nullable|image|max:20480',
-            'password' => [
-                'nullable',
-                'string',
-                'min:8',
-                'regex:/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/',
-                'not_regex:/^[^\w]*$/'
-            ]
-        ], [
-            'username.required' => 'Vui lòng nhập tên tài khoản',
-            'username.regex' => 'Tên tài khoản không chứa kí tự đặc biệt',
-            'username.min' => 'Tên đăng nhập phải có từ 6 đến 25 ký tự.',
-            'username.max' => 'Tên đăng nhập phải có từ 6 đến 25 ký tự.',
-            'username.not_regex' => 'Tên đăng nhập không được chứa khoảng trắng.',
-            'phone_number.required' => 'Vui lòng nhập số điện thoại',
-            'phone_number.regex' => 'Số điện thoại không hợp lệ.',
-            'password.min' => 'Mật khẩu phải chứa ít nhất 8 ký tự, bao gồm cả chữ và số.',
-            'password.regex' => 'Mật khẩu phải chứa ít nhất một chữ cái, một số, và một ký tự đặc biệt.',
-            'password.not_regex' => 'Mật khẩu không được chỉ bao gồm ký tự đặc biệt, phải có cả chữ cái và số.',
-            'email.required' => 'Vui lòng nhập địa chỉ email',
-            'email.email' => 'Địa chỉ email không hợp lệ',
-            'email.unique' => 'Địa chỉ email này đã tồn tại. Vui lòng sử dụng địa chỉ khác.'
-        ]);
-
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-
-        // Cập nhật thông tin người dùng
-        $user->username = $request->username;
-        $user->email = $request->email; // Vẫn giữ dòng này để cập nhật email
+        $user->password = bcrypt($request->password);
         $user->phone_number = $request->phone_number;
         $user->role_id = $request->role_id;
         $user->status = $request->status;
 
-        // Kiểm tra nếu có mật khẩu mới được nhập
-        if ($request->filled('password')) {
-            $user->password = Hash::make($request->password);
-        }
-
-        // Xử lý ảnh đại diện
+        // Xử lý upload ảnh
         if ($request->hasFile('avatar')) {
-            // Xóa ảnh cũ nếu có
-            if ($user->avatar && file_exists(public_path('images/' . $user->avatar))) {
-                unlink(public_path('images/' . $user->avatar));
-            }
-
-            // Lưu trữ ảnh mới
-            $avatarFile = $request->file('avatar');
-            $avatarName = time() . '_' . $avatarFile->getClientOriginalName();
-            $avatarFile->move(public_path('images'), $avatarName);
-            $user->avatar = $avatarName;
+            // Lưu ảnh vào thư mục public/images
+            $avatarName = time() . '.' . $request->avatar->extension();
+            $request->avatar->move(public_path('images'), $avatarName);
+            $user->avatar = $avatarName; // Lưu tên ảnh vào cơ sở dữ liệu
+        } else {
+            $user->avatar = 'default-avatar.png';
         }
 
         $user->save();
 
-        return redirect()->route('admin.viewuser')->with('success', 'User updated successfully!');
+        return redirect()->route('admin.viewuser')->with('success', 'Thêm người dùng thành công.');
     }
-    public function register(Request $request)
+
+    public function deleteUser($user_id)
     {
-        // Xác thực dữ liệu đầu vào
-        $validatedData = $request->validate([
-            'username' => 'required|string|max:25',
-            'email' => 'required|string|email|max:255|min:5|regex:/^[^@.]+@[A-Za-z0-9-]+\.[A-Za-z0-9-]+$/',
-            'phone_number' => 'required|string|regex:/^0[0-9]{9}$/',
-            'password' => 'required|string|min:8|confirmed',
+        $user = User::find($user_id);
+        if ($user) {
+            $user->delete();
+            return response()->json(['success' => true, 'message' => 'Người dùng đã được xóa.']);
+        }
+
+        return response()->json(['success' => false, 'message' => 'Người dùng không tồn tại.'], 404);
+    }
+
+    public function search(Request $request)
+    {
+        $keyword = $request->get('search');
+        $results = User::where('username', 'LIKE', '%' . $keyword . '%')
+            ->orWhere('email', 'LIKE', '%' . $keyword . '%')
+            ->paginate(5);
+
+        return view('admin.search_results_user', compact('results'));
+    }
+
+
+    public function editUser($user_id)
+    {
+        $user = User::findUserById($user_id);
+
+        if (!$user) {
+            return redirect()->route('admin.viewuser')->with('error', 'Người dùng không tồn tại.');
+        }
+
+        // Lấy tất cả vai trò từ bảng roles
+        $roles = Roles::all();
+
+        return view('admin.user_edit', compact('user', 'roles'));
+    }
+
+    public function update(Request $request, $user_id)
+    {
+        $request->validate([
+            'username' => 'required|min:3|max:50|unique:users,username,' . $user_id . ',user_id',
+            'email' => 'required|email|unique:users,email,' . $user_id . ',user_id',
+            'password' => 'nullable|min:8|confirmed', // Chỉ yêu cầu khi có giá trị
+            'phone_number' => 'required|regex:/^0[0-9]{9}$/',
+            'role_id' => 'required|integer',
+            'status' => 'required|boolean',
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg|max:20480', // Kích thước tối đa 20MB
         ], [
-            'username.required' => 'Vui lòng nhập tên đăng nhập.',
-            'username.max' => 'Tên đăng nhập không được vượt quá 25 ký tự.',
-            'email.required' => 'Vui lòng nhập địa chỉ email.',
-            'email.email' => 'Địa chỉ email không hợp lệ.',
-            'email.max' => 'Địa chỉ email không được dài quá 255 ký tự.',
-            'email.min' => 'Địa chỉ email phải từ 5 ký tự trở lên.',
-            'email.regex' => 'Địa chỉ email không đúng định dạng.',
-            'phone_number.required' => 'Vui lòng nhập số điện thoại.',
-            'phone_number.regex' => 'Số điện thoại hợp lệ là ký tự số bắt đầu bằng 0 và có 10 chữ số.',
-            'password.required' => 'Vui lòng nhập mật khẩu.',
-            'password.confirmed' => 'Vui lòng xác nhận lại mật khẩu.',
-        ]);
-       
-        // Đăng ký người dùng mới
-        $user = User::register($request->all());
-        $user->save();
-        return redirect()->route('login')->with('success', 'Đăng ký thành công! Bạn có thể đăng nhập.');
-    }
-    public function login(Request $request)
-    {
-        // Validate dữ liệu
-        $credentials = $request->validate([
-            'login' => 'required|string',
-            'password' => 'required|string',
+            'username.required' => 'Vui lòng nhập tên người dùng',
+            'username.min' => 'Tên người dùng phải có ít nhất 3 ký tự',
+            'username.max' => 'Tên người dùng không được quá 50 ký tự',
+            'username.unique' => 'Tên người dùng đã tồn tại',
+            'email.required' => 'Vui lòng nhập email',
+            'email.email' => 'Email không hợp lệ',
+            'email.unique' => 'Email đã tồn tại',
+            'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự',
+            'password.confirmed' => 'Mật khẩu không khớp',
+            'phone_number.required' => 'Vui lòng nhập số điện thoại',
+            'phone_number.regex' => 'Số điện thoại không hợp lệ',
+            'role_id.required' => 'Vui lòng chọn vai trò',
+            'status.required' => 'Trạng thái là bắt buộc',
+            'avatar.image' => 'Ảnh phải là định dạng JPEG, PNG, hoặc JPG.',
+            'avatar.max' => 'Kích thước ảnh không được vượt quá 20MB.',
         ]);
 
-        // Thử đăng nhập bằng username hoặc email
-        try {
-            $user = User::login($credentials); // Gọi hàm login từ model
-            Auth::login($user); // Đăng nhập người dùng
-    
-            // Kiểm tra vai trò và điều hướng đến trang tương ứng
-            switch ($user->role_id) {
-                case 1: // Giả sử role_id 1 là admin
-                    return redirect()->route('admin'); // Chuyển hướng đến trang dashboard
-                case 2: // Giả sử role_id 2 là user
-                    return redirect()->route('home'); // Chuyển hướng đến trang welcome
-                default: // Các quyền khác
-                    return redirect()->route('error'); // Chuyển hướng đến trang lỗi
-            }
-        } catch (ValidationException $e) {
-            return back()->withErrors($e->validator->errors())->withInput(); // Trả về lỗi nếu có
+        $user = User::find($user_id);
+        if (!$user) {
+            return redirect()->route('admin.viewuser')->with('error', 'Người dùng không tồn tại.');
         }
+
+        // Cập nhật các trường khác
+        $user->username = $request->username;
+        $user->email = $request->email;
+        
+        // Chỉ cập nhật mật khẩu nếu có giá trị
+        if ($request->filled('password')) {
+            $user->password = bcrypt($request->password);
+        }
+
+        $user->phone_number = $request->phone_number;
+        $user->role_id = $request->role_id;
+        $user->status = $request->status;
+
+        // Xử lý avatar
+        if ($request->hasFile('avatar')) {
+            // Lưu ảnh vào thư mục public/images
+            $avatarName = time() . '.' . $request->avatar->extension();
+            $request->avatar->move(public_path('images'), $avatarName);
+            $user->avatar = $avatarName; // Cập nhật tên ảnh vào trường avatar
+        }
+
+        $user->save();
+
+        return redirect()->route('admin.viewuser')->with('success', 'Cập nhật người dùng thành công.');
     }
+
 
 }

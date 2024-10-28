@@ -31,7 +31,7 @@
                             <div class="mb-3 col-md-12">
                                 <label class="form-label">Title</label>
                                 <input class="form-control" type="text" name="title" id="title"
-                                    value="{{ old('title', $post->title) }}" placeholder="Title" required />
+                                    value="{{ old('title', $post->title) }}" placeholder="Title" />
                                 @error('title')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -39,7 +39,7 @@
                             <div class="mb-3 col-md-12">
                                 <label class="form-label">Description</label>
                                 <textarea name="description" id="description"
-                                    required>{{ old('description', $post->description) }}</textarea>
+                                    required>{{ old('title', $post->description) }}</textarea>
                                 @error('description')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -47,7 +47,7 @@
                             <div class="mb-3 col-md-12">
                                 <label class="form-label">Content</label>
                                 <textarea name="content1" id="content1"
-                                    required>{{ old('content1', $post->content) }}</textarea>
+                                    required>{{ old('title', $post->content) }}</textarea>
                                 @error('content1')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -75,6 +75,8 @@
                                 <input class="form-control" type="text" id="url_seo" name="url_seo"
                                     value="{{ old('url_seo', $post->url_seo) }}" placeholder="Url Seo" readonly />
                             </div>
+                            <input class="form-control" type="hidden" id="updated_at" name="updated_at"
+                                value="{{ old('update_at', $post->updated_at) }}" />
                         </div>
 
                         <div class="mt-2" style="text-align: right">
@@ -90,6 +92,24 @@
     </div>
 </div>
 <!-- / Content -->
+<!-- Modal xung đột cập nhật -->
+<div class="modal fade" id="conflictModal" tabindex="-1" aria-labelledby="conflictModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="conflictModalLabel">Thông báo xung đột cập nhật</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Bài viết đã được cập nhật bởi một người dùng khác. Vui lòng tải lại và thử lại.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" onclick="location.reload()">Tải lại trang</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Modal Không có cập nhật nào -->
 <div class="modal fade" id="noUpdateModal" tabindex="-1" aria-labelledby="noUpdateModalLabel" aria-hidden="true">
@@ -130,17 +150,27 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-<script>
-    CKEDITOR.replace('content1', {
+<script>  CKEDITOR.replace('content1', {
         filebrowserUploadUrl: "path/to/upload/image"
     });
 
     CKEDITOR.replace('description', {
         filebrowserUploadUrl: "path/to/upload/image"
     });
+</script>
+<script>
+    let initialContent = '';
+    let initialDescription1 = '';
+    // Lưu nội dung ban đầu khi CKEditor được tải lần đầu
+    CKEDITOR.instances.content1.on('instanceReady', function () {
+        initialContent = CKEDITOR.instances.content1.getData();
+    });
+    CKEDITOR.instances.description.on('instanceReady', function () {
+        initialDescription1 = CKEDITOR.instances.description.getData();
+    });
+
+
     $(document).ready(function () {
-
-
         let isChanged = false; // Biến để theo dõi sự thay đổi
 
         function resetForm() {
@@ -168,11 +198,12 @@
             var content = CKEDITOR.instances.content1.getData();
             var meta_desc = $('#meta_desc').val();
             var statusValue = $('#status option:selected').val();
+            var updated_at = $('#updated_at').val();
 
             if (
                 title !== '{{ addslashes(old('title', $post->title)) }}' ||
-                description !== '{{ addslashes(old('description', $post->description)) }}' ||
-                content !== '{{ addslashes(old('content1', $post->content)) }}' ||
+                description !== initialDescription1 ||
+                content !== initialContent ||
                 meta_desc !== '{{ addslashes(old('meta_desc', $post->meta_desc)) }}' ||
                 statusValue !== '{{ $post->status }}'
             ) {
@@ -198,10 +229,8 @@
 
         $('#postForm').on('submit', function (event) {
             event.preventDefault();
-
-
             if (!isChanged) {
-
+                console.log(updated_at);
                 const noUpdateModal = new bootstrap.Modal(document.getElementById('noUpdateModal'));
                 noUpdateModal.show();
                 return;
@@ -220,13 +249,7 @@
                 contentType: false,
                 processData: false,
                 success: function (response) {
-                    CKEDITOR.replace('content1', {
-                        filebrowserUploadUrl: "path/to/upload/image"
-                    });
 
-                    CKEDITOR.replace('description', {
-                        filebrowserUploadUrl: "path/to/upload/image"
-                    });
                     const updateSuccessModal = new bootstrap.Modal(document.getElementById('updateSuccessModal'));
                     updateSuccessModal.show();
 
@@ -235,15 +258,18 @@
                     }, 2000);
                 },
                 error: function (xhr) {
-                    // Xóa lỗi cũ trước đó
-                    $('.text-danger').remove();
-
-                    // Xử lý lỗi
-                    var errors = xhr.responseJSON.errors;
-                    for (var key in errors) {
-                        if (errors.hasOwnProperty(key)) {
-                            var errorDiv = $('<div class="text-danger"></div>').text(errors[key][0]);
-                            $('[name="' + key + '"]').after(errorDiv);
+                    if (xhr.status === 409) {
+                        const conflictModal = new bootstrap.Modal(document.getElementById('conflictModal'));
+                        conflictModal.show();
+                    } else {
+                        // Xử lý các lỗi khác
+                        $('.text-danger').remove();
+                        var errors = xhr.responseJSON.errors;
+                        for (var key in errors) {
+                            if (errors.hasOwnProperty(key)) {
+                                var errorDiv = $('<div class="text-danger"></div>').text(errors[key][0]);
+                                $('[name="' + key + '"]').after(errorDiv);
+                            }
                         }
                     }
                 }

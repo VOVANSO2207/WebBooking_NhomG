@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<link rel="stylesheet" href="{{asset('css/login.css')}}">
     <div class="card-header text-center py-3 header">
         <h2 class="mb-0">STAYNEST</h2>
     </div>
@@ -8,11 +9,11 @@
     <main class="container login-container">
         <div class="row justify-content-center">
             <div class="col-md-6 col-lg-5">
-                <div class="card">
+                <div class="card ">
                     <div class="card-body p-4">
                         <form method="POST" action="{{ route('auth.login') }}">
                             @csrf <!-- Bảo vệ CSRF -->
-
+                            
                             <h4 class="typing-effect"></h4>
 
                             <label for="floatingInput">Email hoặc Username</label>
@@ -22,6 +23,9 @@
                                 @error('login')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
+                                @error('status')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                             </div>
 
                             <label for="floatingPassword">Mật khẩu</label>
@@ -74,7 +78,7 @@
         function togglePasswordVisibility(fieldId, iconId) {
             const passwordField = document.getElementById(fieldId);
             const icon = document.getElementById(iconId).querySelector('i');
-
+            
             if (passwordField.type === 'password') {
                 passwordField.type = 'text';
                 icon.classList.remove('fa-eye');

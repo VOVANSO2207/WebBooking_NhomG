@@ -1,0 +1,113 @@
+.payment {
+    scale: 0.9;
+}
+
+/* hotel-info */
+.title-pay h4 {
+    font-weight: 700;
+}
+
+.hotel-image img {
+    border-radius: 20px;
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+
+.hotel-card {
+    border-radius: 20px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.hotel-row {
+    align-items: center;
+}
+
+.hotel-name {
+    font-weight: 900;
+}
+
+.hotel-rating {
+    color: yellow;
+    font-size: 20px;
+}
+
+.check-details div .label {
+    font-weight: 700;
+}
+
+.check-details div .info {
+    opacity: .7;
+}
+
+/* Thông tin liên hệ */
+.contact-form {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.contact-form h3 {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.form-control {
+    border-radius: 8px !important;
+    padding: 13px !important;
+    font-size: 14px !important;
+}
+
+.form-label {
+    font-weight: 500;
+    font-size: 16px;
+    opacity: .7;
+}
+
+/* Slider */
+.slider {
+    position: relative;
+    max-width: 600px;
+    margin: auto;
+    overflow: hidden;
+}
+
+.slides {
+    display: flex;
+    transition: transform 0.5s ease;
+}
+
+.slide {
+    min-width: 100%;
+    box-sizing: border-box;
+}
+
+.slide img {
+    width: 100%;
+    display: block;
+    height: 200px;
+    object-fit: cover;
+}
+
+.prev,
+.next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.7);
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    z-index: 1000;
+}
+
+.prev {
+    left: 10px;
+}
+
+.next {
+    right: 10px;
+}
+
+/*  */

@@ -2,7 +2,7 @@
     use App\Helpers\IdEncoder;
 @endphp
 @forelse ($results as $index => $post)
-    <tr class="post-detail1" data-id="{{ IdEncoder::encodeId($post->post_id) }}">
+    <tr class="post-detail1" data-id="{{ IdEncoder::encodeId($post->post_id) }}" data-updated-at="{{ $post->updated_at }}">
         <td>{{ $index + 1 }}</td>
         <td>
             <img src="{{ asset('images/' . $post->img) }}" alt="{{ $post->title }}" style="width: 100px; height: auto;">
@@ -28,12 +28,12 @@
 
     $(document).ready(function () {
         let currentPostId = null; // Lưu ID bài viết hiện tại
-
+        let currentUpdatedAt = null; // Biến lưu updated_at
         // Khi người dùng nhấn vào một bài viết
         $('.post-detail1 td').on('click', function () {
-            currentPostId = $(this).closest('tr').data('id');
-            console.log(`/posts/${currentPostId}/detail`);
-
+            const $row = $(this).closest('tr'); // Lấy hàng tương ứng
+            currentPostId = $row.data('id');
+            currentUpdatedAt = $row.data('updated-at'); // Lấy updated_at
             // Gọi AJAX để lấy thông tin chi tiết bài viết
             $.ajax({
                 url: `/posts/${currentPostId}/detail`,
@@ -75,19 +75,21 @@
             if (currentPostId) {
                 // Sử dụng tên route để tạo URL
                 const deleteRoute = "{{ route('post.delete', ['post_id' => ':id']) }}".replace(':id', currentPostId);
-
                 $.ajax({
                     url: deleteRoute,
                     method: 'DELETE',
                     headers: {
                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
                     },
+                    data: JSON.stringify({ updated_at: currentUpdatedAt }),
+                    contentType: 'application/json', // Đảm bảo rằng content type là JSON
                     success: function (response) {
                         alert("Xoá Bài Viết Thành Công");
-                        location.reload(); // Tải lại trang sau khi xóa thành công
+                        location.reload();
                     },
                     error: function (xhr, status, error) {
                         console.error('Có lỗi xảy ra khi xóa bài viết:', error);
+                        alert('Có lỗi xảy ra: ' + xhr.responseText); // Hiện thông báo lỗi
                     }
                 });
             }
