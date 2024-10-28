@@ -102,7 +102,7 @@ class PromotionsController extends Controller
 
             return response()->json(['success' => 'Voucher được tạo thành công'], 200);
         } catch (\Exception $e) {
-            \Log::error('Error creating voucher: ' . $e->getMessage());
+            // \Log::error('Error creating voucher: ' . $e->getMessage());
             return response()->json(['error' => 'Đã có lỗi xảy ra trong quá trình lưu.'], 500);
         }
     }
