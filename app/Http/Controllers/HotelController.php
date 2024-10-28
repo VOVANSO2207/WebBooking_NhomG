@@ -147,23 +147,25 @@ class HotelController extends Controller
             }
         }
 
-        // Lưu tiện nghi khách sạn
+       // Lưu tiện nghi khách sạn
         if ($request->has('amenities')) {
             foreach ($request->amenities as $amenityId) {
                 // Tìm tiện nghi dựa trên amenity_id
                 $amenity = HotelAmenities::find($amenityId);
-                
+
                 // Kiểm tra nếu tiện nghi tồn tại
                 if ($amenity) {
+                    // Tạo bản ghi mới với description chính xác
                     HotelAmenities::create([
-                        'hotel_id' => $hotel->hotel_id, // Sử dụng id của khách sạn vừa được tạo
+                        'hotel_id' => $hotel->hotel_id,
                         'amenity_id' => $amenityId,
-                        'amenity_name' => $amenity->amenity_name, // Lấy tên tiện nghi từ database
-                        'description' => $request->input('description'),
+                        'amenity_name' => $amenity->amenity_name,
+                        'description' => $amenity->description, // Lấy description từ chính bản ghi tiện nghi
                     ]);
                 }
             }
         }
+
         
 
         return redirect()->route('admin.viewhotel')->with('success', 'Thêm khách sạn thành công.');

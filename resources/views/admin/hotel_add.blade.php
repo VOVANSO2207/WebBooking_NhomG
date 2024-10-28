@@ -39,29 +39,31 @@
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="mb-3 col-md-5">
-                            <label class="form-label">Hotel Amenities</label>
-                        <select name="amenities[]" class="form-select select2" id="amenities" multiple="multiple" required>
-                            @php
-                                $amenityNames = []; // Mảng để theo dõi tên tiện nghi đã hiển thị
-                            @endphp
-                            @foreach ($hotelAmenities as $amenity)
-                                @if (!in_array($amenity->amenity_name, $amenityNames)) // Kiểm tra nếu tên chưa được thêm vào
-                                    <option value="{{ $amenity->amenity_id }}" data-name="{{ $amenity->amenity_name }}" data-description="{{ $amenity->description }}">
-                                        {{ $amenity->amenity_name }}
-                                    </option>
-                                    @php
-                                        $amenityNames[] = $amenity->amenity_name; // Thêm tên tiện nghi vào mảng
-                                    @endphp
-                                @endif
-                            @endforeach
-                        </select>
+                            <!-- HTML Code -->
+<div class="mb-3 col-md-5">
+    <label class="form-label">Hotel Amenities</label>
+    <select name="amenities[]" class="form-select select2" id="amenities" multiple="multiple" onchange="updateDescriptions()" required>
+        @php
+            $amenityNames = []; // Mảng để theo dõi tên tiện nghi đã hiển thị
+        @endphp
+        @foreach ($hotelAmenities as $amenity)
+            @if (!in_array($amenity->amenity_name, $amenityNames))
+                <option value="{{ $amenity->amenity_id }}" 
+                        data-name="{{ $amenity->amenity_name }}" 
+                        data-description="{{ $amenity->description }}">
+                    {{ $amenity->amenity_name }}
+                </option>
+                @php
+                    $amenityNames[] = $amenity->amenity_name; // Thêm tên tiện nghi vào mảng
+                @endphp
+            @endif
+        @endforeach
+    </select>
+</div>
 
-                        </div>
-
-                        <!-- Các trường ẩn để lưu trữ thông tin tiện nghi -->
-                        <input type="hidden" name="amenity_names[]" id="amenity_names">
-                        <input type="hidden" name="descriptions[]" id="descriptions">
+<!-- Các trường ẩn để lưu trữ thông tin tiện nghi -->
+<input type="hidden" name="amenity_names[]" id="amenity_names">
+<input type="hidden" name="descriptions[]" id="descriptions">
 
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Description</label>
@@ -72,12 +74,13 @@
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Rating</label>
-                                <input class="form-control" type="number" name="rating" id="rating" min="1" max="5"
+                                <input class="form-control" type="number" name="rating" id="rating" min="1" max="5" step="0.1"
                                     value="{{ old('rating') }}" placeholder="Rating" required />
                                 @error('rating')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
+
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Upload Images</label>
                                 <div class="d-flex align-items-start align-items-sm-center gap-4">
@@ -156,19 +159,29 @@ document.getElementById('upload').addEventListener('change', function(event) {
 });
 
 function updateDescriptions() {
-    const descriptionsInput = document.getElementById('descriptions');
-    const amenitiesSelect = document.getElementById('amenities');
-    const selectedOptions = Array.from(amenitiesSelect.selectedOptions); // Lấy tất cả các tùy chọn đã chọn
-    const descriptions = []; // Khởi tạo mảng để lưu trữ mô tả
+        const descriptionsInput = document.getElementById('descriptions');
+        const amenityNamesInput = document.getElementById('amenity_names');
+        const amenitiesSelect = document.getElementById('amenities');
+        const selectedOptions = Array.from(amenitiesSelect.selectedOptions);
+        
+        const descriptions = [];
+        const amenityNames = [];
 
-    // Lấy mô tả từ các tùy chọn đã chọn
-    selectedOptions.forEach(option => {
-        descriptions.push(option.getAttribute('data-description')); // Lấy description từ bảng tiện nghi
-    });
+        // Lấy các thông tin từ các tùy chọn đã chọn
+        selectedOptions.forEach(option => {
+            const description = option.getAttribute('data-description'); // Lấy description từ bảng tiện nghi
+            const name = option.getAttribute('data-name');
+            
+            if (description) {
+                descriptions.push(description); // Chỉ thêm khi có description từ bảng tiện nghi
+                amenityNames.push(name);
+            }
+        });
 
-    // Gán các mô tả vào trường ẩn
-    descriptionsInput.value = descriptions.join(', '); // Nối các mô tả với dấu phẩy
-}
+        // Gán các giá trị vào các trường ẩn
+        descriptionsInput.value = descriptions.join(', '); // Nối các mô tả với dấu phẩy
+        amenityNamesInput.value = amenityNames.join(', '); // Nối các tên tiện nghi với dấu phẩy
+    }
 
 </script>
 
