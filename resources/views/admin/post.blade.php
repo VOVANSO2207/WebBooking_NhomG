@@ -154,104 +154,109 @@
     </div>
 </div>
 
+<!-- Modal thông báo xóa bài viết thành công -->
+<div class="modal fade" id="successDeleteModal" tabindex="-1" aria-labelledby="successDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="successDeleteModalLabel">Thành công</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Bài viết đã được xóa thành công.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal thông báo lỗi khi xóa bài viết -->
+<div class="modal fade" id="errorDeleteModal" tabindex="-1" aria-labelledby="errorDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="errorDeleteModalLabel">Lỗi</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Không thể xóa bài viết do có xung đột. Vui lòng cập nhật lại và thử lại.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
+   document.addEventListener('DOMContentLoaded', function () {
+    const postDetailRows = document.querySelectorAll('.post-detail');
+    let currentPostId = null;
 
+    postDetailRows.forEach(row => {
+        row.addEventListener('click', function () {
+            currentPostId = this.getAttribute('data-id');
 
-    document.addEventListener('DOMContentLoaded', function () {
-        const postDetailRows = document.querySelectorAll('.post-detail');
-        let currentPostId = null; // Lưu ID bài viết hiện tại
+            fetch(`/posts/${currentPostId}/detail`)
+                .then(response => response.json())
+                .then(post => {
+                    const limitText = (text, maxLength = 10) => {
+                        return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+                    };
 
-        // Khi người dùng nhấn vào một bài viết
-        postDetailRows.forEach(row => {
-            row.addEventListener('click', function () {
-                currentPostId = this.getAttribute('data-id'); // Lưu ID bài viết hiện tại
-                console.log(`/posts/${currentPostId}/detail`);
+                    document.getElementById('modalTitle').innerText = limitText(post.title);
+                    document.getElementById('modalDescription').innerText = limitText(post.description);
+                    document.getElementById('modalContent').innerText = limitText(post.content);
+                    document.getElementById('modalMetaDesc').innerText = limitText(post.meta_desc);
+                    document.getElementById('modalUrlSeo').innerText = limitText(post.url_seo);
+                    document.getElementById('modalStatus').innerText = post.status ? 'Show' : 'Hidden';
+                    const imageUrl = post.img ? `/images/${post.img}` : '/path/to/default/image.jpg';
+                    document.getElementById('modalImage').src = imageUrl;
 
-                // Gọi AJAX để lấy thông tin chi tiết bài viết
-                fetch(`/posts/${currentPostId}/detail`)
-                    .then(response => response.json())
-                    .then(post => {
-                        const limitText = (text, maxLength = 10) => {
-                            return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
-                        };
+                    const editRoute = "{{ route('post.edit', ['post_id' => ':id']) }}".replace(':id', currentPostId);
+                    document.getElementById('editPostButton').setAttribute('href', editRoute);
 
-                        // Cập nhật nội dung modal
-                        document.getElementById('modalTitle').innerText = limitText(post.title);
-                        document.getElementById('modalDescription').innerText = limitText(post.description);
-                        document.getElementById('modalContent').innerText = limitText(post.content);
-                        document.getElementById('modalMetaDesc').innerText = limitText(post.meta_desc);
-                        document.getElementById('modalUrlSeo').innerText = limitText(post.url_seo);
-                        document.getElementById('modalStatus').innerText = post.status ? 'Show' : 'Hidden';
-                        const imageUrl = post.img ? `/images/${post.img}` : '/path/to/default/image.jpg';
-                        document.getElementById('modalImage').src = imageUrl;
-
-                        // Thiết lập đường dẫn cho nút Edit
-                        const editRoute = "{{ route('post.edit', ['post_id' => ':id']) }}".replace(':id', currentPostId);
-                        document.getElementById('editPostButton').setAttribute('href', editRoute);
-
-                        // Hiển thị modal
-                        const modal = new bootstrap.Modal(document.getElementById('postDetailModal'));
-                        modal.show();
-                    })
-                    .catch(error => {
-                        console.error('Có vấn đề với yêu cầu fetch:', error);
-                    });
-            });
-        });
-
-        // Đường dẫn đến route xóa bài viết
-
-        // Khi người dùng nhấn nút "Delete"
-        document.getElementById('deletePostButton').addEventListener('click', function () {
-            const confirmDeleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
-            confirmDeleteModal.show();
-        });
-
-        // Khi người dùng nhấn nút "OK" trong modal xác nhận
-        document.getElementById('confirmDeleteButton').addEventListener('click', function () {
-            if (currentPostId) {
-                // Sử dụng tên route để tạo URL
-                const deleteRoute = "{{ route('post.delete', ['post_id' => ':id']) }}".replace(':id', currentPostId);
-
-
-                fetch(deleteRoute, {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    }
+                    const modal = new bootstrap.Modal(document.getElementById('postDetailModal'));
+                    modal.show();
                 })
-                    .then(response => {
-                        if (response.ok) {
-                            alert("Xoá Bài Viết Thành Công");
-                            location.reload(); // Tải lại trang sau khi xóa thành công
-                        } else {
-                            console.error('Có lỗi xảy ra khi xóa bài viết');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Có lỗi xảy ra:', error);
-                    });
-            }
+                .catch(error => {
+                    console.error('Có vấn đề với yêu cầu fetch:', error);
+                });
         });
     });
-    // Lắng nghe sự kiện khi modal đã hoàn toàn đóng
-    document.getElementById('confirmDeleteModal').addEventListener('hidden.bs.modal', function () {
-        const backdrop = document.querySelector('.modal-backdrop');
-        if (backdrop) {
-            backdrop.remove(); // Loại bỏ lớp mờ
+
+    document.getElementById('confirmDeleteButton').addEventListener('click', function () {
+        if (currentPostId) {
+            const deleteRoute = "{{ route('post.delete', ['post_id' => ':id']) }}".replace(':id', currentPostId);
+
+            fetch(deleteRoute, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    const confirmDeleteModal = bootstrap.Modal.getInstance(document.getElementById('confirmDeleteModal'));
+                    confirmDeleteModal.hide();
+
+                    const successModal = new bootstrap.Modal(document.getElementById('successDeleteModal'));
+                    successModal.show();
+
+                    successModal._element.addEventListener('hidden.bs.modal', () => {
+                        location.reload();
+                    });
+                } else {
+                    const errorModal = new bootstrap.Modal(document.getElementById('errorDeleteModal'));
+                    errorModal.show();
+                }
+            })
+            .catch(error => {
+                console.error('Có lỗi xảy ra:', error);
+            });
         }
     });
-
-    // Đảm bảo nút Cancel đóng modal
-    document.getElementById('cancelButton').addEventListener('click', function () {
-        const confirmDeleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
-        confirmDeleteModal.hide(); // Ẩn modal
-    });
-
-
-
-
-
+});
 
 
 </script>
