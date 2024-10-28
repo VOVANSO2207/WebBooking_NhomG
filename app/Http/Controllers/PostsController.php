@@ -213,5 +213,24 @@ class PostsController extends Controller
     
         return response()->json($posts);
     }
+    public function getBlogDetail($url_seo)
+    {
+        $post = Posts::where('url_seo', $url_seo)->first();
+
+        if (!$post) {
+            abort(404); 
+        }
+
+        $relatedPosts = Posts::where('post_id', '!=', $post->post_id) 
+            ->where(function ($query) use ($post) {
+                $query->where('title', 'LIKE', '%' . $post->title . '%')
+                    ->orWhere('description', 'LIKE', '%' . $post->description . '%')
+                    ->orWhere('content', 'LIKE', '%' . $post->content . '%');
+            })
+            ->limit(5)
+            ->get();
+
+        return view('blog_detail', compact('post', 'relatedPosts'));
+    }
 
 }

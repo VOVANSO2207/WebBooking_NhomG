@@ -29,7 +29,7 @@
                                 <div class="news-item">
                                     <img src="{{ asset('images/' . $post->img) }}" alt="Ảnh đại diện bài viết">
                                     <div class="news-content">
-                                        <h5>{{ Str::limit($post->title, 25) }}</h5>
+                                        <h5><a href="{{ url('blog/' . $post->url_seo) }}">{{ Str::limit($post->title, 25) }}</a></h5>
                                         <p>{{ Str::limit($post->description, 25) }}</p>
                                         <span class="news-date">{{ $post->formattedCreatedAt }}</span>
                                         <a href="{{ url('blog/' . $post->url_seo) }}" class="btn-read-more">Xem thêm</a>

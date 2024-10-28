@@ -88,6 +88,8 @@ Route::put('/admin/posts/{id}', [PostsController::class, 'update'])->name('admin
 // User-Blog
 Route::get('/search1', action: [PostsController::class, 'searchViewBlog'])->name('searchBlog');
 Route::get('/blog', [PostsController::class, 'getViewBlog'])->name('blog');
+Route::get('/blog/{url_seo}', [PostsController::class, 'getBlogDetail'])->name('blog.detail');
+
 // Admin-Booking Detail
 Route::get('/bookings/{booking_id}/detail', action: [BookingController::class, 'getBookingDetail'])->name('booking.detail');
 Route::delete('/bookings/{booking_id}/delete', [BookingController::class, 'deleteBooking'])->name('booking.delete');
