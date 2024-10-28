@@ -50,7 +50,7 @@ class AuthController extends Controller
         try {
             $user = User::login($credentials); // Gọi hàm login từ model
             Auth::login($user); // Đăng nhập người dùng
-    
+            
             // Kiểm tra vai trò và điều hướng đến trang tương ứng
             switch ($user->role_id) {
                 case 1: // Giả sử role_id 1 là admin
