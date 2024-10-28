@@ -78,7 +78,7 @@ Route::prefix('admin')->group(function () {
     Route::get('/user/add', [UsersController::class, 'userAdd'])->name('user_add');
     Route::post('admin/user/store', action: [UsersController::class, 'store'])->name('admin.user.store');
     // Admin - Hotel
-    Route::get('/hotel', [HotelController::class, 'viewHotel'])->name('admin.viewhotel');
+    Route::get('/hotel', action: [HotelController::class, 'viewHotel'])->name('admin.viewhotel');
     Route::post('/hotel/store', [HotelController::class, 'store'])->name('admin.hotel.store');
     Route::get('/hotel/edit/{hotel_id}', [HotelController::class, 'editHotel'])->name('hotel.edit');
     Route::put('/hotel/update/{hotel_id}', [HotelController::class, 'update'])->name('hotel.update');

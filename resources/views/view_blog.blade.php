@@ -21,7 +21,18 @@
         </div>
         <div class="container">
             <div class="row">
-                <div class="col-lg-8">
+            <div class="col-md-4">
+                    <div class="search-bar">
+                        <h4>Tìm kiếm bài viết</h4>
+                        <form id="search-form">
+                            <input type="text" id="search-input" placeholder="Nhập tiêu đề hoặc mô tả...">
+                            <button type="submit"><i class="fas fa-search"></i></button>
+                        </form>
+                        <div class="error-message" id="error-message"></div>
+                    </div>
+                    <div class="search-results" id="search-results"></div>
+                </div>
+                <div class="col-md-8">
                     <h3>Danh sách bài viết</h3>
                     <div class="row">
                         @foreach ($posts as $post)
@@ -42,17 +53,7 @@
                         {{ $posts->appends(['csrf_token' => csrf_token()])->links('pagination::bootstrap-4') }}
                     </div>
                 </div>
-                <div class="col-lg-4">
-                    <div class="search-bar">
-                        <h4>Tìm kiếm bài viết</h4>
-                        <form id="search-form">
-                            <input type="text" id="search-input" placeholder="Nhập tiêu đề hoặc mô tả...">
-                            <button type="submit"><i class="fas fa-search"></i></button>
-                        </form>
-                        <div class="error-message" id="error-message"></div>
-                    </div>
-                    <div class="search-results" id="search-results"></div>
-                </div>
+               
             </div>
         </div>
     </section>

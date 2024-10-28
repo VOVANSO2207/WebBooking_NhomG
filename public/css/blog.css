@@ -122,11 +122,14 @@ body {
     box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
     margin-bottom: 15px;
 }
-.content img{
+/* .content img{
     max-width: 100%;
     height: auto;
+} */
+.news-content a{
+    text-decoration: none;
+    color: #007cff;
 }
-
 .related-posts {
     background-color: #ffffff;
     padding: 15px;
