@@ -116,7 +116,6 @@ class HotelController extends Controller
             'location' => 'required|string|max:255',
             'city_id' => 'required|integer',
             'description' => 'required|string',
-            'rating' => 'required|numeric|min:1|max:5',
             'images' => 'nullable|array',
             'images.*' => 'image|mimes:jpeg,png,jpg|max:2048',
             'amenities' => 'nullable|array',
@@ -166,8 +165,6 @@ class HotelController extends Controller
             }
         }
 
-        
-
         return redirect()->route('admin.viewhotel')->with('success', 'Thêm khách sạn thành công.');
     }
 
@@ -193,30 +190,107 @@ class HotelController extends Controller
     public function editHotel($hotel_id)
     {
         $hotel = Hotel::findOrFail($hotel_id);
-        $cities = Cities::all(); // Lấy tất cả thành phố để sử dụng trong dropdown
-        return view('admin.hotel_edit', compact('hotel', 'cities'));
+        $cities = Cities::all();
+        $hotelAmenities = HotelAmenities::all(); // Lấy tất cả tiện nghi
+        $currentAmenities = $hotel->amenities()->pluck('amenity_id')->toArray(); // Lấy các tiện nghi hiện tại của khách sạn
+
+        return view('admin.hotel_edit', compact('hotel', 'cities', 'hotelAmenities', 'currentAmenities'));
     }
 
     public function update(Request $request, $hotel_id)
     {
-        $request->validate([
-            'hotel_name' => 'required|string|max:255|regex:/^[^\_]+$/',
+        // Xác thực dữ liệu đầu vào
+        $validatedData = $request->validate([
+            'hotel_name' => 'required|string|max:255|regex:/^[\pL\s]+$/u',
             'location' => 'required|string|max:255',
-            'city_id' => 'required|integer',
-            'description' => 'required|string|min:20|max:8000',
-            'rating' => 'nullable|numeric|min:1|max:5',
+            'city_id' => 'required|integer|exists:cities,city_id',
+            'description' => 'required|string',
+            'rating' => 'required|numeric|min:1|max:5',
+            'images' => 'nullable|array',
+            'images.*' => 'image|mimes:jpeg,png,jpg|max:2048',
+            'amenities' => 'nullable|array',
+            'amenities.*' => 'integer|exists:hotel_amenities,amenity_id',
+        ], [
+            'hotel_name.required' => 'Tên khách sạn là bắt buộc.',
+            'hotel_name.string' => 'Tên khách sạn phải là chuỗi ký tự.',
+            'hotel_name.max' => 'Tên khách sạn không được vượt quá 255 ký tự.',
+            'hotel_name.regex' => 'Tên khách sạn chỉ được chứa chữ cái và khoảng trắng.',
+            'location.required' => 'Địa chỉ là bắt buộc.',
+            'location.string' => 'Địa chỉ phải là chuỗi ký tự.',
+            'location.max' => 'Địa chỉ không được vượt quá 255 ký tự.',
+            'city_id.required' => 'Mã thành phố là bắt buộc.',
+            'city_id.integer' => 'Mã thành phố phải là một số nguyên.',
+            'city_id.exists' => 'Mã thành phố không hợp lệ.',
+            'description.required' => 'Mô tả là bắt buộc.',
+            'description.string' => 'Mô tả phải là chuỗi ký tự.',
+            'rating.required' => 'Đánh giá là bắt buộc.',
+            'rating.numeric' => 'Đánh giá phải là một số.',
+            'rating.min' => 'Đánh giá tối thiểu là 1.',
+            'rating.max' => 'Đánh giá tối đa là 5.',
+            'images.array' => 'Hình ảnh phải là một mảng.',
+            'images.*.image' => 'Mỗi mục trong hình ảnh phải là một ảnh.',
+            'images.*.mimes' => 'Hình ảnh phải có định dạng: jpeg, png, jpg.',
+            'images.*.max' => 'Mỗi hình ảnh không được vượt quá 2MB.',
+            'amenities.array' => 'Tiện nghi phải là một mảng.',
+            'amenities.*.integer' => 'Mỗi tiện nghi phải là một số nguyên.',
+            'amenities.*.exists' => 'Mỗi tiện nghi không hợp lệ.',
         ]);
-
-        $hotel = Hotel::find($hotel_id);
-        if (!$hotel) {
-            return redirect()->route('admin.viewhotel')->with('error', 'Khách sạn không tồn tại.');
+    
+        // Tìm khách sạn và cập nhật thông tin
+        $hotel = Hotel::findOrFail($hotel_id);
+        $hotel->update([
+            'hotel_name' => $validatedData['hotel_name'],
+            'location' => $validatedData['location'],
+            'city_id' => $validatedData['city_id'],
+            'description' => $validatedData['description'],
+            'rating' => $validatedData['rating'],
+        ]);
+    
+        // Xử lý tiện nghi
+        if ($request->has('amenities')) {
+            // Xóa những tiện nghi không còn được chọn
+            $currentAmenities = $hotel->amenities()->pluck('amenity_id')->toArray();
+    
+            // Xóa những tiện nghi không còn được chọn
+            foreach (array_diff($currentAmenities, $validatedData['amenities']) as $amenityId) {
+                $hotel->amenities()->where('amenity_id', $amenityId)->delete();
+            }
+    
+            // Thêm những tiện nghi mới hoặc cập nhật nếu cần
+            foreach ($validatedData['amenities'] as $amenityId) {
+                if (!in_array($amenityId, $currentAmenities)) {
+                    // Tìm tiện nghi dựa trên amenity_id
+                    $amenity = HotelAmenities::find($amenityId);
+    
+                    // Kiểm tra nếu tiện nghi tồn tại
+                    if ($amenity) {
+                        $hotel->amenities()->create([
+                            'hotel_id' => $hotel->hotel_id,
+                            'amenity_id' => $amenityId,
+                            'amenity_name' => $amenity->amenity_name,
+                            'description' => $amenity->description,
+                        ]);
+                    }
+                }
+            }
         }
-
-        $hotel->update($request->all());
-
+    
+        // Xử lý upload ảnh nếu có
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $imageName = time() . '_' . $image->getClientOriginalName();
+                $image->move(public_path('images'), $imageName);
+    
+                HotelImages::create([
+                    'hotel_id' => $hotel->hotel_id,
+                    'image_url' => $imageName,
+                ]);
+            }
+        }
+    
         return redirect()->route('admin.viewhotel')->with('success', 'Cập nhật khách sạn thành công.');
     }
-
-
+    
+    
 }
 // 

@@ -166,6 +166,9 @@
                     document.getElementById('modalHotelDescription').innerText = hotel.description;
                     document.getElementById('modalHotelRating').innerText = hotel.rating;
 
+                    const editRoute = "{{ route('hotel.edit', ['hotel_id' => ':hotel_id']) }}";
+                    document.getElementById('editHotelButton').setAttribute('href', editRoute.replace(':hotel_id', currentHotelId));
+
                     // Hiển thị danh sách tiện ích
                     const amenitiesContainer = document.getElementById('modalHotelAmenities');
                     amenitiesContainer.innerHTML = '';
