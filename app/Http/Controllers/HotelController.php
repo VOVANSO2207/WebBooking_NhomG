@@ -10,13 +10,21 @@ use App\Models\HotelAmenities;
 class HotelController extends Controller
 {
     //
-    public function index()
+    public function viewSearchHotel()
     {
         // Lấy tất cả các hotels từ cơ sở dữ liệu
         $hotels = Hotel::with('images')->get();
 
         // Truyền dữ liệu qua view
         return view('search_result', compact('hotels'));
+    }
+    public function index()
+    {
+        // Lấy tất cả các hotels từ cơ sở dữ liệu
+        $hotels = Hotel::all();
+
+        // Truyền dữ liệu qua view
+        return view('pages.home', compact('hotels'));
     }
 
     public function search(Request $request)

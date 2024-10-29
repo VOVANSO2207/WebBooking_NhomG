@@ -134,15 +134,16 @@
                                         navigation="true" space-between="30" loop="true" style="height: auto">
                                         @foreach ($hotel->images as $image)
                                             <swiper-slide>
-                                                <img src="{{ asset('images/' . $image->image_url) }}" alt="{{$image->image_url}}" />
+                                                <img src="{{ asset('storage/images/' . $image->image_url) }}"
+                                                    alt="{{$image->image_url}}" />
                                             </swiper-slide>
                                         @endforeach
                                         <!-- @foreach ($hotel_images->where('hotel_id', $hotel->hotel_id) as $image)
-                                                            <swiper-slide>
-                                                                <img id="{{$image->image_id}}" src="{{ asset('images/' . $image->image_url) }}"
-                                                                    alt="{{$image->image_url}}" />
-                                                            </swiper-slide>
-                                                        @endforeach -->
+                                            <swiper-slide>
+                                                <img id="{{$image->image_id}}" src="{{ asset('images/' . $image->image_url) }}"
+                                                    alt="{{$image->image_url}}" />
+                                            </swiper-slide>
+                                        @endforeach -->
                                     </swiper-container>
                                 </div>
                                 <div class="hotel-info row">
