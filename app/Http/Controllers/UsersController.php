@@ -18,13 +18,13 @@ class UsersController extends Controller
     {
         // Lấy tất cả vai trò từ bảng roles
         $roles = Roles::all();
-    
+
         // Lấy thông tin người dùng hiện tại (nếu cần)
         $user = auth()->user(); // Lấy người dùng đã xác thực
-    
+
         return view('admin.user_add', compact('roles', 'user')); // Truyền cả $roles và $user vào view
     }
-    
+
 
     public function getUserDetail($user_id)
     {
@@ -113,13 +113,13 @@ class UsersController extends Controller
     public function search(Request $request)
     {
         $keyword = $request->get('search');
-    
+
         $results = User::whereRaw('MATCH(username, email) AGAINST(? IN BOOLEAN MODE)', [$keyword])
             ->paginate(5);
-    
+
         return view('admin.search_results_user', compact('results'));
     }
-    
+
 
 
     public function editUser($user_id)
@@ -171,7 +171,7 @@ class UsersController extends Controller
         // Cập nhật các trường khác
         $user->username = $request->username;
         $user->email = $request->email;
-        
+
         // Chỉ cập nhật mật khẩu nếu có giá trị
         if ($request->filled('password')) {
             $user->password = bcrypt($request->password);
@@ -193,7 +193,6 @@ class UsersController extends Controller
 
         return redirect()->route('admin.viewuser')->with('success', 'Cập nhật người dùng thành công.');
     }
-<<<<<<< HEAD
 
     public function register(Request $request)
     {
@@ -216,7 +215,7 @@ class UsersController extends Controller
             'password.required' => 'Vui lòng nhập mật khẩu.',
             'password.confirmed' => 'Vui lòng xác nhận lại mật khẩu.',
         ]);
-       
+
         // Đăng ký người dùng mới
         $user = User::register($request->all());
         $user->save();
@@ -234,7 +233,7 @@ class UsersController extends Controller
         try {
             $user = User::login($credentials); // Gọi hàm login từ model
             Auth::login($user); // Đăng nhập người dùng
-    
+
             // Kiểm tra vai trò và điều hướng đến trang tương ứng
             switch ($user->role_id) {
                 case 1: // Giả sử role_id 1 là admin
@@ -247,7 +246,8 @@ class UsersController extends Controller
         } catch (ValidationException $e) {
             return back()->withErrors($e->validator->errors())->withInput(); // Trả về lỗi nếu có
         }
-=======
+    }
+
     public function encodeId($id)
     {
         $encodedId = IdEncoder::encodeId($id);
@@ -258,6 +258,5 @@ class UsersController extends Controller
     {
         $decodedId = IdEncoder::decodeId($encodedId);
         return response()->json(['decoded_id' => $decodedId]);
->>>>>>> 4.19-4.22-CRUD-HOTELS-MinhTam
     }
 }
