@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Helpers\IdEncoder;
 use Illuminate\Http\Request;
 use App\Models\Hotel;
 use App\Models\Cities;
@@ -73,7 +73,8 @@ class HotelController extends Controller
 
     public function getHotelDetail($hotel_id)
     {
-        $hotel = Hotel::findHotelById($hotel_id);
+        $decodedId = IdEncoder::decodeId($hotel_id);
+        $hotel = Hotel::findHotelById($decodedId);
 
         if (!$hotel) {
             return response()->json(['error' => 'Khách sạn không tồn tại'], 404);
@@ -170,7 +171,9 @@ class HotelController extends Controller
 
     public function deleteHotel($hotel_id)
     {
-        $hotel = Hotel::find($hotel_id);
+        $decodedId = IdEncoder::decodeId($hotel_id);
+        $hotel = Hotel::find($decodedId);
+
         if ($hotel) {
             $hotel->delete();
             return response()->json(['success' => true, 'message' => 'Khách sạn đã được xóa.']);
@@ -189,7 +192,9 @@ class HotelController extends Controller
 
     public function editHotel($hotel_id)
     {
-        $hotel = Hotel::findOrFail($hotel_id);
+        $decodedId = IdEncoder::decodeId($hotel_id);
+        $hotel = Hotel::find($decodedId);
+        
         $cities = Cities::all();
         $hotelAmenities = HotelAmenities::all(); // Lấy tất cả tiện nghi
         $currentAmenities = $hotel->amenities()->pluck('amenity_id')->toArray(); // Lấy các tiện nghi hiện tại của khách sạn
@@ -237,7 +242,9 @@ class HotelController extends Controller
         ]);
     
         // Tìm khách sạn và cập nhật thông tin
-        $hotel = Hotel::findOrFail($hotel_id);
+        $decodedId = IdEncoder::decodeId($hotel_id);
+        $hotel = Hotel::find($decodedId);
+        
         $hotel->update([
             'hotel_name' => $validatedData['hotel_name'],
             'location' => $validatedData['location'],
@@ -291,6 +298,16 @@ class HotelController extends Controller
         return redirect()->route('admin.viewhotel')->with('success', 'Cập nhật khách sạn thành công.');
     }
     
-    
+    public function encodeId($id)
+    {
+        $encodedId = IdEncoder::encodeId($id);
+        return response()->json(['encoded_id' => $encodedId]);
+    }
+
+    public function decodeId($encodedId)
+    {
+        $decodedId = IdEncoder::decodeId($encodedId);
+        return response()->json(['decoded_id' => $decodedId]);
+    }
 }
 // 
