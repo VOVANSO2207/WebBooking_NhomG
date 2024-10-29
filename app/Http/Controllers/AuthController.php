@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\User;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Validator;
@@ -34,7 +35,7 @@ class AuthController extends Controller
             'password.required' => 'Vui lòng nhập mật khẩu.',
             'password.confirmed' => 'Vui lòng xác nhận lại mật khẩu.',
         ]);
-       
+
         // Đăng ký người dùng mới
         $user = User::register($request->all());
         $user->save();
@@ -43,37 +44,24 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         // Validate dữ liệu
-        $credentials = $request->validate([
-            'login' => 'required|string',
-            'password' => 'required|string',
-        ]);
-        
-        // Thử đăng nhập bằng username hoặc email
+        $credentials = $request->only('login', 'password');
+
         try {
-            // Tìm người dùng theo login (email hoặc username)
-            $user = User::login($credentials); // Gọi hàm login từ model
+            // Gọi hàm authenticate từ model để tìm và xác thực người dùng
+            $user = User::authenticate($credentials);
+
+            // Đăng nhập người dùng
+            Auth::login($user);
+            $request->session()->regenerate();
             
-            // Nếu người dùng tồn tại và mật khẩu chính xác
-            $request->session()->regenerate(); // Tái tạo session ID để ngăn chặn session fixation
-            
-            Auth::login($user); // Đăng nhập người dùng
-            
-            // Kiểm tra vai trò và điều hướng đến trang tương ứng
-            switch ($user->role_id) {
-                case 1: // Giả sử role_id 1 là admin
-                    return redirect()->route('admin');
-                case 2: // Giả sử role_id 2 là user
-                    return redirect()->route('home'); 
-                default: // Các quyền khác
-                    return redirect()->route('error'); 
-            }
+            // Điều hướng người dùng dựa trên vai trò
+            return match ($user->role_id) {
+                1 => redirect()->route('admin'),
+                2 => redirect()->route('home'),
+                default => redirect()->route('error'),
+            };
         } catch (ValidationException $e) {
             return back()->withErrors($e->validator->errors())->withInput(); // Trả về lỗi nếu có
         }
     }
-    
-   
 }
-
-
-
