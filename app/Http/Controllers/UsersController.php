@@ -18,9 +18,13 @@ class UsersController extends Controller
     {
         // Lấy tất cả vai trò từ bảng roles
         $roles = Roles::all();
-
-        return view('admin.user_add', compact('roles'));
+    
+        // Lấy thông tin người dùng hiện tại (nếu cần)
+        $user = auth()->user(); // Lấy người dùng đã xác thực
+    
+        return view('admin.user_add', compact('roles', 'user')); // Truyền cả $roles và $user vào view
     }
+    
 
     public function getUserDetail($user_id)
     {

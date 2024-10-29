@@ -12,8 +12,14 @@
                         @csrf
                         <div class="card-body">
                             <div class="d-flex align-items-start align-items-sm-center gap-4">
-                            <img src="{{ asset('storage/images/admin/' . $user->avatar) }}" alt="{{ $user->username }}" 
-                                class="" height="100" width="100" id="fileUpload" />
+                            @if($user && $user->avatar)
+                                <img src="{{ asset('storage/images/admin/' . $user->avatar) }}" alt="{{ $user->username }}" 
+                                    class="" height="100" width="100" id="fileUpload" />
+                            @else
+                                <img src="{{ asset('storage/images/default-avatar.jpg') }}" alt="Default Avatar" 
+                                    class="" height="100" width="100" id="fileUpload" />
+                            @endif
+
                                 <div class="button-wrapper">
                                     <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
                                         <span class="d-none d-sm-block">Upload</span>
