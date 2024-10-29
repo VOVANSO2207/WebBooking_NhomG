@@ -140,11 +140,8 @@ Route::get('/error', function () {
 // Pay
 Route::get('/payment', [PaymentsController::class, 'viewPay'])->name('pages.pay');
 
-<<<<<<< HEAD
 // Xem danh sách khách sạn
 Route::get('/admin/hotel', [HotelController::class, 'viewHotel'])->name('admin.viewhotel');
 
-=======
 // User Home
 Route::get('/', [HotelController::class, 'index']);
->>>>>>> UI&Fix-4
