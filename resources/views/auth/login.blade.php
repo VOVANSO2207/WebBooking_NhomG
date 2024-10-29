@@ -31,7 +31,7 @@
                             <label for="floatingPassword">Mật khẩu</label>
                             <div class="form-floating mb-3 position-relative">
                                 <input type="password" class="form-control" id="floatingPassword" name="password"
-                                    placeholder="Mật khẩu" required>
+                                    placeholder="Mật khẩu">
                                 <span class="password-toggle-icon" id="togglePassword">
                                     <i class="fa fa-eye" aria-hidden="true"></i>
                                 </span>
