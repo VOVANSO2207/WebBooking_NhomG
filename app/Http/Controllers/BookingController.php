@@ -7,7 +7,7 @@ use App\Models\User;
 use App\Models\Rooms;
 use App\Models\Promotions;
 use Illuminate\Http\Request;
-
+use App\Helpers\IdEncoder;
 class BookingController extends Controller
 {
     public function viewBooking()
@@ -23,7 +23,9 @@ class BookingController extends Controller
 
     public function getBookingDetail($booking_id)
     {
-        $booking = Booking::findBookingById($booking_id);
+        // Giải mã ID
+        $decodedId = IdEncoder::decodeId($booking_id);
+        $booking = Booking::findBookingById($decodedId);
 
         if (!$booking) {
             return response()->json(['error' => 'Đặt phòng không tồn tại'], 404);
@@ -75,7 +77,10 @@ class BookingController extends Controller
 
     public function deleteBooking($id)
     {
-        $booking = Booking::find($id);
+        // Giải mã ID
+        $bookingId = IdEncoder::decodeId($id);
+        $booking = Booking::find($bookingId);
+
         if ($booking) {
             $booking->delete();
             return response()->json(['success' => true, 'message' => 'Đặt phòng đã được xóa.']);
@@ -107,7 +112,9 @@ class BookingController extends Controller
     public function editBooking($booking_id)
     {
         // Tìm booking theo ID
-        $booking = Booking::findBookingById($booking_id);
+        // Giải mã ID
+        $decodedId = IdEncoder::decodeId($booking_id);
+        $booking = Booking::findBookingById($decodedId);
 
         // Kiểm tra nếu booking không tồn tại
         if (!$booking) {
