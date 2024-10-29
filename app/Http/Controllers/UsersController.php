@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Roles;
 use Illuminate\Http\Request;
-
+use App\Helpers\IdEncoder;
 class UsersController extends Controller
 {
     public function viewUser()
@@ -24,7 +24,9 @@ class UsersController extends Controller
 
     public function getUserDetail($user_id)
     {
-        $user = User::findUserById($user_id);
+        // Giải mã ID nếu cần
+        $decodedId = IdEncoder::decodeId($user_id);
+        $user = User::findUserById($decodedId);
 
         if (!$user) {
             return response()->json(['error' => 'Người dùng không tồn tại'], 404);
@@ -93,7 +95,9 @@ class UsersController extends Controller
 
     public function deleteUser($user_id)
     {
-        $user = User::find($user_id);
+        // Giải mã ID trước khi thao tác
+        $decodedId = IdEncoder::decodeId($user_id);
+        $user = User::find($decodedId);
         if ($user) {
             $user->delete();
             return response()->json(['success' => true, 'message' => 'Người dùng đã được xóa.']);
@@ -115,7 +119,9 @@ class UsersController extends Controller
 
     public function editUser($user_id)
     {
-        $user = User::findUserById($user_id);
+        // Giải mã ID
+        $decodedId = IdEncoder::decodeId($user_id);
+        $user = User::findUserById($decodedId);
 
         if (!$user) {
             return redirect()->route('admin.viewuser')->with('error', 'Người dùng không tồn tại.');
@@ -181,5 +187,16 @@ class UsersController extends Controller
         $user->save();
 
         return redirect()->route('admin.viewuser')->with('success', 'Cập nhật người dùng thành công.');
+    }
+    public function encodeId($id)
+    {
+        $encodedId = IdEncoder::encodeId($id);
+        return response()->json(['encoded_id' => $encodedId]);
+    }
+
+    public function decodeId($encodedId)
+    {
+        $decodedId = IdEncoder::decodeId($encodedId);
+        return response()->json(['decoded_id' => $decodedId]);
     }
 }

@@ -1,5 +1,7 @@
 @extends('admin.layouts.master')
-
+@php
+    use App\Helpers\IdEncoder;
+@endphp
 @section('admin-container')
 <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
     id="layout-navbar">
@@ -44,7 +46,7 @@
                     </thead>
                     <tbody class="table-border-bottom-0 alldata">
                         @forelse ($results ?? $users as $index => $user)
-                            <tr class="user-detail" data-id="{{ $user->user_id }}">
+                            <tr class="user-detail" data-id="{{ IdEncoder::encodeId($user->user_id) }}">
                                 <td>{{ $index + 1 }}</td>
                                 <td>
                                     <img src="{{ asset('images/' . $user->avatar) }}" alt="{{ $user->username }}"
