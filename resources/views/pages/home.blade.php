@@ -193,160 +193,45 @@
         <div class="title mt-5 mb-2">Khách Sạn Nổi Tiếng</div>
         <div class="carousel-container">
             <div class="carousel-wrapper">
-                <div class="card the-top-khach-san">
-                    <img class="image-hotel-1"
-                        src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/209890188.jpg?k=882e748be3114714efa7f001b6ffa97425b1a52a458d3166dea3c1af7c66ac09&o=&hp=1"
-                        alt="">
-                    <div class="shape">
-                        <p class="country m-0">VIET NAM</p>
-                        <p class="location m-0">NHA TRANG - <span class="name-hotel">Vinpearl Resort</span></p>
-                        <p class="price-old m-0">VNĐ 1.399.000</p>
-                        <div class="row price-top">
-                            <div class="col-md-7">
-                                <span class="price-new">VNĐ 699.500<span>/ Khách</span> </span>
+                @foreach ($hotels as $hotel)
+                    @if ($hotel->rating >= 4.00)
+                        <div class="card the-top-khach-san">
+                            @foreach ($hotel->images as $index => $image)
+                                @if($index === 0)
+                                    <img class="image-hotel-1" src="{{ asset('storage/images/' . $image->image_url) }}"
+                                        alt="{{ $image->image_url }}" />
+                                @endif
+                            @endforeach
+
+
+                            <div class="shape">
+                                <p class="country m-0">VIET NAM</p>
+                                <p class="location m-0">{{$hotel->location}} - <span
+                                        class="name-hotel">{{$hotel->hotel_name}}</span></p>
+                                <p class="price-old m-0">VNĐ {{ number_format($hotel->price_old, 0, ',', '.') }} VNĐ
+                                </p>
+                                <div class="row price-top">
+                                    <div class="col-md-7">
+                                        <span class="price-new">VNĐ {{ number_format($hotel->price_new, 0, ',', '.') }} VNĐ
+                                            <span>/ Khách</span> </span>
+                                    </div>
+                                    <div class="col-md-5"><a href="#" class="btn-book-now">ĐẶT NGAY</a></div>
+                                </div>
                             </div>
-                            <div class="col-md-5"><a href="#" class="btn-book-now">ĐẶT NGAY</a></div>
-                        </div>
-                    </div>
-                    <div class="rating-top">
-                        <span>★</span> <span>★</span> <span>★</span> <span>★</span> <span>★</span>
-                    </div>
-                    <div class="sale"><span>-</span>50%</div>
-                </div>
-                <div class="card the-top-khach-san">
-                    <img class="image-hotel-1"
-                        src="https://woodbinedevelopment.com/wp-content/uploads/2019/05/hero-legacy-2000x700.jpg"
-                        alt="">
-                    <div class="shape">
-                        <p class="country m-0">VIET NAM</p>
-                        <p class="location m-0">NHA TRANG - <span class="name-hotel">Vinpearl Resort</span></p>
-                        <p class="price-old m-0">VNĐ 1.399.000</p>
-                        <div class="row price-top">
-                            <div class="col-md-7">
-                                <span class="price-new">VNĐ 699.500<span>/ Khách</span> </span>
+                            <div class="rating-top">
+                                @for ($i = 1; $i <= 5; $i++)
+                                    @if ($i <= $hotel->rating)
+                                        <span>★</span>
+                                    @else
+                                        <span>☆</span>
+                                    @endif
+                                @endfor
                             </div>
-                            <div class="col-md-5"><a href="#" class="btn-book-now">ĐẶT NGAY</a></div>
+                            <div class="sale"><span>-</span>50%</div>
                         </div>
-                    </div>
-                    <div class="rating-top">
-                        <span>★</span> <span>★</span> <span>★</span> <span>★</span> <span>★</span>
-                    </div>
-                    <div class="sale"><span>-</span>50%</div>
-                </div>
-                <div class="card the-top-khach-san">
-                    <img class="image-hotel-1"
-                        src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg" alt="">
-                    <div class="shape">
-                        <p class="country m-0">VIET NAM</p>
-                        <p class="location m-0">NHA TRANG - <span class="name-hotel">Vinpearl Resort</span></p>
-                        <p class="price-old m-0">VNĐ 1.399.000</p>
-                        <div class="row price-top">
-                            <div class="col-md-7">
-                                <span class="price-new">VNĐ 699.500<span>/ Khách</span> </span>
-                            </div>
-                            <div class="col-md-5"><a href="#" class="btn-book-now">ĐẶT NGAY</a></div>
-                        </div>
-                    </div>
-                    <div class="rating-top">
-                        <span>★</span> <span>★</span> <span>★</span> <span>★</span> <span>★</span>
-                    </div>
-                    <div class="sale"><span>-</span>50%</div>
-                </div>
-                <div class="card the-top-khach-san">
-                    <img class="image-hotel-1"
-                        src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg" alt="">
-                    <div class="shape">
-                        <p class="country m-0">VIET NAM</p>
-                        <p class="location m-0">NHA TRANG - <span class="name-hotel">Vinpearl Resort</span></p>
-                        <p class="price-old m-0">VNĐ 1.399.000</p>
-                        <div class="row price-top">
-                            <div class="col-md-7">
-                                <span class="price-new">VNĐ 699.500<span>/ Khách</span> </span>
-                            </div>
-                            <div class="col-md-5"><a href="#" class="btn-book-now">ĐẶT NGAY</a></div>
-                        </div>
-                    </div>
-                    <div class="rating-top">
-                        <span>★</span> <span>★</span> <span>★</span> <span>★</span> <span>★</span>
-                    </div>
-                    <div class="sale"><span>-</span>50%</div>
-                </div>
-                <div class="card the-top-khach-san">
-                    <img class="image-hotel-1"
-                        src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg" alt="">
-                    <div class="shape">
-                        <p class="country m-0">VIET NAM</p>
-                        <p class="location m-0">NHA TRANG - <span class="name-hotel">Vinpearl Resort</span></p>
-                        <p class="price-old m-0">VNĐ 1.399.000</p>
-                        <div class="row price-top">
-                            <div class="col-md-7">
-                                <span class="price-new">VNĐ 699.500<span>/ Khách</span> </span>
-                            </div>
-                            <div class="col-md-5"><a href="#" class="btn-book-now">ĐẶT NGAY</a></div>
-                        </div>
-                    </div>
-                    <div class="rating-top">
-                        <span>★</span> <span>★</span> <span>★</span> <span>★</span> <span>★</span>
-                    </div>
-                    <div class="sale"><span>-</span>50%</div>
-                </div>
-                <div class="card the-top-khach-san">
-                    <img class="image-hotel-1"
-                        src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg" alt="">
-                    <div class="shape">
-                        <p class="country m-0">VIET NAM</p>
-                        <p class="location m-0">NHA TRANG - <span class="name-hotel">Vinpearl Resort</span></p>
-                        <p class="price-old m-0">VNĐ 1.399.000</p>
-                        <div class="row price-top">
-                            <div class="col-md-7">
-                                <span class="price-new">VNĐ 699.500<span>/ Khách</span> </span>
-                            </div>
-                            <div class="col-md-5"><a href="#" class="btn-book-now">ĐẶT NGAY</a></div>
-                        </div>
-                    </div>
-                    <div class="rating-top">
-                        <span>★</span> <span>★</span> <span>★</span> <span>★</span> <span>★</span>
-                    </div>
-                    <div class="sale"><span>-</span>50%</div>
-                </div>
-                <div class="card the-top-khach-san">
-                    <img class="image-hotel-1"
-                        src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg" alt="">
-                    <div class="shape">
-                        <p class="country m-0">VIET NAM</p>
-                        <p class="location m-0">NHA TRANG - <span class="name-hotel">Vinpearl Resort</span></p>
-                        <p class="price-old m-0">VNĐ 1.399.000</p>
-                        <div class="row price-top">
-                            <div class="col-md-7">
-                                <span class="price-new">VNĐ 699.500<span>/ Khách</span> </span>
-                            </div>
-                            <div class="col-md-5"><a href="#" class="btn-book-now">ĐẶT NGAY</a></div>
-                        </div>
-                    </div>
-                    <div class="rating-top">
-                        <span>★</span> <span>★</span> <span>★</span> <span>★</span> <span>★</span>
-                    </div>
-                    <div class="sale"><span>-</span>50%</div>
-                </div>
-                <div class="card the-top-khach-san">
-                    <img class="image-hotel-1"
-                        src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg" alt="">
-                    <div class="shape">
-                        <p class="country m-0">VIET NAM</p>
-                        <p class="location m-0">NHA TRANG - <span class="name-hotel">Vinpearl Resort</span></p>
-                        <p class="price-old m-0">VNĐ 1.399.000</p>
-                        <div class="row price-top">
-                            <div class="col-md-7">
-                                <span class="price-new">VNĐ 699.500<span>/ Khách</span> </span>
-                            </div>
-                            <div class="col-md-5"><a href="#" class="btn-book-now">ĐẶT NGAY</a></div>
-                        </div>
-                    </div>
-                    <div class="rating-top">
-                        <span>★</span> <span>★</span> <span>★</span> <span>★</span> <span>★</span>
-                    </div>
-                    <div class="sale"><span>-</span>50%</div>
-                </div>
+                    @endif
+
+                @endforeach
             </div>
             <button class="prev-btn"><i class="fa-solid fa-arrow-right"></i></button>
             <button class="next-btn"><i class="fa-solid fa-arrow-right"></i></button>
