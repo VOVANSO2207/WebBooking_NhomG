@@ -1,5 +1,7 @@
 @extends('admin.layouts.master')
-
+@php
+    use App\Helpers\IdEncoder;
+@endphp
 @section('admin-container')
 <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
     id="layout-navbar">
@@ -44,7 +46,7 @@
                     </thead>
                     <tbody>
                         @forelse ($hotels as $index => $hotel)
-                            <tr class="hotel-detail" data-id="{{ $hotel->hotel_id }}">
+                            <tr class="hotel-detail" data-id="{{ IdEncoder::encodeId($hotel->hotel_id) }}">
                                 <td>{{ $index + 1 }}</td>
                                 <td>
                                     <div class="swiper room-swiper">

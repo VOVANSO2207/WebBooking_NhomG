@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Roles;
 use Illuminate\Http\Request;
-
+use App\Helpers\IdEncoder;
 class UsersController extends Controller
 {
     public function viewUser()
@@ -24,7 +24,9 @@ class UsersController extends Controller
 
     public function getUserDetail($user_id)
     {
-        $user = User::findUserById($user_id);
+        // Giải mã ID nếu cần
+        $decodedId = IdEncoder::decodeId($user_id);
+        $user = User::findUserById($decodedId);
 
         if (!$user) {
             return response()->json(['error' => 'Người dùng không tồn tại'], 404);
@@ -78,9 +80,9 @@ class UsersController extends Controller
 
         // Xử lý upload ảnh
         if ($request->hasFile('avatar')) {
-            // Lưu ảnh vào thư mục public/images
+            // Lưu ảnh vào thư mục public/storage/images/admin
             $avatarName = time() . '.' . $request->avatar->extension();
-            $request->avatar->move(public_path('images'), $avatarName);
+            $request->avatar->move(public_path('storage/images/admin'), $avatarName);
             $user->avatar = $avatarName; // Lưu tên ảnh vào cơ sở dữ liệu
         } else {
             $user->avatar = 'default-avatar.png';
@@ -93,7 +95,9 @@ class UsersController extends Controller
 
     public function deleteUser($user_id)
     {
-        $user = User::find($user_id);
+        // Giải mã ID trước khi thao tác
+        $decodedId = IdEncoder::decodeId($user_id);
+        $user = User::find($decodedId);
         if ($user) {
             $user->delete();
             return response()->json(['success' => true, 'message' => 'Người dùng đã được xóa.']);
@@ -105,17 +109,20 @@ class UsersController extends Controller
     public function search(Request $request)
     {
         $keyword = $request->get('search');
-        $results = User::where('username', 'LIKE', '%' . $keyword . '%')
-            ->orWhere('email', 'LIKE', '%' . $keyword . '%')
+    
+        $results = User::whereRaw('MATCH(username, email) AGAINST(? IN BOOLEAN MODE)', [$keyword])
             ->paginate(5);
-
+    
         return view('admin.search_results_user', compact('results'));
     }
+    
 
 
     public function editUser($user_id)
     {
-        $user = User::findUserById($user_id);
+        // Giải mã ID
+        $decodedId = IdEncoder::decodeId($user_id);
+        $user = User::findUserById($decodedId);
 
         if (!$user) {
             return redirect()->route('admin.viewuser')->with('error', 'Người dùng không tồn tại.');
@@ -172,9 +179,9 @@ class UsersController extends Controller
 
         // Xử lý avatar
         if ($request->hasFile('avatar')) {
-            // Lưu ảnh vào thư mục public/images
+            // Lưu ảnh vào thư mục public/storage/images/admin
             $avatarName = time() . '.' . $request->avatar->extension();
-            $request->avatar->move(public_path('images'), $avatarName);
+            $request->avatar->move(public_path('storage/images/admin'), $avatarName);
             $user->avatar = $avatarName; // Cập nhật tên ảnh vào trường avatar
         }
 
@@ -182,6 +189,7 @@ class UsersController extends Controller
 
         return redirect()->route('admin.viewuser')->with('success', 'Cập nhật người dùng thành công.');
     }
+<<<<<<< HEAD
 
     public function register(Request $request)
     {
@@ -235,5 +243,17 @@ class UsersController extends Controller
         } catch (ValidationException $e) {
             return back()->withErrors($e->validator->errors())->withInput(); // Trả về lỗi nếu có
         }
+=======
+    public function encodeId($id)
+    {
+        $encodedId = IdEncoder::encodeId($id);
+        return response()->json(['encoded_id' => $encodedId]);
+    }
+
+    public function decodeId($encodedId)
+    {
+        $decodedId = IdEncoder::decodeId($encodedId);
+        return response()->json(['decoded_id' => $decodedId]);
+>>>>>>> 4.19-4.22-CRUD-HOTELS-MinhTam
     }
 }
