@@ -184,9 +184,14 @@ class HotelController extends Controller
 
     public function searchAdminHotel(Request $request)
     {
+        // Lấy từ khóa tìm kiếm từ request
         $keyword = $request->get('search');
-        $hotels = Hotel::searchHotel($keyword)->paginate(5);
-
+        
+        // Thực hiện tìm kiếm toàn văn trên các trường name và description
+        $hotels = Hotel::whereRaw('MATCH(hotel_name, description) AGAINST(? IN BOOLEAN MODE)', [$keyword])
+                        ->paginate(5);
+        
+        // Trả về view với kết quả tìm kiếm
         return view('admin.search_results_hotel', compact('hotels'));
     }
 

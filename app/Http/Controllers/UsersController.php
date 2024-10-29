@@ -109,12 +109,13 @@ class UsersController extends Controller
     public function search(Request $request)
     {
         $keyword = $request->get('search');
-        $results = User::where('username', 'LIKE', '%' . $keyword . '%')
-            ->orWhere('email', 'LIKE', '%' . $keyword . '%')
+    
+        $results = User::whereRaw('MATCH(username, email) AGAINST(? IN BOOLEAN MODE)', [$keyword])
             ->paginate(5);
-
+    
         return view('admin.search_results_user', compact('results'));
     }
+    
 
 
     public function editUser($user_id)
