@@ -41,12 +41,28 @@
             <div data-i18n="Tables">User</div>
           </a>
         </li>
-        <li class="menu-item">
-          <a href="{{route('admin.viewhotel')}}" class="menu-link">
+        <li class="menu-item has-dropdown">
+          <a href="#" class="menu-link" data-bs-toggle="collapse" data-bs-target="#hotel-dropdown" aria-expanded="false">
             <i class="menu-icon tf-icons bx bx-hotel"></i>
             <div data-i18n="Tables">Hotel</div>
+            <i class="bx bx-chevron-down arrow-icon"></i>
           </a>
+          <ul class="collapse" id="hotel-dropdown">
+            <li class="menu-item">
+              <a href="{{route('admin.viewhotel')}}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-list-ul"></i>
+                <div data-i18n="Hotel List">Danh sách khách sạn</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="#" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-bulb"></i> 
+                <div data-i18n="Hotel Amenities">Tiện nghi khách sạn</div>
+              </a>
+            </li>
+          </ul>
         </li>
+
         <li class="menu-item">
           <a href="{{route('admin.viewpost')}}" class="menu-link">
             <i class="menu-icon tf-icons bx bx-news"></i>

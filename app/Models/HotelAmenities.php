@@ -19,6 +19,7 @@ class HotelAmenities extends Model
         'description',
     ];
 
+    // Thiết lập quan hệ một-nhiều với model Hotel
     public function hotel()
     {
         return $this->belongsTo(Hotel::class, 'hotel_id', 'hotel_id');
