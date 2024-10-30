@@ -129,11 +129,11 @@
                                             </swiper-slide>
                                         @endforeach
                                         <!-- @foreach ($hotel_images->where('hotel_id', $hotel->hotel_id) as $image)
-                                                            <swiper-slide>
-                                                                <img id="{{$image->image_id}}" src="{{ asset('images/' . $image->image_url) }}"
-                                                                    alt="{{$image->image_url}}" />
-                                                            </swiper-slide>
-                                                        @endforeach -->
+                                            <swiper-slide>
+                                                <img id="{{$image->image_id}}" src="{{ asset('images/' . $image->image_url) }}"
+                                                    alt="{{$image->image_url}}" />
+                                            </swiper-slide>
+                                        @endforeach -->
                                     </swiper-container>
                                 </div>
                                 <div class="hotel-info row">

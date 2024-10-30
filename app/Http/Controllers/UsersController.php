@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Roles;
 use Illuminate\Http\Request;
-
+use App\Helpers\IdEncoder;
 class UsersController extends Controller
 {
     public function viewUser()
@@ -19,12 +19,18 @@ class UsersController extends Controller
         // Lấy tất cả vai trò từ bảng roles
         $roles = Roles::all();
 
-        return view('admin.user_add', compact('roles'));
+        // Lấy thông tin người dùng hiện tại (nếu cần)
+        $user = auth()->user(); // Lấy người dùng đã xác thực
+
+        return view('admin.user_add', compact('roles', 'user')); // Truyền cả $roles và $user vào view
     }
+
 
     public function getUserDetail($user_id)
     {
-        $user = User::findUserById($user_id);
+        // Giải mã ID nếu cần
+        $decodedId = IdEncoder::decodeId($user_id);
+        $user = User::findUserById($decodedId);
 
         if (!$user) {
             return response()->json(['error' => 'Người dùng không tồn tại'], 404);
@@ -78,9 +84,9 @@ class UsersController extends Controller
 
         // Xử lý upload ảnh
         if ($request->hasFile('avatar')) {
-            // Lưu ảnh vào thư mục public/images
+            // Lưu ảnh vào thư mục public/storage/images/admin
             $avatarName = time() . '.' . $request->avatar->extension();
-            $request->avatar->move(public_path('images'), $avatarName);
+            $request->avatar->move(public_path('storage/images/admin'), $avatarName);
             $user->avatar = $avatarName; // Lưu tên ảnh vào cơ sở dữ liệu
         } else {
             $user->avatar = 'default-avatar.png';
@@ -93,7 +99,9 @@ class UsersController extends Controller
 
     public function deleteUser($user_id)
     {
-        $user = User::find($user_id);
+        // Giải mã ID trước khi thao tác
+        $decodedId = IdEncoder::decodeId($user_id);
+        $user = User::find($decodedId);
         if ($user) {
             $user->delete();
             return response()->json(['success' => true, 'message' => 'Người dùng đã được xóa.']);
@@ -105,17 +113,20 @@ class UsersController extends Controller
     public function search(Request $request)
     {
         $keyword = $request->get('search');
-        $results = User::where('username', 'LIKE', '%' . $keyword . '%')
-            ->orWhere('email', 'LIKE', '%' . $keyword . '%')
+
+        $results = User::whereRaw('MATCH(username, email) AGAINST(? IN BOOLEAN MODE)', [$keyword])
             ->paginate(5);
 
         return view('admin.search_results_user', compact('results'));
     }
 
 
+
     public function editUser($user_id)
     {
-        $user = User::findUserById($user_id);
+        // Giải mã ID
+        $decodedId = IdEncoder::decodeId($user_id);
+        $user = User::findUserById($decodedId);
 
         if (!$user) {
             return redirect()->route('admin.viewuser')->with('error', 'Người dùng không tồn tại.');
@@ -160,7 +171,7 @@ class UsersController extends Controller
         // Cập nhật các trường khác
         $user->username = $request->username;
         $user->email = $request->email;
-        
+
         // Chỉ cập nhật mật khẩu nếu có giá trị
         if ($request->filled('password')) {
             $user->password = bcrypt($request->password);
@@ -172,9 +183,9 @@ class UsersController extends Controller
 
         // Xử lý avatar
         if ($request->hasFile('avatar')) {
-            // Lưu ảnh vào thư mục public/images
+            // Lưu ảnh vào thư mục public/storage/images/admin
             $avatarName = time() . '.' . $request->avatar->extension();
-            $request->avatar->move(public_path('images'), $avatarName);
+            $request->avatar->move(public_path('storage/images/admin'), $avatarName);
             $user->avatar = $avatarName; // Cập nhật tên ảnh vào trường avatar
         }
 
@@ -204,7 +215,7 @@ class UsersController extends Controller
             'password.required' => 'Vui lòng nhập mật khẩu.',
             'password.confirmed' => 'Vui lòng xác nhận lại mật khẩu.',
         ]);
-       
+
         // Đăng ký người dùng mới
         $user = User::register($request->all());
         $user->save();
@@ -222,7 +233,7 @@ class UsersController extends Controller
         try {
             $user = User::login($credentials); // Gọi hàm login từ model
             Auth::login($user); // Đăng nhập người dùng
-    
+
             // Kiểm tra vai trò và điều hướng đến trang tương ứng
             switch ($user->role_id) {
                 case 1: // Giả sử role_id 1 là admin
@@ -235,5 +246,17 @@ class UsersController extends Controller
         } catch (ValidationException $e) {
             return back()->withErrors($e->validator->errors())->withInput(); // Trả về lỗi nếu có
         }
+    }
+
+    public function encodeId($id)
+    {
+        $encodedId = IdEncoder::encodeId($id);
+        return response()->json(['encoded_id' => $encodedId]);
+    }
+
+    public function decodeId($encodedId)
+    {
+        $decodedId = IdEncoder::decodeId($encodedId);
+        return response()->json(['decoded_id' => $decodedId]);
     }
 }

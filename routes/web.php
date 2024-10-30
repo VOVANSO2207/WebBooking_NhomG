@@ -128,7 +128,7 @@ Route::get('/admin/voucher/edit/{promotion_id}', [PromotionsController::class, '
 Route::put('/admin/voucher/update/{id}', [PromotionsController::class, 'updateVoucher'])->name('admin.voucher.update');
 // Search
 // Route::get('/search', [SearchController::class, 'index'])->name('search');
-Route::get('/hotels', [HotelController::class, 'index'])->name('hotels.index');
+Route::get('/hotels', [HotelController::class, 'viewSearchHotel'])->name('hotels.index');
 Route::get('hotels/search', [HotelController::class, 'search'])->name('hotels.search');
 // Cities
 // Route::get('/partials/search', [CitiesController::class, 'index'])->name('home');
@@ -142,3 +142,6 @@ Route::get('/payment', [PaymentsController::class, 'viewPay'])->name('pages.pay'
 
 // Xem danh sách khách sạn
 Route::get('/admin/hotel', [HotelController::class, 'viewHotel'])->name('admin.viewhotel');
+
+// User Home
+Route::get('/', [HotelController::class, 'index']);

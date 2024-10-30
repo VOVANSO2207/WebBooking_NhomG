@@ -7,7 +7,7 @@ use App\Models\User;
 use App\Models\Rooms;
 use App\Models\Promotions;
 use Illuminate\Http\Request;
-
+use App\Helpers\IdEncoder;
 class BookingController extends Controller
 {
     public function viewBooking()
@@ -23,7 +23,9 @@ class BookingController extends Controller
 
     public function getBookingDetail($booking_id)
     {
-        $booking = Booking::findBookingById($booking_id);
+        // Giải mã ID
+        $decodedId = IdEncoder::decodeId($booking_id);
+        $booking = Booking::findBookingById($decodedId);
 
         if (!$booking) {
             return response()->json(['error' => 'Đặt phòng không tồn tại'], 404);
@@ -75,7 +77,10 @@ class BookingController extends Controller
 
     public function deleteBooking($id)
     {
-        $booking = Booking::find($id);
+        // Giải mã ID
+        $bookingId = IdEncoder::decodeId($id);
+        $booking = Booking::find($bookingId);
+
         if ($booking) {
             $booking->delete();
             return response()->json(['success' => true, 'message' => 'Đặt phòng đã được xóa.']);
@@ -89,25 +94,34 @@ class BookingController extends Controller
         $keyword = $request->input('search');
         $bookings = Booking::query()
             ->when($keyword, function ($query, $keyword) {
-                return $query->whereHas('user', function ($q) use ($keyword) {
-                    $q->where('username', 'LIKE', "%{$keyword}%");
-                })
-                    ->orWhereHas('room', function ($q) use ($keyword) {
-                        $q->where('name', 'LIKE', "%{$keyword}%");
+                $query->where(function ($q) use ($keyword) {
+                    // Tìm kiếm trên trường 'username' từ bảng 'users' với LIKE
+                    $q->whereHas('user', function ($queryUser) use ($keyword) {
+                        $queryUser->where('username', 'LIKE', "%{$keyword}%")
+                                  ->orWhereRaw('MATCH(username) AGAINST (? IN BOOLEAN MODE)', [$keyword]);
                     })
-                    ->orWhereHas('promotion', function ($q) use ($keyword): void {
-                        $q->where('promotion_code', 'LIKE', "%{$keyword}%");
+                    // Tìm kiếm trên trường 'name' từ bảng 'rooms'
+                    ->orWhereHas('room', function ($queryRoom) use ($keyword) {
+                        $queryRoom->where('name', 'LIKE', "%{$keyword}%")
+                                  ->orWhereRaw('MATCH(name) AGAINST (? IN BOOLEAN MODE)', [$keyword]);
+                    })
+                    // Tìm kiếm trên trường 'promotion_code' từ bảng 'promotions'
+                    ->orWhereHas('promotion', function ($queryPromo) use ($keyword) {
+                        $queryPromo->where('promotion_code', 'LIKE', "%{$keyword}%");
                     });
+                });
             })
             ->paginate(5);
-
+    
         return view('admin.search_results_booking', compact('bookings'));
     }
-
+    
     public function editBooking($booking_id)
     {
         // Tìm booking theo ID
-        $booking = Booking::findBookingById($booking_id);
+        // Giải mã ID
+        $decodedId = IdEncoder::decodeId($booking_id);
+        $booking = Booking::findBookingById($decodedId);
 
         // Kiểm tra nếu booking không tồn tại
         if (!$booking) {

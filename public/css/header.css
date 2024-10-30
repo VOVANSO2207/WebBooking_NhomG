@@ -119,8 +119,10 @@
  }
 
  .menu-attribute li a:hover {
-     color: #3B79C9;
-
+     color: #0057c9;
+     background: rgba(255, 255, 255, 0.5);
+     padding: 15px;
+     border-radius: 50px;
  }
 
  .group-left-header a {

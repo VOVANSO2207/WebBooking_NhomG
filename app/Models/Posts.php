@@ -44,20 +44,20 @@ class Posts extends Model
     //     });
     // }
     public static function searchPost($keyword)
-{
-    $query = static::query(); // Sử dụng static::query() để giữ nguyên Model và cho phép phân trang
+    {
+        $query = static::query(); // Sử dụng static::query() để giữ nguyên Model và cho phép phân trang
 
-    if (!empty($keyword)) {
-        // Thực hiện tìm kiếm
-        $query->where(function ($query) use ($keyword) {
-            $query->where('title', 'LIKE', "%{$keyword}%")
-                  ->orWhere('description', 'LIKE', "%{$keyword}%")
-                  ->orWhereRaw('MATCH(title, description) AGAINST (? IN BOOLEAN MODE)', [$keyword]);
-        });
+        if (!empty($keyword)) {
+            // Thực hiện tìm kiếm
+            $query->where(function ($query) use ($keyword) {
+                $query->where('title', 'LIKE', "%{$keyword}%")
+                    ->orWhere('description', 'LIKE', "%{$keyword}%")
+                    ->orWhereRaw('MATCH(title, description) AGAINST (? IN BOOLEAN MODE)', [$keyword]);
+            });
+        }
+
+        return $query; // Trả về Query Builder để có thể phân trang
     }
-
-    return $query; // Trả về Query Builder để có thể phân trang
-}
     public function deletePost()
     {
         return $this->delete();
