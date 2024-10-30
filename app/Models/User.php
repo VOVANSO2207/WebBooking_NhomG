@@ -130,7 +130,7 @@ class User extends Model implements Authenticatable // Thêm giao diện
                 },
             ],
         ]);
-
+        
         if ($validator->fails()) {
             throw new ValidationException($validator);
         }

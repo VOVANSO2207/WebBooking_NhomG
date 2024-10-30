@@ -85,23 +85,14 @@
             <!-- Tiện nghi khách sạn -->
             <div class="amenities_hotel">
                 <h2 class="title_top">Tiện nghi khách sạn</h2>
-                <div class="option d-flex justify-content-between align-items-center">
-                    <p>Cho thuê xe đạp</p>
-                    <input type="checkbox" class="check_filter">
-                </div>
-                <div class="option d-flex justify-content-between align-items-center">
-                    <p>Cho thuê xe đạp</p>
-                    <input type="checkbox" class="check_filter">
-                </div>
-                <div class="option d-flex justify-content-between align-items-center">
-                    <p>Cho thuê xe đạp</p>
-                    <input type="checkbox" class="check_filter">
-                </div>
-                <div class="option d-flex justify-content-between align-items-center">
-                    <p>Cho thuê xe đạp</p>
-                    <input type="checkbox" class="check_filter">
-                </div>
+                @foreach ($amenities as $amenity)
+                    <div class="option d-flex justify-content-between align-items-center">
+                        <p>{{ $amenity->amenity_name }}</p>
+                        <input type="checkbox" class="check_filter">
+                    </div>
+                @endforeach
             </div>
+            
         </div>
         <div class="col-9">
             <div class="tab_control">
@@ -134,7 +125,7 @@
                                         navigation="true" space-between="30" loop="true" style="height: auto">
                                         @foreach ($hotel->images as $image)
                                             <swiper-slide>
-                                                <img src="{{ asset('images/' . $image->image_url) }}" alt="{{$image->image_url}}" />
+                                                <img src="{{ asset('storage/images/' . $image->image_url) }}" alt="{{$image->image_url}}" />
                                             </swiper-slide>
                                         @endforeach
                                         <!-- @foreach ($hotel_images->where('hotel_id', $hotel->hotel_id) as $image)

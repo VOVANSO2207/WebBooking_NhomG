@@ -14,7 +14,6 @@ class HotelAmenities extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'hotel_id',
         'amenity_name',
         'description',
     ];
@@ -22,5 +21,9 @@ class HotelAmenities extends Model
     public function hotel()
     {
         return $this->belongsTo(Hotel::class, 'hotel_id', 'hotel_id');
+    }
+    public static function getAllAmenities()
+    {
+        return self::all();
     }
 }

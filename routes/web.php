@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AmenityHotelController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostsController;
 use App\Http\Controllers\RoomController;
@@ -10,8 +11,7 @@ use App\Http\Controllers\CitiesController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\PromotionsController;
 use App\Http\Controllers\PaymentsController;
-
-
+use App\Models\HotelAmenities;
 use Illuminate\Support\Facades\Route;
 // Route người dùng 
 Route::get('/', function () {
@@ -33,7 +33,7 @@ Route::get('/register', function () {
 });
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::get('/search_result', function () {
-    return view('search_result');
+    return view('pages.search_result');
 });
 
 Route::get('/header', function () {
@@ -142,4 +142,3 @@ Route::get('/payment', [PaymentsController::class, 'viewPay'])->name('pages.pay'
 
 // Xem danh sách khách sạn
 Route::get('/admin/hotel', [HotelController::class, 'viewHotel'])->name('admin.viewhotel');
-
