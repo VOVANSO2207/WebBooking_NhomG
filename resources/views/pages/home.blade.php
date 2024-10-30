@@ -66,7 +66,7 @@
                         <li><a href="#">GIỚI THIỆU</a></li>
                         <li><a href="#">PHÒNG KHÁCH SẠN</a></li>
                         <li><a href="{{route('blog')}}">TIN TỨC</a></li>
-                        <li><a href="#">LIÊN HỆ</a></li>
+                        <li><a href="{{route(name: 'contact')}}">LIÊN HỆ</a></li>
                     </ul>
                 </div>
                 <div class="profile-header col-md-2">

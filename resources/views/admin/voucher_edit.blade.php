@@ -95,7 +95,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                Bài viết đã được cập nhật bởi một người dùng khác. Vui lòng tải lại và thử lại.
+                Voucher đã được cập nhật bởi một người dùng khác. Vui lòng tải lại và thử lại.
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>

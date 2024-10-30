@@ -10,6 +10,8 @@ use App\Http\Controllers\CitiesController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\PromotionsController;
 use App\Http\Controllers\PaymentsController;
+use App\Http\Controllers\ContactController;
+
 
 
 use Illuminate\Support\Facades\Route;
@@ -145,3 +147,6 @@ Route::get('/admin/hotel', [HotelController::class, 'viewHotel'])->name('admin.v
 
 // User Home
 Route::get('/', [HotelController::class, 'index']);
+
+Route::get('/contact', action: [ContactController::class, 'contact'])->name('contact');
+Route::post('/contact', action: [ContactController::class, 'sendMail']);
