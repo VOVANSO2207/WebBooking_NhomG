@@ -84,9 +84,9 @@ class UsersController extends Controller
 
         // Xử lý upload ảnh
         if ($request->hasFile('avatar')) {
-            // Lưu ảnh vào thư mục public/storage/images/admin
+            // Lưu ảnh vào thư mục public/storage/images
             $avatarName = time() . '.' . $request->avatar->extension();
-            $request->avatar->move(public_path('storage/images/admin'), $avatarName);
+            $request->avatar->move(public_path('storage/images'), $avatarName);
             $user->avatar = $avatarName; // Lưu tên ảnh vào cơ sở dữ liệu
         } else {
             $user->avatar = 'default-avatar.png';
@@ -183,9 +183,9 @@ class UsersController extends Controller
 
         // Xử lý avatar
         if ($request->hasFile('avatar')) {
-            // Lưu ảnh vào thư mục public/storage/images/admin
+            // Lưu ảnh vào thư mục public/storage/images
             $avatarName = time() . '.' . $request->avatar->extension();
-            $request->avatar->move(public_path('storage/images/admin'), $avatarName);
+            $request->avatar->move(public_path('storage/images'), $avatarName);
             $user->avatar = $avatarName; // Cập nhật tên ảnh vào trường avatar
         }
 
