@@ -8,6 +8,7 @@ use App\Models\Cities;
 use App\Models\HotelImages;
 use App\Models\HotelAmenities;
 use App\Models\HotelAmenityHotel;
+use App\Models\Rooms;
 class HotelController extends Controller
 {
     //
@@ -64,13 +65,16 @@ class HotelController extends Controller
     {
         // Lấy tất cả các thành phố từ bảng cities
         $cities = Cities::all(); // Giả sử bạn đã khai báo model Cities
-    
+
         // Lấy tất cả các tiện nghi từ bảng hotel_amenities
-        $hotelAmenities = HotelAmenities::all(); // Giả sử bạn đã khai báo model HotelAmenity
-    
-        // Truyền cả $cities và $hotelAmenities vào view
-        return view('admin.hotel_add', compact('cities', 'hotelAmenities'));
-    }    
+        $hotelAmenities = HotelAmenities::all(); // Giả sử bạn đã khai báo model HotelAmenities
+
+        // Lấy tất cả các phòng từ bảng hotel_rooms
+        $hotelRooms = Rooms::all(); // Giả sử bạn đã khai báo model HotelRoom
+
+        // Truyền cả $cities, $hotelAmenities và $hotelRooms vào view
+        return view('admin.hotel_add', compact('cities', 'hotelAmenities', 'hotelRooms'));
+    }
 
     public function getHotelDetail($hotel_id)
     {
