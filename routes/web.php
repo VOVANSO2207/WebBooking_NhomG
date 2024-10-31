@@ -10,7 +10,8 @@ use App\Http\Controllers\CitiesController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\PromotionsController;
 use App\Http\Controllers\PaymentsController;
-
+use App\Http\Controllers\HotelAmenitiesController;
+use App\Http\Controllers\ContactController;
 
 use Illuminate\Support\Facades\Route;
 // Route người dùng 
