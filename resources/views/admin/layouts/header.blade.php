@@ -55,7 +55,7 @@
               </a>
             </li>
             <li class="menu-item">
-              <a href="#" class="menu-link">
+              <a href="{{route('admin.hotel_amenities.index')}}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-bulb"></i> 
                 <div data-i18n="Hotel Amenities">Tiện nghi khách sạn</div>
               </a>
@@ -64,7 +64,7 @@
         </li>
 
         <li class="menu-item">
-          <a href="{{route('admin.viewpost')}}" class="menu-link">
+          <a href="{{route('admin.hotel_amenities.index')}}" class="menu-link">
             <i class="menu-icon tf-icons bx bx-news"></i>
             <div data-i18n="Tables">Post</div>
           </a>

@@ -10,8 +10,6 @@ use App\Http\Controllers\CitiesController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\PromotionsController;
 use App\Http\Controllers\PaymentsController;
-use App\Http\Controllers\ContactController;
-
 
 
 use Illuminate\Support\Facades\Route;
@@ -85,6 +83,13 @@ Route::prefix('admin')->group(function () {
     Route::get('/hotel/edit/{hotel_id}', [HotelController::class, 'editHotel'])->name('hotel.edit');
     Route::put('/hotel/update/{hotel_id}', [HotelController::class, 'update'])->name('hotel.update');
     Route::delete('/hotel/{hotel_id}', [HotelController::class, 'destroy'])->name('hotel.destroy');
+    // Admin - Tiện ích khách sạn
+    Route::get('/hotel-amenities', [HotelAmenitiesController::class, 'index'])->name('admin.hotel_amenities.index');
+    Route::get('/hotel-amenities/add', [HotelAmenitiesController::class, 'create'])->name('admin.hotel_amenities.add');
+    Route::post('/hotel-amenities/store', [HotelAmenitiesController::class, 'store'])->name('admin.hotel_amenities.store');
+    Route::get('/hotel-amenities/{id}/edit', [HotelAmenitiesController::class, 'edit'])->name('admin.hotel_amenities.edit');
+    Route::put('/hotel-amenities/{id}', [HotelAmenitiesController::class, 'update'])->name('admin.hotel_amenities.update');
+    Route::delete('/hotel_amenities/{id}/delete', [HotelAmenitiesController::class, 'destroy'])->name('amenities.delete');
 });
 
 // Admin-Post Detail
@@ -128,6 +133,11 @@ Route::get('/admin/voucher/add', [PromotionsController::class, 'voucherAdd'])->n
 Route::post('/admin/voucher/store', [PromotionsController::class, 'storeVoucher'])->name('admin.promotion.store');
 Route::get('/admin/voucher/edit/{promotion_id}', [PromotionsController::class, 'editVoucher'])->name('voucher.edit');
 Route::put('/admin/voucher/update/{id}', [PromotionsController::class, 'updateVoucher'])->name('admin.voucher.update');
+
+// Admin - Tiện ích khách sạn
+Route::get('/hotel-amenities', [HotelAmenitiesController::class, 'list'])->name('hotel_amenities.list');
+Route::get('/hotel-amenities/search', [HotelAmenitiesController::class, 'search'])->name('hotel_amenities.search');
+Route::get('/hotel_amenities/{id}/detail', [HotelAmenitiesController::class, 'showDetail'])->name('hotel_amenities.detail');
 // Search
 // Route::get('/search', [SearchController::class, 'index'])->name('search');
 Route::get('/hotels', [HotelController::class, 'viewSearchHotel'])->name('hotels.index');
