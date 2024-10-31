@@ -27,12 +27,12 @@
                 </div>
                 <div class="profile-header col-md-2">
                     <!-- Nếu chưa đăng nhập -->
-                    <!-- <div class="group-left-header">
+                    <div class="group-left-header">
                         <a href="#" class="login">Đăng nhập/</a>
                         <a href="#" class="register">Đăng ký</a>
-                    </div> -->
+                    </div>
                     <!-- Nếu đã đăng nhập -->
-                    <div class="loged">
+                    <!-- <div class="loged">
                         <div class="group-left-header d-flex align-items-center justify-content-center">
                             <div class="col-md-2 text-center">
                                 <i class="fa-solid fa-bell fa-xl"></i>
@@ -55,7 +55,7 @@
                             <a class="dropdown-item dropdown-item-staynest" href="#">Voucher</a>
                             <a class="dropdown-item dropdown-item-staynest text-danger" href="#">Đăng Xuất</a>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
