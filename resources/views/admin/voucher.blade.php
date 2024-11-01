@@ -152,7 +152,7 @@
                 <!-- Nội dung thông báo sẽ được chèn vào đây -->
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-secondary" style="#3B79C9 !important" data-bs-dismiss="modal">Đóng</button>
             </div>
         </div>
     </div>

@@ -22,7 +22,7 @@
 
         <!-- Dashboard -->
         <li class="menu-item">
-          <a href="{{route('admin.index')}}" class="menu-link">
+          <a href="{{route('admin.visits')}}" class="menu-link">
             <i class="menu-icon tf-icons bx bx-home-circle"></i>
             <div data-i18n="Analytics">Trang Chủ</div>
           </a>

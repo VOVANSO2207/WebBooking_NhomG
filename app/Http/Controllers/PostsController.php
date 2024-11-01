@@ -56,16 +56,16 @@ class PostsController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required|min:30|max:100|regex:/^[^!@#$%^&*()_+=\-{}\[\];:"\'<>,.?\/~`]+$/u|regex:/^(?!.*  )/',
+            'title' => 'required|min:30|max:200|regex:/^[^!@#$%^&*()_+=\-{}\[\];:"\'<>,.?\/~`]+$/u|regex:/^(?!.*  )/',
             'description' => 'required|min:50|max:1000',
             'content1' => 'required|min:100|max:100000',
             'meta_desc' => 'nullable|min:10|max:50|regex:/^[^!@#$%^&*()_+=\-{}\[\];:"\'<>,.?\/~`]+$/u',
             'status' => 'required|boolean',
-            'fileUpload' => 'required|image|max:10240',
+            'fileUpload' => 'required|image|max:1024',
         ], [
             'title.required' => 'Vui lòng nhập tiêu đề bài viết',
             'title.min' => 'Tiêu đề bài viết phải trên 30 ký tự',
-            'title.max' => 'Tiêu đề bài viết không được quá 100 ký tự',
+            'title.max' => 'Tiêu đề bài viết không được quá 200 ký tự',
             'title.regex' => 'Tiêu đề bài viết không hợp lệ',
             'description.required' => 'Mô tả là bắt buộc.',
             'description.max' => 'Mô tả không quá 1000 ký tự.',
@@ -79,7 +79,7 @@ class PostsController extends Controller
             'status.required' => 'Trạng thái là bắt buộc.',
             'fileUpload.required' => 'Vui lòng chọn hình ảnh',
             'fileUpload.image' => 'Tệp không hợp lệ, chỉ cho phép PNG, JPEG, JPG',
-            'fileUpload.max' => 'Dung lượng tệp không được vượt quá 10MB',
+            'fileUpload.max' => 'Dung lượng tệp không được vượt quá 1MB',
         ]);
 
         $post = new Posts();
@@ -140,16 +140,16 @@ class PostsController extends Controller
     {
         // Xác thực các dữ liệu đầu vào
         $request->validate([
-            'title' => 'required|min:30|max:100|regex:/^[^!@#$%^&*()_+=\-{}\[\];:"\'<>,.?\/~`]+$/u|regex:/^(?!.*  )/',
+            'title' => 'required|min:30|max:200|regex:/^[^!@#$%^&*()_+=\-{}\[\];:"\'<>,.?\/~`]+$/u|regex:/^(?!.*  )/',
             'description' => 'required|min:50|max:1000',
             'content1' => 'required|min:100|max:100000',
             'meta_desc' => 'nullable|min:10|max:50|regex:/^[^!@#$%^&*()_+=\-{}\[\];:"\'<>,.?\/~`]+$/u',
             'status' => 'required|boolean',
-            'fileUpload' => 'nullable|image|max:10240',
+            'fileUpload' => 'nullable|image|max:1024',
         ], [
             'title.required' => 'Vui lòng nhập tiêu đề bài viết',
             'title.min' => 'Tiêu đề bài viết phải trên 30 ký tự',
-            'title.max' => 'Tiêu đề bài viết không được quá 100 ký tự',
+            'title.max' => 'Tiêu đề bài viết không được quá 200 ký tự',
             'title.regex' => 'Tiêu đề bài viết không hợp lệ',
             'description.required' => 'Mô tả là bắt buộc.',
             'description.max' => 'Mô tả không quá 1000 ký tự.',
@@ -160,9 +160,9 @@ class PostsController extends Controller
             'meta_desc.min' => 'Từ khoá mô tả bài viết không được dưới 10 ký tự',
             'meta_desc.max' => 'Từ khoá mô tả bài viết không được quá 50 ký tự',
             'meta_desc.regex' => 'Từ khoá mô tả bài viết không chứa kí tự đặc biệt',
-            'status.required' => 'Trạng thái là bắt buộc.',
+            'status.required' => 'Vui lòng chọn trạng thái hiển thị bài viết (show/hidden)',
             'fileUpload.image' => 'Tệp không hợp lệ, chỉ cho phép PNG, JPEG, JPG',
-            'fileUpload.max' => 'Dung lượng tệp không được vượt quá 10MB',
+            'fileUpload.max' => 'Dung lượng tệp không được vượt quá 1MB',
         ]);
 
         $post = Posts::findPostById($post_id);
