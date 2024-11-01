@@ -79,4 +79,9 @@ class Hotel extends Model
         )->select('hotel_amenities.amenity_id', 'hotel_amenities.amenity_name', 'hotel_amenities.description');
     }
 
+    public function rooms()
+    {
+        return $this->hasMany(Rooms::class, 'hotel_id', 'hotel_id');
+    }
+
 }

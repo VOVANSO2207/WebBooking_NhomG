@@ -74,6 +74,29 @@
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
+
+                            <div class="mb-3 col-md-5">
+    <label class="form-label">Rooms</label>
+    <select name="rooms[]" class="form-select select2" id="rooms" multiple="multiple" required>
+        @php
+            $roomNames = []; // Mảng để theo dõi tên phòng đã hiển thị
+        @endphp
+        @foreach ($rooms as $room)
+            @if (!in_array($room->name, $roomNames)) // Kiểm tra nếu tên phòng chưa được thêm vào
+                <option value="{{ $room->room_id }}" 
+                    @if(in_array($room->room_id, $currentRooms)) selected @endif 
+                    data-name="{{ $room->name }}" data-description="{{ $room->description }}">
+                    {{ $room->name }}
+                </option>
+                @php
+                    $roomNames[] = $room->name; // Thêm tên phòng vào mảng
+                @endphp
+            @endif
+        @endforeach
+    </select>
+</div>
+
+
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Rating</label>
                                 <input class="form-control" type="number" name="rating" id="rating" min="1" max="5"
