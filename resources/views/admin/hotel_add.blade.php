@@ -77,23 +77,24 @@
                             </div>
 
                             <div class="mb-3 col-md-5">
-                            <label class="form-label">Hotel Rooms</label>
-                            <select name="rooms[]" class="form-select select2" id="rooms" multiple="multiple" required>
-                                @php
-                                    $roomNames = []; // Mảng để theo dõi tên phòng đã hiển thị
-                                @endphp
-                                @foreach ($hotelRooms as $room)
-                                    @if (!in_array($room->name, $roomNames)) // Kiểm tra nếu tên chưa được thêm vào
-                                        <option value="{{ $room->room_id }}" data-name="{{ $room->name }}" data-price="{{ $room->price }}">
-                                            {{ $room->name }} - Giá: {{ $room->price }} - Số người tối đa: {{ $room->capacity }}
-                                        </option>
-                                        @php
-                                            $roomNames[] = $room->name; // Thêm tên phòng vào mảng
-                                        @endphp
-                                    @endif
-                                @endforeach
-                            </select>
-                        </div>
+    <label class="form-label">Hotel Rooms</label>
+    <select name="rooms[]" class="form-select select2" id="rooms" multiple="multiple" required>
+        @php
+            $roomNames = []; // Mảng để theo dõi tên phòng đã hiển thị
+        @endphp
+        @foreach ($hotelRooms as $room)
+            @if (!in_array($room->name, $roomNames)) 
+                <option value="{{ $room->room_id }}" data-name="{{ $room->name }}" data-price="{{ $room->price }}">
+                    {{ $room->name }} - Giá: {{ $room->price }} - Số người tối đa: {{ $room->capacity }}
+                </option>
+                @php
+                    $roomNames[] = $room->name; // Thêm tên phòng vào mảng
+                @endphp
+            @endif
+        @endforeach
+    </select>
+</div>
+
 
                         <div class="mb-3 col-md-6">
                                 <label class="form-label">Rating</label>
