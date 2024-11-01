@@ -1,0 +1,23 @@
+.card {
+    overflow: hidden; /* Giới hạn phần hiển thị trong vùng chứa */
+    position: relative;
+}
+
+.welcome-message h1 {
+    margin-top: 20px;
+    font-weight: bold; /* Độ đậm của chữ */
+    font-size: 2em; /* Kích thước chữ */
+    color: #3B79C9 !important; /* Màu chữ */
+    white-space: nowrap; /* Không xuống dòng */
+    position: relative;
+    animation: slide-right 10s linear infinite; /* Chạy từ trái sang phải liên tục */
+}
+
+@keyframes slide-right {
+    0% {
+        transform: translateX(-100%); /* Bắt đầu bên trái ngoài vùng .card */
+    }
+    100% {
+        transform: translateX(100%); /* Kết thúc bên phải ngoài vùng .card */
+    }
+}
