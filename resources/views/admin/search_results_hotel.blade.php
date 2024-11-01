@@ -1,7 +1,10 @@
 @extends('admin.layouts.master')
-
+@php
+    use App\Helpers\IdEncoder;
+@endphp
 @section('admin-container')
-<nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
+<nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+    id="layout-navbar">
     <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
         <a class="nav-item nav-link px-0 me-xl-4">
             <i class="bx bx-menu bx-sm"></i>
@@ -10,9 +13,11 @@
 
     <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
         <div class="navbar-nav align-items-center" style="width: 100%;">
-            <form action="{{ route('admin.hotels.search') }}" method="GET" class="d-flex align-items-center" style="width: 100%;">
+            <form action="{{ route('admin.hotels.search') }}" method="GET" class="d-flex align-items-center"
+                style="width: 100%;">
                 <i class="bx bx-search fs-4 lh-0"></i>
-                <input type="text" name="search" class="form-control border-0 shadow-none" placeholder="Search..." aria-label="Search..." style="width: 100%;" />
+                <input type="text" name="search" class="form-control border-0 shadow-none" placeholder="Search..."
+                    aria-label="Search..." style="width: 100%;" />
                 <button type="submit" class="btn btn-primary">Search</button>
             </form>
         </div>
@@ -41,7 +46,7 @@
                     </thead>
                     <tbody>
                         @forelse ($hotels as $index => $hotel)
-                            <tr class="hotel-detail" data-id="{{ $hotel->hotel_id }}">
+                            <tr class="hotel-detail" data-id="{{ IdEncoder::encodeId($hotel->hotel_id) }}">
                                 <td>{{ $index + 1 }}</td>
                                 <td>
                                     <div class="swiper room-swiper">
@@ -56,7 +61,8 @@
                                                         @if (file_exists(public_path('images/' . $image->image_url)))
                                                             <img src="{{ asset('images/' . $image->image_url) }}" alt="Room Image">
                                                         @elseif (file_exists(public_path('storage/images/' . $image->image_url)))
-                                                            <img src="{{ asset('storage/images/' . $image->image_url) }}" alt="Room Image">
+                                                            <img src="{{ asset('storage/images/' . $image->image_url) }}"
+                                                                alt="Room Image">
                                                         @else
                                                             <img src="{{ asset('images/img-upload.jpg') }}" alt="Default Image">
                                                         @endif
@@ -98,24 +104,35 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+                <!-- Thông tin khách sạn hiện tại -->
                 <div><strong>Name:</strong> <span id="modalHotelName"></span></div>
                 <div><strong>Location:</strong> <span id="modalHotelLocation"></span></div>
                 <div><strong>City:</strong> <span id="modalHotelCity"></span></div>
                 <div><strong>Description:</strong> <span id="modalHotelDescription"></span></div>
                 <div><strong>Rating:</strong> <span id="modalHotelRating"></span></div>
 
+
                 <!-- Swiper carousel cho hình ảnh -->
                 <div class="swiper room-swiper">
-                    <div class="swiper-wrapper" id="hotelImages">
-                        <!-- Hình ảnh sẽ được thêm động bằng JavaScript -->
-                    </div>
+                    <div class="swiper-wrapper" id="hotelImages"></div>
                     <div class="swiper-button-next"></div>
                     <div class="swiper-button-prev"></div>
                 </div>
+                <!-- Tiện ích khách sạn -->
+                <div><strong>Amenities:</strong>
+                    <ul id="modalHotelAmenities"></ul>
+                </div>
+
+                <!-- Danh sách phòng khách sạn -->
+                <div><strong>Rooms:</strong>
+                    <ul id="modalHotelRooms"></ul>
+                </div>
             </div>
+
             <div class="modal-footer">
                 <a id="editHotelButton" class="btn btn-info">Edit</a>
-                <button type="button" class="btn btn-danger" id="deleteHotelButton" data-bs-toggle="modal" data-bs-target="#confirmDeleteHotelModal">Delete</button>
+                <button type="button" class="btn btn-danger" id="deleteHotelButton" data-bs-toggle="modal"
+                    data-bs-target="#confirmDeleteHotelModal">Delete</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
@@ -124,7 +141,8 @@
 
 
 <!-- Modal xác nhận xóa -->
-<div class="modal fade" id="confirmDeleteHotelModal" tabindex="-1" aria-labelledby="confirmDeleteHotelModalLabel" aria-hidden="true">
+<div class="modal fade" id="confirmDeleteHotelModal" tabindex="-1" aria-labelledby="confirmDeleteHotelModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -154,6 +172,7 @@
                 fetch(`/hotels/${currentHotelId}/detail`)
                     .then(response => response.json())
                     .then(hotel => {
+                        // Cập nhật thông tin khách sạn
                         document.getElementById('modalHotelName').innerText = hotel.hotel_name;
                         document.getElementById('modalHotelLocation').innerText = hotel.location;
                         document.getElementById('modalHotelCity').innerText = hotel.city_id;
@@ -163,11 +182,27 @@
                         const editRoute = "{{ route('hotel.edit', ['hotel_id' => ':hotel_id']) }}";
                         document.getElementById('editHotelButton').setAttribute('href', editRoute.replace(':hotel_id', currentHotelId));
 
-                        // Clear existing images
-                        const imageContainer = document.getElementById('hotelImages');
-                        imageContainer.innerHTML = '';
+                        // Hiển thị danh sách tiện ích
+                        const amenitiesContainer = document.getElementById('modalHotelAmenities');
+                        amenitiesContainer.innerHTML = '';
+                        hotel.amenities.forEach(amenity => {
+                            const listItem = document.createElement('li');
+                            listItem.textContent = `${amenity.name}: ${amenity.description}`;
+                            amenitiesContainer.appendChild(listItem);
+                        });
 
-                        // Append images to swiper container
+                        // Hiển thị danh sách phòng
+                        const roomsContainer = document.getElementById('modalHotelRooms');
+                        roomsContainer.innerHTML = '';
+                        hotel.rooms.forEach(room => {
+                            const roomItem = document.createElement('li');
+                            roomItem.textContent = `${room.room_name} - Price: ${room.price}`;
+                            roomsContainer.appendChild(roomItem);
+                        });
+
+                        // Hiển thị hình ảnh khách sạn
+                        const imageContainer = document.getElementById('hotelImages');
+                        imageContainer.innerHTML = ''; // Xóa các ảnh cũ trước
                         hotel.images.forEach(image => {
                             const slide = document.createElement('div');
                             slide.classList.add('swiper-slide');
@@ -175,7 +210,7 @@
                             imageContainer.appendChild(slide);
                         });
 
-                        // Initialize or update Swiper
+                        // Khởi tạo Swiper sau khi đã thêm ảnh
                         new Swiper('.room-swiper', {
                             navigation: {
                                 nextEl: '.swiper-button-next',
@@ -184,10 +219,12 @@
                             loop: false,
                         });
 
+                        // Hiển thị modal chi tiết khách sạn
                         const hotelDetailModal = new bootstrap.Modal(document.getElementById('hotelDetailModal'));
                         hotelDetailModal.show();
                     })
                     .catch(error => console.error('Error fetching hotel details:', error));
+
             });
         });
 
@@ -198,14 +235,14 @@
                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
                 }
             })
-            .then(response => {
-                if (response.ok) {
-                    location.reload(); // Tải lại trang nếu xóa thành công
-                } else {
-                    console.error('Error deleting hotel:', response.statusText);
-                }
-            })
-            .catch(error => console.error('Error deleting hotel:', error));
+                .then(response => {
+                    if (response.ok) {
+                        location.reload(); // Tải lại trang nếu xóa thành công
+                    } else {
+                        console.error('Error deleting hotel:', response.statusText);
+                    }
+                })
+                .catch(error => console.error('Error deleting hotel:', error));
         });
 
         // Initialize Swiper for each Swiper container
