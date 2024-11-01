@@ -90,15 +90,16 @@
 
 
 
-                            <div class="mb-3 col-md-6">
-                                <label class="form-label">Rating</label>
-                                <input class="form-control" type="number" name="rating" id="rating" min="1" max="5"
-                                    step="0.1"
-                                    value="{{ old('rating', $hotel->rating) }}" placeholder="Rating" required />
-                                @error('rating')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
+<div class="mb-3 col-md-6">
+    <label class="form-label">Rating</label>
+    <input class="form-control" type="number" name="rating" id="rating" 
+        min="1" max="5" step="0.1"
+        value="{{ old('rating', $hotel->rating) }}" placeholder="Rating" required />
+    @error('rating')
+        <div class="text-danger">{{ $message }}</div>
+    @enderror
+</div>
+
 
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Upload Images</label>

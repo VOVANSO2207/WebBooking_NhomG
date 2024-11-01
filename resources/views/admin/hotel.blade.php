@@ -122,6 +122,11 @@
                 <div><strong>Amenities:</strong>
                     <ul id="modalHotelAmenities"></ul>
                 </div>
+
+                <!-- Danh sách phòng khách sạn -->
+                <div><strong>Rooms:</strong>
+                    <ul id="modalHotelRooms"></ul>
+                </div>
             </div>
 
             <div class="modal-footer">
@@ -184,6 +189,15 @@
                             const listItem = document.createElement('li');
                             listItem.textContent = `${amenity.name}: ${amenity.description}`;
                             amenitiesContainer.appendChild(listItem);
+                        });
+
+                        // Hiển thị danh sách phòng
+                        const roomsContainer = document.getElementById('modalHotelRooms');
+                        roomsContainer.innerHTML = '';
+                        hotel.rooms.forEach(room => {
+                            const roomItem = document.createElement('li');
+                            roomItem.textContent = `${room.room_name} - Price: ${room.price}`;
+                            roomsContainer.appendChild(roomItem);
                         });
 
                         // Hiển thị hình ảnh khách sạn
