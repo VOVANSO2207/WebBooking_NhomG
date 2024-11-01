@@ -53,10 +53,10 @@
                                     <img src="{{ asset('images/' . $post->img) }}" alt="{{ $post->title }}"
                                         style="width: 100px; height: auto;">
                                 </td>
-                                <td>{{ Str::limit($post->title, 10) }}</td>
-                                <td>{{ Str::limit($post->description, 10) }}</td>
-                                <td>{{ Str::limit($post->content, 10) }}</td>
-                                <td>{{ Str::limit($post->meta_desc, 10) }}</td>
+                                <td>{{ Str::limit($post->title, 60) }}</td>
+                                <td>{{ Str::limit($post->description, 60) }}</td>
+                                <td>{{ Str::limit($post->content, 60) }}</td>
+                                <td>{{ Str::limit($post->meta_desc, 60) }}</td>
                                 <td>{{ $post->url_seo }}</td>
                                 <td class="{{ $post->status ? 'badge bg-success' : 'badge bg-danger' }}">
                                     {{ $post->status ? 'Show' : 'Hidden' }}
@@ -166,7 +166,7 @@
                 Bài viết đã được xóa thành công.
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-secondary" style="#3B79C9 !important" data-bs-dismiss="modal">Đóng</button>
             </div>
         </div>
     </div>
@@ -200,7 +200,7 @@
             fetch(`/posts/${currentPostId}/detail`)
                 .then(response => response.json())
                 .then(post => {
-                    const limitText = (text, maxLength = 10) => {
+                    const limitText = (text, maxLength = 60) => {
                         return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
                     };
 

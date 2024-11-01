@@ -15,7 +15,7 @@
 <body>
     <section class="blog">
         <div class="title-blog">
-            <div class="container">
+            <div class="container mt-5">
                 Tin Tức
             </div>
         </div>
@@ -39,7 +39,8 @@
                         @foreach ($posts as $post)
                             <div class="col-md-6">
                                 <div class="news-item">
-                                    <img src="{{ asset('images/' . $post->img) }}" alt="Ảnh đại diện bài viết">
+                                <a style="text-decoration: none" href="{{ url('blog/' . $post->url_seo) }}">
+                                    <img src="{{ asset('images/' . $post->img) }}" alt="Ảnh đại diện bài viết"></a>
                                     <div class="news-content">
                                         <h5><a href="{{ url('blog/' . $post->url_seo) }}">{{ Str::limit($post->title, 25) }}</a></h5>
                                         <p>{{ Str::limit($post->description, 25) }}</p>
