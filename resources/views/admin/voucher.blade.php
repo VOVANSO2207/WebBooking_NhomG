@@ -58,12 +58,10 @@
                                     data-updated-at="{{ $voucher->updated_at }}">
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $voucher->promotion_code }}</td>
-                                    <td>{{ $voucher->discount_amount }}</td>
+                                    <td>{{ number_format($voucher->discount_amount, 0, ',', '.') }} VND
+                                    </td>
                                     <td>{{ $voucher->start_date }}</td>
                                     <td>{{ $voucher->end_date }}</td>
-
-
-
                                 </tr>
                             @endforeach
                         @endif
@@ -152,7 +150,8 @@
                 <!-- Nội dung thông báo sẽ được chèn vào đây -->
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" style="#3B79C9 !important" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-secondary" style="#3B79C9 !important"
+                    data-bs-dismiss="modal">Đóng</button>
             </div>
         </div>
     </div>
@@ -180,7 +179,9 @@
                     })
                     .then(voucher => {
                         document.getElementById('modalPromotionCode').innerText = voucher.promotion_code;
-                        document.getElementById('modalDiscountAmount').innerText = voucher.discount_amount;
+                        let discountAmount = voucher.discount_amount;
+                        let formattedAmount = Number(discountAmount).toLocaleString('vi-VN') + ' VND';
+                        document.getElementById('modalDiscountAmount').innerText = formattedAmount;
                         document.getElementById('modalStartDate').innerText = voucher.start_date;
                         document.getElementById('modalEndDate').innerText = voucher.end_date;
                         // Thiết lập đường dẫn cho nút Edit
