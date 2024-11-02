@@ -21,7 +21,7 @@
         </div>
         <div class="container">
             <div class="row">
-            <div class="col-md-4">
+                <div class="col-md-4">
                     <div class="search-bar">
                         <h4>Tìm kiếm bài viết</h4>
                         <form id="search-form">
@@ -40,7 +40,9 @@
                                 <div class="news-item">
                                     <img src="{{ asset('images/' . $post->img) }}" alt="Ảnh đại diện bài viết">
                                     <div class="news-content">
-                                        <h5><a href="{{ url('blog/' . $post->url_seo) }}">{{ Str::limit($post->title, 25) }}</a></h5>
+                                        <h5><a
+                                                href="{{ url('blog/' . $post->url_seo) }}">{{ Str::limit($post->title, 25) }}</a>
+                                        </h5>
                                         <p>{{ Str::limit($post->description, 25) }}</p>
                                         <span class="news-date">{{ $post->formattedCreatedAt }}</span>
                                         <a href="{{ url('blog/' . $post->url_seo) }}" class="btn-read-more">Xem thêm</a>
@@ -53,7 +55,7 @@
                         {{ $posts->appends(['csrf_token' => csrf_token()])->links('pagination::bootstrap-4') }}
                     </div>
                 </div>
-               
+
             </div>
         </div>
     </section>

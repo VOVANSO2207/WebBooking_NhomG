@@ -132,11 +132,6 @@
             padding: 10px;
         }
 
-        .availability-alert {
-            color: red;
-            font-weight: bold;
-        }
-
         .date-box {
             border: 1px solid #ddd;
             border-radius: 10px;
