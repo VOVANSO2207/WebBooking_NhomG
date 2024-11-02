@@ -17,7 +17,7 @@
                         <div class="row">
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">User</label>
-                                <input type="text" class="form-control" value="{{ $booking->user->username }}" readonly>
+                                <input type="text" class="form-control" value="{{ optional($booking->user)->username ?? 'Không có người dùng' }}" readonly>
                                 <input type="hidden" name="user_id" value="{{ $booking->user_id }}">
                                 @error('user_id')
                                     <div class="text-danger">{{ $message }}</div>

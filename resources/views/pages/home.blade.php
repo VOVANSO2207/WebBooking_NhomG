@@ -49,7 +49,7 @@
 <div class="banner-home"></div>
 <section class="header-staynest-home">
     <div class="top-header">
-        <a href="#" class="logo-staynest p-3">
+        <a href="/" class="logo-staynest p-3">
             <img src="{{ asset('/images/logo_staynest_white_color.png') }}" alt="" width="50px">
             <h1 class="name-logo ms-2">StayNest</h1>
         </a>
@@ -62,7 +62,7 @@
                 </div>
                 <div class="menu-header col-md-8">
                     <ul class="menu-attribute d-flex justify-content-around m-0">
-                        <li><a href="#">TRANG CHỦ</a></li>
+                        <li><a href="/">TRANG CHỦ</a></li>
                         <li><a href="#">GIỚI THIỆU</a></li>
                         <li><a href="#">PHÒNG KHÁCH SẠN</a></li>
                         <li><a href="{{route('blog')}}">TIN TỨC</a></li>
