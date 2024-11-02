@@ -46,9 +46,9 @@
                         @forelse ($bookings as $index => $booking)
                             <tr class="booking-detail" data-id="{{ IdEncoder::encodeId($booking->booking_id ) }}">
                                 <td>{{ $index + 1 }}</td>
-                                <td>{{ $booking->user->username ?? 'N/A' }}</td> <!-- Hiển thị tên người dùng -->
+                                <td>{{ $booking->user->username ?? 'Không có người dùng' }}</td> <!-- Hiển thị tên người dùng -->
                                 <td>{{ $booking->room->name ?? 'N/A' }}</td> <!-- Hiển thị tên phòng -->
-                                <td>{{ $booking->promotion->promotion_code ?? 'N/A' }}</td> <!-- Hiển thị mã khuyến mãi -->
+                                <td>{{ $booking->promotion->promotion_code ?? 'Không có khuyến mãi' }}</td> <!-- Hiển thị mã khuyến mãi -->
                                 <td>{{ $booking->check_in ? \Carbon\Carbon::parse($booking->check_in)->format('d/m/Y') : 'N/A' }}
                                 </td>
                                 <td>{{ $booking->check_out ? \Carbon\Carbon::parse($booking->check_out)->format('d/m/Y') : 'N/A' }}

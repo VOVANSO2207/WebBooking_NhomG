@@ -36,13 +36,12 @@
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Promotion</label>
                                 <input type="text" class="form-control"
-                                    value="{{ $booking->promotion->promotion_code }}" readonly>
+                                    value="{{ optional($booking->promotion)->promotion_code ?? 'Không có khuyến mãi' }}" readonly>
                                 <input type="hidden" name="promotion_id" value="{{ $booking->promotion_id }}">
                                 @error('promotion_id')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
-
 
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Check-In Date</label>
