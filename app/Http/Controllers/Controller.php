@@ -14,4 +14,9 @@ abstract class Controller
         return view('pages.hotel_detail');
     }
 
+    public function accountTest()
+    {
+        return view('pages.account');
+    }
+
 }

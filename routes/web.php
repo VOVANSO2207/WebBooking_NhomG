@@ -51,6 +51,11 @@ Route::get('/hotel_detail', function () {
 });
 
 
+Route::get('/account', function () {
+    return view('pages/account');
+});
+
+
 // Route::get('/home', function () {
 //     return view('pages/home');
 // });

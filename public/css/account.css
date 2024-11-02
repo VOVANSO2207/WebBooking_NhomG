@@ -1,0 +1,305 @@
+.content-account {
+    .account-title {
+        background: #dddddd53;
+        width: 100%;
+        padding: 15px;
+
+        .link-title {
+            font-size: 13px;
+        }
+
+        .title-account {
+            font-size: 35px;
+            font-weight: bold;
+        }
+    }
+
+    .tabbar-account {
+        .link-tab {
+            box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+        }
+
+        .tab-content {
+
+            .info-account {
+                padding: 20px;
+                border-radius: 20px;
+                box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+
+                .image-user {
+                    i {
+                        font-size: 10rem;
+                        color: #3B79C9;
+                    }
+                }
+
+                .view-info-user {
+                    .form-group {
+                        label {
+                            font-size: 20px;
+                        }
+
+                        input {
+                            width: 30%;
+                        }
+                    }
+                }
+            }
+
+            .bill-room {
+                .invoice-card {
+                    background-color: #ffffff;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                    margin: 20px;
+
+                    .availability-container {
+                        .group-view-date {
+                            text-align: center;
+                        }
+
+                        .date-box {
+                            border: 1px solid #ddd;
+                            border-radius: 10px;
+                            width: 100%;
+
+                            .date-header {
+                                font-size: 14px;
+                                color: #888;
+                            }
+
+                            .date-main {
+                                font-size: 16px;
+                                font-weight: bold;
+                            }
+
+                            .date-sub {
+                                font-size: 14px;
+                                color: #888;
+                            }
+                        }
+
+                        .date-divider {
+                            font-size: 24px;
+                            color: #888;
+                        }
+                    }
+                }
+
+                .header-bar {
+                    background-color: #588CD0;
+                    color: white;
+                    padding: 15px;
+                    border-radius: 8px 8px 0 0;
+
+                    h5 {
+                        font-size: 25px;
+                        display: flex;
+                        align-items: center;
+                        text-align: center;
+                    }
+                }
+
+                .booking-info {
+                    .content {
+                        display: flex;
+                        flex-wrap: wrap;
+                    }
+                }
+
+                .room-details {
+                    .content-room-details {
+                        display: flex;
+                        justify-content: space-between;
+                        padding: 30px 30px 0 30px;
+
+                        h6 {
+                            font-size: 20px;
+                        }
+                    }
+
+                    .price {
+                        .content-price {
+                            .price-details p {
+                                font-size: 20px;
+                                font-weight: 700;
+                                text-align: right;
+                            }
+                        }
+
+                        .price-item {
+                            display: flex;
+                            justify-content: space-between;
+                            font-size: 16px;
+                            color: #333;
+
+                            .item-1 {
+                                .discount-code {
+                                    font-weight: bold;
+                                    font-size: 20px;
+                                    color: green;
+                                }
+                            }
+
+                            .discount-amount {
+                                font-size: 16px;
+                                color: green;
+                            }
+
+                        }
+
+                        .total-price p {
+                            font-weight: 700;
+                            font-size: 23px;
+                        }
+                    }
+                }
+
+                .booking-info,
+                .room-details {
+                    margin-top: 15px;
+                }
+
+                .total-price {
+                    color: #007bff;
+                    font-weight: bold;
+                }
+
+                .cancel-booking {
+                    color: #dc3545;
+                    text-align: right;
+                }
+            }
+
+            .hotel-like {
+                .card-like-hotel {
+                    border-radius: 20px;
+                    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+                    .group-room-card {
+                        display: flex;
+                        justify-content: space-between;
+
+                        .group-info-room-card {
+                            box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+                            border-radius: 20px;
+                            scale: 0.95;
+                            background: #fff;
+                        }
+
+                    }
+
+                    .mySwiper img {
+                        width: 100%;
+                        height: 200px;
+                        object-fit: cover;
+                        padding: 10px;
+                        border-radius: 20px;
+                    }
+
+                    .detail-infor-right {
+                        position: relative;
+                        padding: 10px;
+                        font-size: 20px;
+
+                        .detail-room-sale {
+                            position: absolute;
+                            width: 45px;
+                            height: 45px;
+                            background: yellow;
+                            color: red;
+                            top: 0;
+                            right: 0;
+                            border-bottom-left-radius: 20px;
+                            border-top-right-radius: 20px;
+                            display: flex;
+                            text-align: center;
+                            justify-content: center;
+                            align-items: center;
+                            font-weight: 900;
+                        }
+
+                        .card-room-location {
+                            i {
+                                color: #3B79C9;
+                                margin-right: 5px;
+                            }
+                        }
+
+                        .card-room-hotel-name {
+                            i {
+                                color: #3B79C9;
+                                margin-right: 5px;
+                            }
+                        }
+
+                        .card-room-rating span {
+                            font-size: 35px;
+                            color: #ffdd00;
+                        }
+
+                        .group-room-price {
+                            .card-room-price-old {
+                                color: #ACACAC;
+                                text-decoration: line-through;
+                                font-size: 16px;
+                            }
+
+                            ul li {
+                                list-style: none;
+                            }
+
+                            .card-room-price-new {
+                                color: red;
+                                font-weight: 700;
+                                font-size: 25px;
+                            }
+                        }
+
+                        .card-room-status {
+                            position: absolute;
+                            bottom: 30%;
+                            right: 20px;
+                            display: flex;
+
+                            .don {
+                                background: #12C84F;
+                                color: #fff;
+
+                            }
+
+                            .don,
+                            .doi {
+                                margin-left: 5px;
+                                padding: 3px 10px;
+                                border: 1px solid;
+                                width: 100%;
+                                font-size: 13px;
+                                border-radius: 10px;
+                            }
+                        }
+
+                        .card-room-btn-book {
+                            position: absolute;
+                            bottom: 10%;
+                            right: 20px;
+                            text-transform: uppercase;
+                            font-size: 16px;
+                            padding: 5px 10px;
+                            border-radius: 10px;
+                            background: #3B79C9;
+
+                            .btn-book-now {
+                                color: #fff;
+                                text-decoration: none;
+
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+
+}
