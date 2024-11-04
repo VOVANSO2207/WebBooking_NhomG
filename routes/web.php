@@ -62,7 +62,7 @@ Route::get('/account', function () {
 
 // Admin - Home
 Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
-Route::get('/admin', action: [AdminController::class, 'showVisitsChart'])->name('admin.visits');
+// Route::get('/admin', action: [AdminController::class, 'showVisitsChart'])->name('admin.visits');
 
 Route::prefix('admin')->group(function () {
     // Route cho danh sách phòng
