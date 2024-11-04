@@ -59,7 +59,7 @@
                                                                 <img src="{{ asset('storage/images/' . $image->image_url) }}"
                                                                     alt="Room Image">
                                                             @else
-                                                                <img src="{{ asset('images/img-upload.jpg') }}"
+                                                                <img src="{{ asset('images/defaullt-image.png') }}"
                                                                     alt="Default Image">
                                                             @endif
                                                         </div>
@@ -227,7 +227,7 @@
                         const slideDiv = document.createElement('div');
                         slideDiv.className = 'swiper-slide';
                         const imgElement = document.createElement('img');
-        
+                        
                         checkImageExists(imgUrl, exists => {
                             imgElement.src = exists ? imgUrl : storageImgUrl;
                             imgElement.style.width = '100%'; // Adjust width as necessary

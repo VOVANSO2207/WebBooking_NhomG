@@ -67,7 +67,7 @@
               </a>
             </li>
             <li class="menu-item">
-              <a href="#" class="menu-link">
+              <a href="{{route('admin.viewroomtype')}}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-category"></i>
                 <div data-i18n="Room Type">Loại phòng</div>
               </a>
@@ -93,8 +93,16 @@
           </a>
         </li>
 
-        <!-- Misc -->
+        <li class="menu-item">
+          <label for="switch" class="switch">
+            <input id="switch" type="checkbox" />
+            <span class="slider"></span>
+            <span class="decoration"></span>
+          </label>          
+        </li>
 
+        <!-- Misc -->
+          
       </ul>
     </aside>
     <!-- / Menu -->

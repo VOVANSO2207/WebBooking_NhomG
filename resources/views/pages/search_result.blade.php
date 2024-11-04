@@ -54,7 +54,8 @@
                 <h2>Bộ lọc phổ biến</h2>
                 <div class="option d-flex justify-content-between align-items-center">
                     <p>Nhiều đánh giá</p>
-                    <input type="checkbox" class="check_filter">
+                    <input type="checkbox" class="check_filter" id="filterMostReviews" data-url="{{ route('hotels.most-reviewed') }}">
+                    
                 </div>
                 <div class="option d-flex justify-content-between align-items-center">
                     <p>Khuyến mãi</p>
@@ -106,7 +107,7 @@
             </div>
 
             <div class="tab_content">
-                <div id="low-to-high" class="tab_item active">
+                <div id="low-to-high" class="tab_item active hotels-container">
                     <div class="d-flex">
                         <p>Ngày đi: {{ isset($daterange) ? explode(' - ', $daterange)[0] : '' }} </p>
                         <p class="ms-2">Ngày về: {{ isset($daterange) ? explode(' - ', $daterange)[1] : '' }} </p>

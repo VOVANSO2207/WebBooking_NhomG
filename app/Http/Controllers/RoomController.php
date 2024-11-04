@@ -245,9 +245,9 @@ class RoomController extends Controller
                     ->orWhere('description', 'LIKE', '%' . $keyword . '%');
             });
         }
-
+        
         $results = $rooms->with('room_images', 'roomType')->get(); // Lấy kết quả tìm kiếm
-
+        
         // Trả về view với kết quả tìm kiếm
         return view('admin.search_results_room', ['results' => $results])->render(); // Render view và trả về
     }

@@ -64,13 +64,33 @@ starButtons.forEach(button => {
     });
 });
 
+$(document).ready(function() {
+    $('#filterMostReviews').change(function() {
+        if ($(this).is(':checked')) {
+            $.ajax({
+                url: $(this).data('url'),  // Lấy URL từ thuộc tính data-url
+                type: 'GET',
+                success: function(response) {
+                    $('.hotels-container').html(response);
+                },
+                error: function() {
+                    alert('Có lỗi xảy ra!');
+                }
+            });
+        } else {
+            location.reload();
+        }
+    });
+});
+
+
 
 
 // Initialize slider
-setHandlePosition(minHandle, currentMin);
-setHandlePosition(maxHandle, currentMax);
-updateSliderRange();
-updatePriceValues();
+// setHandlePosition(minHandle, currentMin);
+// setHandlePosition(maxHandle, currentMax);
+// updateSliderRange();
+// updatePriceValues();
 
 
 

@@ -46,7 +46,7 @@ class Hotel extends Model
 
         return static::where(function ($query) use ($keyword) {
             $query->where('hotel_name', 'LIKE', "%{$keyword}%")
-                  ->orWhere('location', 'LIKE', "%{$keyword}%");
+                ->orWhere('location', 'LIKE', "%{$keyword}%");
         });
     }
 
@@ -71,4 +71,10 @@ class Hotel extends Model
     {
         return $this->hasMany(HotelAmenities::class, 'hotel_id', 'hotel_id');
     }
+    public function reviews()
+    {
+        return $this->hasMany(Reviews::class, 'hotel_id');
+    }
+    // Hàm lọc khách sạn theo số lượng đánh giá nhiều nhất
+    
 }

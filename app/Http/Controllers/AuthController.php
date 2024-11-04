@@ -53,15 +53,24 @@ class AuthController extends Controller
             // Đăng nhập người dùng
             Auth::login($user);
             $request->session()->regenerate();
-            
+
             // Điều hướng người dùng dựa trên vai trò
             return match ($user->role_id) {
                 1 => redirect()->route('admin'),
-                2 => redirect()->route('home'),
+                2 => redirect('/'),
                 default => redirect()->route('error'),
             };
         } catch (ValidationException $e) {
             return back()->withErrors($e->validator->errors())->withInput(); // Trả về lỗi nếu có
         }
     }
+    public function logout(Request $request)
+    {
+        Auth::logout(); // Đăng xuất người dùng
+        $request->session()->invalidate(); // Hủy phiên làm việc hiện tại
+        $request->session()->regenerateToken(); // Tạo token mới để bảo mật
+        
+        return redirect('/')->with('success', 'Đăng xuất thành công');
+    }
+    
 }

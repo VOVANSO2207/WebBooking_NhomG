@@ -7,6 +7,7 @@ use App\Models\Hotel;
 use App\Models\Cities;
 use App\Models\HotelImages;
 use App\Models\HotelAmenities;
+use App\Models\Reviews;
 
 class HotelController extends Controller
 {
@@ -15,7 +16,7 @@ class HotelController extends Controller
     {
         // Lấy tất cả các hotels từ cơ sở dữ liệu
         $hotels = Hotel::with('images')->get();
-
+        
         // Truyền dữ liệu qua view
         return view('pages.search_result', compact('hotels'));
     }
@@ -23,7 +24,7 @@ class HotelController extends Controller
     {
         // Lấy tất cả các hotels từ cơ sở dữ liệu
         $hotels = Hotel::all();
-
+        
         // Truyền dữ liệu qua view
         return view('pages.home', compact('hotels'));
     }
@@ -59,7 +60,7 @@ class HotelController extends Controller
         $hotels = $query->get();
         // Lấy danh sách tiện nghi
         $amenities = HotelAmenities::getAllAmenities();
-
+        
         // Trả dữ liệu về trang search_result
         return view('pages.search_result', compact('hotels','amenities', 'location', 'daterange', 'rooms', 'adults', 'children'));
     }
@@ -325,5 +326,7 @@ class HotelController extends Controller
         $decodedId = IdEncoder::decodeId($encodedId);
         return response()->json(['decoded_id' => $decodedId]);
     }
+    
+    
 }
 // 

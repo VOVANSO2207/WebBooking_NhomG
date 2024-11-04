@@ -1,4 +1,5 @@
 <?php
+
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AmenityHotelController;
 use App\Http\Controllers\AuthController;
@@ -11,15 +12,16 @@ use App\Http\Controllers\CitiesController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\PromotionsController;
 use App\Http\Controllers\PaymentsController;
+use App\Http\Controllers\RoomTypeController;
 use App\Models\HotelAmenities;
 use Illuminate\Support\Facades\Route;
 // Route người dùng 
-Route::get('/', function () {
-    return view('pages/home');
-})->name('home');
+// Route::get('/', function () {
+//     return view('pages/home');
+// })->name('home');
 // Route::middleware(['auth'])->group(function () {
 //     Route::get('/', function () {
-//         return view('pages/home');
+//         return view('pages/homex');
 //     })->name('home');
 // });
 
@@ -31,6 +33,7 @@ Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
 Route::get('/register', function () {
     return view('auth.register');
 });
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::get('/search_result', function () {
     return view('pages.search_result');
@@ -83,6 +86,17 @@ Route::prefix('admin')->group(function () {
     Route::get('/hotel/edit/{hotel_id}', [HotelController::class, 'editHotel'])->name('hotel.edit');
     Route::put('/hotel/update/{hotel_id}', [HotelController::class, 'update'])->name('hotel.update');
     Route::delete('/hotel/{hotel_id}', [HotelController::class, 'destroy'])->name('hotel.destroy');
+    // Admin - RoomType
+    Route::get('/roomtype', [RoomTypeController::class, 'getAllRoomType'])->name('admin.viewroomtype');
+    Route::get('/roomtype/add', [RoomTypeController::class, 'showAddRoomType'])->name('roomType_add');
+    Route::post('/roomtype/store', [RoomTypeController::class, 'AddRoomType'])->name('admin.roomtype.store');
+    // Update - Delete RoomType 
+    Route::get('/admin/roomtype/edit/{id}', [RoomTypeController::class, 'editRoomType'])->name('admin.roomtype.edit');
+    Route::put('/admin/roomtype/update/{id}', [RoomTypeController::class, 'updateRoomType'])->name('admin.roomtype.update');
+
+    Route::delete('/roomtype/delete/{id}', [RoomTypeController::class, 'deleteRoomType'])->name('admin.roomtype.delete');
+    Route::get('/room-types/search', [RoomTypeController::class, 'search'])->name('roomTypes.search');
+
 });
 
 // Admin-Post Detail
@@ -144,4 +158,5 @@ Route::get('/payment', [PaymentsController::class, 'viewPay'])->name('pages.pay'
 Route::get('/admin/hotel', [HotelController::class, 'viewHotel'])->name('admin.viewhotel');
 
 // User Home
-Route::get('/', [HotelController::class, 'index']);
+Route::get('/', [HotelController::class, 'index'])->name('home');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

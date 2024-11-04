@@ -6,6 +6,8 @@ use App\Models\User;
 use App\Models\Roles;
 use Illuminate\Http\Request;
 use App\Helpers\IdEncoder;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 class UsersController extends Controller
 {
     public function viewUser()
@@ -18,10 +20,10 @@ class UsersController extends Controller
     {
         // Lấy tất cả vai trò từ bảng roles
         $roles = Roles::all();
-
+        
         // Lấy thông tin người dùng hiện tại (nếu cần)
         $user = auth()->user(); // Lấy người dùng đã xác thực
-
+            
         return view('admin.user_add', compact('roles', 'user')); // Truyền cả $roles và $user vào view
     }
 
