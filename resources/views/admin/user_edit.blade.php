@@ -25,13 +25,17 @@
                                     </label>
                                 </div>
                             </div>
+                            <!-- Hiển thị thông báo lỗi cho avatar -->
+                            @error('avatar')
+                                <div class="text-danger mt-2">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <div class="row">
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Username</label>
                                 <input class="form-control" type="text" name="username" id="username"
-                                    value="{{ old('username', $user->username) }}" placeholder="Username" required />
+                                    value="{{ old('username', $user->username) }}" placeholder="Username" />
                                 @error('username')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -39,7 +43,7 @@
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Email</label>
                                 <input class="form-control" type="email" name="email" id="email"
-                                    value="{{ old('email', $user->email) }}" placeholder="Email" required />
+                                    value="{{ old('email', $user->email) }}" placeholder="Email" />
                                 @error('email')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -48,7 +52,7 @@
                                 <label class="form-label">Phone Number</label>
                                 <input class="form-control" type="text" name="phone_number" id="phone_number"
                                     value="{{ old('phone_number', $user->phone_number) }}" placeholder="Phone Number"
-                                    required />
+                                     />
                                 @error('phone_number')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -57,13 +61,14 @@
                                 <label class="form-label">Password</label>
                                 <input class="form-control" type="password" name="password" id="password"
                                     placeholder="Password" />
+                                <small class="form-text text-muted">Để trống nếu không thay đổi mật khẩu.</small> <!-- Thêm thông điệp chữ mờ -->
                                 @error('password')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Role</label>
-                                <select id="role_id" name="role_id" class="form-select" required>
+                                <select id="role_id" name="role_id" class="form-select">
                                     @foreach ($roles as $role)
                                         <option value="{{ $role->role_id }}" {{ $user->role_id == $role->role_id ? 'selected' : '' }}>
                                             {{ $role->role_name }}
