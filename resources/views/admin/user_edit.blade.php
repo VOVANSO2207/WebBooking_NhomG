@@ -14,8 +14,8 @@
                         @method('PUT')
                         <div class="card-body">
                             <div class="d-flex align-items-start align-items-sm-center gap-4">
-                                <img src="{{ asset('storage/images/admin/' . $user->avatar) }}" alt="user-avatar" 
-                                class="d-block rounded" height="100" width="100" id="fileUpload" />
+                                <img src="{{ asset('images/' . $user->avatar) }}" alt="user-avatar" 
+                                    class="d-block rounded" height="100" width="100" id="fileUpload" />
                                 <div class="button-wrapper">
                                     <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
                                         <span class="d-none d-sm-block">Upload</span>

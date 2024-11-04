@@ -49,7 +49,7 @@
                             <tr class="user-detail" data-id="{{ IdEncoder::encodeId($user->user_id) }}">
                                 <td>{{ $index + 1 }}</td>
                                 <td>
-                                    <img src="{{ asset('storage/images/' . $user->avatar) }}" alt="{{ $user->username }}" 
+                                    <img src="{{ asset('images/' . $user->avatar) }}" alt="{{ $user->username }}" 
                                     style="width: 100px; height: auto;">
                                 </td>
                                 <td>{{ $user->username }}</td>
