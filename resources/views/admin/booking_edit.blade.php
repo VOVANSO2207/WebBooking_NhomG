@@ -17,7 +17,7 @@
                         <div class="row">
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">User</label>
-                                <input type="text" class="form-control" value="{{ $booking->user->username }}" readonly>
+                                <input type="text" class="form-control" value="{{ optional($booking->user)->username ?? 'Không có người dùng' }}" readonly>
                                 <input type="hidden" name="user_id" value="{{ $booking->user_id }}">
                                 @error('user_id')
                                     <div class="text-danger">{{ $message }}</div>
@@ -36,13 +36,12 @@
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Promotion</label>
                                 <input type="text" class="form-control"
-                                    value="{{ $booking->promotion->promotion_code }}" readonly>
+                                    value="{{ optional($booking->promotion)->promotion_code ?? 'Không có khuyến mãi' }}" readonly>
                                 <input type="hidden" name="promotion_id" value="{{ $booking->promotion_id }}">
                                 @error('promotion_id')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
-
 
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Check-In Date</label>

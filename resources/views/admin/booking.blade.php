@@ -46,9 +46,9 @@
                         @forelse ($bookings as $index => $booking)
                             <tr class="booking-detail" data-id="{{ IdEncoder::encodeId($booking->booking_id ) }}">
                                 <td>{{ $index + 1 }}</td>
-                                <td>{{ $booking->user->username ?? 'N/A' }}</td> <!-- Hiển thị tên người dùng -->
+                                <td>{{ $booking->user->username ?? 'Không có người dùng' }}</td> <!-- Hiển thị tên người dùng -->
                                 <td>{{ $booking->room->name ?? 'N/A' }}</td> <!-- Hiển thị tên phòng -->
-                                <td>{{ $booking->promotion->promotion_code ?? 'N/A' }}</td> <!-- Hiển thị mã khuyến mãi -->
+                                <td>{{ $booking->promotion->promotion_code ?? 'Không có khuyến mãi' }}</td> <!-- Hiển thị mã khuyến mãi -->
                                 <td>{{ $booking->check_in ? \Carbon\Carbon::parse($booking->check_in)->format('d/m/Y') : 'N/A' }}
                                 </td>
                                 <td>{{ $booking->check_out ? \Carbon\Carbon::parse($booking->check_out)->format('d/m/Y') : 'N/A' }}
@@ -77,6 +77,7 @@
 </div>
 
 <!-- Modal chi tiết đặt phòng -->
+<!-- Modal chi tiết đặt phòng -->
 <div class="modal fade" id="bookingDetailModal" tabindex="-1" aria-labelledby="bookingDetailModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -86,34 +87,27 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="booking-detail">
-                    <div class="booking-detail-item">
-                        <strong>User:</strong>
-                        <span id="modalUserId"></span>
+                <div class="row">
+                    <!-- Labels Column -->
+                    <div class="col-4 text-end fw-bold">
+                        <div class="booking-detail-item">User:</div>
+                        <div class="booking-detail-item">Room:</div>
+                        <div class="booking-detail-item">Promotion:</div>
+                        <div class="booking-detail-item">Check In:</div>
+                        <div class="booking-detail-item">Check Out:</div>
+                        <div class="booking-detail-item">Total Price:</div>
+                        <div class="booking-detail-item">Status:</div>
                     </div>
-                    <div class="booking-detail-item">
-                        <strong>Room:</strong>
-                        <span id="modalRoomId"></span>
-                    </div>
-                    <div class="booking-detail-item">
-                        <strong>Promotion:</strong>
-                        <span id="modalPromotionId"></span>
-                    </div>
-                    <div class="booking-detail-item">
-                        <strong>Check In:</strong>
-                        <span id="modalCheckIn"></span>
-                    </div>
-                    <div class="booking-detail-item">
-                        <strong>Check Out:</strong>
-                        <span id="modalCheckOut"></span>
-                    </div>
-                    <div class="booking-detail-item">
-                        <strong>Total Price:</strong>
-                        <span id="modalTotalPrice"></span>
-                    </div>
-                    <div class="booking-detail-item">
-                        <strong>Status:</strong>
-                        <span id="modalStatus"></span>
+
+                    <!-- Values Column -->
+                    <div class="col-8 text-start">
+                        <div class="booking-detail-item" id="modalUserId"></div>
+                        <div class="booking-detail-item" id="modalRoomId"></div>
+                        <div class="booking-detail-item" id="modalPromotionId"></div>
+                        <div class="booking-detail-item" id="modalCheckIn"></div>
+                        <div class="booking-detail-item" id="modalCheckOut"></div>
+                        <div class="booking-detail-item" id="modalTotalPrice"></div>
+                        <div class="booking-detail-item" id="modalStatus"></div>
                     </div>
                 </div>
             </div>
