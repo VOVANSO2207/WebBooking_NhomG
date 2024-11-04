@@ -66,15 +66,15 @@
                             <li><a href="#">GIỚI THIỆU</a></li>
                             <li><a href="#">PHÒNG KHÁCH SẠN</a></li>
                             <li><a href="{{ route('blog') }}">TIN TỨC</a></li>
-                            <li><a href="#">LIÊN HỆ</a></li>
+                            <li><a href="{{ route(name: 'contact') }}">LIÊN HỆ</a></li>
                         </ul>
                     </div>
                     <div class="profile-header col-md-2">
                         <!-- Nếu chưa đăng nhập -->
                         <!-- <div class="group-left-header">
-                                <a href="#" class="login">Đăng nhập/</a>
-                                <a href="#" class="register">Đăng ký</a>
-                            </div> -->
+                                                        <a href="#" class="login">Đăng nhập/</a>
+                                                        <a href="#" class="register">Đăng ký</a>
+                                                    </div> -->
                         <!-- Nếu đã đăng nhập -->
                         <div class="loged">
                             <div class="group-left-header d-flex align-items-center justify-content-center">
@@ -93,15 +93,17 @@
                                 </div>
                             </div>
                             <div class="dropdown-menu" id="userDropdown" style="display: none;">
-                                <a class="dropdown-item dropdown-item-staynest" href="#">Tài Khoản</a>
-                                <a class="dropdown-item dropdown-item-staynest" href="#">Yêu Thích</a>
-                                <a class="dropdown-item dropdown-item-staynest" href="#">Hóa Đơn</a>
+                                <a class="dropdown-item dropdown-item-staynest" href="{{ route('pages.account') }}">Tài
+                                    Khoản</a>
+                                <a class="dropdown-item dropdown-item-staynest"
+                                    href="{{ route('pages.account') }}?tab=nav-contact">Yêu Thích</a>
+                                <a class="dropdown-item dropdown-item-staynest"
+                                    href="{{ route('pages.account') }}?tab=nav-profile">Hóa Đơn</a>
                                 <a class="dropdown-item dropdown-item-staynest" href="#">Voucher</a>
-                                <a href="#" class="dropdown-item dropdown-item-staynest text-danger"
-                                    >
+                                <a href="#" class="dropdown-item dropdown-item-staynest text-danger">
                                     Đăng Xuất
                                 </a>
-                               
+
                             </div>
                         </div>
                     </div>
@@ -508,7 +510,8 @@
             </div>
         </div>
     </section>
-
+    <!-- Back to Top Button -->
+    <button id="backToTopBtn" class="back-to-top" title="Back to Top">↑</button>
     <script>
         const carousels = document.querySelectorAll('.carousel-wrapper');
 
@@ -556,6 +559,21 @@
 
             // Initial call to hide prev button on load
             updateCarousel();
+        });
+        //  THêm BACK TO TOP cho home
+        const backToTopBtn = document.getElementById("backToTopBtn");
+        window.addEventListener("scroll", () => {
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.add("visible");
+            } else {
+                backToTopBtn.classList.remove("visible");
+            }
+        });
+        backToTopBtn.addEventListener("click", () => {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
         });
     </script>
 @endsection

@@ -14,6 +14,9 @@ use App\Http\Controllers\PromotionsController;
 use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\RoomTypeController;
 use App\Models\HotelAmenities;
+use App\Http\Controllers\HotelAmenitiesController;
+use App\Http\Controllers\ContactController;
+
 use Illuminate\Support\Facades\Route;
 // Route người dùng 
 // Route::get('/', function () {
@@ -53,12 +56,19 @@ Route::get('/hotel_detail', function () {
 });
 
 
+Route::get('/account', function () {
+    return view('pages/account');
+})->name('pages.account');
+
+
 // Route::get('/home', function () {
 //     return view('pages/home');
 // });
 
 // Admin - Home
 Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
+Route::get('/admin', action: [AdminController::class, 'showVisitsChart'])->name('admin.visits');
+
 Route::prefix('admin')->group(function () {
     // Route cho danh sách phòng
     Route::get('/room', [RoomController::class, 'index'])->name('admin.viewroom');
@@ -97,6 +107,13 @@ Route::prefix('admin')->group(function () {
     Route::delete('/roomtype/delete/{id}', [RoomTypeController::class, 'deleteRoomType'])->name('admin.roomtype.delete');
     Route::get('/room-types/search', [RoomTypeController::class, 'search'])->name('roomTypes.search');
 
+    // Admin - Tiện ích khách sạn
+    Route::get('/hotel-amenities', [HotelAmenitiesController::class, 'index'])->name('admin.hotel_amenities.index');
+    Route::get('/hotel-amenities/add', [HotelAmenitiesController::class, 'create'])->name('admin.hotel_amenities.add');
+    Route::post('/hotel-amenities/store', [HotelAmenitiesController::class, 'store'])->name('admin.hotel_amenities.store');
+    Route::get('/hotel-amenities/{id}/edit', [HotelAmenitiesController::class, 'edit'])->name('admin.hotel_amenities.edit');
+    Route::put('/hotel-amenities/{id}', [HotelAmenitiesController::class, 'update'])->name('admin.hotel_amenities.update');
+    Route::delete('/hotel_amenities/{id}/delete', [HotelAmenitiesController::class, 'destroy'])->name('amenities.delete');
 });
 
 // Admin-Post Detail
@@ -140,6 +157,11 @@ Route::get('/admin/voucher/add', [PromotionsController::class, 'voucherAdd'])->n
 Route::post('/admin/voucher/store', [PromotionsController::class, 'storeVoucher'])->name('admin.promotion.store');
 Route::get('/admin/voucher/edit/{promotion_id}', [PromotionsController::class, 'editVoucher'])->name('voucher.edit');
 Route::put('/admin/voucher/update/{id}', [PromotionsController::class, 'updateVoucher'])->name('admin.voucher.update');
+
+// Admin - Tiện ích khách sạn
+Route::get('/hotel-amenities', [HotelAmenitiesController::class, 'list'])->name('hotel_amenities.list');
+Route::get('/hotel-amenities/search', [HotelAmenitiesController::class, 'search'])->name('hotel_amenities.search');
+Route::get('/hotel_amenities/{id}/detail', [HotelAmenitiesController::class, 'showDetail'])->name('hotel_amenities.detail');
 // Search
 // Route::get('/search', [SearchController::class, 'index'])->name('search');
 Route::get('/hotels', [HotelController::class, 'viewSearchHotel'])->name('hotels.index');
@@ -160,3 +182,7 @@ Route::get('/admin/hotel', [HotelController::class, 'viewHotel'])->name('admin.v
 // User Home
 Route::get('/', [HotelController::class, 'index'])->name('home');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+// Route::get('/', [HotelController::class, 'index']);
+
+Route::get('/contact', action: [ContactController::class, 'contact'])->name('contact');
+Route::post('/contact', action: [ContactController::class, 'sendMail']);

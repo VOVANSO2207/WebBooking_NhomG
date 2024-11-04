@@ -7,7 +7,7 @@
 <div class="container-xxl flex-grow-1 container-p-y">
     <div class="row">
         <div class="col-md-12">
-        <h3 style="text-align: center; font-size: 40px">EDIT VOUCHER</h3>
+            <h3 style="text-align: center; font-size: 40px">EDIT VOUCHER</h3>
             <div class="card mb-4">
                 <hr class="my-0" />
                 <div class="card-body">
@@ -95,11 +95,11 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                Bài viết đã được cập nhật bởi một người dùng khác. Vui lòng tải lại và thử lại.
+                Voucher đã được cập nhật bởi một người dùng khác. Vui lòng tải lại và thử lại.
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                <button type="button" class="btn btn-primary" onclick="location.reload()">Tải lại trang</button>
+                <button type="button" class="btn btn-primary" style="#3B79C9 !important" onclick="location.reload()">Tải lại trang</button>
             </div>
         </div>
     </div>
@@ -139,7 +139,53 @@
             var discountAmount = $('#discount_amount').val();
             var startDate = $('#start_date').val(); // Định dạng YYYY-MM-DD
             var endDate = $('#end_date').val(); // Định dạng YYYY-MM-DD
+            // Xóa các lỗi trước đó
+            $('.text-danger').remove();
 
+            // Kiểm tra các lỗi cho promotion_code
+            if (promotionCode === '') {
+                $('<div class="text-danger">Vui lòng nhập tên voucher.</div>').insertAfter('#promotion_code');
+                return;
+            }
+            if (/[^a-zA-Z0-9\s]/.test(promotionCode)) {
+                $('<div class="text-danger">Tên voucher không chứa kí tự đặc biệt.</div>').insertAfter('#promotion_code');
+                return;
+            }
+            if (promotionCode.length > 15) {
+                $('<div class="text-danger">Tên voucher trên 15 ký tự vui lòng nhập lại.</div>').insertAfter('#promotion_code');
+                return;
+            }
+            if (promotionCode.length < 10) {
+                $('<div class="text-danger">Tên voucher dưới 10 ký tự vui lòng nhập lại.</div>').insertAfter('#promotion_code');
+                return;
+            }
+            if (/\s/.test(promotionCode)) {
+                $('<div class="text-danger">Vui lòng không nhập khoảng trắng.</div>').insertAfter('#promotion_code');
+                return;
+            }
+            if (!/[a-zA-Z]/.test(promotionCode) || !/[0-9]/.test(promotionCode)) {
+                $('<div class="text-danger">Tên voucher phải vừa là chữ vừa là số.</div>').insertAfter('#promotion_code');
+                return;
+            }
+            // Kiểm tra discount_amount
+            if (discountAmount === '') {
+                $('<div class="text-danger">Vui lòng nhập số tiền giảm giá.</div>').insertAfter('#discount_amount');
+                return;
+            }
+            if (/\D/.test(discountAmount)) {
+                $('<div class="text-danger">Vui lòng không nhập ký tự đặc biệt hoặc khoảng trắng.</div>').insertAfter('#discount_amount');
+                return;
+            }
+            if (parseFloat(discountAmount) <= 0) {
+                $('<div class="text-danger">Số tiền giảm giá không hợp lệ.</div>').insertAfter('#discount_amount');
+                return;
+            }
+
+            // Kiểm tra nếu start_date lớn hơn end_date
+            if (new Date(startDate) > new Date(endDate)) {
+                alert('Ngày bắt đầu không được lớn hơn ngày kết thúc.');
+                return;
+            }
             // Kiểm tra nếu không có thay đổi
             if (promotionCode === originalPromotionCode &&
                 discountAmount === originalDiscountAmount &&

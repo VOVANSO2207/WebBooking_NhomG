@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 namespace App\Models;
 
@@ -55,6 +55,7 @@ class Hotel extends Model
     {
         return $this->delete();
     }
+
     // Quan hệ với bảng HotelImage
     public function images()
     {
@@ -67,9 +68,15 @@ class Hotel extends Model
         return $this->belongsTo(Cities::class, 'city_id');
     }
 
+    // Quan hệ với bảng HotelAmenities thông qua bảng trung gian hotel_amenity_hotel
     public function amenities()
     {
-        return $this->hasMany(HotelAmenities::class, 'hotel_id', 'hotel_id');
+        return $this->belongsToMany(
+            HotelAmenities::class,
+            'hotel_amenity_hotel',
+            'hotel_id',
+            'amenity_id'
+        )->select('hotel_amenities.amenity_id', 'hotel_amenities.amenity_name', 'hotel_amenities.description');
     }
     public function reviews()
     {
@@ -77,4 +84,10 @@ class Hotel extends Model
     }
     // Hàm lọc khách sạn theo số lượng đánh giá nhiều nhất
     
+
+    public function rooms()
+    {
+        return $this->hasMany(Rooms::class, 'hotel_id', 'hotel_id');
+    }
+
 }

@@ -669,3 +669,39 @@ outline: none;
          max-width: 100%;
      }
  }
+
+
+/* Back to Top Button Styling */
+.back-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #007bff, #5bc0de);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-size: 28px;
+    cursor: pointer;
+    z-index: 1000;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease, visibility 0.4s ease, transform 0.3s ease;
+    transform: scale(1.1);
+}
+
+.back-to-top.visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: scale(1); 
+}
+
+.back-to-top:hover {
+    background: linear-gradient(135deg, #0056b3, #2ca8d1); 
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+    transform: scale(1.1); 
+}
+
+

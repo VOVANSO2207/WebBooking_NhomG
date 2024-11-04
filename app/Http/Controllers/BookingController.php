@@ -98,12 +98,11 @@ class BookingController extends Controller
                     // Tìm kiếm trên trường 'username' từ bảng 'users' với LIKE
                     $q->whereHas('user', function ($queryUser) use ($keyword) {
                         $queryUser->where('username', 'LIKE', "%{$keyword}%")
-                                  ->orWhereRaw('MATCH(username) AGAINST (? IN BOOLEAN MODE)', [$keyword]);
+                                ->orWhere('email', 'LIKE', "%{$keyword}%"); // Thêm tìm kiếm email
                     })
                     // Tìm kiếm trên trường 'name' từ bảng 'rooms'
                     ->orWhereHas('room', function ($queryRoom) use ($keyword) {
-                        $queryRoom->where('name', 'LIKE', "%{$keyword}%")
-                                  ->orWhereRaw('MATCH(name) AGAINST (? IN BOOLEAN MODE)', [$keyword]);
+                        $queryRoom->where('name', 'LIKE', "%{$keyword}%");
                     })
                     // Tìm kiếm trên trường 'promotion_code' từ bảng 'promotions'
                     ->orWhereHas('promotion', function ($queryPromo) use ($keyword) {
@@ -112,9 +111,9 @@ class BookingController extends Controller
                 });
             })
             ->paginate(5);
-    
+
         return view('admin.search_results_booking', compact('bookings'));
-    }
+    } 
     
     public function editBooking($booking_id)
     {

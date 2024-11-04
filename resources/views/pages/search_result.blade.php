@@ -54,7 +54,7 @@
                 <h2>Bộ lọc phổ biến</h2>
                 <div class="option d-flex justify-content-between align-items-center">
                     <p>Nhiều đánh giá</p>
-                    <input type="checkbox" class="check_filter" id="filterMostReviews" data-url="{{ route('hotels.most-reviewed') }}">
+                    <input type="checkbox" class="check_filter" id="filterMostReviews">
                     
                 </div>
                 <div class="option d-flex justify-content-between align-items-center">

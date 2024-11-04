@@ -74,10 +74,23 @@
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
+
+                            <div class="mb-3 col-md-5">
+                                <label class="form-label">Hotel Rooms</label>
+                                <select name="rooms[]" class="form-select select2" id="rooms" multiple="multiple" required>
+                                    @foreach ($rooms as $room)
+                                        <option value="{{ $room->room_id }}" data-name="{{ $room->name }}" data-price="{{ $room->price }}"
+                                            @if(in_array($room->room_id, $currentRooms)) selected @endif>
+                                            {{ $room->name }} - Giá: {{ $room->price }} - Số người tối đa: {{ $room->capacity }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Rating</label>
-                                <input class="form-control" type="number" name="rating" id="rating" min="1" max="5"
-                                    step="0.1"
+                                <input class="form-control" type="number" name="rating" id="rating" 
+                                    min="1" max="5" step="0.1"
                                     value="{{ old('rating', $hotel->rating) }}" placeholder="Rating" required />
                                 @error('rating')
                                     <div class="text-danger">{{ $message }}</div>
@@ -87,7 +100,15 @@
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Upload Images</label>
                                 <div class="d-flex align-items-start align-items-sm-center gap-4">
-                                    <div id="imagePreviewContainer" class="d-flex flex-wrap"></div>
+                                    <div id="imagePreviewContainer" class="d-flex flex-wrap">
+                                        <!-- Hiển thị ảnh hiện tại nếu có -->
+                                        @foreach($hotel->images as $image)
+                                            <div class="position-relative me-2">
+                                                <img src="{{ asset($image->path) }}" class="img-thumbnail me-2" style="width: 100px; height: auto;">
+                                                <button type="button" class="btn btn-danger btn-sm" style="position: absolute; top: 0; right: 0;" onclick="removeImage(this)">X</button>
+                                            </div>
+                                        @endforeach
+                                    </div>
                                     <div class="button-wrapper">
                                         <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
                                             <span class="d-none d-sm-block">Upload</span>
@@ -115,74 +136,61 @@
 </div>
 <!-- / Content -->
 
-<!-- Modal Không có cập nhật nào -->
-<div class="modal fade" id="noUpdateModal" tabindex="-1" aria-labelledby="noUpdateModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="noUpdateModalLabel">Thông báo</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Không có cập nhật mới.
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- / Modal -->
-
 <script>
+// Xem trước hình ảnh khi chọn file
 document.getElementById('upload').addEventListener('change', function(event) {
     const imagePreviewContainer = document.getElementById('imagePreviewContainer');
-    imagePreviewContainer.innerHTML = ''; // Clear previous images
+    const files = event.target.files;
 
-    const files = event.target.files; // Get the selected files
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        
-        // Create a FileReader to read the file
         const reader = new FileReader();
         reader.onload = function(e) {
-            // Create an image element and set its source
             const img = document.createElement('img');
-            img.src = e.target.result; // Set the source to the FileReader result
-            img.className = 'img-thumbnail me-2'; // Add styling classes
-            img.style.width = '100px'; // Set width for preview
-            img.style.height = 'auto'; // Maintain aspect ratio
+            img.src = e.target.result;
+            img.className = 'img-thumbnail me-2';
+            img.style.width = '100px';
+            img.style.height = 'auto';
 
-            // Append the image to the preview container
-            imagePreviewContainer.appendChild(img);
+            // Tùy chọn xóa ảnh xem trước
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'btn btn-danger btn-sm';
+            removeBtn.innerText = 'X';
+            removeBtn.style.position = 'absolute';
+            removeBtn.style.marginLeft = '-20px';
+            removeBtn.onclick = () => imagePreviewContainer.removeChild(wrapper);
+
+            const wrapper = document.createElement('div');
+            wrapper.style.position = 'relative';
+            wrapper.appendChild(img);
+            wrapper.appendChild(removeBtn);
+
+            imagePreviewContainer.appendChild(wrapper);
         }
-        // Read the file as a data URL
         reader.readAsDataURL(file);
     }
 });
 
-// Cập nhật mô tả tiện nghi khi có sự thay đổi
+// Hàm để xóa ảnh trong preview
+function removeImage(button) {
+    const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+    imagePreviewContainer.removeChild(button.parentElement);
+}
+
+// Cập nhật mô tả tiện nghi
 document.getElementById('amenities').addEventListener('change', updateDescriptions);
 
 function updateDescriptions() {
     const descriptionsInput = document.getElementById('descriptions');
     const amenitiesSelect = document.getElementById('amenities');
-    const selectedOptions = Array.from(amenitiesSelect.selectedOptions); // Lấy tất cả các tùy chọn đã chọn
-    const descriptions = []; // Khởi tạo mảng để lưu trữ mô tả
+    const selectedOptions = Array.from(amenitiesSelect.selectedOptions);
+    const descriptions = selectedOptions.map(option => option.getAttribute('data-description')).filter(Boolean);
 
-    // Lấy mô tả từ các tùy chọn đã chọn
-    selectedOptions.forEach(option => {
-        descriptions.push(option.getAttribute('data-description')); // Lấy description từ bảng tiện nghi
-    });
-
-    // Gán các mô tả vào trường ẩn
-    descriptionsInput.value = descriptions.join(', '); // Nối các mô tả với dấu phẩy
+    descriptionsInput.value = descriptions.join(', ');
 }
 
-// Khởi tạo mô tả cho các tiện nghi đã chọn khi tải trang
-window.onload = function() {
-    updateDescriptions(); // Cập nhật mô tả ngay khi tải trang
-}
+// Cập nhật mô tả khi tải trang
+window.onload = updateDescriptions;
 
 </script>
 

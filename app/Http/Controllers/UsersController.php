@@ -86,9 +86,9 @@ class UsersController extends Controller
 
         // Xử lý upload ảnh
         if ($request->hasFile('avatar')) {
-            // Lưu ảnh vào thư mục public/storage/images/admin
+            // Lưu ảnh vào thư mục public/storage/images
             $avatarName = time() . '.' . $request->avatar->extension();
-            $request->avatar->move(public_path('storage/images/admin'), $avatarName);
+            $request->avatar->move(public_path('storage/images'), $avatarName);
             $user->avatar = $avatarName; // Lưu tên ảnh vào cơ sở dữ liệu
         } else {
             $user->avatar = 'default-avatar.png';
@@ -185,9 +185,9 @@ class UsersController extends Controller
 
         // Xử lý avatar
         if ($request->hasFile('avatar')) {
-            // Lưu ảnh vào thư mục public/storage/images/admin
+            // Lưu ảnh vào thư mục public/storage/images
             $avatarName = time() . '.' . $request->avatar->extension();
-            $request->avatar->move(public_path('storage/images/admin'), $avatarName);
+            $request->avatar->move(public_path('storage/images'), $avatarName);
             $user->avatar = $avatarName; // Cập nhật tên ảnh vào trường avatar
         }
 
@@ -196,59 +196,6 @@ class UsersController extends Controller
         return redirect()->route('admin.viewuser')->with('success', 'Cập nhật người dùng thành công.');
     }
 
-    public function register(Request $request)
-    {
-        // Xác thực dữ liệu đầu vào
-        $validatedData = $request->validate([
-            'username' => 'required|string|max:25',
-            'email' => 'required|string|email|max:255|min:5|regex:/^[^@.]+@[A-Za-z0-9-]+\.[A-Za-z0-9-]+$/',
-            'phone_number' => 'required|string|regex:/^0[0-9]{9}$/',
-            'password' => 'required|string|min:8|confirmed',
-        ], [
-            'username.required' => 'Vui lòng nhập tên đăng nhập.',
-            'username.max' => 'Tên đăng nhập không được vượt quá 25 ký tự.',
-            'email.required' => 'Vui lòng nhập địa chỉ email.',
-            'email.email' => 'Địa chỉ email không hợp lệ.',
-            'email.max' => 'Địa chỉ email không được dài quá 255 ký tự.',
-            'email.min' => 'Địa chỉ email phải từ 5 ký tự trở lên.',
-            'email.regex' => 'Địa chỉ email không đúng định dạng.',
-            'phone_number.required' => 'Vui lòng nhập số điện thoại.',
-            'phone_number.regex' => 'Số điện thoại hợp lệ là ký tự số bắt đầu bằng 0 và có 10 chữ số.',
-            'password.required' => 'Vui lòng nhập mật khẩu.',
-            'password.confirmed' => 'Vui lòng xác nhận lại mật khẩu.',
-        ]);
-
-        // Đăng ký người dùng mới
-        $user = User::register($request->all());
-        $user->save();
-        return redirect()->route('login')->with('success', 'Đăng ký thành công! Bạn có thể đăng nhập.');
-    }
-    public function login(Request $request)
-    {
-        // Validate dữ liệu
-        $credentials = $request->validate([
-            'login' => 'required|string',
-            'password' => 'required|string',
-        ]);
-
-        // Thử đăng nhập bằng username hoặc email
-        try {
-            $user = User::login($credentials); // Gọi hàm login từ model
-            Auth::login($user); // Đăng nhập người dùng
-
-            // Kiểm tra vai trò và điều hướng đến trang tương ứng
-            switch ($user->role_id) {
-                case 1: // Giả sử role_id 1 là admin
-                    return redirect()->route('admin'); // Chuyển hướng đến trang dashboard
-                case 2: // Giả sử role_id 2 là user
-                    return redirect()->route('home'); // Chuyển hướng đến trang welcome
-                default: // Các quyền khác
-                    return redirect()->route('error'); // Chuyển hướng đến trang lỗi
-            }
-        } catch (ValidationException $e) {
-            return back()->withErrors($e->validator->errors())->withInput(); // Trả về lỗi nếu có
-        }
-    }
 
     public function encodeId($id)
     {

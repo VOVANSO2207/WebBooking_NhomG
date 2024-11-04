@@ -576,8 +576,8 @@ button.list-group-item-primary.active {
 .btn-primary.active,
 .show>.btn-primary.dropdown-toggle {
   color: #fff;
-  background-color: #595cd9;
-  border-color: #595cd9;
+  background-color: #3B79C9 !important;
+  border-color: #3B79C9 !important;
 }
 
 .btn-check:checked+.btn-primary:focus,
