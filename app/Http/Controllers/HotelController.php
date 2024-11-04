@@ -101,15 +101,13 @@ class HotelController extends Controller
 
         // Lấy URL hình ảnh
         $images = $hotel->images->map(function ($image) {
-            if (file_exists(public_path('images/' . $image->image_url))) {
+            $imagePath = public_path('images/' . $image->image_url);
+            if (file_exists($imagePath)) {
                 return asset('images/' . $image->image_url);
-            } elseif (file_exists(public_path('storage/images/' . $image->image_url))) {
-                return asset('storage/images/' . $image->image_url);
             } else {
                 return asset('images/img-upload.jpg'); // Hình ảnh mặc định
             }
         });
-
         // Lấy amenities từ bảng hotel_amenity_hotel
         $amenities = $hotel->amenities->map(function ($amenity) {
             return [
@@ -148,7 +146,7 @@ class HotelController extends Controller
             'city_id' => 'required|integer',
             'description' => 'required|string',
             'rating' => 'nullable|between:1,5',
-            'images' => 'nullable|array',
+            'images' => 'required|nullable|array',
             'images.*' => 'image|mimes:jpeg,png,jpg|max:2048',
             'amenities' => 'nullable|array',
             'amenities.*' => 'integer|exists:hotel_amenities,amenity_id',
@@ -166,18 +164,20 @@ class HotelController extends Controller
             'description' => $request->description,
             'rating' => $request->rating,
         ]);
+    
+        // Lấy hotel_id vừa được tạo
+        $hotelId = $hotel->hotel_id;
 
-        // Lưu ảnh vào bảng hotel_images
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $image) {
-                $imageName = time() . '_' . $image->getClientOriginalName();
-                $image->move(public_path('images'), $imageName);
+        // Lưu hình ảnh liên quan đến khách sạn
+        foreach ($request->file('images') as $image) {
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $image->move(public_path('images'), $imageName);
 
-                HotelImages::create([
-                    'hotel_id' => $hotel->hotel_id,
-                    'image_url' => $imageName,
-                ]);
-            }
+            // Lưu hình ảnh vào bảng hotel_images với hotel_id
+            HotelImages::create([
+                'image_url' => $imageName,
+                'hotel_id' => $hotelId, // Sử dụng hotel_id đã lấy
+            ]);
         }
 
         // Lưu tiện nghi khách sạn

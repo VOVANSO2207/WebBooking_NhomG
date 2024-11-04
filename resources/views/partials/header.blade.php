@@ -28,8 +28,8 @@
                 <div class="profile-header col-md-2">
                     <!-- Nếu chưa đăng nhập -->
                     <div class="group-left-header">
-                        <a href="#" class="login">Đăng nhập/</a>
-                        <a href="#" class="register">Đăng ký</a>
+                        <a href="/login" class="login">Đăng nhập/</a>
+                        <a href="/register" class="register">Đăng ký</a>
                     </div>
                     <!-- Nếu đã đăng nhập -->
                     <!-- <div class="loged">

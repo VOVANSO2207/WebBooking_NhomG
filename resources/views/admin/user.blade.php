@@ -49,7 +49,7 @@
                             <tr class="user-detail" data-id="{{ IdEncoder::encodeId($user->user_id) }}">
                                 <td>{{ $index + 1 }}</td>
                                 <td>
-                                    <img src="{{ asset('storage/images/' . $user->avatar) }}" alt="{{ $user->username }}" 
+                                    <img src="{{ asset('images/' . $user->avatar) }}" alt="{{ $user->username }}" 
                                     style="width: 100px; height: auto;">
                                 </td>
                                 <td>{{ $user->username }}</td>
@@ -169,7 +169,7 @@
                         document.getElementById('modalPhoneNumber').innerText = user.phone_number;
                         document.getElementById('modalRoleId').innerText = user.role_id;
                         document.getElementById('modalStatus').innerText = user.status ? 'Active' : 'Inactive';
-                        const avatarUrl = user.avatar ? `/storage/images/${user.avatar}` : '/path/to/default/avatar.jpg';
+                        const avatarUrl = user.avatar ? `/images/${user.avatar}` : 'default-avatar.png';
                         document.getElementById('modalAvatar').src = avatarUrl;
 
                         // Thiết lập đường dẫn cho nút Edit

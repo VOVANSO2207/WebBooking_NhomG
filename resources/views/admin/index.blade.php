@@ -70,7 +70,7 @@
                             <div class="card-body">
                                 <div>
                                     @foreach ($years as $year)
-                                        <a href="{{ route('admin.visits', ['year' => $year]) }}"
+                                        <a href="{{ route('admin.index', ['year' => $year]) }}"
                                             class="btn btn-primary @if ($selectedYear == $year) active @endif">{{ $year }}</a>
                                     @endforeach
                                 </div>

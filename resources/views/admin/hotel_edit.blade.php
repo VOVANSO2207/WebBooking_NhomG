@@ -104,8 +104,7 @@
                                         <!-- Hiển thị ảnh hiện tại nếu có -->
                                         @foreach($hotel->images as $image)
                                             <div class="position-relative me-2">
-                                                <img src="{{ asset($image->path) }}" class="img-thumbnail me-2" style="width: 100px; height: auto;">
-                                                <button type="button" class="btn btn-danger btn-sm" style="position: absolute; top: 0; right: 0;" onclick="removeImage(this)">X</button>
+                                                <img src="{{ asset('images/' . $image->image_url) }}" class="img-thumbnail me-2" style="width: 100px; height: auto;">
                                             </div>
                                         @endforeach
                                     </div>
@@ -142,6 +141,15 @@ document.getElementById('upload').addEventListener('change', function(event) {
     const imagePreviewContainer = document.getElementById('imagePreviewContainer');
     const files = event.target.files;
 
+    // Xóa tất cả ảnh hiện tại
+    imagePreviewContainer.innerHTML = '';
+
+    // Giới hạn số lượng ảnh upload là 4
+    if (files.length > 4) {
+        alert("Bạn chỉ có thể upload tối đa 4 ảnh.");
+        return;
+    }
+
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
         const reader = new FileReader();
@@ -152,30 +160,15 @@ document.getElementById('upload').addEventListener('change', function(event) {
             img.style.width = '100px';
             img.style.height = 'auto';
 
-            // Tùy chọn xóa ảnh xem trước
-            const removeBtn = document.createElement('button');
-            removeBtn.className = 'btn btn-danger btn-sm';
-            removeBtn.innerText = 'X';
-            removeBtn.style.position = 'absolute';
-            removeBtn.style.marginLeft = '-20px';
-            removeBtn.onclick = () => imagePreviewContainer.removeChild(wrapper);
-
             const wrapper = document.createElement('div');
             wrapper.style.position = 'relative';
             wrapper.appendChild(img);
-            wrapper.appendChild(removeBtn);
 
             imagePreviewContainer.appendChild(wrapper);
         }
         reader.readAsDataURL(file);
     }
 });
-
-// Hàm để xóa ảnh trong preview
-function removeImage(button) {
-    const imagePreviewContainer = document.getElementById('imagePreviewContainer');
-    imagePreviewContainer.removeChild(button.parentElement);
-}
 
 // Cập nhật mô tả tiện nghi
 document.getElementById('amenities').addEventListener('change', updateDescriptions);

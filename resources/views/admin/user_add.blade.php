@@ -13,10 +13,10 @@
                         <div class="card-body">
                             <div class="d-flex align-items-start align-items-sm-center gap-4">
                             @if($user && $user->avatar)
-                                <img src="{{ asset('storage/images/admin/' . $user->avatar) }}" alt="{{ $user->username }}" 
+                                <img src="{{ asset('images/' . $user->avatar) }}" alt="{{ $user->username }}" 
                                     class="" height="100" width="100" id="fileUpload" />
                             @else
-                                <img src="{{ asset('storage/images/default-avatar.jpg') }}" alt="Default Avatar" 
+                                <img src="{{ asset('images/default-avatar.png') }}" alt="Default Avatar" 
                                     class="" height="100" width="100" id="fileUpload" />
                             @endif
 
