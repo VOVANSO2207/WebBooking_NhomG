@@ -110,7 +110,7 @@ class BookingController extends Controller
                     });
                 });
             })
-            ->paginate(5);
+            ->paginate(7);
 
         return view('admin.search_results_booking', compact('bookings'));
     } 
