@@ -117,9 +117,7 @@
             <div class="modal-footer" style="display: flex; justify-content: space-between;">
                 <a id="editUserButton" class="btn btn-info">Edit</a>
                 <button type="button" class="btn btn-danger" id="deleteUserButton">Delete</button>
-            </div>
-            <div class="modal-footer" style="width: 100%; position: relative; bottom: 0;">
-                <button type="button" class="btn btn-secondary w-100" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
