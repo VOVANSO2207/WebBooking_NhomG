@@ -55,10 +55,12 @@
                                 </td>
                                 <td>{{ $booking->total_price !== null ? number_format($booking->total_price, 0, ',', '.') . ' VNĐ' : 'N/A' }}
                                 </td>
-                                <td
-                                    class="{{ $booking->status === 'confirmed' ? 'badge bg-success' : ($booking->status === 'cancelled' ? 'badge bg-danger' : 'badge bg-warning') }}">
-                                    {{ ucfirst($booking->status) }}
+                                <td>
+                                    <span class="badge d-inline" style="{{ $booking->status === 'confirmed' ? 'background-color: green; color: white; padding: 5px;' : ($booking->status === 'cancelled' ? 'background-color: red; color: white; padding: 5px;' : 'background-color: orange; color: white; padding: 5px;') }}">
+                                        {{ ucfirst($booking->status) }}
+                                    </span>
                                 </td>
+
                             </tr>
                         @empty
                             <tr>
@@ -76,10 +78,10 @@
     </div>
 </div>
 
+
 <!-- Modal chi tiết đặt phòng -->
 <!-- Modal chi tiết đặt phòng -->
-<div class="modal fade" id="bookingDetailModal" tabindex="-1" aria-labelledby="bookingDetailModalLabel"
-    aria-hidden="true">
+<div class="modal fade" id="bookingDetailModal" tabindex="-1" aria-labelledby="bookingDetailModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -87,57 +89,41 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <!-- Labels Column -->
-                    <div class="col-4 text-end fw-bold">
-                        <div class="booking-detail-item">User:</div>
-                        <div class="booking-detail-item">Room:</div>
-                        <div class="booking-detail-item">Promotion:</div>
-                        <div class="booking-detail-item">Check In:</div>
-                        <div class="booking-detail-item">Check Out:</div>
-                        <div class="booking-detail-item">Total Price:</div>
-                        <div class="booking-detail-item">Status:</div>
+                <div class="room-info-grid mt-3">
+                    <div class="info-card">
+                        <div class="info-label">User ID:</div>
+                        <div class="info-value" id="modalUserId"></div>
                     </div>
-
-                    <!-- Values Column -->
-                    <div class="col-8 text-start">
-                        <div class="booking-detail-item" id="modalUserId"></div>
-                        <div class="booking-detail-item" id="modalRoomId"></div>
-                        <div class="booking-detail-item" id="modalPromotionId"></div>
-                        <div class="booking-detail-item" id="modalCheckIn"></div>
-                        <div class="booking-detail-item" id="modalCheckOut"></div>
-                        <div class="booking-detail-item" id="modalTotalPrice"></div>
-                        <div class="booking-detail-item" id="modalStatus"></div>
+                    <div class="info-card">
+                        <div class="info-label">Room ID:</div>
+                        <div class="info-value" id="modalRoomId"></div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label">Promotion ID:</div>
+                        <div class="info-value" id="modalPromotionId"></div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label">Check-In:</div>
+                        <div class="info-value" id="modalCheckIn"></div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label">Check-Out:</div>
+                        <div class="info-value" id="modalCheckOut"></div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label">Total Price:</div>
+                        <div class="info-value" id="modalTotalPrice"></div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label">Status:</div>
+                        <div class="info-value" id="modalStatus"></div>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer" style="display: flex; justify-content: space-between;">
                 <a id="editBookingButton" class="btn btn-info">Edit</a>
-                <button type="button" class="btn btn-danger" id="deleteBookingButton" data-bs-toggle="modal"
-                    data-bs-target="#confirmDeleteModal">Delete</button>
-            </div>
-            <div class="modal-footer" style="width: 100%; position: relative; bottom: 0;">
-                <button type="button" class="btn btn-secondary w-100" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal xác nhận xóa -->
-<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="confirmDeleteModalLabel">Xác nhận xóa</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Bạn có chắc chắn muốn xóa đặt phòng này không?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-danger" id="confirmDeleteButton">OK</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteButton">Delete</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -162,23 +148,21 @@
                         return response.json();
                     })
                     .then(booking => {
-                        // Kiểm tra thông tin đã nhận được
-                        if (booking) {
-                            document.getElementById('modalUserId').innerText = booking.user_id;
-                            document.getElementById('modalRoomId').innerText = booking.room_id;
-                            document.getElementById('modalPromotionId').innerText = booking.promotion_id;
-                            document.getElementById('modalCheckIn').innerText = booking.check_in;
-                            document.getElementById('modalCheckOut').innerText = booking.check_out;
-                            document.getElementById('modalTotalPrice').innerText = booking.total_price;
-                            document.getElementById('modalStatus').innerText = booking.status.charAt(0).toUpperCase() + booking.status.slice(1);
+                        // Cập nhật thông tin vào modal
+                        document.getElementById('modalUserId').innerText = booking.user_id;
+                        document.getElementById('modalRoomId').innerText = booking.room_id;
+                        document.getElementById('modalPromotionId').innerText = booking.promotion_id;
+                        document.getElementById('modalCheckIn').innerText = booking.check_in;
+                        document.getElementById('modalCheckOut').innerText = booking.check_out;
+                        document.getElementById('modalTotalPrice').innerText = booking.total_price;
+                        document.getElementById('modalStatus').innerText = booking.status.charAt(0).toUpperCase() + booking.status.slice(1);
 
-                            const editRoute = "{{ route('booking.edit', ['booking_id' => ':id']) }}".replace(':id', currentBookingId);
-                            document.getElementById('editBookingButton').setAttribute('href', editRoute);
+                        // Đặt link Edit
+                        const editRoute = "{{ route('booking.edit', ['booking_id' => ':id']) }}".replace(':id', currentBookingId);
+                        document.getElementById('editBookingButton').setAttribute('href', editRoute);
 
-                            new bootstrap.Modal(document.getElementById('bookingDetailModal')).show();
-                        } else {
-                            console.error('Không có thông tin đặt phòng.');
-                        }
+                        // Hiển thị modal chi tiết đặt phòng
+                        new bootstrap.Modal(document.getElementById('bookingDetailModal')).show();
                     })
                     .catch(error => {
                         console.error('Lỗi khi lấy thông tin đặt phòng:', error);
@@ -208,6 +192,13 @@
                         console.error('Lỗi khi thực hiện yêu cầu xóa:', error);
                     });
             }
+        });
+        const bookingDetailModal = document.getElementById('bookingDetailModal');
+
+        // Lắng nghe sự kiện đóng modal
+        bookingDetailModal.addEventListener('hidden.bs.modal', function () {
+            // Tự động reload lại trang khi modal đóng
+            location.reload();
         });
     });
 </script>

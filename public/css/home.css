@@ -210,6 +210,34 @@
      color: #3B79C9 !important;
  }
 
+ /* @keyframes typeAndDelete {
+
+     0%,
+     10% {
+         width: 0;
+     }
+
+     45%,
+     55% {
+         width: 100%;
+     }
+
+     90%,
+     100% {
+         width: 0;
+     }
+ }
+
+ .slogan-staynest .text-slogan-staynest {
+     display: inline-block;
+     white-space: nowrap;
+     overflow: hidden;
+     border-right: 0.2em solid #fff;
+     animation: typeAndDelete 4s steps(11) infinite,
+         blinkCursor 0.5s step-end infinite alternate;
+     margin-top: 1.5em;
+ } */
+
  .slogan-staynest p {
      text-align: center;
      color: #fff;
@@ -217,6 +245,8 @@
      font-size: 90px;
      padding: 0 50px;
  }
+
+
 
  .slogan-staynest .header-text-muted {
      font-weight: 300;
@@ -671,40 +701,37 @@ outline: none;
  }
 
 
-/* Back to Top Button Styling */
-.back-to-top {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 40px;
-    height: 40px;
-    background: linear-gradient(135deg, #007bff, #5bc0de);
-    color: white;
-    border: none;
-    border-radius: 30px;
-    font-size: 28px;
-    cursor: pointer;
-    z-index: 1000;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.4s ease, visibility 0.4s ease, transform 0.3s ease;
+ /* Back to Top Button Styling */
+ .back-to-top {
+     position: fixed;
+     bottom: 20px;
+     right: 20px;
+     width: 40px;
+     height: 40px;
+     background: linear-gradient(135deg, #007bff, #5bc0de);
+     color: white;
+     border: none;
+     border-radius: 30px;
+     font-size: 20px;
+     cursor: pointer;
+     z-index: 1000;
+     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+     opacity: 0;
+     pointer-events: none;
+     transition: opacity 0.4s ease, visibility 0.4s ease, transform 0.3s ease;
+     transform: scale(1.1);
+ }
+
+ .back-to-top.visible {
+     opacity: 1;
+     pointer-events: auto;
+     transform: scale(1);
+ }
+ .back-to-top:hover {
+    background: linear-gradient(135deg, #0056b3, #2ca8d1);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
     transform: scale(1.1);
 }
-
-.back-to-top.visible {
-    opacity: 1;
-    pointer-events: auto;
-    transform: scale(1); 
-}
-
-.back-to-top:hover {
-    background: linear-gradient(135deg, #0056b3, #2ca8d1); 
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
-    transform: scale(1.1); 
-}
-
-
 
 .notification-dropdown {
     position: absolute;
@@ -736,7 +763,4 @@ outline: none;
 .notification-item:hover {
     background-color: #f1f1f1;
 }
-
-
-
 

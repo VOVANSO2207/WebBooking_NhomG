@@ -12,13 +12,13 @@
                         @csrf
                         <div class="card-body">
                             <div class="d-flex align-items-start align-items-sm-center gap-4">
-                            @if($user && $user->avatar)
-                                <img src="{{ asset('images/' . $user->avatar) }}" alt="{{ $user->username }}" 
-                                    class="" height="100" width="100" id="fileUpload" />
-                            @else
-                                <img src="{{ asset('images/default-avatar.png') }}" alt="Default Avatar" 
-                                    class="" height="100" width="100" id="fileUpload" />
-                            @endif
+                                @if($user && $user->avatar)
+                                    <img src="{{ asset('images/' . $user->avatar) }}" alt="{{ $user->username }}" 
+                                         class="" height="100" width="100" id="fileUpload" />
+                                @else
+                                    <img src="{{ asset('images/default-avatar.png') }}" alt="Default Avatar" 
+                                         class="" height="100" width="100" id="fileUpload" />
+                                @endif
 
                                 <div class="button-wrapper">
                                     <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
@@ -29,12 +29,17 @@
                                     </label>
                                 </div>
                             </div>
+                            <!-- Hiển thị thông báo lỗi cho avatar -->
+                            @error('avatar')
+                                <div class="text-danger mt-2">{{ $message }}</div>
+                            @enderror
                         </div>
+
                         <div class="row">
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Username</label>
                                 <input class="form-control" type="text" name="username" id="username"
-                                    placeholder="Username" required />
+                                    placeholder="Username" />
                                 @error('username')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -42,7 +47,7 @@
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Email</label>
                                 <input class="form-control" type="email" name="email" id="email" placeholder="Email"
-                                    required />
+                                 />
                                 @error('email')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -50,7 +55,7 @@
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Password</label>
                                 <input class="form-control" type="password" name="password" id="password"
-                                    placeholder="Password" required />
+                                    placeholder="Password" />
                                 @error('password')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -58,14 +63,14 @@
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Phone Number</label>
                                 <input class="form-control" type="text" name="phone_number" id="phone_number"
-                                    placeholder="Phone Number" required />
+                                    placeholder="Phone Number" />
                                 @error('phone_number')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Role</label>
-                                <select id="role_id" name="role_id" class="form-select" required>
+                                <select id="role_id" name="role_id" class="form-select" >
                                     @foreach ($roles as $role)
                                         <option value="{{ $role->role_id }}">{{ $role->role_name }}</option>
                                     @endforeach
@@ -162,7 +167,7 @@
 
     function resetForm() {
         $('#userForm')[0].reset(); // Đặt lại biểu mẫu
-        $("#fileUpload").attr("src", "{{ asset('storage/images/admin/img-upload.jpg') }}"); // Đặt lại hình ảnh tải lên
+        $("#fileUpload").attr("src", "{{ asset('images/default-avatar.png') }}"); // Đặt lại hình ảnh tải lên
     }
 
     // Xử lý sự kiện upload hình ảnh

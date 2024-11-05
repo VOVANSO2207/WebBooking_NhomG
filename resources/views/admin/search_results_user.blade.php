@@ -56,8 +56,10 @@
                                 <td>{{ $user->email }}</td>
                                 <td>{{ $user->phone_number }}</td>
                                 <td>{{ $user->role->role_name ?? 'N/A' }}</td>
-                                <td class="{{ $user->status ? 'badge bg-success' : 'badge bg-danger' }}">
-                                    {{  $user->status ? 'Active' : 'Inactive' }}
+                                <td>
+                                    <span class="badge d-inline" style="{{ $user->status ? 'background-color: green; color: white; padding: 5px;' : 'background-color: red; color: white; padding: 5px;' }}">
+                                        {{ $user->status ? 'Active' : 'Inactive' }}
+                                    </span>
                                 </td>
                             </tr>
                         @empty
@@ -84,60 +86,38 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="user-detail">
-                    <div class="user-detail-item">
-                        <strong>Username:</strong>
-                        <span id="modalUsername"></span>
+                <div class="gallery-section">
+                    <strong>Avatar:</strong>
+                    <img id="modalAvatar" style="width: 100%; height: auto; max-width: 200px;" alt="">
+                </div>
+
+                <div class="room-info-grid mt-3">
+                    <div class="info-card">
+                        <div class="info-label">Username:</div>
+                        <div class="info-value" id="modalUsername"></div>
                     </div>
-                    <div class="user-detail-item">
-                        <strong>Email:</strong>
-                        <span id="modalEmail"></span>
+                    <div class="info-card">
+                        <div class="info-label">Email:</div>
+                        <div class="info-value" id="modalEmail"></div>
                     </div>
-                    <div class="user-detail-item">
-                        <strong>Phone Number:</strong>
-                        <span id="modalPhoneNumber"></span>
+                    <div class="info-card">
+                        <div class="info-label">Phone Number:</div>
+                        <div class="info-value" id="modalPhoneNumber"></div>
                     </div>
-                    <div class="user-detail-item">
-                        <strong>Role Name:</strong>
-                        <span id="modalRoleId"></span>
+                    <div class="info-card">
+                        <div class="info-label">Role Name:</div>
+                        <div class="info-value" id="modalRoleId"></div>
                     </div>
-                    <div class="user-detail-item">
-                        <strong>Status:</strong>
-                        <span id="modalStatus"></span>
-                    </div>
-                    <div class="user-detail-item">
-                        <strong>Avatar:</strong>
-                        <img id="modalAvatar" style="width: 100%; height: auto; max-width: 200px;" alt="">
+                    <div class="info-card">
+                        <div class="info-label">Status:</div>
+                        <div class="info-value" id="modalStatus"></div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer" style="display: flex; justify-content: space-between;">
                 <a id="editUserButton" class="btn btn-info">Edit</a>
-                <button type="button" class="btn btn-danger" id="deleteUserButton" data-bs-toggle="modal"
-                    data-bs-target="#confirmDeleteUserModal">Delete</button>
-            </div>
-            <div class="modal-footer" style="width: 100%; position: relative; bottom: 0;">
-                <button type="button" class="btn btn-secondary w-100" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal xác nhận xóa -->
-<div class="modal fade" id="confirmDeleteUserModal" tabindex="-1" aria-labelledby="confirmDeleteUserModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="confirmDeleteUserModalLabel">Xác nhận xóa</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Bạn có chắc chắn muốn xóa người dùng này không?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-danger" id="confirmDeleteUserButton">OK</button>
+                <button type="button" class="btn btn-danger" id="deleteUserButton">Delete</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -146,15 +126,14 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const userDetailRows = document.querySelectorAll('.user-detail');
-        let currentUserId = null; // Lưu ID người dùng hiện tại
+        let currentUserId = null;
 
-        // Khi người dùng nhấn vào một người dùng
+        // Khi nhấn vào một người dùng
         userDetailRows.forEach(row => {
             row.addEventListener('click', function () {
-                currentUserId = this.getAttribute('data-id'); // Lưu ID người dùng hiện tại
-                console.log(`/users/${currentUserId}/detail`);
-
-                // Gọi AJAX để lấy thông tin chi tiết người dùng
+                currentUserId = this.getAttribute('data-id');
+                
+                // Gọi AJAX để lấy chi tiết người dùng
                 fetch(`/users/${currentUserId}/detail`)
                     .then(response => {
                         if (!response.ok) {
@@ -163,7 +142,7 @@
                         return response.json();
                     })
                     .then(user => {
-                        // Cập nhật nội dung modal
+                        // Cập nhật thông tin vào modal
                         document.getElementById('modalUsername').innerText = user.username;
                         document.getElementById('modalEmail').innerText = user.email;
                         document.getElementById('modalPhoneNumber').innerText = user.phone_number;
@@ -172,11 +151,11 @@
                         const avatarUrl = user.avatar ? `/images/${user.avatar}` : 'default-avatar.png';
                         document.getElementById('modalAvatar').src = avatarUrl;
 
-                        // Thiết lập đường dẫn cho nút Edit
+                        // Đặt link Edit
                         const editRoute = "{{ route('user.edit', ['user_id' => ':id']) }}".replace(':id', currentUserId);
                         document.getElementById('editUserButton').setAttribute('href', editRoute);
 
-                        // Hiển thị modal
+                        // Hiển thị modal chi tiết người dùng
                         new bootstrap.Modal(document.getElementById('userDetailModal')).show();
                     })
                     .catch(error => {
@@ -185,34 +164,49 @@
             });
         });
 
-        // Xử lý sự kiện nhấn nút Delete trong modal
+        // Xử lý xóa người dùng khi nhấn nút "Delete"
         document.getElementById('deleteUserButton').addEventListener('click', function () {
-            new bootstrap.Modal(document.getElementById('confirmDeleteUserModal')).show();
-        });
-
-        // Xác nhận xóa người dùng
-        document.getElementById('confirmDeleteUserButton').addEventListener('click', function () {
             fetch(`/users/${currentUserId}/delete`, {
                 method: 'DELETE',
                 headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}', // Thêm CSRF token
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
                 },
             })
-                .then(response => {
-                    if (response.ok) {
-                        // Xóa người dùng khỏi bảng
-                        const rowToDelete = document.querySelector(`.user-detail[data-id="${currentUserId}"]`);
-                        rowToDelete.remove();
-                        new bootstrap.Modal(document.getElementById('confirmDeleteUserModal')).hide();
-                        alert('User deleted successfully.');
-                    } else {
-                        throw new Error('Failed to delete user.');
+            .then(response => {
+                if (response.ok) {
+                    alert('User deleted successfully.');
+
+                    // Đóng modal chi tiết và tải lại trang
+                    const userDetailModal = bootstrap.Modal.getInstance(document.getElementById('userDetailModal'));
+                    if (userDetailModal) {
+                        userDetailModal.hide();
                     }
-                })
-                .catch(error => {
-                    console.error('Error deleting user:', error);
-                    alert('An error occurred while deleting the user.');
-                });
+                    location.reload();
+                } else {
+                    throw new Error('Failed to delete user.');
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting user:', error);
+                alert('An error occurred while deleting the user.');
+            });
+        });
+
+        // Đóng modal chi tiết và reload trang khi nhấn nút "Close"
+        document.querySelector('#userDetailModal .btn-close, #userDetailModal .btn-secondary').addEventListener('click', function () {
+            const userDetailModal = bootstrap.Modal.getInstance(document.getElementById('userDetailModal'));
+            if (userDetailModal) {
+                userDetailModal.hide();
+            }
+            location.reload();
+        });
+
+        // Lắng nghe sự kiện đóng modal
+        const userDetailModal = document.getElementById('userDetailModal');
+        
+        userDetailModal.addEventListener('hidden.bs.modal', function () {
+            // Tự động reload lại trang khi modal đóng
+            location.reload();
         });
     });
 </script>

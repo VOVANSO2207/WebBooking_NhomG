@@ -15,7 +15,7 @@
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Hotel Name</label>
                                 <input class="form-control" type="text" name="hotel_name" id="hotel_name"
-                                    value="{{ old('hotel_name', $hotel->hotel_name) }}" placeholder="Hotel Name" required />
+                                    value="{{ old('hotel_name', $hotel->hotel_name) }}" placeholder="Hotel Name" />
                                 @error('hotel_name')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -23,14 +23,14 @@
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Location</label>
                                 <input class="form-control" type="text" name="location" id="location"
-                                    value="{{ old('location', $hotel->location) }}" placeholder="Location" required />
+                                    value="{{ old('location', $hotel->location) }}" placeholder="Location" />
                                 @error('location')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">City ID</label>
-                                <select class="form-control" name="city_id" id="city_id" required>
+                                <select class="form-control" name="city_id" id="city_id">
                                     <option value="">Chọn thành phố</option>
                                     @foreach($cities as $city)
                                         <option value="{{ $city->city_id }}" {{ $city->city_id == $hotel->city_id ? 'selected' : '' }}>
@@ -44,7 +44,7 @@
                             </div>
                             <div class="mb-3 col-md-5">
                                 <label class="form-label">Hotel Amenities</label>
-                                <select name="amenities[]" class="form-select select2" id="amenities" multiple="multiple" required>
+                                <select name="amenities[]" class="form-select select2" id="amenities" multiple="multiple">
                                     @php
                                         $amenityNames = []; // Mảng để theo dõi tên tiện nghi đã hiển thị
                                     @endphp
@@ -68,16 +68,18 @@
                             <input type="hidden" name="descriptions[]" id="descriptions">
 
                             <div class="mb-3 col-md-6">
-                                <label class="form-label">Description</label>
-                                <textarea class="form-control" name="description" id="description" placeholder="Description" required>{{ old('description', $hotel->description) }}</textarea>
-                                @error('description')
+                                <label class="form-label">Rating</label>
+                                <input class="form-control" type="number" name="rating" id="rating" 
+                                    min="1" max="5" step="0.1"
+                                    value="{{ old('rating', $hotel->rating) }}" placeholder="Rating" />
+                                @error('rating')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
 
                             <div class="mb-3 col-md-5">
                                 <label class="form-label">Hotel Rooms</label>
-                                <select name="rooms[]" class="form-select select2" id="rooms" multiple="multiple" required>
+                                <select name="rooms[]" class="form-select select2" id="rooms" multiple="multiple">
                                     @foreach ($rooms as $room)
                                         <option value="{{ $room->room_id }}" data-name="{{ $room->name }}" data-price="{{ $room->price }}"
                                             @if(in_array($room->room_id, $currentRooms)) selected @endif>
@@ -85,16 +87,6 @@
                                         </option>
                                     @endforeach
                                 </select>
-                            </div>
-
-                            <div class="mb-3 col-md-6">
-                                <label class="form-label">Rating</label>
-                                <input class="form-control" type="number" name="rating" id="rating" 
-                                    min="1" max="5" step="0.1"
-                                    value="{{ old('rating', $hotel->rating) }}" placeholder="Rating" required />
-                                @error('rating')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
                             </div>
 
                             <div class="mb-3 col-md-6">
@@ -118,6 +110,13 @@
                                         </label>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="mb-3 col-md-12">
+                                <label class="form-label">Description</label>
+                                <textarea class="form-control" name="description" id="description" placeholder="Description">{{ old('description', $hotel->description) }}</textarea>
+                                @error('description')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
 
@@ -182,9 +181,11 @@ function updateDescriptions() {
     descriptionsInput.value = descriptions.join(', ');
 }
 
-// Cập nhật mô tả khi tải trang
-window.onload = updateDescriptions;
-
+    window.onload = function () {
+        CKEDITOR.replace('description', {
+            filebrowserUploadUrl: "path/to/upload/image" // Sửa đường dẫn này cho đúng
+        });
+    };
 </script>
 
 @endsection

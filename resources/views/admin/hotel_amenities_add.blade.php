@@ -14,7 +14,7 @@
                             <div class="mb-3">
                                 <label class="form-label">Amenity Name</label>
                                 <input class="form-control" type="text" name="amenity_name" id="amenity_name"
-                                    placeholder="Enter Amenity Name" required />
+                                    placeholder="Enter Amenity Name" />
                                 @error('amenity_name')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
