@@ -250,7 +250,7 @@
 
 <section class="popular-destination pb-5">
     <div class="container">
-        <div class="title mt-5 mb-2">Điểm đến thịnh hành</div>
+        <div class="title mb-2">Điểm đến thịnh hành</div>
         <div class="row">
             <div class="col-md-6">
                 <a href="#" class="link-popular-destination">
@@ -299,7 +299,7 @@
 
 <section class="our-offers pb-5">
     <div class="container">
-        <div class="title mt-5 mb-2">Ưu đãi của chúng tôi</div>
+        <div class="title mb-2">Ưu đãi của chúng tôi</div>
         <div class="carousel-container">
             <div class="carousel-wrapper">
                 <div class="card">
@@ -507,177 +507,74 @@
     </div>
 </section>
 
-<section class="famous-hotel">
-    <div class="container">
-        <div class="title mt-5 mb-2">Khách Sạn Nổi Tiếng</div>
-        <div class="carousel-container">
-            <div class="carousel-wrapper">
-                @foreach ($hotels as $hotel)
-                    @if ($hotel->rating >= 4.00)
-                        <div class="card the-top-khach-san">
-                            @foreach ($hotel->images as $index => $image)
-                                @if($index === 0)
-                                    <img class="image-hotel-1" src="{{ asset('images/' . $image->image_url) }}"
-                                        alt="{{ $image->image_url }}" />
-                                @endif
-                            @endforeach
-
-                            <div class="shape">
-                                <p class="country m-0">VIET NAM</p>
-                                <p class="location m-0">{{$hotel->location}} - <span
-                                        class="name-hotel">{{$hotel->hotel_name}}</span></p>
-                                <p class="price-old m-0">VNĐ {{ number_format($hotel->price_old, 0, ',', '.') }} VNĐ
-                                </p>
-                                <div class="row price-top">
-                                    <div class="col-md-7">
-                                        <span class="price-new">VNĐ {{ number_format($hotel->price_new, 0, ',', '.') }} VNĐ
-                                            <span>/ Khách</span> </span>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <a href="{{ route('pages.hotel_detail', ['hotel_id' => $hotel->hotel_id]) }}"
-                                            class="btn-book-now">ĐẶT NGAY</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="rating-top">
-                                @for ($i = 1; $i <= 5; $i++)
-                                    @if ($i <= $hotel->rating)
-                                        <span>★</span>
-                                    @else
-                                        <span>☆</span>
-                                    @endif
-                                @endfor
-                            </div>
-                            <!-- <div class="sale"><span>-</span>50%</div> -->
-                        </div>
-                    @endif
-
-                @endforeach
-            </div>
-            <button class="prev-btn"><i class="fa-solid fa-arrow-right"></i></button>
-            <button class="next-btn"><i class="fa-solid fa-arrow-right"></i></button>
-        </div>
-    </div>
-</section>
-
-<section class="popular-destination pb-5">
-    <div class="container">
-        <div class="title mt-5 mb-2">Điểm đến thịnh hành</div>
-        <div class="row">
-            <div class="col-md-6">
-                <a href="#" class="link-popular-destination">
-                    <img class="image-destitation-1"
-                        src="https://image.vietnamnews.vn/uploadvnnews/Article/2023/9/28/308010_4651436783396218_vna_potal_thanh_pho_ho_chi_minh_la_1_trong_10_diem_den_tuyet_voi_nhat_o_chau_a_6666855.jpg"
-                        alt="image">
-                    <p class="name-location-1">HỒ CHÍ MINH</p>
-                </a>
-            </div>
-            <div class="col-md-6">
-                <a href="#" class="link-popular-destination">
-                    <img class="image-destitation-1"
-                        src="https://letsflytravel.vn/assets/source/2_5_2024_Up/nha-trang-city-tour/nha-trang-letsflytravel.jpg"
-                        alt="image">
-                    <p class="name-location-1">ĐÀ NẴNG</p>
-            </div>
-            </a>
-        </div>
-        <div class="row mt-4">
-            <div class="col-md-4">
-                <a href="#" class="link-popular-destination">
-                    <img class="image-destitation-1"
-                        src="https://static.vinwonders.com/production/gioi-thieu-ve-da-lat-1.jpg" alt="image">
-                    <p class="name-location-1">ĐÀ LẠT</p>
-                </a>
-            </div>
-            <div class="col-md-4">
-                <a href="#" class="link-popular-destination">
-                    <img class="image-destitation-1"
-                        src="https://th.bing.com/th/id/R.05b072e1b9b939addf7c3f25637efa5e?rik=3F5fed7sbYHisQ&pid=ImgRaw&r=0"
-                        alt="image">
-                    <p class="name-location-1">CÀ MAU</p>
-                </a>
-            </div>
-            <div class="col-md-4">
-                <a href="#" class="link-popular-destination">
-                    <img class="image-destitation-1"
-                        src="https://vcdn1-dulich.vnecdn.net/2022/06/03/cauvang-1654247842-9403-1654247849.jpg?w=1200&h=0&q=100&dpr=1&fit=crop&s=Swd6JjpStebEzT6WARcoOA"
-                        alt="image">
-                    <p class="name-location-1">ĐÀ NẴNG</p>
-                </a>
-            </div>
-        </div>
-</section>
 <!-- Back to Top Button -->
 <button id="backToTopBtn" class="back-to-top" title="Back to Top">↑</button>
-<script>
-    const carousels = document.querySelectorAll('.carousel-wrapper');
 
-    carousels.forEach(carousel => {
+<script>
+    // Carousel functionality
+    document.querySelectorAll('.carousel-wrapper').forEach((carousel) => {
         const cards = carousel.querySelectorAll('.card');
-        const nextBtn = carousel.parentElement.querySelector('.next-btn');
-        const prevBtn = carousel.parentElement.querySelector('.prev-btn');
+        const nextBtn = carousel.closest('.carousel-container').querySelector('.next-btn');
+        const prevBtn = carousel.closest('.carousel-container').querySelector('.prev-btn');
         let index = 0;
         const visibleCards = 4; // Number of cards visible at a time
 
         function updateCarousel() {
+            if (cards.length === 0) return; // Prevent errors if no cards
+
             const cardWidth = cards[0].clientWidth;
             carousel.style.transform = `translateX(${-index * cardWidth}px)`;
 
-            // Hide prev button if at the start
-            if (index === 0) {
-                prevBtn.classList.add('hidden');
-            } else {
-                prevBtn.classList.remove('hidden');
-            }
-
-            // Hide next button if at the end
-            if (index >= cards.length - visibleCards) {
-                nextBtn.classList.add('hidden');
-            } else {
-                nextBtn.classList.remove('hidden');
-            }
+            // Toggle visibility of buttons based on position
+            prevBtn && prevBtn.classList.toggle('hidden', index === 0);
+            nextBtn && nextBtn.classList.toggle('hidden', index >= cards.length - visibleCards);
         }
 
-        nextBtn.addEventListener('click', () => {
-            if (index < cards.length - visibleCards) {
-                index++;
-                updateCarousel();
-            }
-        });
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                if (index < cards.length - visibleCards) {
+                    index++;
+                    updateCarousel();
+                }
+            });
+        }
 
-        prevBtn.addEventListener('click', () => {
-            if (index > 0) {
-                index--;
-                updateCarousel();
-            }
-        });
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => {
+                if (index > 0) {
+                    index--;
+                    updateCarousel();
+                }
+            });
+        }
 
-        window.addEventListener('resize', updateCarousel); // Adjust on window resize
-
-        // Initial call to hide prev button on load
-        updateCarousel();
+        window.addEventListener('resize', updateCarousel);
+        updateCarousel(); // Initial call
     });
-    //  THêm BACK TO TOP cho home
+
+    // Xử Lý Nút Back to top 
     const backToTopBtn = document.getElementById("backToTopBtn");
-    window.addEventListener("scroll", () => {
-        if (window.scrollY > 300) {
-            backToTopBtn.classList.add("visible");
-        } else {
-            backToTopBtn.classList.remove("visible");
-        }
-    });
-    backToTopBtn.addEventListener("click", () => {
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
+    if (backToTopBtn) {
+        window.addEventListener("scroll", () => {
+            backToTopBtn.classList.toggle("visible", window.scrollY > 300);
         });
-    });
+
+        backToTopBtn.addEventListener("click", () => {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        });
+    }
+
 </script>
 @endsection
+
 @section('footer')
 @include('partials.footer')
+@endsection
+
 {{-- Link File JS --}}
 @section('js')
 <script src="{{ asset('js/home.js') }}"></script>
-@endsection
 @endsection
