@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Models\WebsiteVisit;
 use App\Models\Posts;
 use App\Models\Hotel;
+use App\Models\Booking; // Đảm bảo bạn đã import Booking model
 
 class AdminController extends Controller
 {
@@ -23,6 +24,7 @@ class AdminController extends Controller
         // Xử lý dữ liệu thống kê
         $selectedYear = $request->input('year', date('Y'));
 
+        // Lấy dữ liệu lượt truy cập
         $visits = WebsiteVisit::selectRaw('DATE_FORMAT(visit_date, "%Y") as year, DATE_FORMAT(visit_date, "%m") as month, SUM(count) as total')
             ->whereYear('visit_date', $selectedYear)
             ->groupBy('year', 'month')
@@ -34,7 +36,7 @@ class AdminController extends Controller
             ['Tháng', 'Lượt truy cập'],
         ];
         foreach ($visits as $visit) {
-            $data[] = [$visit->year . '-' . $visit->month, (int) $visit->total];
+            $data[] = [$visit->year . '-' . $visit->month, (int)$visit->total];
         }
 
         $totalVisitors = $visits->sum('total');
@@ -45,7 +47,36 @@ class AdminController extends Controller
             ->pluck('year')
             ->toArray();
 
+        // Lấy dữ liệu doanh thu theo tháng
+        $revenueData = $this->getRevenueData($selectedYear);
+
+        // Lấy danh sách các năm có dữ liệu doanh thu từ bảng Booking
+        $revenueYears = Booking::selectRaw('YEAR(check_in) as year')
+        ->where('status', 'confirmed')
+        ->groupBy('year')
+        ->pluck('year')
+        ->toArray();
+
         // Trả về view với dữ liệu tổng hợp
-        return view('admin.index', compact('data', 'years', 'selectedYear', 'totalVisitors', 'postCount', 'hotelCount'));
+        return view('admin.index', compact('data', 'years', 'selectedYear', 'totalVisitors', 'postCount', 'hotelCount', 'revenueData', 'revenueYears'));
+    }
+
+    private function getRevenueData($year)
+    {
+        $revenue = Booking::selectRaw('DATE_FORMAT(check_in, "%Y") as year, DATE_FORMAT(check_in, "%m") as month, SUM(total_price) as total')
+            ->whereYear('check_in', $year)
+            ->groupBy('year', 'month')
+            ->orderBy('year', 'desc')
+            ->orderBy('month', 'asc')
+            ->get();
+
+        $data = [
+            ['Tháng', 'Doanh thu'],
+        ];
+        foreach ($revenue as $rev) {
+            $data[] = [$rev->year . '-' . $rev->month, (float)$rev->total];
+        }
+
+        return $data;
     }
 }

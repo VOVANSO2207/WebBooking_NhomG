@@ -45,7 +45,7 @@
                         </div>
                         <div class="mt-2" style="text-align: right">
                             <button type="reset" class="btn btn-outline-secondary" onclick="resetForm()">Reset</button>
-                            <button type="button" class="btn btn-outline-danger">Close</button>
+                            <button type="button" class="btn btn-outline-danger" onclick="window.location.href='{{ route('admin.viewvoucher') }}'">Close</button>
                             <button type="submit" class="btn btn-outline-success me-2">Save</button>
                         </div>
                     </form>
@@ -128,7 +128,7 @@
 
         // Kiểm tra nếu start_date lớn hơn end_date
         if (new Date(startDate) > new Date(endDate)) {
-            alert('Ngày bắt đầu không được lớn hơn ngày kết thúc.');
+            $('<div class="text-danger">Ngày bắt đầu không được lớn hơn ngày kết thúc.</div>').insertAfter('#start_date');
             return;
         }
 
@@ -151,6 +151,9 @@
                 // Hiển thị modal thông báo thành công
                 const successModal = new bootstrap.Modal(document.getElementById('successModal'));
                 successModal.show();
+                setTimeout(function() {
+                    window.location.href = '{{ route('admin.viewvoucher') }}';
+                }, 2000); 
 
             },
             error: function (xhr) {

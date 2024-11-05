@@ -21,7 +21,7 @@
                                 <label class="form-label">Promotion Code</label>
                                 <input class="form-control" type="text" name="promotion_code" id="promotion_code"
                                     placeholder="Promotion Code"
-                                    value="{{ old('promotion_code', $voucher->promotion_code) }}" required />
+                                    value="{{ old('promotion_code', $voucher->promotion_code) }}"  />
                                 @error('promotion_code')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -30,7 +30,7 @@
                                 <label class="form-label">Discount Amount</label>
                                 <input class="form-control" type="number" name="discount_amount" id="discount_amount"
                                     placeholder="Discount Amount"
-                                    value="{{ old('discount_amount', $voucher->discount_amount) }}" required />
+                                    value="{{ old('discount_amount', $voucher->discount_amount) }}"  />
                                 @error('discount_amount')
                                     <div class="text-danger">{{ $errors->first('discount_amount') }}</div>
                                 @enderror
@@ -38,7 +38,7 @@
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Start Date (Y-m-d)</label>
                                 <input class="form-control" type="date" name="start_date" id="start_date"
-                                    value="{{ old('start_date', $start_date) }}" required />
+                                    value="{{ old('start_date', $start_date) }}"  />
                                 @error('start_date')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -46,7 +46,7 @@
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">End Date (Y-m-d)</label>
                                 <input class="form-control" type="date" name="end_date" id="end_date"
-                                    value="{{ old('end_date', $end_date) }}" required />
+                                    value="{{ old('end_date', $end_date) }}"  />
                                 @error('end_date')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -183,9 +183,9 @@
 
             // Kiểm tra nếu start_date lớn hơn end_date
             if (new Date(startDate) > new Date(endDate)) {
-                alert('Ngày bắt đầu không được lớn hơn ngày kết thúc.');
-                return;
-            }
+            $('<div class="text-danger">Ngày bắt đầu không được lớn hơn ngày kết thúc.</div>').insertAfter('#start_date');
+            return;
+        }
             // Kiểm tra nếu không có thay đổi
             if (promotionCode === originalPromotionCode &&
                 discountAmount === originalDiscountAmount &&

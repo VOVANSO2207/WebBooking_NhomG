@@ -112,6 +112,7 @@
                         const resultItem = document.createElement('div');
                         resultItem.classList.add('news-item');
                         resultItem.innerHTML = `
+                         <a href="/blog/${post.url_seo}" class="news-link">
                         <img src="{{ asset('images/${post.img}') }}" alt="Ảnh đại diện bài viết">
                             <div class="news-content">
                                 <h5>${post.title}</h5>
@@ -119,6 +120,7 @@
                                 <span class="news-date">${post.created_at}</span>
                                 <a href="#" class="btn-read-more">Xem thêm</a>
                             </div>
+                               </a>
                         `;
                         resultsContainer.appendChild(resultItem);
                     });
@@ -134,4 +136,7 @@
 </body>
 
 </html>
+@endsection
+@section('footer')
+@include('partials.footer') 
 @endsection

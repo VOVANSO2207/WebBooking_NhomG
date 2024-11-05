@@ -50,7 +50,7 @@
                     <tbody class="table-border-bottom-0 alldata">
                         @if($vouchers->isEmpty())
                             <tr>
-                                <td colspan="5" class="text-center">No vouchers available.</td>
+                                <td colspan="5" class="text-center">Không có voucher nào hiển thị</td>
                             </tr>
                         @else
                             @foreach($vouchers as $key => $voucher)
@@ -151,7 +151,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" style="#3B79C9 !important"
-                    data-bs-dismiss="modal">Đóng</button>
+                    data-bs-dismiss="modal" onclick="location.reload()">Đóng</button>
             </div>
         </div>
     </div>

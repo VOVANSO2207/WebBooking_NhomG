@@ -50,8 +50,8 @@
                             <tr class="post-detail" data-id="{{ IdEncoder::encodeId($post->post_id) }}">
                                 <td>{{ $index + 1 }}</td>
                                 <td>
-                                    <img src="{{ asset('images/' . $post->img) }}" alt="{{ $post->title }}"
-                                        style="width: 100px; height: auto;">
+                                <img src="{{ asset($post->img ? 'images/' . $post->img : 'images/img-blog.jpg') }}"
+                                alt="{{ $post->title }}" style="width: 100px; height: auto;">
                                 </td>
                                 <td>{{ Str::limit($post->title, 60) }}</td>
                                 <td>{{ Str::limit($post->description, 60) }}</td>

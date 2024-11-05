@@ -55,7 +55,7 @@ class PromotionsController extends Controller
         $isDeleted = Promotions::deleteVoucher($decodedId, $request->updated_at);
 
         if (!$isDeleted) {
-            return response()->json(['error' => 'VOUCHER CÓ THỂ ĐÃ BỊ XOÁ HOẶC CẬP NHẬT VUI LÒNG THỬ LẠI'], 409);
+            return response()->json(['error' => 'Voucher có thể bị xoá vui lòng cập nhật lại'], 409);
         }
 
         return response()->json(['success' => 'XOÁ VOUCHER THÀNH CÔNG']);
@@ -67,16 +67,22 @@ class PromotionsController extends Controller
     }
     public function storeVoucher(Request $request)
     {
+        $maxStartDate = Carbon::today()->addYear()->format('Y-m-d');
+
         // Validate dữ liệu
         $validator = Validator::make($request->all(), [
             'promotion_code' => 'required|max:15|min:10|alpha_num|unique:promotions,promotion_code|regex:/^(?=.*[a-zA-Z])(?=.*[0-9]).+$/',
-            'discount_amount' => 'required|numeric|min:0|max:99999999|not_regex:/^0\d+$/|regex:/^\d+$/', // Thêm ràng buộc regex
-            'start_date' => 'required|date|date_format:Y-m-d',
-            'end_date' => 'required|date|date_format:Y-m-d|after:start_date',
+            'discount_amount' => 'required|numeric|min:0|max:99999999|not_regex:/^0\d+$/|regex:/^\d+$/',
+            'start_date' => "required|date|date_format:Y-m-d|after_or_equal:today|before_or_equal:$maxStartDate",
+            'end_date' => "required|date|date_format:Y-m-d|after:start_date|after_or_equal:today|before_or_equal:$maxStartDate",
         ], [
             'end_date.after' => 'Ngày kết thúc phải lớn hơn ngày bắt đầu.',
             'end_date.required' => 'Vui lòng chọn ngày kết thúc',
+            'end_date.after_or_equal' => 'Ngày kết thúc không được là ngày trong quá khứ.',
+            'end_date.before_or_equal' => 'Ngày kết thúc không được chọn quá xa.', 
             'start_date.required' => 'Vui lòng chọn ngày bắt đầu',
+            'start_date.after_or_equal' => 'Ngày bắt đầu không được là ngày trong quá khứ.',
+            'start_date.before_or_equal' => 'Ngày bắt đầu không được chọn quá xa.',
             'promotion_code.required' => 'Vui lòng nhập tên voucher.',
             'promotion_code.unique' => 'Tên voucher đã tồn tại',
             'discount_amount.required' => 'Vui lòng nhập số tiền giảm giá.',
@@ -124,6 +130,8 @@ class PromotionsController extends Controller
 
     public function updateVoucher(Request $request, $id)
     {
+        $maxStartDate = Carbon::today()->addYear()->format('Y-m-d');
+
         // Validate dữ liệu với các ràng buộc chi tiết
         $validator = Validator::make($request->all(), [
             'promotion_code' => [
@@ -142,15 +150,18 @@ class PromotionsController extends Controller
                 'not_regex:/^0\d+$/',
                 'regex:/^\d+$/',
             ],
-            'start_date' => 'required|date|date_format:Y-m-d',
-            'end_date' => 'required|date|date_format:Y-m-d|after:start_date',
+            'start_date' => "required|date|date_format:Y-m-d|after_or_equal:today|before_or_equal:$maxStartDate",
+            'end_date' => "required|date|date_format:Y-m-d|after:start_date|after_or_equal:today|before_or_equal:$maxStartDate",
         ], [
-            // Custom error messages
             'end_date.after' => 'Ngày kết thúc phải lớn hơn ngày bắt đầu.',
             'end_date.required' => 'Vui lòng chọn ngày kết thúc.',
+            'end_date.date_format' => 'Ngày kết thúc phải ở định dạng yyyy-mm-dd.',
+            'end_date.after_or_equal' => 'Ngày kết thúc không được là ngày trong quá khứ.',
+            'end_date.before_or_equal' => 'Ngày kết thúc không được chọn quá xa.', 
             'start_date.required' => 'Vui lòng chọn ngày bắt đầu.',
             'start_date.date_format' => 'Ngày bắt đầu phải ở định dạng yyyy-mm-dd.',
-            'end_date.date_format' => 'Ngày kết thúc phải ở định dạng yyyy-mm-dd.',
+            'start_date.after_or_equal' => 'Ngày bắt đầu không được là ngày trong quá khứ.',
+            'start_date.before_or_equal' => 'Ngày bắt đầu không được chọn quá xa.',
             'promotion_code.required' => 'Vui lòng nhập tên voucher.',
             'promotion_code.alpha_num' => 'Tên voucher chỉ bao gồm chữ và số.',
             'promotion_code.regex' => 'Tên voucher phải bao gồm cả chữ và số.',
