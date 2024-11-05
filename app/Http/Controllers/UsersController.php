@@ -53,11 +53,11 @@ class UsersController extends Controller
         $request->validate([
             'username' => 'required|min:3|max:50|unique:users,username',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:8',
-            'phone_number' => 'required|regex:/^0[0-9]{9}$/',
+            'password' => 'required|min:8|regex:/[a-zA-Z]/|regex:/[0-9]/|regex:/[@$!%*?&#]/',
+            'phone_number' => 'required|regex:/^0[0-9]{9}$/|size:10',
             'role_id' => 'required|integer',
             'status' => 'required|boolean',
-            'avatar' => 'nullable|image|mimes:jpeg,png,jpg|max:20480', // Kích thước tối đa 20MB
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Kích thước tối đa 2MB
         ], [
             'username.required' => 'Vui lòng nhập tên người dùng',
             'username.min' => 'Tên người dùng phải có ít nhất 3 ký tự',
@@ -68,13 +68,15 @@ class UsersController extends Controller
             'email.unique' => 'Email đã tồn tại',
             'password.required' => 'Vui lòng nhập mật khẩu',
             'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự',
+            'password.regex' => 'Mật khẩu phải bao gồm ít nhất một chữ cái, một số và một ký tự đặc biệt.',
             'phone_number.required' => 'Vui lòng nhập số điện thoại',
             'phone_number.regex' => 'Số điện thoại không hợp lệ',
+            'phone_number.size' => 'Số điện thoại phải có 10 ký tự.',
             'role_id.required' => 'Vui lòng chọn vai trò',
             'status.required' => 'Trạng thái là bắt buộc',
             'avatar.image' => 'Ảnh phải là định dạng JPEG, PNG, hoặc JPG.',
-            'avatar.max' => 'Kích thước ảnh không được vượt quá 20MB.',
-        ]);
+            'avatar.max' => 'Kích thước ảnh không được vượt quá 2MB.',
+        ]);        
 
         $user = new User();
         $user->username = $request->username;
@@ -115,15 +117,16 @@ class UsersController extends Controller
     public function search(Request $request)
     {
         $keyword = $request->get('search');
-
-        $results = User::whereRaw('MATCH(username, email) AGAINST(? IN BOOLEAN MODE)', [$keyword])
-            ->paginate(5);
-
+        if (empty($keyword)) {
+            // Nếu từ khóa tìm kiếm trống, hiển thị tất cả kết quả
+            $results = User::getAllUsers();
+        } else {
+            // Nếu có từ khóa, tìm kiếm theo từ khóa
+            $results = User::whereRaw('MATCH(username, email) AGAINST(? IN BOOLEAN MODE)', [$keyword])
+                ->paginate(5);
+        }
         return view('admin.search_results_user', compact('results'));
     }
-
-
-
     public function editUser($user_id)
     {
         // Giải mã ID
@@ -145,25 +148,30 @@ class UsersController extends Controller
         $request->validate([
             'username' => 'required|min:3|max:50|:users,username,' . $user_id . ',user_id',
             'email' => 'required|email|:users,email,' . $user_id . ',user_id',
-            'password' => 'nullable|min:8|', // Chỉ yêu cầu khi có giá trị
-            'phone_number' => 'required|regex:/^0[0-9]{9}$/',
+            'password' => 'nullable|min:8|regex:/[a-zA-Z]/|regex:/[0-9]/|regex:/[@$!%*?&#]/',
+            'phone_number' => 'required|regex:/^0[0-9]{9}$/|size:10',
             'role_id' => 'required|integer',
             'status' => 'required|boolean',
-            'avatar' => 'nullable|image|mimes:jpeg,png,jpg|max:20480', // Kích thước tối đa 20MB
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Kích thước tối đa 2MB
         ], [
             'username.required' => 'Vui lòng nhập tên người dùng',
             'username.min' => 'Tên người dùng phải có ít nhất 3 ký tự',
             'username.max' => 'Tên người dùng không được quá 50 ký tự',
+            'username.unique' => 'Tên người dùng đã tồn tại',
             'email.required' => 'Vui lòng nhập email',
             'email.email' => 'Email không hợp lệ',
+            'email.unique' => 'Email đã tồn tại',
             'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự',
+            'password.regex' => 'Mật khẩu phải bao gồm ít nhất một chữ cái, một số và một ký tự đặc biệt.',
             'phone_number.required' => 'Vui lòng nhập số điện thoại',
             'phone_number.regex' => 'Số điện thoại không hợp lệ',
+            'phone_number.size' => 'Số điện thoại phải có 10 ký tự.',
             'role_id.required' => 'Vui lòng chọn vai trò',
             'status.required' => 'Trạng thái là bắt buộc',
             'avatar.image' => 'Ảnh phải là định dạng JPEG, PNG, hoặc JPG.',
-            'avatar.max' => 'Kích thước ảnh không được vượt quá 20MB.',
+            'avatar.max' => 'Kích thước ảnh không được vượt quá 2MB.',
         ]);
+        
 
         $user = User::find($user_id);
         if (!$user) {

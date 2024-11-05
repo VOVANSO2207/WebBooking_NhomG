@@ -99,7 +99,7 @@ class HotelController extends Controller
 
     public function viewHotel()
     {
-        $hotels = Hotel::with(['images', 'city'])->paginate(5);
+        $hotels = Hotel::getAllHotels(); 
         return view('admin.hotel', compact('hotels'));
     }
 
@@ -169,19 +169,34 @@ class HotelController extends Controller
     {
         // Xác thực dữ liệu đầu vào
         $request->validate([
-            'hotel_name' => 'required|string|max:255|regex:/^[\pL\s]+$/u',
+            'hotel_name' => 'required|string|max:255|regex:/^[\pL\s]+$/u|unique:hotels,hotel_name',
             'location' => 'required|string|max:255',
             'city_id' => 'required|integer',
             'description' => 'required|string',
-            'rating' => 'nullable|between:1,5',
-            'images' => 'required|nullable|array',
+            'rating' => 'required|nullable|between:1,5',
+            'images' => 'nullable|array',
             'images.*' => 'image|mimes:jpeg,png,jpg|max:2048',
-            'amenities' => 'nullable|array',
+            'amenities' => 'required|nullable|array',
             'amenities.*' => 'integer|exists:hotel_amenities,amenity_id',
-            'rooms' => 'nullable|array', // Thêm rooms vào xác thực nếu cần
-            'rooms.*' => 'integer|exists:rooms,room_id', // Đảm bảo các room_id tồn tại
+            'rooms' => 'required|nullable|array',
+            'rooms.*' => 'integer|exists:rooms,room_id',
         ], [
-            // Các thông báo lỗi có thể tùy chỉnh tại đây
+            'hotel_name.required' => 'Tên khách sạn là bắt buộc.',
+            'hotel_name.unique' => 'Tên khách sạn đã tồn tại.',
+            'hotel_name.regex' => 'Tên khách sạn chỉ được chứa chữ cái và khoảng trắng.',
+            'location.required' => 'Vị trí là bắt buộc.',
+            'city_id.required' => 'Thành phố là bắt buộc.',
+            'description.required' => 'Mô tả là bắt buộc.',
+            'rating.between' => 'Đánh giá phải từ 1 đến 5.',
+            'rating.required' => 'Đánh giá là bắt buộc.',
+            'images.array' => 'Hình ảnh phải là một mảng.',
+            'images.*.image' => 'Tập tin phải là hình ảnh.',
+            'images.*.mimes' => 'Hình ảnh phải có định dạng jpeg, png hoặc jpg.',
+            'images.*.max' => 'Kích thước hình ảnh không được vượt quá 2MB.',
+            'amenities.*.exists' => 'Tiện nghi không tồn tại.',
+            'amenities.required' => 'Tiện nghi là bắt buộc.',
+            'rooms.*.exists' => 'Phòng không tồn tại.',
+            'rooms.required' => 'Phòng là bắt buộc.',
         ]);
 
         // Tạo khách sạn mới
@@ -196,15 +211,24 @@ class HotelController extends Controller
         // Lấy hotel_id vừa được tạo
         $hotelId = $hotel->hotel_id;
 
-        // Lưu hình ảnh liên quan đến khách sạn
-        foreach ($request->file('images') as $image) {
-            $imageName = time() . '_' . $image->getClientOriginalName();
-            $image->move(public_path('images'), $imageName);
+        // Kiểm tra xem có hình ảnh nào được upload không
+        if ($request->hasFile('images') && count($request->file('images')) > 0) {
+            foreach ($request->file('images') as $image) {
+                $imageName = time() . '_' . $image->getClientOriginalName();
+                $image->move(public_path('images'), $imageName);
 
-            // Lưu hình ảnh vào bảng hotel_images với hotel_id
+                // Lưu hình ảnh vào bảng hotel_images với hotel_id
+                HotelImages::create([
+                    'image_url' => $imageName,
+                    'hotel_id' => $hotelId, 
+                ]);
+            }
+        } else {
+            // Nếu không có hình ảnh nào được chọn, lưu hình ảnh mặc định
+            $defaultImage = 'img-upload.jpg'; // Tên file hình ảnh mặc định
             HotelImages::create([
-                'image_url' => $imageName,
-                'hotel_id' => $hotelId, // Sử dụng hotel_id đã lấy
+                'image_url' => $defaultImage,
+                'hotel_id' => $hotelId,
             ]);
         }
 
@@ -236,6 +260,7 @@ class HotelController extends Controller
         return redirect()->route('admin.viewhotel')->with('success', 'Thêm khách sạn thành công.');
     }
 
+
     public function deleteHotel($hotel_id)
     {
         $decodedId = IdEncoder::decodeId($hotel_id);
@@ -256,14 +281,20 @@ class HotelController extends Controller
     {
         // Lấy từ khóa tìm kiếm từ request
         $keyword = $request->get('search');
-
-        // Thực hiện tìm kiếm toàn văn trên các trường name và description
-        $hotels = Hotel::whereRaw('MATCH(hotel_name, description) AGAINST(? IN BOOLEAN MODE)', [$keyword])
-            ->paginate(5);
-
+    
+        // Kiểm tra nếu từ khóa tìm kiếm rỗng, hiển thị tất cả kết quả
+        if (empty($keyword)) {
+            $hotels = Hotel::getAllHotels();
+        } else {
+            // Thực hiện tìm kiếm toàn văn trên các trường name và description
+            $hotels = Hotel::whereRaw('MATCH(hotel_name, description) AGAINST(? IN BOOLEAN MODE)', [$keyword])
+                ->paginate(5);
+        }
+    
         // Trả về view với kết quả tìm kiếm
         return view('admin.search_results_hotel', compact('hotels'));
     }
+    
 
     public function editHotel($hotel_id)
     {
@@ -289,6 +320,20 @@ class HotelController extends Controller
             'city_id' => 'required|integer|exists:cities,city_id',
             'description' => 'required|string',
             'rating' => 'required|numeric|min:1|max:5',
+        ], [
+            'hotel_name.required' => 'Tên khách sạn là bắt buộc.',
+            'hotel_name.regex' => 'Tên khách sạn chỉ được chứa chữ cái và khoảng trắng.',
+            'hotel_name.max' => 'Tên khách sạn không được vượt quá 255 ký tự.',
+            'location.required' => 'Vị trí là bắt buộc.',
+            'location.max' => 'Vị trí không được vượt quá 255 ký tự.',
+            'city_id.required' => 'Thành phố là bắt buộc.',
+            'city_id.integer' => 'Thành phố phải là một số nguyên.',
+            'city_id.exists' => 'Thành phố không tồn tại.',
+            'description.required' => 'Mô tả là bắt buộc.',
+            'rating.required' => 'Đánh giá là bắt buộc.',
+            'rating.numeric' => 'Đánh giá phải là một số.',
+            'rating.min' => 'Đánh giá tối thiểu là 1.',
+            'rating.max' => 'Đánh giá tối đa là 5.',
         ]);
 
         $hotel = Hotel::find($hotel_id);

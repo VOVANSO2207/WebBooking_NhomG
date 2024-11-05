@@ -16,18 +16,18 @@
                         <div class="card-body">
 
                             <div class="mb-3">
-                                <label class="form-label">Tên Tiện Ích</label>
+                                <label class="form-label">Amenity Name</label>
                                 <input class="form-control" type="text" name="amenity_name" id="amenity_name"
-                                    value="{{ old('amenity_name', $amenity->amenity_name) }}" placeholder="Tên Tiện Ích" required />
+                                    value="{{ old('amenity_name', $amenity->amenity_name) }}" placeholder="Amenity Name" />
                                 @error('amenity_name')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Mô Tả</label>
+                                <label class="form-label">Description</label>
                                 <textarea class="form-control" name="description" id="description" rows="3"
-                                    placeholder="Mô Tả" required>{{ old('description', $amenity->description) }}</textarea>
+                                    placeholder="Description">{{ old('description', $amenity->description) }}</textarea>
                                 @error('description')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror

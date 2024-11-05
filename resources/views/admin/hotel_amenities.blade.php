@@ -13,7 +13,7 @@
         <div class="navbar-nav align-items-center" style="width: 100%;">
             <form action="{{ route('hotel_amenities.search') }}" method="GET" class="d-flex align-items-center" style="width: 100%;">
                 <i class="bx bx-search fs-4 lh-0"></i>
-                <input type="text" name="search" class="form-control border-0 shadow-none" placeholder="Search amenities..." aria-label="Search..." style="width: 100%;" />
+                <input type="text" name="search" class="form-control border-0 shadow-none" placeholder="Search..." aria-label="Search..." style="width: 100%;" />
                 <button type="submit" class="btn btn-primary">Search</button>
             </form>
         </div>
@@ -67,43 +67,21 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="amenity-detail">
-                    <div class="amenity-detail-item">
-                        <strong>Amenity Name:</strong>
-                        <span id="modalAmenityName"></span>
+                <div class="room-info-grid mt-3">
+                    <div class="info-card">
+                        <div class="info-label">Amenity Name:</div>
+                        <div class="info-value" id="modalAmenityName"></div>
                     </div>
-                    <div class="amenity-detail-item">
-                        <strong>Description:</strong>
-                        <span id="modalDescription"></span>
+                    <div class="info-card">
+                        <div class="info-label">Description:</div>
+                        <div class="info-value" id="modalDescription"></div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer d-flex justify-content-between">
                 <a id="editAmenityButton" class="btn btn-info">Edit</a>
-                <button type="button" class="btn btn-danger" id="deleteAmenityButton" data-bs-toggle="modal" data-bs-target="#confirmDeleteAmenityModal">Delete</button>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary w-100" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Confirm Delete Modal -->
-<div class="modal fade" id="confirmDeleteAmenityModal" tabindex="-1" aria-labelledby="confirmDeleteAmenityModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="confirmDeleteAmenityModal">Xác nhận xóa</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Bạn có chắc chắn muốn xóa người dùng này không?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-danger" id="confirmDeleteAmenityButton">OK</button>
+                <button type="button" class="btn btn-danger" id="deleteAmenityButton">Delete</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -143,42 +121,44 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-     // Xử lý sự kiện nhấn nút Delete trong modal
-     document.getElementById('deleteAmenityButton').addEventListener('click', function () {
-            new bootstrap.Modal(document.getElementById('confirmDeleteAmenityModal')).show();
-        });
-
-// Xác nhận xóa người dùng
-document.getElementById('confirmDeleteAmenityButton').addEventListener('click', function () {
-    fetch(`/admin/hotel_amenities/${currentAmenityId}/delete`, {
-        method: 'DELETE',
-        headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}', // Thêm CSRF token
-        },
-    })
-    .then(response => {
-        if (response.ok) {
-            // Xóa tiện ích khỏi bảng
-            const rowToDelete = document.querySelector(`.amenity-detail[data-id="${currentAmenityId}"]`);
-            if (rowToDelete) {
-                rowToDelete.remove();
-            } else {
-                console.error('Row not found for deletion');
-            }
-            new bootstrap.Modal(document.getElementById('confirmDeleteAmenityModal')).hide();
-            alert('Amenity deleted successfully.');
-        } else {
-            throw new Error('Failed to delete Amenity.');
+    // Xử lý sự kiện nhấn nút Delete trong modal chi tiết
+    document.getElementById('deleteAmenityButton').addEventListener('click', function () {
+        if (currentAmenityId) {
+            // Thực hiện xóa tiện ích mà không có thông báo xác nhận
+            fetch(`/admin/hotel_amenities/${currentAmenityId}/delete`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}', // Thêm CSRF token
+                },
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Xóa tiện ích khỏi bảng
+                    const rowToDelete = document.querySelector(`.amenity-detail[data-id="${currentAmenityId}"]`);
+                    if (rowToDelete) {
+                        rowToDelete.remove();
+                    } else {
+                        console.error('Row not found for deletion');
+                    }
+                    // Đóng modal và tải lại trang
+                    new bootstrap.Modal(document.getElementById('amenityDetailModal')).hide();
+                    location.reload(); // Tải lại trang
+                } else {
+                    throw new Error('Failed to delete Amenity.');
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting Amenity:', error);
+                alert('An error occurred while deleting the amenity.');
+            });
         }
-    })
-    .catch(error => {
-        console.error('Error deleting Amenity:', error);
-        alert('An error occurred while deleting the amenity.');
+    });
+
+    // Lắng nghe sự kiện đóng modal
+    document.getElementById('amenityDetailModal').addEventListener('hidden.bs.modal', function () {
+        // Tự động reload lại trang khi modal đóng
+        location.reload();
     });
 });
-
-    });
-
 </script>
-
 @endsection
