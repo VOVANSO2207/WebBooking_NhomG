@@ -18,7 +18,7 @@ class Rooms extends Model
     {
         return $this->hasMany(RoomImages::class, 'room_id', 'room_id');
     }
-      // Định nghĩa mối quan hệ với RoomImages
+    // Định nghĩa mối quan hệ với RoomImages
     //   public function roomImages()
     //   {
     //       return $this->hasMany(RoomImages::class, 'room_id');
@@ -40,8 +40,8 @@ class Rooms extends Model
     public static function getAllRooms($perPage = 5)
     {
         return self::with('roomType', 'amenities', 'room_images')
-        ->orderBy('created_at', 'desc')
-        ->paginate($perPage);
+            ->orderBy('created_at', 'desc')
+            ->paginate($perPage);
     }
     public static function createRoom($data)
     {
@@ -51,7 +51,7 @@ class Rooms extends Model
     {
         // Lấy phòng và các quan hệ liên quan (hình ảnh, tiện nghi)
         $room = self::with(['room_images', 'amenities'])->find($roomId);
-    
+
         if ($room) {
             // Xóa file hình ảnh trong thư mục storage/images
             foreach ($room->room_images as $image) {
@@ -60,19 +60,19 @@ class Rooms extends Model
                     unlink($imagePath); // Xóa file
                 }
             }
-    
+
             // Xóa record trong bảng room_images và amenities
             $room->room_images()->delete();
             $room->amenities()->delete();
-            
+
             // Xóa phòng
             $room->delete();
-            
+
             return true;
         }
         return false;
     }
-    
+
     public function updateRoom($data)
     {
         return $this->update($data);
@@ -82,5 +82,4 @@ class Rooms extends Model
     {
         return RoomAmenities::addAmenitiesToRoom($this->room_id, $amenities);
     }
-    
 }

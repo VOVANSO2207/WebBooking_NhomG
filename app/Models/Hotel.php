@@ -83,11 +83,25 @@ class Hotel extends Model
         return $this->hasMany(Reviews::class, 'hotel_id');
     }
     // Hàm lọc khách sạn theo số lượng đánh giá nhiều nhất
-    
+
 
     public function rooms()
     {
         return $this->hasMany(Rooms::class, 'hotel_id', 'hotel_id');
     }
-
+    // Tính tiền
+    public function averageRoomPrice()
+    {
+        return $this->rooms()->avg('price');
+    }
+    public static function getHotelsWithAverageRoomPrice()
+    {
+        return self::with('rooms')
+            ->get()
+            ->map(function ($hotel) {
+                // Tính giá trung bình và lưu vào thuộc tính tạm `average_price`
+                $hotel->average_price = $hotel->averageRoomPrice();
+                return $hotel;
+            });
+    }
 }

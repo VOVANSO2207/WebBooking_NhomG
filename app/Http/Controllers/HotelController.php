@@ -55,10 +55,13 @@ class HotelController extends Controller
         return response()->json(['hotels' => $hotels]);
     }
 
+    // Chi tiết khách sạn
     public function show($hotel_id)
     {
-        $hotel = Hotel::with('images')->findOrFail($hotel_id);
-        return view('pages.hotel_detail', compact('hotel'));
+
+        $hotel = Hotel::with(['rooms.room_images'], 'images')->findOrFail($hotel_id);
+        $rooms = $hotel->rooms()->paginate(4);
+        return view('pages.hotel_detail', compact('hotel', 'rooms'));
     }
 
     public function search(Request $request)
