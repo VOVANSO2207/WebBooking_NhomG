@@ -55,17 +55,14 @@ class HotelAmenities extends Model
     {
         return $this->delete();
     }
-<<<<<<< HEAD
+
     // public static function getAllAmenities()
     // {
     //     return self::all();
     // }
-=======
 
     public function hotels()
     {
         return $this->belongsToMany(Hotel::class, 'hotel_amentities'); // Use your actual pivot table name here
     }
-
->>>>>>> UI&Fix-7
 }

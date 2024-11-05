@@ -54,12 +54,7 @@
                 <h2>Bộ lọc phổ biến</h2>
                 <div class="option d-flex justify-content-between align-items-center">
                     <p>Nhiều đánh giá</p>
-<<<<<<< HEAD:resources/views/pages/search_result.blade.php
                     <input type="checkbox" class="check_filter" id="filterMostReviews">
-                    
-=======
-                    <input type="checkbox" class="check_filter" data-filter="high_rating">
->>>>>>> UI&Fix-7:resources/views/search_result.blade.php
                 </div>
                 <div class="option d-flex justify-content-between align-items-center">
                     <p>Khuyến mãi</p>
@@ -97,7 +92,7 @@
                     </div>
                 @endforeach
             </div>
-            
+
         </div>
         <div class="col-md-9">
             <div class="tab_control">
@@ -151,11 +146,12 @@
                                         navigation="true" space-between="30" loop="true" style="height: auto">
                                         @foreach ($hotel->images as $image)
                                             <swiper-slide>
-<<<<<<< HEAD:resources/views/pages/search_result.blade.php
-                                                <img src="{{ asset('storage/images/' . $image->image_url) }}" alt="{{$image->image_url}}" />
-=======
+                                                <<<<<<< HEAD:resources/views/pages/search_result.blade.php <img
+                                                    src="{{ asset('storage/images/' . $image->image_url) }}"
+                                                    alt="{{$image->image_url}}" />
+                                                =======
                                                 <img src="{{ asset('images/' . $image->image_url) }}" alt="{{$image->image_url}}" />
->>>>>>> UI&Fix-7:resources/views/search_result.blade.php
+                                                >>>>>>> UI&Fix-7:resources/views/search_result.blade.php
                                             </swiper-slide>
                                         @endforeach
                                     </swiper-container>
