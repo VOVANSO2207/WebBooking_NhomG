@@ -64,6 +64,9 @@ class Posts extends Model
     }
     public static function getViewBlogs($perPage = 6)
     {
-        return self::where('status', 1)->paginate($perPage); // 1 có thể là trạng thái "show"
+        return self::where('status', 1) 
+                    ->orderBy('created_at', 'desc') 
+                    ->paginate($perPage);
     }
+    
 }
