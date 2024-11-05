@@ -23,6 +23,9 @@
                 <div class="col-md-6">
                     <div class="row">
                         <div class="col-6 small-img">
+                            <!-- @foreach ($hotel->images as $image)
+                                <img src="{{ asset('images/' . $image->image_url) }}" alt="{{$image->image_url}}" />
+                            @endforeach -->
                             <img src="https://kykagroup.com/wp-content/uploads/2023/07/IMG-Worlds-of-Adventure.jpg"
                                 alt="Small Image">
                             <img src="https://kykagroup.com/wp-content/uploads/2023/07/IMG-Worlds-of-Adventure.jpg"
@@ -58,21 +61,20 @@
                 <div class="row">
                     <div class="col-md-8 detail-left-info">
                         <h5 class="section-title">Giới thiệu</h5>
-                        <p class="detail-description">ibis Styles Vung Tau là khách sạn quốc tế tiết kiệm với thiết kế
-                            vui nhộn, sáng tạo và hiện đại. Tọa lạc tại trung tâm khu vực bãi biển phía sau của Vũng
-                            Tàu, du khách có thể tận hưởng một trong những tầm nhìn ra đại dương đẹp nhất tại thành phố
-                            Vũng Tàu. Khách sạn cung cấp 250 phòng độc đáo với khái niệm giường ngủ ibis mới và WIFI
-                            miễn phí, phục vụ cả khách du lịch giải trí và công tác.ibis Styles Vung Tau là khách sạn
-                            quốc tế tiết kiệm với thiết kế
-                            vui nhộn, sáng tạo và hiện đại. Tọa lạc tại trung tâm khu vực bãi biển phía sau của Vũng
-                            Tàu, du khách có thể tận hưởng một trong những tầm nhìn ra đại dương đẹp nhất tại thành phố
-                            Vũng Tàu. Khách sạn cung cấp 250 phòng độc đáo với khái niệm giường ngủ ibis mới và WIFI
-                            miễn phí, phục vụ cả khách du lịch giải trí và công tác.
-                            <span><a href="#" class="detail-btn-load-more">Xem thêm</a></span>
+                        <p class="detail-description">
+                            {{ \Illuminate\Support\Str::limit($hotel->description, 500) }}
+                            @if (str_word_count($hotel->description) > 100)
+                                <span id="more-text" style="display: none;">
+                                    {{ substr($hotel->description, 500) }}
+                                </span>
+                                <span>
+                                    <a href="#" class="detail-btn-load-more" onclick="toggleMoreText(event)">Xem thêm</a>
+                                </span>
+                            @endif
                         </p>
                         <div class="detail-address">
                             <i class="fa-solid fa-location-dot fa-xl me-2"></i>
-                            <span>164 Lê Thánh Tôn, Phường Bến Thành, Quận 1, TP. Hồ Chí Minh</span>
+                            <span>{{ $hotel->location }}</span>
                         </div>
                     </div>
                     <div class="col-md-4 detail-right-info">
@@ -92,34 +94,24 @@
                 <div class="hotel-amenities">
                     <div class="row">
                         <div class="col-md-6 detail-title-amenities">Tiện nghi khách sạn </div>
-                        <div class="col-md-6"><a href="#" class="xem-tat-ca">Xem tất cả ></a></div>
+                        @if ($hotel->amenities->IsEmpty())
+                            <div class="col-md-6"><a href="#" class="xem-tat-ca"></a></div>
+                        @else
+                            <div class="col-md-6"><a href="#" class="xem-tat-ca">Xem tất cả ></a></div>
+                        @endif
                     </div>
                     <div class="info-amenities d-flex justify-content-center">
                         <div class="row">
-                            <div class="col-6 col-md-3 amenity-item">
-                                <i class="fas fa-check-circle amenity-icon"></i> Có bãi đậu xe
-                            </div>
-                            <div class="col-6 col-md-3 amenity-item">
-                                <i class="fas fa-check-circle amenity-icon"></i> Có hồ bơi
-                            </div>
-                            <div class="col-6 col-md-3 amenity-item">
-                                <i class="fas fa-check-circle amenity-icon"></i> Phòng gym
-                            </div>
-                            <div class="col-6 col-md-3 amenity-item">
-                                <i class="fas fa-check-circle amenity-icon"></i> Phòng gym
-                            </div>
-                            <div class="col-6 col-md-3 amenity-item">
-                                <i class="fas fa-check-circle amenity-icon"></i> WiFi miễn phí
-                            </div>
-                            <div class="col-6 col-md-3 amenity-item">
-                                <i class="fas fa-check-circle amenity-icon"></i> Nhà hàng
-                            </div>
-                            <div class="col-6 col-md-3 amenity-item">
-                                <i class="fas fa-check-circle amenity-icon"></i> Máy lạnh
-                            </div>
-                            <div class="col-6 col-md-3 amenity-item">
-                                <i class="fas fa-check-circle amenity-icon"></i> Ghế tình yêu
-                            </div>
+                            @if ($hotel->amenities->IsEmpty())
+                                <p>Khách sạn không có tiện nghi</p>
+                            @else
+                                @foreach($hotel->amenities as $amenity)
+                                    <div class="col-6 col-md-3 amenity-item">
+                                        <i class="fas fa-check-circle amenity-icon"></i>
+                                        {{ $amenity->amenity_name }}
+                                    </div>
+                                @endforeach
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -591,6 +583,22 @@
             reader.readAsDataURL(file); // Đọc file dưới dạng URL
         }
     });
+
+    // load more cho giới thiệu description
+    function toggleMoreText(event) {
+        event.preventDefault(); // Prevent the default anchor behavior
+
+        const moreText = document.getElementById("more-text");
+        const loadMoreBtn = event.target;
+
+        if (moreText.style.display === "none") {
+            moreText.style.display = "inline"; // Show more text
+            loadMoreBtn.textContent = "Thu gọn"; // Change button text
+        } else {
+            moreText.style.display = "none"; // Hide more text
+            loadMoreBtn.textContent = "Xem thêm"; // Reset button text
+        }
+    }
 </script>
 @endsection
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>

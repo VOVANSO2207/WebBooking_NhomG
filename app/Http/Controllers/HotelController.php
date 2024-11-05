@@ -14,20 +14,42 @@ class HotelController extends Controller
     //
     public function viewSearchHotel()
     {
-        // Lấy tất cả các hotels từ cơ sở dữ liệu
         $hotels = Hotel::with('images')->get();
-
-        // Truyền dữ liệu qua view
         return view('search_result', compact('hotels'));
     }
     public function index()
     {
-        // Lấy tất cả các hotels từ cơ sở dữ liệu
         $hotels = Hotel::all();
-
-        // Truyền dữ liệu qua view
         return view('pages.home', compact('hotels'));
     }
+    // Filter
+    public function filterHotels(Request $request)
+    {
+        $filters = $request->input('filters', []);
+        $hotels = Hotel::query();
+
+        if (in_array('high_rating', $filters)) {
+            $hotels->where('rating', '>=', 4); // Lọc theo rating từ 4-5
+        }
+
+        // Sắp xếp theo rating giảm dần nếu có yêu cầu
+        if (in_array('desc_rating', $filters)) {
+            $hotels->orderBy('rating', 'desc')->get();
+        }
+        // Thêm điều kiện cho các bộ lọc
+        // ...
+
+        $hotels = $hotels->with('images')->get();
+
+        return response()->json(['hotels' => $hotels]);
+    }
+
+    public function show($hotel_id)
+    {
+        $hotel = Hotel::with('images')->findOrFail($hotel_id);
+        return view('pages.hotel_detail', compact('hotel'));
+    }
+
 
     public function search(Request $request)
     {
@@ -84,15 +106,15 @@ class HotelController extends Controller
         return view('admin.hotel_add', compact('cities', 'hotelAmenities', 'hotelRooms'));
     }
 
-    public function getHotelDetail($hotel_id) 
+    public function getHotelDetail($hotel_id)
     {
         $decodedId = IdEncoder::decodeId($hotel_id);
         $hotel = Hotel::with(['images', 'amenities', 'city', 'rooms'])->find($decodedId); // Thêm 'rooms' vào here
-    
+
         if (!$hotel) {
             return response()->json(['error' => 'Khách sạn không tồn tại'], 404);
         }
-    
+
         // Lấy URL hình ảnh
         $images = $hotel->images->map(function ($image) {
             if (file_exists(public_path('images/' . $image->image_url))) {
@@ -103,7 +125,7 @@ class HotelController extends Controller
                 return asset('images/img-upload.jpg'); // Hình ảnh mặc định
             }
         });
-    
+
         // Lấy amenities từ bảng hotel_amenity_hotel
         $amenities = $hotel->amenities->map(function ($amenity) {
             return [
@@ -111,7 +133,7 @@ class HotelController extends Controller
                 'description' => $amenity->description,
             ];
         });
-    
+
         // Lấy thông tin phòng
         $rooms = $hotel->rooms->map(function ($room) {
             return [
@@ -119,7 +141,7 @@ class HotelController extends Controller
                 'price' => $room->price,
             ];
         });
-    
+
         return response()->json([
             'hotel_name' => $hotel->hotel_name,
             'location' => $hotel->location,
@@ -131,7 +153,7 @@ class HotelController extends Controller
             'rooms' => $rooms, // Danh sách phòng
         ]);
     }
-    
+
 
     public function store(Request $request)
     {
@@ -206,17 +228,17 @@ class HotelController extends Controller
     {
         $decodedId = IdEncoder::decodeId($hotel_id);
         $hotel = Hotel::find($decodedId);
-    
+
         if ($hotel) {
             // Xóa khách sạn mà không xóa các phòng, hình ảnh hay tiện nghi
             $hotel->delete();
-    
+
             return response()->json(['success' => true, 'message' => 'Khách sạn đã được xóa.']);
         }
-    
+
         return response()->json(['success' => false, 'message' => 'Khách sạn không tồn tại.'], 404);
     }
-    
+
 
     public function searchAdminHotel(Request $request)
     {
@@ -296,40 +318,40 @@ class HotelController extends Controller
             }
         }
 
-// Kiểm tra và lưu hình ảnh
-if ($request->hasFile('images')) {
-    // Lấy danh sách hình ảnh hiện tại
-    $existingImages = $hotel->images()->pluck('image_id')->toArray();
+        // Kiểm tra và lưu hình ảnh
+        if ($request->hasFile('images')) {
+            // Lấy danh sách hình ảnh hiện tại
+            $existingImages = $hotel->images()->pluck('image_id')->toArray();
 
-    // Xóa hình ảnh không còn được chọn
-    foreach ($existingImages as $imageId) {
-        // Nếu hình ảnh không có trong danh sách mới, xóa
-        if (!in_array($imageId, $request->input('existing_image_ids', []))) {
-            $imageToDelete = HotelImages::where('image_id', $imageId)->first();
-            if ($imageToDelete) {
-                // Xóa tệp hình ảnh trong thư mục
-                $imagePath = public_path('images/' . $imageToDelete->image_url);
-                if (file_exists($imagePath)) {
-                    unlink($imagePath);
+            // Xóa hình ảnh không còn được chọn
+            foreach ($existingImages as $imageId) {
+                // Nếu hình ảnh không có trong danh sách mới, xóa
+                if (!in_array($imageId, $request->input('existing_image_ids', []))) {
+                    $imageToDelete = HotelImages::where('image_id', $imageId)->first();
+                    if ($imageToDelete) {
+                        // Xóa tệp hình ảnh trong thư mục
+                        $imagePath = public_path('images/' . $imageToDelete->image_url);
+                        if (file_exists($imagePath)) {
+                            unlink($imagePath);
+                        }
+
+                        // Xóa hình ảnh khỏi cơ sở dữ liệu
+                        $imageToDelete->delete();
+                    }
                 }
+            }
 
-                // Xóa hình ảnh khỏi cơ sở dữ liệu
-                $imageToDelete->delete();
+            // Lưu hình ảnh mới
+            foreach ($request->file('images') as $image) {
+                $imageName = time() . '_' . $image->getClientOriginalName();
+                $image->move(public_path('images'), $imageName);
+
+                HotelImages::create([
+                    'hotel_id' => $hotel->hotel_id,
+                    'image_url' => $imageName,
+                ]);
             }
         }
-    }
-
-    // Lưu hình ảnh mới
-    foreach ($request->file('images') as $image) {
-        $imageName = time() . '_' . $image->getClientOriginalName();
-        $image->move(public_path('images'), $imageName);
-
-        HotelImages::create([
-            'hotel_id' => $hotel->hotel_id,
-            'image_url' => $imageName,
-        ]);
-    }
-}
 
         if ($request->has('rooms')) {
             $existingRooms = $hotel->rooms()->pluck('room_id')->toArray();

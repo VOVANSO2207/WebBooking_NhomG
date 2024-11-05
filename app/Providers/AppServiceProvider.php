@@ -6,8 +6,10 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use App\Models\Cities;
+use App\Models\Hotel;
 use App\Models\RoomImages;
 use App\Models\HotelImages;
+use App\Models\HotelAmenities;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -35,5 +37,12 @@ class AppServiceProvider extends ServiceProvider
 
         $hotel_images = HotelImages::all();
         View::share('hotel_images', $hotel_images);
+
+        $get_hotels = Hotel::orderBy('rating', 'desc')->get();
+        View::share('get_hotels_desc', $get_hotels);
+
+        $hotel_amenities_ser = HotelAmenities::all();
+        View::share('hotel_amenities_ser', $hotel_amenities_ser);
+
     }
 }

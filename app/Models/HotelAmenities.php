@@ -46,7 +46,7 @@ class HotelAmenities extends Model
 
         return static::where(function ($query) use ($keyword) {
             $query->where('amenity_name', 'LIKE', "%{$keyword}%")
-                  ->orWhere('description', 'LIKE', "%{$keyword}%");
+                ->orWhere('description', 'LIKE', "%{$keyword}%");
         });
     }
 
@@ -55,4 +55,10 @@ class HotelAmenities extends Model
     {
         return $this->delete();
     }
+
+    public function hotels()
+    {
+        return $this->belongsToMany(Hotel::class, 'hotel_amentities'); // Use your actual pivot table name here
+    }
+
 }

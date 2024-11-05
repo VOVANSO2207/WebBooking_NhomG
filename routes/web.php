@@ -168,3 +168,10 @@ Route::get('/', [HotelController::class, 'index']);
 
 Route::get('/contact', action: [ContactController::class, 'contact'])->name('contact');
 Route::post('/contact', action: [ContactController::class, 'sendMail']);
+
+// Fillter Hanle
+// Route::get('/hotels/rating-desc', [HotelController::class, 'getHotelsByRatingDesc'])->name('hotels.getHotelsByRatingDesc');
+Route::post('/filter-hotels', [HotelController::class, 'filterHotels']);
+
+// User - Hotel 
+Route::get('/hotel_detail/{hotel_id}', [HotelController::class, 'show'])->name('pages.hotel_detail');

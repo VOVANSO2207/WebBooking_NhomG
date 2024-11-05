@@ -54,6 +54,7 @@ body {
     border-radius: 999px;
     font-weight: bold;
     transition: background-color 0.3s ease;
+    pointer-events: auto;
 }
 
 .tab_btn.active {

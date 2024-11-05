@@ -176,7 +176,7 @@
             </form>
         </div>
         <div class="slogan-staynest container">
-            <p>ĐẶT PHÒNG NHANH TẬN HƯỞNG NGAY</p>
+            <p class="text-slogan-staynest">ĐẶT PHÒNG NHANH TẬN HƯỞNG NGAY</p>
             <p class="header-text-muted">Khám phá du lịch với dịch vụ đặt phòng nhanh chóng và tiện lợi. Hãy bắt đầu
                 hành trình
                 của bạn ngay hôm
@@ -198,11 +198,10 @@
                         <div class="card the-top-khach-san">
                             @foreach ($hotel->images as $index => $image)
                                 @if($index === 0)
-                                    <img class="image-hotel-1" src="{{ asset('storage/images/' . $image->image_url) }}"
+                                    <img class="image-hotel-1" src="{{ asset('images/' . $image->image_url) }}"
                                         alt="{{ $image->image_url }}" />
                                 @endif
                             @endforeach
-
 
                             <div class="shape">
                                 <p class="country m-0">VIET NAM</p>
@@ -215,7 +214,10 @@
                                         <span class="price-new">VNĐ {{ number_format($hotel->price_new, 0, ',', '.') }} VNĐ
                                             <span>/ Khách</span> </span>
                                     </div>
-                                    <div class="col-md-5"><a href="#" class="btn-book-now">ĐẶT NGAY</a></div>
+                                    <div class="col-md-5">
+                                        <a href="{{ route('pages.hotel_detail', ['hotel_id' => $hotel->hotel_id]) }}"
+                                            class="btn-book-now">ĐẶT NGAY</a>
+                                    </div>
                                 </div>
                             </div>
                             <div class="rating-top">
@@ -227,7 +229,7 @@
                                     @endif
                                 @endfor
                             </div>
-                            <div class="sale"><span>-</span>50%</div>
+                            <!-- <div class="sale"><span>-</span>50%</div> -->
                         </div>
                     @endif
 

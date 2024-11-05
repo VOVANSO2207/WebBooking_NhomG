@@ -78,8 +78,8 @@
                     </div>
                 </div>
             </div>
-            <div class="tab-pane fade bill-room active" id="nav-profile" role="tabpanel"
-                aria-labelledby="nav-profile-tab" tabindex="0">
+            <div class="tab-pane fade bill-room" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab"
+                tabindex="0">
                 <div class="row">
                     <!-- Invoice Card 1 -->
                     <div class="col-md-6">
