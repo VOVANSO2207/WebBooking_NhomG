@@ -201,29 +201,30 @@
         <div class="carousel-container">
             <div class="carousel-wrapper">
                 @foreach ($hotels as $hotel)
-                    @if ($hotel->rating >= 4.0)
+                    @if ($hotel->rating >= 4.00)
                         <div class="card the-top-khach-san">
                             @foreach ($hotel->images as $index => $image)
-                                @if ($index === 0)
+                                @if($index === 0)
                                     <img class="image-hotel-1" src="{{ asset('images/' . $image->image_url) }}"
                                         alt="{{ $image->image_url }}" />
                                 @endif
                             @endforeach
 
-
                             <div class="shape">
                                 <p class="country m-0">VIET NAM</p>
-                                <p class="location m-0">{{ $hotel->location }} - <span
-                                        class="name-hotel">{{ $hotel->hotel_name }}</span></p>
+                                <p class="location m-0">{{$hotel->location}} - <span
+                                        class="name-hotel">{{$hotel->hotel_name}}</span></p>
                                 <p class="price-old m-0">VNĐ {{ number_format($hotel->price_old, 0, ',', '.') }} VNĐ
                                 </p>
                                 <div class="row price-top">
                                     <div class="col-md-7">
-                                        <span class="price-new">VNĐ
-                                            {{ number_format($hotel->price_new, 0, ',', '.') }} VNĐ
+                                        <span class="price-new">VNĐ {{ number_format($hotel->price_new, 0, ',', '.') }} VNĐ
                                             <span>/ Khách</span> </span>
                                     </div>
-                                    <div class="col-md-5"><a href="#" class="btn-book-now">ĐẶT NGAY</a></div>
+                                    <div class="col-md-5">
+                                        <a href="{{ route('pages.hotel_detail', ['hotel_id' => $hotel->hotel_id]) }}"
+                                            class="btn-book-now">ĐẶT NGAY</a>
+                                    </div>
                                 </div>
                             </div>
                             <div class="rating-top">
@@ -235,9 +236,10 @@
                                     @endif
                                 @endfor
                             </div>
-                            <div class="sale"><span>-</span>50%</div>
+                            <!-- <div class="sale"><span>-</span>50%</div> -->
                         </div>
                     @endif
+
                 @endforeach
             </div>
             <button class="prev-btn"><i class="fa-solid fa-arrow-right"></i></button>

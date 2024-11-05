@@ -146,12 +146,7 @@
                                         navigation="true" space-between="30" loop="true" style="height: auto">
                                         @foreach ($hotel->images as $image)
                                             <swiper-slide>
-                                                <<<<<<< HEAD:resources/views/pages/search_result.blade.php <img
-                                                    src="{{ asset('storage/images/' . $image->image_url) }}"
-                                                    alt="{{$image->image_url}}" />
-                                                =======
                                                 <img src="{{ asset('images/' . $image->image_url) }}" alt="{{$image->image_url}}" />
-                                                >>>>>>> UI&Fix-7:resources/views/search_result.blade.php
                                             </swiper-slide>
                                         @endforeach
                                     </swiper-container>

@@ -42,8 +42,8 @@ rangeInput.forEach((input) => {
     });
 });
 
-const tabButtons = document.querySelectorAll('.tab_btn');
-const tabContents = document.querySelectorAll('.tab_item');
+// const tabButtons = document.querySelectorAll('.tab_btn');
+// const tabContents = document.querySelectorAll('.tab_item');
 
 // tabButtons.forEach((btn) => {
 //     btn.addEventListener('click', function () {
