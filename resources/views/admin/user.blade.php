@@ -191,6 +191,23 @@
                 alert('An error occurred while deleting the user.');
             });
         });
+
+        // Đóng modal chi tiết và reload trang khi nhấn nút "Close"
+        document.querySelector('#userDetailModal .btn-close, #userDetailModal .btn-secondary').addEventListener('click', function () {
+            const userDetailModal = bootstrap.Modal.getInstance(document.getElementById('userDetailModal'));
+            if (userDetailModal) {
+                userDetailModal.hide();
+            }
+            location.reload();
+        });
+
+        // Lắng nghe sự kiện đóng modal
+        const userDetailModal = document.getElementById('userDetailModal');
+        
+        userDetailModal.addEventListener('hidden.bs.modal', function () {
+            // Tự động reload lại trang khi modal đóng
+            location.reload();
+        });
     });
 </script>
 @endsection

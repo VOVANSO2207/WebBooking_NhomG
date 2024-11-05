@@ -154,7 +154,11 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
     });
-
+    // Lắng nghe sự kiện đóng modal
+    document.getElementById('amenityDetailModal').addEventListener('hidden.bs.modal', function () {
+        // Tự động reload lại trang khi modal đóng
+        location.reload();
+    });
 });
 </script>
 @endsection

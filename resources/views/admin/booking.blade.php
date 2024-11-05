@@ -193,6 +193,13 @@
                     });
             }
         });
+        const bookingDetailModal = document.getElementById('bookingDetailModal');
+
+        // Lắng nghe sự kiện đóng modal
+        bookingDetailModal.addEventListener('hidden.bs.modal', function () {
+            // Tự động reload lại trang khi modal đóng
+            location.reload();
+        });
     });
 </script>
 

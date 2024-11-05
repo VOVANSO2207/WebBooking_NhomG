@@ -238,6 +238,13 @@
             console.error('Error:', error);
         });
     });
+    const hotelDetailModal = document.getElementById('hotelDetailModal');
+
+    // Lắng nghe sự kiện đóng modal
+    hotelDetailModal.addEventListener('hidden.bs.modal', function () {
+        // Tự động reload lại trang khi modal đóng
+        location.reload();
+    });
 });
 </script>
 
