@@ -59,7 +59,6 @@
 </div>
 
 <!-- Amenity Detail Modal -->
-<!-- Amenity Detail Modal -->
 <div class="modal fade" id="amenityDetailModal" tabindex="-1" aria-labelledby="amenityDetailModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -125,6 +124,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Xử lý sự kiện nhấn nút Delete trong modal chi tiết
     document.getElementById('deleteAmenityButton').addEventListener('click', function () {
         if (currentAmenityId) {
+            // Thực hiện xóa tiện ích mà không có thông báo xác nhận
             fetch(`/admin/hotel_amenities/${currentAmenityId}/delete`, {
                 method: 'DELETE',
                 headers: {
@@ -142,7 +142,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                     // Đóng modal và tải lại trang
                     new bootstrap.Modal(document.getElementById('amenityDetailModal')).hide();
-                    alert('Amenity deleted successfully.');
                     location.reload(); // Tải lại trang
                 } else {
                     throw new Error('Failed to delete Amenity.');
@@ -154,6 +153,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
     });
+
     // Lắng nghe sự kiện đóng modal
     document.getElementById('amenityDetailModal').addEventListener('hidden.bs.modal', function () {
         // Tự động reload lại trang khi modal đóng
@@ -162,4 +162,3 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 @endsection
-
