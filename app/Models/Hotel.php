@@ -22,7 +22,7 @@ class Hotel extends Model
     // Lấy tất cả khách sạn với phân trang
     public static function getAllHotels($perPage = 5)
     {
-        return self::orderBy('created_at', 'DESC')->paginate($perPage);
+        return self::with(['images', 'city'])->orderBy('created_at', 'DESC')->paginate($perPage);
     }
 
     // Tìm khách sạn theo ID

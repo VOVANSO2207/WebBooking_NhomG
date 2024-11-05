@@ -104,26 +104,21 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <!-- Thông tin khách sạn hiện tại -->
                 <div><strong>Name:</strong> <span id="modalHotelName"></span></div>
                 <div><strong>Location:</strong> <span id="modalHotelLocation"></span></div>
                 <div><strong>City:</strong> <span id="modalHotelCity"></span></div>
                 <div><strong>Description:</strong> <span id="modalHotelDescription"></span></div>
                 <div><strong>Rating:</strong> <span id="modalHotelRating"></span></div>
 
-
-                <!-- Swiper carousel cho hình ảnh -->
                 <div class="swiper room-swiper">
                     <div class="swiper-wrapper" id="hotelImages"></div>
                     <div class="swiper-button-next"></div>
                     <div class="swiper-button-prev"></div>
                 </div>
-                <!-- Tiện ích khách sạn -->
                 <div><strong>Amenities:</strong>
                     <ul id="modalHotelAmenities"></ul>
                 </div>
 
-                <!-- Danh sách phòng khách sạn -->
                 <div><strong>Rooms:</strong>
                     <ul id="modalHotelRooms"></ul>
                 </div>
@@ -131,30 +126,8 @@
 
             <div class="modal-footer">
                 <a id="editHotelButton" class="btn btn-info">Edit</a>
-                <button type="button" class="btn btn-danger" id="deleteHotelButton" data-bs-toggle="modal"
-                    data-bs-target="#confirmDeleteHotelModal">Delete</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteHotelButton">Delete</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<!-- Modal xác nhận xóa -->
-<div class="modal fade" id="confirmDeleteHotelModal" tabindex="-1" aria-labelledby="confirmDeleteHotelModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="confirmDeleteHotelModalLabel">Xác nhận xóa</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Bạn có chắc chắn muốn xóa khách sạn này không?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-danger" id="confirmDeleteHotelButton">OK</button>
             </div>
         </div>
     </div>
@@ -172,7 +145,6 @@
                 fetch(`/hotels/${currentHotelId}/detail`)
                     .then(response => response.json())
                     .then(hotel => {
-                        // Cập nhật thông tin khách sạn
                         document.getElementById('modalHotelName').innerText = hotel.hotel_name;
                         document.getElementById('modalHotelLocation').innerText = hotel.location;
                         document.getElementById('modalHotelCity').innerText = hotel.city_id;
@@ -182,7 +154,6 @@
                         const editRoute = "{{ route('hotel.edit', ['hotel_id' => ':hotel_id']) }}";
                         document.getElementById('editHotelButton').setAttribute('href', editRoute.replace(':hotel_id', currentHotelId));
 
-                        // Hiển thị danh sách tiện ích
                         const amenitiesContainer = document.getElementById('modalHotelAmenities');
                         amenitiesContainer.innerHTML = '';
                         hotel.amenities.forEach(amenity => {
@@ -191,7 +162,6 @@
                             amenitiesContainer.appendChild(listItem);
                         });
 
-                        // Hiển thị danh sách phòng
                         const roomsContainer = document.getElementById('modalHotelRooms');
                         roomsContainer.innerHTML = '';
                         hotel.rooms.forEach(room => {
@@ -200,9 +170,8 @@
                             roomsContainer.appendChild(roomItem);
                         });
 
-                        // Hiển thị hình ảnh khách sạn
                         const imageContainer = document.getElementById('hotelImages');
-                        imageContainer.innerHTML = ''; // Xóa các ảnh cũ trước
+                        imageContainer.innerHTML = '';
                         hotel.images.forEach(image => {
                             const slide = document.createElement('div');
                             slide.classList.add('swiper-slide');
@@ -210,7 +179,6 @@
                             imageContainer.appendChild(slide);
                         });
 
-                        // Khởi tạo Swiper sau khi đã thêm ảnh
                         new Swiper('.room-swiper', {
                             navigation: {
                                 nextEl: '.swiper-button-next',
@@ -219,7 +187,6 @@
                             loop: false,
                         });
 
-                        // Hiển thị modal chi tiết khách sạn
                         const hotelDetailModal = new bootstrap.Modal(document.getElementById('hotelDetailModal'));
                         hotelDetailModal.show();
                     })
@@ -239,35 +206,11 @@
                     if (response.ok) {
                         location.reload(); // Tải lại trang nếu xóa thành công
                     } else {
-                        console.error('Error deleting hotel:', response.statusText);
+                        console.error('Error deleting hotel:', response);
                     }
                 })
-                .catch(error => console.error('Error deleting hotel:', error));
-        });
-
-        // Initialize Swiper for each Swiper container
-        document.addEventListener('DOMContentLoaded', function () {
-            const swiperContainers = document.querySelectorAll('.room-swiper');
-
-            swiperContainers.forEach(container => {
-                const swiper = new Swiper(container, {
-                    navigation: {
-                        nextEl: container.querySelector('.swiper-button-next'),
-                        prevEl: container.querySelector('.swiper-button-prev'),
-                    },
-                    loop: false,
-                });
-
-                container.querySelector('.swiper-button-next').addEventListener('click', function (event) {
-                    event.stopPropagation();
-                });
-
-                container.querySelector('.swiper-button-prev').addEventListener('click', function (event) {
-                    event.stopPropagation();
-                });
-            });
+                .catch(error => console.error('Error:', error));
         });
     });
 </script>
-
 @endsection
