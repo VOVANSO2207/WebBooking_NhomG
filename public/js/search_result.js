@@ -42,21 +42,9 @@ rangeInput.forEach((input) => {
     });
 });
 
-const tabButtons = document.querySelectorAll('.tab_btn');
-const tabContents = document.querySelectorAll('.tab_item');
+// const tabButtons = document.querySelectorAll('.tab_btn');
+// const tabContents = document.querySelectorAll('.tab_item');
 
-<<<<<<< HEAD
-tabButtons.forEach((btn) => {
-    btn.addEventListener('click', function () {
-        tabButtons.forEach((btn) => btn.classList.remove('active'));
-        tabContents.forEach((content) => content.classList.remove('active'));
-
-        this.classList.add('active');
-        const targetTab = this.getAttribute('data-tab');
-        document.getElementById(targetTab).classList.add('active');
-    });
-});
-=======
 // tabButtons.forEach((btn) => {
 //     btn.addEventListener('click', function () {
 //         console.log('Tab button clicked');
@@ -75,7 +63,7 @@ setHandlePosition(minHandle, currentMin);
 setHandlePosition(maxHandle, currentMax);
 updateSliderRange();
 updatePriceValues();
->>>>>>> UI&Fix-7
+
 const starButtons = document.querySelectorAll('.star-button');
 
 starButtons.forEach(button => {
@@ -83,20 +71,10 @@ starButtons.forEach(button => {
         starButtons.forEach(btn => btn.classList.remove('active'));
         button.classList.add('active');
     });
-<<<<<<< HEAD
 });
-
-
 
 // Initialize slider
 // setHandlePosition(minHandle, currentMin);
 // setHandlePosition(maxHandle, currentMax);
 // updateSliderRange();
 // updatePriceValues();
-
-
-
-
-=======
-});
->>>>>>> UI&Fix-7
