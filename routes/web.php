@@ -16,17 +16,21 @@ use App\Http\Controllers\RoomTypeController;
 use App\Models\HotelAmenities;
 use App\Http\Controllers\HotelAmenitiesController;
 use App\Http\Controllers\ContactController;
-
+use App\Http\Controllers\RoomAmenitiesController;
 use Illuminate\Support\Facades\Route;
 // Route người dùng 
 // Route::get('/', function () {
 //     return view('pages/home');
 // })->name('home');
 // Route::middleware(['auth'])->group(function () {
-//     Route::get('/', function () {
-//         return view('pages/homex');
-//     })->name('home');
+//     Route::get('/admin', function () {
+//         return view('admin.index');
+//     })->name('admin');
 // });
+// Route::get('/admin', function () {
+//     return view('admin.inex');
+// })->middleware(['auth', 'session.token']);
+
 
 
 Route::get('/login', function () {
@@ -36,7 +40,6 @@ Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
 Route::get('/register', function () {
     return view('auth.register');
 });
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::get('/search_result', function () {
     return view('pages.search_result');
@@ -114,8 +117,15 @@ Route::prefix('admin')->group(function () {
     Route::get('/hotel-amenities/{id}/edit', [HotelAmenitiesController::class, 'edit'])->name('admin.hotel_amenities.edit');
     Route::put('/hotel-amenities/{id}', [HotelAmenitiesController::class, 'update'])->name('admin.hotel_amenities.update');
     Route::delete('/hotel_amenities/{id}/delete', [HotelAmenitiesController::class, 'destroy'])->name('amenities.delete');
-});
 
+    // Admin - Tiện nghi phòng
+    Route::get('/room-amenities', [RoomAmenitiesController::class, 'getAllRoomAmenties'])->name('admin.viewroomamenities');});
+    Route::delete('/room-amenities/delete/{id}', [RoomAmenitiesController::class, 'deleteRoomAmenities'])->name('admin.room_amenities.delete');
+    Route::get('/room-amenities/add', [RoomAmenitiesController::class, 'showAddRoomAmenities'])->name('room_amenities_add');
+    Route::post('/room-amenities/store', [RoomAmenitiesController::class, 'AddRoomAmenities'])->name('admin.room_amenities.store');
+    Route::get('/admin/room-amenities/edit/{id}', [RoomAmenitiesController::class, 'editRoomAmenity'])->name('admin.room_amenities.edit');
+    Route::put('/admin/room-amenities/update/{id}', [RoomAmenitiesController::class, 'updateRoomAmenity'])->name('admin.room_amenities.update');
+    Route::get('admin/room-amenities/search', [RoomAmenitiesController::class, 'search'])->name('roomAmenities.search');
 // Admin-Post Detail
 Route::get('/posts/{post_id}/detail', action: [PostsController::class, 'getPostDetail'])->name('post.detail');
 Route::get('/search', [PostsController::class, 'search'])->name('search');

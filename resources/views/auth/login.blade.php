@@ -66,7 +66,7 @@
                     </div>
 
                     <div class="card-footer text-center text-muted">
-                        Website by team © Staynest™
+                        Website by team © Group G
                     </div>
                 </div>
             </div>

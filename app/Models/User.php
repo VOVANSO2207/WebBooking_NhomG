@@ -139,7 +139,7 @@ class User extends Model implements Authenticatable // Thêm giao diện
         $user = self::where('username', $credentials['login'])
             ->orWhere('email', $credentials['login'])
             ->first();
-
+        
         if (!$user || !Hash::check($credentials['password'], $user->password)) {
             throw ValidationException::withMessages([
                 'login' => ['Thông tin đăng nhập không chính xác.'],

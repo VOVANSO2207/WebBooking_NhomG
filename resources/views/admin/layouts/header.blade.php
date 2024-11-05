@@ -89,7 +89,7 @@
               </a>
             </li>
             <li class="menu-item">
-              <a href="#" class="menu-link">
+              <a href="{{route('admin.viewroomamenities')}}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-bulb"></i> 
                 <div data-i18n="Room Amenities">Tiện Nghi Phòng</div>
               </a>

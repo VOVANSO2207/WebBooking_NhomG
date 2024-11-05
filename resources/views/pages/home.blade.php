@@ -72,25 +72,47 @@
                     <div class="profile-header col-md-2">
                         <!-- Nếu chưa đăng nhập -->
                         <!-- <div class="group-left-header">
-                                                        <a href="#" class="login">Đăng nhập/</a>
-                                                        <a href="#" class="register">Đăng ký</a>
-                                                    </div> -->
+                                                                        <a href="#" class="login">Đăng nhập/</a>
+                                                                        <a href="#" class="register">Đăng ký</a>
+                                                                    </div> -->
                         <!-- Nếu đã đăng nhập -->
                         <div class="loged">
                             <div class="group-left-header d-flex align-items-center justify-content-center">
                                 <div class="col-md-2 text-center">
-                                    <i class="fa-solid fa-bell fa-xl"></i>
+                                    <i class="fa-solid fa-bell fa-xl" id="notificationBell" style="cursor: pointer;"></i>
+
+                                    <!-- Notification Dropdown -->
+                                    <div class="notification-dropdown" id="notificationDropdown" style="display: none;">
+                                        <h5 class="dropdown-header">Notifications</h5>
+                                        <div class="notification-item">You have a new message</div>
+                                        <div class="notification-item">Booking confirmed</div>
+                                        <div class="notification-item">Special offer just for you!</div>
+                                        <div class="notification-item">Your review has been approved</div>
+                                    </div>
                                 </div>
+
                                 <div class="col-md-8 text-center ms-3 me-2">
                                     <p class="name-user m-0 p-0" id="userIcon">
                                         <span style="display: inline-block; transform: rotate(90deg);">&gt;</span>
-                                        <abbr title="Nguyen Hoang Son" style="text-decoration: none;">Nguyen Hoang
-                                            Son</abbr>
+                                        <abbr title="{{ Auth::check() ? Auth::user()->username : 'Guest' }}"
+                                            style="text-decoration: none;">
+                                            {{ Auth::check() ? Auth::user()->username : 'Guest' }}
+                                        </abbr>
                                     </p>
                                 </div>
-                                <div class="col-md-2 text-center">
-                                    <i class="fa-solid fa-user fa-xl"></i>
+
+                                <div class="col-md-2 text-center" style="width: 100%;height:100%;">
+                                    @if (Auth::check())
+                                        <img src="{{ Auth::user()->avatar ? asset('storage/images/' . Auth::user()->avatar) : asset('storage/images/user-profile.png') }}"
+                                             alt="Avatar" class="img-fluid rounded-circle"
+                                             style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;">
+                                    @else
+                                        <img src="{{ asset('images/user-profile.png') }}" alt="Default User Profile"
+                                        style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;">
+                                    @endif
                                 </div>
+                                
+                                
                             </div>
                             <div class="dropdown-menu" id="userDropdown" style="display: none;">
                                 <a class="dropdown-item dropdown-item-staynest" href="{{ route('pages.account') }}">Tài
@@ -100,10 +122,20 @@
                                 <a class="dropdown-item dropdown-item-staynest"
                                     href="{{ route('pages.account') }}?tab=nav-profile">Hóa Đơn</a>
                                 <a class="dropdown-item dropdown-item-staynest" href="#">Voucher</a>
-                                <a href="#" class="dropdown-item dropdown-item-staynest text-danger">
-                                    Đăng Xuất
-                                </a>
-
+                                @if (Auth::check())
+                                    <a href="#" class="dropdown-item dropdown-item-staynest text-danger"
+                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        Đăng Xuất
+                                    </a>
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                        style="display: none;">
+                                        @csrf
+                                    </form>
+                                @else
+                                    <a href="{{ route('login') }}" class="dropdown-item dropdown-item-staynest">
+                                        Đăng Nhập
+                                    </a>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -574,6 +606,20 @@
                 top: 0,
                 behavior: "smooth"
             });
+        });
+
+        document.getElementById('notificationBell').addEventListener('click', function() {
+            const dropdown = document.getElementById('notificationDropdown');
+            dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+        });
+
+        // Optional: Close the dropdown if clicking outside of it
+        document.addEventListener('click', function(event) {
+            const bell = document.getElementById('notificationBell');
+            const dropdown = document.getElementById('notificationDropdown');
+            if (!bell.contains(event.target) && !dropdown.contains(event.target)) {
+                dropdown.style.display = 'none';
+            }
         });
     </script>
 @endsection

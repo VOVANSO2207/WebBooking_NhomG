@@ -19,8 +19,8 @@
             <div class="navbar-nav align-items-center" style="width: 100%;">
                 <div class="nav-item d-flex align-items-center" style="width: 100%;">
                     <i class="bx bx-search fs-4 lh-0"></i>
-                    <input type="text" class="form-control border-0 shadow-none" id="search_roomType"
-                        placeholder="Search..." aria-label="Search..." style="width: 100%;" onkeyup="searchRoomType()" />
+                    <input type="text" class="form-control border-0 shadow-none" id="search_roomAmenities"
+                        placeholder="Search..." aria-label="Search..." style="width: 100%;" onkeyup="searchRoomAmenities()" />
                 </div>
             </div>
             <!-- /Search -->
@@ -33,9 +33,10 @@
         <div class="container-xxl flex-grow-1 container-p-y">
             <!-- Basic Bootstrap Table -->
             <div class="card">
-                <h5 class="card-header" style="background-color: #696cff; border-color: #696cff; color:#fff">ROOM TYPE</h5>
+                <h5 class="card-header" style="background-color: #696cff; border-color: #696cff; color:#fff">ROOM AMENITIES
+                </h5>
                 <div class="add">
-                    <a href="{{ route(name: 'roomType_add') }}" class="btn btn-success">Add</a>
+                    <a href="{{ route(name: 'room_amenities_add') }}" class="btn btn-success">Add</a>
                 </div>
                 <div class="table-responsive text-nowrap content1">
                     <table class="table">
@@ -43,41 +44,44 @@
                             <tr class="color_tr">
                                 <th>STT</th>
                                 <th>Name</th>
+                                <th>Description</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody class="table-border-bottom-0 alldata">
-                            @if ($roomType->isEmpty())
+                            @if ($roomAmenitie->isEmpty())
                                 <tr>
                                     <td colspan="3" class="text-center">Không tìm thấy kết quả</td>
                                 </tr>
                             @else
-                                @foreach ($roomType as $key => $roomTypes)
+                                @foreach ($roomAmenitie as $key => $roomAmenities)
                                     <tr>
                                         <td style="width: 10%;">{{ $key + 1 }}</td>
-                                        <td style="width: 70%;">{{ $roomTypes->name }}</td>
+                                        <td style="width: 30%;">{{ $roomAmenities->amenity_name }}</td>
+                                        <td style="width: 40%">{{ $roomAmenities->description }}</td>
                                         <td style="width: 20%;">
                                             <div class="d-flex justify-content-around align-items-center">
-                                                <a href="{{ route('admin.roomtype.edit', IdEncoder::encodeId($roomTypes->room_type_id)) }}"
-                                                    class="btn btn-info btn-sm" title="Edit">
+                                                <a href="{{ route('admin.room_amenities.edit', IdEncoder::encodeId($roomAmenities->amenity_id)) }}" class="btn btn-info btn-sm" title="Edit">
                                                     <i class="bi bi-pencil-fill" style="margin-right: 5px"></i> Edit
                                                 </a>
                                                 <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
                                                     data-bs-target="#confirmDeleteModal"
-                                                    onclick="setDeleteAction('{{ route('admin.roomtype.delete', IdEncoder::encodeId($roomTypes->room_type_id)) }}')">
+                                                    onclick="setDeleteAction('{{ route('admin.room_amenities.delete', IdEncoder::encodeId($roomAmenities->amenity_id)) }}')">
                                                     <i class="bi bi-x-circle" style="margin-right: 5px;"></i> Delete
                                                 </button>
+
                                             </div>
                                         </td>
                                     </tr>
                                 @endforeach
-                                @endif
+                            @endif
                         </tbody>
 
                     </table>
                 </div>
                 <div class="d-flex justify-content-center mt-3 pagination-roomtype">
-                    {{ $roomType->appends(['query' => request('query')])->links('pagination::bootstrap-4') }}
+                    {{-- {{ $roomAmenitie->appends(['csrf_token' => csrf_token()])->links('pagination::bootstrap-4') }} --}}
+                    {{ $roomAmenitie->appends(['query' => request('query')])->links('pagination::bootstrap-4') }}
                 </div>
             </div>
         </div>
@@ -123,41 +127,32 @@
             </div>
         </div>
     @endif
-    @if (session('info'))
-    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1050;">
-        <div id="infoToast" class="toast align-items-center text-bg-info border-0" role="alert"
-            aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
-            <div class="d-flex">
-                <div class="toast-body">
-                    <i class="bi bi-info-circle-fill me-2" style="color: #0dcaf0;"></i>
-                    {{ session('info') }}
-                </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
-                    aria-label="Close"></button>
-            </div>
-        </div>
-    </div>
-@endif
+
     <script>
-          document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function() {
             if ({{ session('success') ? 'true' : 'false' }}) {
                 var successToast = new bootstrap.Toast(document.getElementById('successToast'), {
                     delay: 1500
                 });
                 successToast.show();
             }
-            if ({{ session('info') ? 'true' : 'false' }}) {
-                var infoToast = new bootstrap.Toast(document.getElementById('infoToast'), {
-                    delay: 1500
-                });
-                infoToast.show();
-            }
         });
-        function searchRoomType() {
-            const query = document.getElementById('search_roomType').value;
+        if ({{ session('info') ? 'true' : 'false' }}) {
+            var infoToast = new bootstrap.Toast(document.getElementById('infoToast'), {
+                delay: 1500
+            });
+            infoToast.show();
+        }
+
+        function setDeleteAction(actionUrl) {
+            document.getElementById('deleteForm').action = actionUrl;
+        }
+
+        function searchRoomAmenities() {
+            const query = document.getElementById('search_roomAmenities').value;
 
             // Gửi yêu cầu AJAX
-            fetch(`/admin/room-types/search?query=${query}`, {
+            fetch(`/admin/room-amenities/search?query=${query}`, {
                     method: 'GET',
                     headers: {
                         'X-CSRF-TOKEN': '{{ csrf_token() }}',

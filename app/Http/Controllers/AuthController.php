@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller
 {
@@ -45,15 +46,21 @@ class AuthController extends Controller
     {
         // Validate dữ liệu
         $credentials = $request->only('login', 'password');
-
+    
         try {
             // Gọi hàm authenticate từ model để tìm và xác thực người dùng
             $user = User::authenticate($credentials);
-
+    
             // Đăng nhập người dùng
             Auth::login($user);
             $request->session()->regenerate();
-
+    
+            // Tạo một session token mới
+            $sessionToken = bin2hex(random_bytes(32));
+            
+            // Lưu session token vào Laravel session
+            $request->session()->put('session_token', $sessionToken);
+    
             // Điều hướng người dùng dựa trên vai trò
             return match ($user->role_id) {
                 1 => redirect()->route('admin'),
@@ -64,12 +71,14 @@ class AuthController extends Controller
             return back()->withErrors($e->validator->errors())->withInput(); // Trả về lỗi nếu có
         }
     }
+    
     public function logout(Request $request)
     {
-        Auth::logout(); // Đăng xuất người dùng
-        $request->session()->invalidate(); // Hủy phiên làm việc hiện tại
-        $request->session()->regenerateToken(); // Tạo token mới để bảo mật
-        
+        $request->session()->forget('session_token');
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
         return redirect('/')->with('success', 'Đăng xuất thành công');
     }
     

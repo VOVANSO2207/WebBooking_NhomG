@@ -1,4 +1,4 @@
-<!-- 
+<?php 
 namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
@@ -11,13 +11,13 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middleware = [
-        \App\Http\Middleware\TrustProxies::class,
-        \App\Http\Middleware\PreventRequestsDuringMaintenance::class,
+        // \App\Http\Middleware\TrustProxies::class,
+        // \App\Http\Middleware\PreventRequestsDuringMaintenance::class,
         \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
         \Illuminate\Http\Middleware\HandleCors::class,
         \Illuminate\Session\Middleware\StartSession::class,
         \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-        \App\Http\Middleware\VerifyCsrfToken::class,
+        // \App\Http\Middleware\VerifyCsrfToken::class,
         \Illuminate\Routing\Middleware\SubstituteBindings::class,
     ];
 
@@ -31,8 +31,9 @@ class Kernel extends HttpKernel
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
-        'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
+        // 'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'session.token' => \App\Http\Middleware\SessionTokenMiddleware::class,
     ];
 
     /**
@@ -43,8 +44,8 @@ class Kernel extends HttpKernel
     protected $middlewarePriority = [
         \Illuminate\Routing\Middleware\SubstituteBindings::class,
         \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
-        \App\Http\Middleware\TrustProxies::class,
-        \App\Http\Middleware\PreventRequestsDuringMaintenance::class,
+        // \App\Http\Middleware\TrustProxies::class,
+        // \App\Http\Middleware\PreventRequestsDuringMaintenance::class,
         \Illuminate\Session\Middleware\StartSession::class,
         \Illuminate\View\Middleware\ShareErrorsFromSession::class,
         \Illuminate\Routing\Middleware\SubstituteBindings::class,
@@ -52,4 +53,4 @@ class Kernel extends HttpKernel
         \Illuminate\Auth\Middleware\Authenticate::class,
         \Illuminate\Auth\Middleware\Authorize::class,
     ];
-} -->
+}

@@ -49,4 +49,52 @@ class RoomAmenities extends Model
             ]);
         }
     }
+    public static function getAllRoomAmenitie($perPage = 5)
+    {
+        return self::query()
+            ->paginate($perPage);
+    }
+    public static function deleteRoomAmenities($roomamenity_id)
+    {
+        $roomAmenities = self::find($roomamenity_id);
+        if ($roomAmenities) {
+            return $roomAmenities->delete();
+        }
+        return false;
+    }
+    public static function createRoomAmenities($data)
+    {
+        return self::create([
+            'amenity_name' => $data['amenity_name'],
+            'description' => $data['description']
+        ]);
+    }
+    public static function updateRoomAmenities($roomAmenitie_id, $data)
+    {
+        $roomAmenities = self::find($roomAmenitie_id);
+
+        if ($roomAmenities) {
+            $roomAmenities->update([
+                'amenity_name' => $data['amenity_name'],
+                'description' => $data['description']
+            ]);
+            return $roomAmenities; 
+        }
+
+        return false; 
+    }
+    public static function searchByNameOrDescription($keyword, $perPage = 5)
+    {
+        $query = self::query();
+        
+        if (!empty($keyword)) {
+            $query->where(function ($query) use ($keyword) {
+                $query->where('amenity_name', 'LIKE', "%{$keyword}%")
+                      ->orWhereRaw('MATCH(amenity_name, description) AGAINST (? IN BOOLEAN MODE)', [$keyword]);
+            });
+        }
+        
+        return $query->paginate($perPage);  
+    }
+    
 }

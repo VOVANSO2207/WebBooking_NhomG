@@ -676,8 +676,8 @@ outline: none;
     position: fixed;
     bottom: 20px;
     right: 20px;
-    width: 60px;
-    height: 60px;
+    width: 40px;
+    height: 40px;
     background: linear-gradient(135deg, #007bff, #5bc0de);
     color: white;
     border: none;
@@ -703,5 +703,40 @@ outline: none;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
     transform: scale(1.1); 
 }
+
+
+
+.notification-dropdown {
+    position: absolute;
+    top: 152px;
+    right: 335px;
+    width: 250px;
+    background-color: rgb(23, 2, 2);
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    text-align: left;
+}
+
+.dropdown-header {
+    display: block;
+    font-weight: bold;
+    padding: 20px;
+    border-bottom: 1px solid #ddd;
+    background-color: #000;
+}
+
+.notification-item {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+}
+
+.notification-item:hover {
+    background-color: #f1f1f1;
+}
+
+
 
 

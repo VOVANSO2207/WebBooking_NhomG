@@ -20,7 +20,6 @@ class UsersController extends Controller
     {
         // Lấy tất cả vai trò từ bảng roles
         $roles = Roles::all();
-        
         // Lấy thông tin người dùng hiện tại (nếu cần)
         $user = auth()->user(); // Lấy người dùng đã xác thực
             
