@@ -311,8 +311,7 @@
                             <div class="group-info-hotel">
                                 <p class="info-hotel-name m-0">Grand Wahlla Hotel</p>
                                 <p class="info-hotel-location m-0">Ho Chi Minh City, Viet Nam</p>
-                                <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i> 294 Đánh giá
-                                </p>
+                                <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i> 294 Đánh giá</p>
                                 <p class="info-hotel-price-old mb-0 mt-5 pt-5">1,710,000 đ</p>
                                 <div class="row group-heart-price">
                                     <div class="col-md-6"><a href="#"><i class="fa-regular fa-heart"></i></a>
@@ -336,8 +335,7 @@
                             <div class="group-info-hotel">
                                 <p class="info-hotel-name m-0">Grand Wahlla Hotel</p>
                                 <p class="info-hotel-location m-0">Ho Chi Minh City, Viet Nam</p>
-                                <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i> 294 Đánh giá
-                                </p>
+                                <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i> 294 Đánh giá</p>
                                 <p class="info-hotel-price-old mb-0 mt-5 pt-5">1,710,000 đ</p>
                                 <div class="row group-heart-price">
                                     <div class="col-md-6"><a href="#"><i class="fa-regular fa-heart"></i></a>
@@ -361,8 +359,7 @@
                             <div class="group-info-hotel">
                                 <p class="info-hotel-name m-0">Grand Wahlla Hotel</p>
                                 <p class="info-hotel-location m-0">Ho Chi Minh City, Viet Nam</p>
-                                <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i> 294 Đánh giá
-                                </p>
+                                <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i> 294 Đánh giá</p>
                                 <p class="info-hotel-price-old mb-0 mt-5 pt-5">1,710,000 đ</p>
                                 <div class="row group-heart-price">
                                     <div class="col-md-6"><a href="#"><i class="fa-regular fa-heart"></i></a>
@@ -386,8 +383,7 @@
                             <div class="group-info-hotel">
                                 <p class="info-hotel-name m-0">Grand Wahlla Hotel</p>
                                 <p class="info-hotel-location m-0">Ho Chi Minh City, Viet Nam</p>
-                                <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i> 294 Đánh giá
-                                </p>
+                                <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i> 294 Đánh giá</p>
                                 <p class="info-hotel-price-old mb-0 mt-5 pt-5">1,710,000 đ</p>
                                 <div class="row group-heart-price">
                                     <div class="col-md-6"><a href="#"><i class="fa-regular fa-heart"></i></a>
@@ -411,8 +407,7 @@
                             <div class="group-info-hotel">
                                 <p class="info-hotel-name m-0">Grand Wahlla Hotel</p>
                                 <p class="info-hotel-location m-0">Ho Chi Minh City, Viet Nam</p>
-                                <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i> 294 Đánh giá
-                                </p>
+                                <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i> 294 Đánh giá</p>
                                 <p class="info-hotel-price-old mb-0 mt-5 pt-5">1,710,000 đ</p>
                                 <div class="row group-heart-price">
                                     <div class="col-md-6"><a href="#"><i class="fa-regular fa-heart"></i></a>
@@ -436,8 +431,7 @@
                             <div class="group-info-hotel">
                                 <p class="info-hotel-name m-0">Grand Wahlla Hotel</p>
                                 <p class="info-hotel-location m-0">Ho Chi Minh City, Viet Nam</p>
-                                <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i> 294 Đánh giá
-                                </p>
+                                <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i> 294 Đánh giá</p>
                                 <p class="info-hotel-price-old mb-0 mt-5 pt-5">1,710,000 đ</p>
                                 <div class="row group-heart-price">
                                     <div class="col-md-6"><a href="#"><i class="fa-regular fa-heart"></i></a>
@@ -461,8 +455,7 @@
                             <div class="group-info-hotel">
                                 <p class="info-hotel-name m-0">Grand Wahlla Hotel</p>
                                 <p class="info-hotel-location m-0">Ho Chi Minh City, Viet Nam</p>
-                                <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i> 294 Đánh giá
-                                </p>
+                                <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i> 294 Đánh giá</p>
                                 <p class="info-hotel-price-old mb-0 mt-5 pt-5">1,710,000 đ</p>
                                 <div class="row group-heart-price">
                                     <div class="col-md-6"><a href="#"><i class="fa-regular fa-heart"></i></a>
@@ -486,8 +479,7 @@
                             <div class="group-info-hotel">
                                 <p class="info-hotel-name m-0">Grand Wahlla Hotel</p>
                                 <p class="info-hotel-location m-0">Ho Chi Minh City, Viet Nam</p>
-                                <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i> 294 Đánh giá
-                                </p>
+                                <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i> 294 Đánh giá</p>
                                 <p class="info-hotel-price-old mb-0 mt-5 pt-5">1,710,000 đ</p>
                                 <div class="row group-heart-price">
                                     <div class="col-md-6"><a href="#"><i class="fa-regular fa-heart"></i></a>
@@ -503,10 +495,11 @@
                     </a>
                 </div>
             </div>
+            <button class="prev-btn"><i class="fa-solid fa-arrow-right"></i></button>
+            <button class="next-btn"><i class="fa-solid fa-arrow-right"></i></button>
         </div>
     </div>
 </section>
-
 <!-- Back to Top Button -->
 <button id="backToTopBtn" class="back-to-top" title="Back to Top">↑</button>
 
