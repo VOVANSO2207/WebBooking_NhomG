@@ -503,21 +503,6 @@
                     </a>
                 </div>
             </div>
-            <div class="col-md-2 search-header button-search-header">
-                <button type="submit" class="btn btn-primary" style="width: 100%; height: 47px;">Tìm Khách
-                    Sạn</button>
-            </div>
-            </form>
-        </div>
-        <div class="slogan-staynest container">
-            <p class="text-slogan-staynest">ĐẶT PHÒNG NHANH TẬN HƯỞNG NGAY</p>
-            <p class="header-text-muted">Khám phá du lịch với dịch vụ đặt phòng nhanh chóng và tiện lợi. Hãy bắt đầu
-                hành trình
-                của bạn ngay hôm
-                nay!</p>
-        </div>
-        <div class="button-book d-flex justify-content-center">
-            <a href="#" class="header-btn-book-now">ĐẶT NGAY</a>
         </div>
     </div>
 </section>
