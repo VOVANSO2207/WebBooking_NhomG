@@ -136,19 +136,34 @@ class HotelController extends Controller
     {
         // Xác thực dữ liệu đầu vào
         $request->validate([
-            'hotel_name' => 'required|string|max:255|regex:/^[\pL\s]+$/u',
+            'hotel_name' => 'required|string|max:255|regex:/^[\pL\s]+$/u|unique:hotels,hotel_name',
             'location' => 'required|string|max:255',
             'city_id' => 'required|integer',
             'description' => 'required|string',
-            'rating' => 'nullable|between:1,5',
-            'images' => 'required|nullable|array',
+            'rating' => 'required|nullable|between:1,5',
+            'images' => 'nullable|array',
             'images.*' => 'image|mimes:jpeg,png,jpg|max:2048',
-            'amenities' => 'nullable|array',
+            'amenities' => 'required|nullable|array',
             'amenities.*' => 'integer|exists:hotel_amenities,amenity_id',
-            'rooms' => 'nullable|array', // Thêm rooms vào xác thực nếu cần
-            'rooms.*' => 'integer|exists:rooms,room_id', // Đảm bảo các room_id tồn tại
+            'rooms' => 'required|nullable|array',
+            'rooms.*' => 'integer|exists:rooms,room_id',
         ], [
-            // Các thông báo lỗi có thể tùy chỉnh tại đây
+            'hotel_name.required' => 'Tên khách sạn là bắt buộc.',
+            'hotel_name.unique' => 'Tên khách sạn đã tồn tại.',
+            'hotel_name.regex' => 'Tên khách sạn chỉ được chứa chữ cái và khoảng trắng.',
+            'location.required' => 'Vị trí là bắt buộc.',
+            'city_id.required' => 'Thành phố là bắt buộc.',
+            'description.required' => 'Mô tả là bắt buộc.',
+            'rating.between' => 'Đánh giá phải từ 1 đến 5.',
+            'rating.required' => 'Đánh giá là bắt buộc.',
+            'images.array' => 'Hình ảnh phải là một mảng.',
+            'images.*.image' => 'Tập tin phải là hình ảnh.',
+            'images.*.mimes' => 'Hình ảnh phải có định dạng jpeg, png hoặc jpg.',
+            'images.*.max' => 'Kích thước hình ảnh không được vượt quá 2MB.',
+            'amenities.*.exists' => 'Tiện nghi không tồn tại.',
+            'amenities.required' => 'Tiện nghi là bắt buộc.',
+            'rooms.*.exists' => 'Phòng không tồn tại.',
+            'rooms.required' => 'Phòng là bắt buộc.',
         ]);
 
         // Tạo khách sạn mới
@@ -159,19 +174,28 @@ class HotelController extends Controller
             'description' => $request->description,
             'rating' => $request->rating,
         ]);
-    
+
         // Lấy hotel_id vừa được tạo
         $hotelId = $hotel->hotel_id;
 
-        // Lưu hình ảnh liên quan đến khách sạn
-        foreach ($request->file('images') as $image) {
-            $imageName = time() . '_' . $image->getClientOriginalName();
-            $image->move(public_path('images'), $imageName);
+        // Kiểm tra xem có hình ảnh nào được upload không
+        if ($request->hasFile('images') && count($request->file('images')) > 0) {
+            foreach ($request->file('images') as $image) {
+                $imageName = time() . '_' . $image->getClientOriginalName();
+                $image->move(public_path('images'), $imageName);
 
-            // Lưu hình ảnh vào bảng hotel_images với hotel_id
+                // Lưu hình ảnh vào bảng hotel_images với hotel_id
+                HotelImages::create([
+                    'image_url' => $imageName,
+                    'hotel_id' => $hotelId, 
+                ]);
+            }
+        } else {
+            // Nếu không có hình ảnh nào được chọn, lưu hình ảnh mặc định
+            $defaultImage = 'img-upload.jpg'; // Tên file hình ảnh mặc định
             HotelImages::create([
-                'image_url' => $imageName,
-                'hotel_id' => $hotelId, // Sử dụng hotel_id đã lấy
+                'image_url' => $defaultImage,
+                'hotel_id' => $hotelId,
             ]);
         }
 
@@ -202,6 +226,7 @@ class HotelController extends Controller
 
         return redirect()->route('admin.viewhotel')->with('success', 'Thêm khách sạn thành công.');
     }
+
 
     public function deleteHotel($hotel_id)
     {
@@ -262,6 +287,20 @@ class HotelController extends Controller
             'city_id' => 'required|integer|exists:cities,city_id',
             'description' => 'required|string',
             'rating' => 'required|numeric|min:1|max:5',
+        ], [
+            'hotel_name.required' => 'Tên khách sạn là bắt buộc.',
+            'hotel_name.regex' => 'Tên khách sạn chỉ được chứa chữ cái và khoảng trắng.',
+            'hotel_name.max' => 'Tên khách sạn không được vượt quá 255 ký tự.',
+            'location.required' => 'Vị trí là bắt buộc.',
+            'location.max' => 'Vị trí không được vượt quá 255 ký tự.',
+            'city_id.required' => 'Thành phố là bắt buộc.',
+            'city_id.integer' => 'Thành phố phải là một số nguyên.',
+            'city_id.exists' => 'Thành phố không tồn tại.',
+            'description.required' => 'Mô tả là bắt buộc.',
+            'rating.required' => 'Đánh giá là bắt buộc.',
+            'rating.numeric' => 'Đánh giá phải là một số.',
+            'rating.min' => 'Đánh giá tối thiểu là 1.',
+            'rating.max' => 'Đánh giá tối đa là 5.',
         ]);
 
         $hotel = Hotel::find($hotel_id);
@@ -303,40 +342,40 @@ class HotelController extends Controller
             }
         }
 
-// Kiểm tra và lưu hình ảnh
-if ($request->hasFile('images')) {
-    // Lấy danh sách hình ảnh hiện tại
-    $existingImages = $hotel->images()->pluck('image_id')->toArray();
+        // Kiểm tra và lưu hình ảnh
+        if ($request->hasFile('images')) {
+            // Lấy danh sách hình ảnh hiện tại
+            $existingImages = $hotel->images()->pluck('image_id')->toArray();
 
-    // Xóa hình ảnh không còn được chọn
-    foreach ($existingImages as $imageId) {
-        // Nếu hình ảnh không có trong danh sách mới, xóa
-        if (!in_array($imageId, $request->input('existing_image_ids', []))) {
-            $imageToDelete = HotelImages::where('image_id', $imageId)->first();
-            if ($imageToDelete) {
-                // Xóa tệp hình ảnh trong thư mục
-                $imagePath = public_path('images/' . $imageToDelete->image_url);
-                if (file_exists($imagePath)) {
-                    unlink($imagePath);
+            // Xóa hình ảnh không còn được chọn
+            foreach ($existingImages as $imageId) {
+                // Nếu hình ảnh không có trong danh sách mới, xóa
+                if (!in_array($imageId, $request->input('existing_image_ids', []))) {
+                    $imageToDelete = HotelImages::where('image_id', $imageId)->first();
+                    if ($imageToDelete) {
+                        // Xóa tệp hình ảnh trong thư mục
+                        $imagePath = public_path('images/' . $imageToDelete->image_url);
+                        if (file_exists($imagePath)) {
+                            unlink($imagePath);
+                        }
+
+                        // Xóa hình ảnh khỏi cơ sở dữ liệu
+                        $imageToDelete->delete();
+                    }
                 }
+            }
 
-                // Xóa hình ảnh khỏi cơ sở dữ liệu
-                $imageToDelete->delete();
+            // Lưu hình ảnh mới
+            foreach ($request->file('images') as $image) {
+                $imageName = time() . '_' . $image->getClientOriginalName();
+                $image->move(public_path('images'), $imageName);
+
+                HotelImages::create([
+                    'hotel_id' => $hotel->hotel_id,
+                    'image_url' => $imageName,
+                ]);
             }
         }
-    }
-
-    // Lưu hình ảnh mới
-    foreach ($request->file('images') as $image) {
-        $imageName = time() . '_' . $image->getClientOriginalName();
-        $image->move(public_path('images'), $imageName);
-
-        HotelImages::create([
-            'hotel_id' => $hotel->hotel_id,
-            'image_url' => $imageName,
-        ]);
-    }
-}
 
         if ($request->has('rooms')) {
             $existingRooms = $hotel->rooms()->pluck('room_id')->toArray();

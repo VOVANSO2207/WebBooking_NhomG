@@ -56,24 +56,23 @@
                                                     <img src="{{ asset('images/img-upload.jpg') }}" alt="Default Image">
                                                 </div>
                                             @else
-                                                @foreach ($hotel->images as $image)
-                                                    <div class="swiper-slide">
-                                                        @if (file_exists(public_path('images/' . $image->image_url)))
-                                                            <img src="{{ asset('images/' . $image->image_url) }}" alt="Room Image">
-                                                        @elseif (file_exists(public_path('storage/images/' . $image->image_url)))
-                                                            <img src="{{ asset('storage/images/' . $image->image_url) }}"
-                                                                alt="Room Image">
-                                                        @else
-                                                            <img src="{{ asset('images/img-upload.jpg') }}" alt="Default Image">
-                                                        @endif
-                                                    </div>
-                                                @endforeach
+                                                <div class="swiper-slide">
+                                                    @php
+                                                        $firstImage = $hotel->images->first();
+                                                    @endphp
+                                                    @if (file_exists(public_path('images/' . $firstImage->image_url)))
+                                                        <img src="{{ asset('images/' . $firstImage->image_url) }}" alt="Room Image">
+                                                    @elseif (file_exists(public_path('storage/images/' . $firstImage->image_url)))
+                                                        <img src="{{ asset('storage/images/' . $firstImage->image_url) }}" alt="Room Image">
+                                                    @else
+                                                        <img src="{{ asset('images/img-upload.jpg') }}" alt="Default Image">
+                                                    @endif
+                                                </div>
                                             @endif
                                         </div>
-                                        <div class="swiper-button-next"></div>
-                                        <div class="swiper-button-prev"></div>
                                     </div>
                                 </td>
+
                                 <td>{{ $hotel->hotel_name }}</td>
                                 <td>{{ $hotel->location }}</td>
                                 <td>{{ Str::limit($hotel->description, 50, '...') }}</td>
@@ -103,24 +102,53 @@
                 <h5 class="modal-title" id="hotelDetailModalLabel">Hotel Detail</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+
             <div class="modal-body">
-                <div><strong>Name:</strong> <span id="modalHotelName"></span></div>
-                <div><strong>Location:</strong> <span id="modalHotelLocation"></span></div>
-                <div><strong>City:</strong> <span id="modalHotelCity"></span></div>
-                <div><strong>Description:</strong> <span id="modalHotelDescription"></span></div>
-                <div><strong>Rating:</strong> <span id="modalHotelRating"></span></div>
+                <div class="room-detail-container">
+                    <div class="gallery-section">
+                        <div class="swiper room-image-swiper">
+                            <div class="swiper-wrapper" id="hotelImages">
+                                <!-- Dynamic image slides -->
+                            </div>
+                            <div class="swiper-button-next"></div>
+                            <div class="swiper-button-prev"></div>
+                        </div>
+                    </div>
 
-                <div class="swiper room-swiper">
-                    <div class="swiper-wrapper" id="hotelImages"></div>
-                    <div class="swiper-button-next"></div>
-                    <div class="swiper-button-prev"></div>
-                </div>
-                <div><strong>Amenities:</strong>
-                    <ul id="modalHotelAmenities"></ul>
-                </div>
+                    <div class="room-info-grid">
+                        <div class="info-card">
+                            <div class="info-label">Name:</div>
+                            <div class="info-value" id="modalHotelName"></div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-label">Location:</div>
+                            <div class="info-value" id="modalHotelLocation"></div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-label">City:</div>
+                            <div class="info-value" id="modalHotelCity"></div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-label">Description:</div>
+                            <div class="info-value" id="modalHotelDescription"></div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-label">Rating:</div>
+                            <div class="info-value" id="modalHotelRating"></div>
+                        </div>
+                    </div>
 
-                <div><strong>Rooms:</strong>
-                    <ul id="modalHotelRooms"></ul>
+                    <div class="description-section">
+                        <h6 class="info-label">Amenities:</h6>
+                        <div class="description-content" id="modalHotelAmenities"></div>
+                    </div>
+
+                    <div class="description-section">
+                        <h6 class="info-label">Rooms:</h6>
+                        <div class="description-content" id="modalHotelRooms"></div>
+                    </div>
+
+                    <div class="amenities-section" id="modalAmenities"></div>
                 </div>
             </div>
 
@@ -147,7 +175,7 @@
                     .then(hotel => {
                         document.getElementById('modalHotelName').innerText = hotel.hotel_name;
                         document.getElementById('modalHotelLocation').innerText = hotel.location;
-                        document.getElementById('modalHotelCity').innerText = hotel.city_id;
+                        document.getElementById('modalHotelCity').innerText = hotel.city;
                         document.getElementById('modalHotelDescription').innerText = hotel.description;
                         document.getElementById('modalHotelRating').innerText = hotel.rating;
 
@@ -157,7 +185,7 @@
                         const amenitiesContainer = document.getElementById('modalHotelAmenities');
                         amenitiesContainer.innerHTML = '';
                         hotel.amenities.forEach(amenity => {
-                            const listItem = document.createElement('li');
+                            const listItem = document.createElement('div');
                             listItem.textContent = `${amenity.name}: ${amenity.description}`;
                             amenitiesContainer.appendChild(listItem);
                         });
@@ -165,52 +193,52 @@
                         const roomsContainer = document.getElementById('modalHotelRooms');
                         roomsContainer.innerHTML = '';
                         hotel.rooms.forEach(room => {
-                            const roomItem = document.createElement('li');
-                            roomItem.textContent = `${room.room_name} - Price: ${room.price}`;
+                            const roomItem = document.createElement('div');
+                            roomItem.textContent = `${room.room_name}: ${room.price} VNĐ`;
                             roomsContainer.appendChild(roomItem);
                         });
 
-                        const imageContainer = document.getElementById('hotelImages');
-                        imageContainer.innerHTML = '';
+                        const imagesContainer = document.getElementById('hotelImages');
+                        imagesContainer.innerHTML = '';
                         hotel.images.forEach(image => {
                             const slide = document.createElement('div');
                             slide.classList.add('swiper-slide');
                             slide.innerHTML = `<img src="${image}" alt="Room Image">`;
-                            imageContainer.appendChild(slide);
+                            imagesContainer.appendChild(slide);
                         });
 
-                        new Swiper('.room-swiper', {
+                        new Swiper('.room-image-swiper', {
                             navigation: {
                                 nextEl: '.swiper-button-next',
                                 prevEl: '.swiper-button-prev',
                             },
-                            loop: false,
                         });
 
-                        const hotelDetailModal = new bootstrap.Modal(document.getElementById('hotelDetailModal'));
-                        hotelDetailModal.show();
-                    })
-                    .catch(error => console.error('Error fetching hotel details:', error));
-
+                        $('#hotelDetailModal').modal('show');
+                    });
             });
         });
 
         document.getElementById('confirmDeleteHotelButton').addEventListener('click', function () {
-            fetch(`/hotels/${currentHotelId}/delete`, {
-                method: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                }
-            })
-                .then(response => {
-                    if (response.ok) {
-                        location.reload(); // Tải lại trang nếu xóa thành công
-                    } else {
-                        console.error('Error deleting hotel:', response);
-                    }
-                })
-                .catch(error => console.error('Error:', error));
+        fetch(`/hotels/${currentHotelId}/delete`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => {
+            if (response.ok) {
+                location.reload();
+            } else {
+                alert('Có lỗi xảy ra. Vui lòng thử lại sau.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
         });
     });
+});
 </script>
+
 @endsection
