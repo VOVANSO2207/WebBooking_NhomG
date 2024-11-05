@@ -186,3 +186,13 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/contact', action: [ContactController::class, 'contact'])->name('contact');
 Route::post('/contact', action: [ContactController::class, 'sendMail']);
+<<<<<<< HEAD
+=======
+
+// Fillter Hanle
+// Route::get('/hotels/rating-desc', [HotelController::class, 'getHotelsByRatingDesc'])->name('hotels.getHotelsByRatingDesc');
+Route::post('/filter-hotels', [HotelController::class, 'filterHotels']);
+
+// User - Hotel 
+Route::get('/hotel_detail/{hotel_id}', [HotelController::class, 'show'])->name('pages.hotel_detail');
+>>>>>>> UI&Fix-7

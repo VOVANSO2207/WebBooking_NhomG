@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Models;
 
@@ -59,7 +59,7 @@ class Hotel extends Model
     // Quan hệ với bảng HotelImage
     public function images()
     {
-        return $this->hasMany(HotelImages::class, 'hotel_id');
+        return $this->hasMany(HotelImages::class, 'hotel_id', 'hotel_id');
     }
 
     // Quan hệ với bảng City

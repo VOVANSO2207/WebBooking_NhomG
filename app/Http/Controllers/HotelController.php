@@ -18,20 +18,48 @@ class HotelController extends Controller
     //
     public function viewSearchHotel()
     {
-        // Lấy tất cả các hotels từ cơ sở dữ liệu
         $hotels = Hotel::with('images')->get();
+<<<<<<< HEAD
 
         // Truyền dữ liệu qua view
         return view('pages.search_result', compact('hotels'));
+=======
+        return view('search_result', compact('hotels'));
+>>>>>>> UI&Fix-7
     }
     public function index()
     {
-        // Lấy tất cả các hotels từ cơ sở dữ liệu
         $hotels = Hotel::all();
-
-        // Truyền dữ liệu qua view
         return view('pages.home', compact('hotels'));
     }
+    // Filter
+    public function filterHotels(Request $request)
+    {
+        $filters = $request->input('filters', []);
+        $hotels = Hotel::query();
+
+        if (in_array('high_rating', $filters)) {
+            $hotels->where('rating', '>=', 4); // Lọc theo rating từ 4-5
+        }
+
+        // Sắp xếp theo rating giảm dần nếu có yêu cầu
+        if (in_array('desc_rating', $filters)) {
+            $hotels->orderBy('rating', 'desc')->get();
+        }
+        // Thêm điều kiện cho các bộ lọc
+        // ...
+
+        $hotels = $hotels->with('images')->get();
+
+        return response()->json(['hotels' => $hotels]);
+    }
+
+    public function show($hotel_id)
+    {
+        $hotel = Hotel::with('images')->findOrFail($hotel_id);
+        return view('pages.hotel_detail', compact('hotel'));
+    }
+
 
     public function search(Request $request)
     {
@@ -108,6 +136,10 @@ class HotelController extends Controller
                 return asset('images/img-upload.jpg'); // Hình ảnh mặc định
             }
         });
+<<<<<<< HEAD
+=======
+
+>>>>>>> UI&Fix-7
         // Lấy amenities từ bảng hotel_amenity_hotel
         $amenities = $hotel->amenities->map(function ($amenity) {
             return [
