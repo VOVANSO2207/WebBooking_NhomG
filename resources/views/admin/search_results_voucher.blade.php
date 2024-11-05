@@ -13,7 +13,7 @@
     </tr>
 @empty
     <tr>
-        <td colspan="8" class="text-center">Không có bài viết nào để hiển thị.</td>
+        <td colspan="8" class="text-center">Không có voucher nào hiển thị.</td>
     </tr>
 @endforelse
 
