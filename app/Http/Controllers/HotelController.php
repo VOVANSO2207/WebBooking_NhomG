@@ -40,7 +40,7 @@ class HotelController extends Controller
 
             // Tính phần trăm giảm giá trung bình
             $hotel->average_discount_percent = $hotel->rooms->avg('discount_percent');
-
+            
             // Tính giá sale dựa trên giá gốc và phần trăm giảm giá trung bình
             $hotel->average_price_sale = $hotel->average_price * (1 - $hotel->average_discount_percent / 100);
         }
