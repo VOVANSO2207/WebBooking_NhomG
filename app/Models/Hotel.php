@@ -134,5 +134,4 @@ class Hotel extends Model
 
         return $averagePrice * (1 - $averageDiscountPercent / 100);
     }
-    
 }
