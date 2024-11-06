@@ -71,7 +71,7 @@ body {
 }
 
 .modal-image-alls.enlarged {
-    transform: scale(2);
+    transform: scale(3);
     width: 100%;
     transition: transform 0.3s ease;
     z-index: 1055;

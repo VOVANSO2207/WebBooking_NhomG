@@ -50,13 +50,13 @@
         <!-- Modal -->
         <div class="modal fade" id="imageModal" data-bs-backdrop="static" tabindex="-1"
             aria-labelledby="imageModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xxl">
+            <div class="modal-dialog ">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="imageModalLabel">Tất cả hình ảnh</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body p-5">
                         <div class="row">
                             @foreach ($hotel->images as $image)
                                 <div class="col-md-4 mb-3">
