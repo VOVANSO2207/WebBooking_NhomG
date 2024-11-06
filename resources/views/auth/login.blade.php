@@ -54,28 +54,25 @@
                         </div>
                     </div>
 
-<<<<<<< HEAD
                     <div class="card-footer text-center text-muted">
                         Website by team © Group G
-=======
-                    <div class="d-flex align-items-center justify-content-between mt-3">
-                        <span class="flex-grow-1">
-                            <hr>
-                        </span>
-                        <p class="mx-2 mb-0">Hoặc</p>
-                        <span class="flex-grow-1">
-                            <hr>
-                        </span>
->>>>>>> detail_user_function
+                        <div class="d-flex align-items-center justify-content-between mt-3">
+                            <span class="flex-grow-1">
+                                <hr>
+                            </span>
+                            <p class="mx-2 mb-0">Hoặc</p>
+                            <span class="flex-grow-1">
+                                <hr>
+                            </span>
+                        </div>
                     </div>
-                </div>
 
-                <div class="card-footer text-center text-muted">
-                    Website by team © Staynest™
+                    <div class="card-footer text-center text-muted">
+                        Website by team © Staynest™
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 </main>
 
 <script>
