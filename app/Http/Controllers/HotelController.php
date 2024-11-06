@@ -6,6 +6,7 @@ use App\Helpers\IdEncoder;
 use Illuminate\Http\Request;
 use App\Models\Hotel;
 use App\Models\Cities;
+use App\Models\FavoriteHotel;
 use App\Models\HotelImages;
 use App\Models\HotelAmenities;
 use App\Models\Reviews;
@@ -27,8 +28,24 @@ class HotelController extends Controller
     public function index()
     {
         // Lấy tất cả các hotels từ cơ sở dữ liệu
-        $hotels = Hotel::all();
+        $hotels = Hotel::with('rooms', 'city', 'reviews', 'images')->get();
+        $userId = auth()->id();
+        // Lấy danh sách khách sạn mà người dùng đã yêu thích
+        $favoriteHotelIds = FavoriteHotel::where('user_id', $userId)->pluck('hotel_id')->toArray();
+        foreach ($hotels as $hotel) {
+            // Kiểm tra nếu khách sạn là yêu thích
+            $hotel->is_favorite = in_array($hotel->hotel_id, $favoriteHotelIds);
+            // Tính giá gốc trung bình
+            $hotel->average_price = $hotel->rooms->avg('price');
 
+            // Tính phần trăm giảm giá trung bình
+            $hotel->average_discount_percent = $hotel->rooms->avg('discount_percent');
+
+            // Tính giá sale dựa trên giá gốc và phần trăm giảm giá trung bình
+            $hotel->average_price_sale = $hotel->average_price * (1 - $hotel->average_discount_percent / 100);
+        }
+
+        // dd($hotels);
         // Truyền dữ liệu qua view
         return view('pages.home', compact('hotels'));
     }
@@ -439,5 +456,6 @@ class HotelController extends Controller
         $decodedId = IdEncoder::decodeId($encodedId);
         return response()->json(['decoded_id' => $decodedId]);
     }
+   
 }
 // 

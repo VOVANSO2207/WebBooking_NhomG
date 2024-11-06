@@ -300,51 +300,51 @@
             <div class="tab-pane fade hotel-like" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab"
                 tabindex="0">
                 <!--  -->
+                @foreach($favorites as $favorite)
                 <div class="card-like-hotel border row mt-4">
                     <div class="col-md-5 detail-infor-room-left">
                         <swiper-container class="mySwiper" pagination="true" pagination-clickable="true"
-                            navigation="true" space-between="30" loop="true">
-                            <swiper-slide>
-                                <img src="https://gratisography.com/wp-content/uploads/2024/10/gratisography-cool-cat-800x525.jpg"
-                                    alt="Nature Image 1" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://gratisography.com/wp-content/uploads/2024/10/gratisography-cool-cat-800x525.jpg"
-                                    alt="Nature Image 1" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://gratisography.com/wp-content/uploads/2024/10/gratisography-cool-cat-800x525.jpg"
-                                    alt="Nature Image 1" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-1.jpg" alt="Nature Image 1" />
-                            </swiper-slide>
-                        </swiper-container>
+                    navigation="true" space-between="30" loop="true">
+                    @foreach($favorite->hotel->images as $image)
+                        <swiper-slide>
+                            <img src="{{ asset('storage/images/' . $image->image_url) }}" alt="Hotel Image" />
+                        </swiper-slide>
+                    @endforeach
+                </swiper-container>
                     </div>
                     <div class="col-md-7 detail-infor-right">
-                        <div class="detail-room-sale">-12%</div>
+                        <div class="detail-room-sale">   
+                            @if($favorite->hotel->rooms->isNotEmpty())
+                          {{ $favorite->hotel->rooms->first()->discount_percent }}%
+                         @endif                         
+                        </div>
                         <div class="row">
                             <div class="col-md-8">
                                 <div class="card-room-location m-0">
                                     <i class="fa-solid fa-location-dot"></i>
-                                    <span>Đà Nẵng</span>
+                                    <span>{{ $favorite->hotel->location }}, {{$favorite->hotel->city->city_name}} </span>
                                 </div>
                                 <div class="card-room-hotel-name m-0">
                                     <i class="fa-solid fa-hotel"></i>
-                                    <span>Khách Sạn Maximilan</span>
+                                    <a href="#" class="hotel-link">{{ $favorite->hotel->hotel_name }}</a>
                                 </div>
                                 <div class="group-room-price mt-2">
-                                    <ul class="p-0">
+                                    <p>
+                                        {{ strlen($favorite->hotel->description) > 100 ? substr($favorite->hotel->description, 0, 100) . '...' : $favorite->hotel->description }}
+                                    </p>
+                                    {{-- <ul class="p-0">
                                         <li>
                                             <span class="card-room-price-old">1.057.666 đ</span>
                                         </li>
                                         <li>
                                             <span class="card-room-price-new">933.157 đ</span>
                                         </li>
-                                    </ul>
+                                    </ul> --}}
                                 </div>
                                 <div class="card-room-rating m-0">
-                                    <span>★</span> <span>★</span> <span>★</span> <span>★</span> <span>☆</span>
+                                    @for($i = 0; $i < 5; $i++)
+                                    <span>{{ $i < $favorite->hotel->rating ? '★' : '☆' }}</span>
+                                @endfor
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -353,91 +353,21 @@
                                     <div class="doi">ĐÔI</div>
                                 </div>
                                 <div class="card-room-btn-book">
-                                    <a href="#" class="btn-book-now">đặt ngay</a>
+                                    <a href="{{ route('pages.hotel_detail', ['hotel_id' => $favorite->hotel->hotel_id]) }}" class="btn-book-now">đặt ngay</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!--  -->
-                <!--  -->
-                <div class="card-like-hotel border row mt-4">
-                    <div class="col-md-5 detail-infor-room-left">
-                        <swiper-container class="mySwiper" pagination="true" pagination-clickable="true"
-                            navigation="true" space-between="30" loop="true">
-                            <swiper-slide>
-                                <img src="https://gratisography.com/wp-content/uploads/2024/10/gratisography-cool-cat-800x525.jpg"
-                                    alt="Nature Image 1" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://gratisography.com/wp-content/uploads/2024/10/gratisography-cool-cat-800x525.jpg"
-                                    alt="Nature Image 1" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://gratisography.com/wp-content/uploads/2024/10/gratisography-cool-cat-800x525.jpg"
-                                    alt="Nature Image 1" />
-                            </swiper-slide>
-                            <swiper-slide>
-                                <img src="https://swiperjs.com/demos/images/nature-1.jpg" alt="Nature Image 1" />
-                            </swiper-slide>
-                        </swiper-container>
-                    </div>
-                    <div class="col-md-7 detail-infor-right">
-                        <div class="detail-room-sale">-12%</div>
-                        <div class="row">
-                            <div class="col-md-8">
-                                <div class="card-room-location m-0">
-                                    <i class="fa-solid fa-location-dot"></i>
-                                    <span>Đà Nẵng</span>
-                                </div>
-                                <div class="card-room-hotel-name m-0">
-                                    <i class="fa-solid fa-hotel"></i>
-                                    <span>Khách Sạn Maximilan</span>
-                                </div>
-                                <div class="group-room-price mt-2">
-                                    <ul class="p-0">
-                                        <li>
-                                            <span class="card-room-price-old">1.057.666 đ</span>
-                                        </li>
-                                        <li>
-                                            <span class="card-room-price-new">933.157 đ</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="card-room-rating m-0">
-                                    <span>★</span> <span>★</span> <span>★</span> <span>★</span> <span>☆</span>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card-room-status">
-                                    <div class="don">ĐƠN</div>
-                                    <div class="doi">ĐÔI</div>
-                                </div>
-                                <div class="card-room-btn-book">
-                                    <a href="#" class="btn-book-now">đặt ngay</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
                 <!--  -->
                 <!-- PHÂN TRANG -->
                 <div class="review-pagination mt-5 d-flex justify-content-end">
                     <ul class="pagination">
-                        <li class="page-item disabled">
-                            <a class="page-link">
-                                < </a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item active" aria-current="page">
-                            <a class="page-link" href="#">2</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#"> > </a>
-                        </li>
+                        {!! $favorites->appends(['tab' => 'nav-contact'])->links('pagination::bootstrap-4') !!}
                     </ul>
                 </div>
+                
             </div>
             <div class="tab-pane fade" id="nav-disabled" role="tabpanel" aria-labelledby="nav-disabled-tab"
                 tabindex="0">
