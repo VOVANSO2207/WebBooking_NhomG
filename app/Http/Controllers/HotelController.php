@@ -58,8 +58,7 @@ class HotelController extends Controller
     // Chi tiết khách sạn
     public function show($hotel_id)
     {
-
-        $hotel = Hotel::with(['rooms.room_images'], 'images')->findOrFail($hotel_id);
+        $hotel = Hotel::with(['rooms.room_images'], 'images','city')->findOrFail($hotel_id);
         $rooms = $hotel->rooms()->paginate(4);
         return view('pages.hotel_detail', compact('hotel', 'rooms'));
     }
@@ -102,7 +101,7 @@ class HotelController extends Controller
 
     public function viewHotel()
     {
-        $hotels = Hotel::getAllHotels(); 
+        $hotels = Hotel::getAllHotels();
         return view('admin.hotel', compact('hotels'));
     }
 
@@ -223,7 +222,7 @@ class HotelController extends Controller
                 // Lưu hình ảnh vào bảng hotel_images với hotel_id
                 HotelImages::create([
                     'image_url' => $imageName,
-                    'hotel_id' => $hotelId, 
+                    'hotel_id' => $hotelId,
                 ]);
             }
         } else {
@@ -284,7 +283,7 @@ class HotelController extends Controller
     {
         // Lấy từ khóa tìm kiếm từ request
         $keyword = $request->get('search');
-    
+
         // Kiểm tra nếu từ khóa tìm kiếm rỗng, hiển thị tất cả kết quả
         if (empty($keyword)) {
             $hotels = Hotel::getAllHotels();
@@ -293,11 +292,11 @@ class HotelController extends Controller
             $hotels = Hotel::whereRaw('MATCH(hotel_name, description) AGAINST(? IN BOOLEAN MODE)', [$keyword])
                 ->paginate(5);
         }
-    
+
         // Trả về view với kết quả tìm kiếm
         return view('admin.search_results_hotel', compact('hotels'));
     }
-    
+
 
     public function editHotel($hotel_id)
     {
