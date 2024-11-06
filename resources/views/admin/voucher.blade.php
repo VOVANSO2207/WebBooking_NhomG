@@ -2,6 +2,7 @@
 
 @php
     use App\Helpers\IdEncoder;
+    use Carbon\Carbon;
 @endphp
 
 @section('admin-container')
@@ -53,17 +54,28 @@
                                 <td colspan="5" class="text-center">Không có voucher nào hiển thị</td>
                             </tr>
                         @else
-                            @foreach($vouchers as $key => $voucher)
-                                <tr class="voucher-detail" data-id="{{ IdEncoder::encodeId($voucher->promotion_id) }}"
-                                    data-updated-at="{{ $voucher->updated_at }}">
-                                    <td>{{ $key + 1 }}</td>
-                                    <td>{{ $voucher->promotion_code }}</td>
-                                    <td>{{ number_format($voucher->discount_amount, 0, ',', '.') }} VND
-                                    </td>
-                                    <td>{{ $voucher->start_date }}</td>
-                                    <td>{{ $voucher->end_date }}</td>
-                                </tr>
-                            @endforeach
+                        @php
+                            $today = Carbon::today();
+                        @endphp
+
+                        @foreach($vouchers as $key => $voucher)
+                        @php
+                            $textClass = '';
+                            $endDate = Carbon::createFromFormat('d/m/Y', $voucher->end_date);
+                            if ($endDate->isPast()) {
+                                $textClass = 'text-danger'; 
+                            }
+                        @endphp
+                            <tr class="voucher-detail" 
+                                data-id="{{ IdEncoder::encodeId($voucher->promotion_id) }}" 
+                                data-updated-at="{{ $voucher->updated_at }}">
+                                <td class="{{ $textClass }}">{{ $key + 1 }}</td>
+                                <td class="{{ $textClass }}">{{ $voucher->promotion_code }}</td>
+                                <td class="{{ $textClass }}">{{ number_format($voucher->discount_amount, 0, ',', '.') }} VND</td>
+                                <td class="{{ $textClass }}">{{ $voucher->start_date }}</td>
+                                <td class="{{ $textClass }}">{{ $voucher->end_date }}</td>
+                            </tr>
+                        @endforeach
                         @endif
                     </tbody>
                     <tbody id="Content" class="searchdata">
