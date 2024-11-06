@@ -36,8 +36,8 @@
             <div class="col-lg-3 col-md-4 mb-3">
                 <h5 class="text-muted">KHÁC</h5>
                 <ul class="list-unstyled">
-                    <li><a href="#">Tin tức</a></li>
-                    <li><a href="#">Liên hệ</a></li>
+                    <li><a href="{{route(name: 'blog')}}">Tin tức</a></li>
+                    <li><a href="{{route(name: 'contact')}}">Liên hệ</a></li>
                 </ul>
                 <h5 class="text-muted mt-3">MẠNG XÃ HỘI</h5>
                 <div class="social-links">

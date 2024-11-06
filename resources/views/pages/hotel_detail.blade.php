@@ -70,16 +70,20 @@
             </div>
         </div>
 
-        <div class="detail-location-shape m-0"><span>vũng tàu</span></div>
+        <div class="detail-location-shape m-0"><span>
+                {{ $hotel->city->city_name }}
+            </span></div>
         <div class="detail-info-top">
             <div class="detail-hotel-card">
-                <span class="hotel-name">Khách sạn Ibis Styles Vũng Tàu</span>
+                <span class="hotel-name">{{$hotel->hotel_name}}</span>
                 <div class="rating">
-                    <span class="star">★</span>
-                    <span class="star">★</span>
-                    <span class="star">★</span>
-                    <span class="star">★</span>
-                    <span class="star empty">★</span>
+                    @for ($i = 1; $i <= 5; $i++)
+                        @if ($i <= $hotel->rating)
+                            <span class="star">★</span>
+                        @else
+                            <span class="star emty">☆</span>
+                        @endif
+                    @endfor
                 </div>
                 <span class="price-label">Giá phòng từ</span>
             </div>
