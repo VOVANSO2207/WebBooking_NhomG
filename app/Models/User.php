@@ -154,4 +154,10 @@ class User extends Model implements Authenticatable // Thêm giao diện
 
         return $user;
     }
+
+    public function favorites()
+    {
+        return $this->belongsToMany(Hotel::class, 'favorite_hotels');
+    }
+    
 }

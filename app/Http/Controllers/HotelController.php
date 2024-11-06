@@ -6,6 +6,7 @@ use App\Helpers\IdEncoder;
 use Illuminate\Http\Request;
 use App\Models\Hotel;
 use App\Models\Cities;
+use App\Models\FavoriteHotel;
 use App\Models\HotelImages;
 use App\Models\HotelAmenities;
 use App\Models\Reviews;
@@ -27,8 +28,24 @@ class HotelController extends Controller
     public function index()
     {
         // Lấy tất cả các hotels từ cơ sở dữ liệu
-        $hotels = Hotel::all();
+        $hotels = Hotel::with('rooms', 'city', 'reviews', 'images')->get();
+        $userId = auth()->id();
+        // Lấy danh sách khách sạn mà người dùng đã yêu thích
+        $favoriteHotelIds = FavoriteHotel::where('user_id', $userId)->pluck('hotel_id')->toArray();
+        foreach ($hotels as $hotel) {
+            // Kiểm tra nếu khách sạn là yêu thích
+            $hotel->is_favorite = in_array($hotel->hotel_id, $favoriteHotelIds);
+            // Tính giá gốc trung bình
+            $hotel->average_price = $hotel->rooms->avg('price');
 
+            // Tính phần trăm giảm giá trung bình
+            $hotel->average_discount_percent = $hotel->rooms->avg('discount_percent');
+
+            // Tính giá sale dựa trên giá gốc và phần trăm giảm giá trung bình
+            $hotel->average_price_sale = $hotel->average_price * (1 - $hotel->average_discount_percent / 100);
+        }
+
+        // dd($hotels);
         // Truyền dữ liệu qua view
         return view('pages.home', compact('hotels'));
     }
@@ -99,7 +116,7 @@ class HotelController extends Controller
 
     public function viewHotel()
     {
-        $hotels = Hotel::getAllHotels(); 
+        $hotels = Hotel::getAllHotels();
         return view('admin.hotel', compact('hotels'));
     }
 
@@ -220,7 +237,7 @@ class HotelController extends Controller
                 // Lưu hình ảnh vào bảng hotel_images với hotel_id
                 HotelImages::create([
                     'image_url' => $imageName,
-                    'hotel_id' => $hotelId, 
+                    'hotel_id' => $hotelId,
                 ]);
             }
         } else {
@@ -281,7 +298,7 @@ class HotelController extends Controller
     {
         // Lấy từ khóa tìm kiếm từ request
         $keyword = $request->get('search');
-    
+
         // Kiểm tra nếu từ khóa tìm kiếm rỗng, hiển thị tất cả kết quả
         if (empty($keyword)) {
             $hotels = Hotel::getAllHotels();
@@ -290,11 +307,11 @@ class HotelController extends Controller
             $hotels = Hotel::whereRaw('MATCH(hotel_name, description) AGAINST(? IN BOOLEAN MODE)', [$keyword])
                 ->paginate(5);
         }
-    
+
         // Trả về view với kết quả tìm kiếm
         return view('admin.search_results_hotel', compact('hotels'));
     }
-    
+
 
     public function editHotel($hotel_id)
     {
@@ -437,5 +454,6 @@ class HotelController extends Controller
         $decodedId = IdEncoder::decodeId($encodedId);
         return response()->json(['decoded_id' => $decodedId]);
     }
+   
 }
 // 

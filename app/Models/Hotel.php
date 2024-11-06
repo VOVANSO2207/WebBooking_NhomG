@@ -67,7 +67,7 @@ class Hotel extends Model
     {
         return $this->belongsTo(Cities::class, 'city_id');
     }
-
+    
     // Quan hệ với bảng HotelAmenities thông qua bảng trung gian hotel_amenity_hotel
     public function amenities()
     {
@@ -89,5 +89,9 @@ class Hotel extends Model
     {
         return $this->hasMany(Rooms::class, 'hotel_id', 'hotel_id');
     }
-
+    public function favorites()
+    {
+        return $this->belongsToMany(User::class, 'favorite_hotels');
+    }
+    
 }

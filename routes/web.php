@@ -16,6 +16,7 @@ use App\Http\Controllers\RoomTypeController;
 use App\Models\HotelAmenities;
 use App\Http\Controllers\HotelAmenitiesController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\RoomAmenitiesController;
 use Illuminate\Support\Facades\Route;
 // Route người dùng 
@@ -59,9 +60,9 @@ Route::get('/hotel_detail', function () {
 });
 
 
-Route::get('/account', function () {
-    return view('pages/account');
-})->name('pages.account');
+// Route::get('/account', function () {
+//     return view('pages/account');
+// })->name('pages.account');
 
 
 // Route::get('/home', function () {
@@ -69,7 +70,10 @@ Route::get('/account', function () {
 // });
 
 // Admin - Home
-Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
+// Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
+Route::middleware('auth')->group(function () {
+    Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
+});
 // Route::get('/admin', action: [AdminController::class, 'showVisitsChart'])->name('admin.visits');
 
 Route::prefix('admin')->group(function () {
@@ -203,3 +207,7 @@ Route::post('/filter-hotels', [HotelController::class, 'filterHotels']);
 
 // User - Hotel 
 Route::get('/hotel_detail/{hotel_id}', [HotelController::class, 'show'])->name('pages.hotel_detail');
+Route::post('/favorites', [FavoriteController::class, 'addFavorite'])->name('favorites.add')->middleware('auth');
+Route::delete('/favorites', [FavoriteController::class, 'removeFavorite'])->middleware('auth');
+// Route::get('/show-favorites', [FavoriteController::class, 'showHotelFavorite'])->name('pages.favorites')->middleware('auth');
+Route::get('/account', [FavoriteController::class, 'showHotelFavorite'])->name('pages.account');

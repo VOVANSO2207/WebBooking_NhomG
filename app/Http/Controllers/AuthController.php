@@ -63,7 +63,7 @@ class AuthController extends Controller
     
             // Điều hướng người dùng dựa trên vai trò
             return match ($user->role_id) {
-                1 => redirect()->route('admin'),
+                1 => redirect()->route('admin.index'),
                 2 => redirect('/'),
                 default => redirect()->route('error'),
             };

@@ -82,5 +82,8 @@ class Rooms extends Model
     {
         return RoomAmenities::addAmenitiesToRoom($this->room_id, $amenities);
     }
-    
+    public function hotel() 
+    {
+        return $this->belongsTo(Hotel::class, 'hotel_id');
+    }
 }
