@@ -117,8 +117,7 @@
                             <div class="news-content">
                                 <h5>${post.title}</h5>
                                 <p>${post.description}</p>
-                                <span class="news-date">${post.created_at}</span>
-                                <a href="#" class="btn-read-more">Xem thêm</a>
+                                <a href="/blog/${post.url_seo}" class="btn-read-more">Xem thêm</a>
                             </div>
                                </a>
                         `;
