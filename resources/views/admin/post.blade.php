@@ -183,7 +183,7 @@
                 Không thể xóa bài viết do có xung đột. Vui lòng cập nhật lại và thử lại.
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
             </div>
         </div>
     </div>

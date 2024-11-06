@@ -105,7 +105,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                <button type="button" class="btn btn-primary" style="#3B79C9 !important" onclick="location.reload()">Tải lại trang</button>
+                <button type="button" class="btn btn-secondary" style="#3B79C9 !important" onclick="location.reload()">Tải lại trang</button>
             </div>
         </div>
     </div>
