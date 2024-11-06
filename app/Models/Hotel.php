@@ -93,5 +93,33 @@ class Hotel extends Model
     {
         return $this->belongsToMany(User::class, 'favorite_hotels');
     }
-    
+      /**
+     * Tính giá gốc trung bình
+     */
+    public function getAveragePriceAttribute()
+    {
+        return $this->rooms->avg('price');
+    }
+
+    /**
+     * Tính phần trăm giảm giá trung bình
+     */
+    public function getAverageDiscountPercentAttribute()
+    {
+        return $this->rooms->avg('discount_percent');
+    }
+
+    /**
+     * Tính giá sale trung bình
+     */
+    public function getAveragePriceSaleAttribute()
+    {
+        $averagePrice = $this->average_price;
+        $averageDiscountPercent = $this->average_discount_percent;
+
+        return $averagePrice * (1 - $averageDiscountPercent / 100);
+    }
+
+
+
 }
