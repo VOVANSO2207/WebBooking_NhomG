@@ -173,7 +173,6 @@
                                                     <span>☆</span>
                                                 @endif
                                             @endfor
-
                                         </div>
 
                                     </div>

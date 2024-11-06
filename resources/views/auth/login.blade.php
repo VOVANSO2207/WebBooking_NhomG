@@ -2,115 +2,120 @@
 
 @section('content')
 <link rel="stylesheet" href="{{asset('css/login.css')}}">
-    <div class="card-header text-center py-3 header">
-        <h2 class="mb-0">STAYNEST</h2>
-    </div>
+<div class="card-header text-center py-3 header">
+    <h2 class="mb-0"> <a class="nav-link" href="{{asset('/')}}"> STAYNEST</a> </h2>
+</div>
 
-    <main class="container login-container">
-        <div class="row justify-content-center">
-            <div class="col-md-6 col-lg-5">
-                <div class="card ">
-                    <div class="card-body p-4">
-                        <form method="POST" action="{{ route('auth.login') }}">
-                            @csrf <!-- Bảo vệ CSRF -->
-                            
-                            <h4 class="typing-effect"></h4>
+<main class="container login-container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card ">
+                <div class="card-body p-4">
+                    <form method="POST" action="{{ route('auth.login') }}">
+                        @csrf <!-- Bảo vệ CSRF -->
 
-                            <label for="floatingInput">Email hoặc Username</label>
-                            <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="floatingInput" name="login"
-                                    placeholder="Email hoặc Username" value="{{ old('login') }}" required>
-                                @error('login')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                                @error('status')
+                        <h4 class="typing-effect"></h4>
+
+                        <label for="floatingInput">Email hoặc Username</label>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="floatingInput" name="login"
+                                placeholder="Email hoặc Username" value="{{ old('login') }}" required>
+                            @error('login')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
-                            </div>
-
-                            <label for="floatingPassword">Mật khẩu</label>
-                            <div class="form-floating mb-3 position-relative">
-                                <input type="password" class="form-control" id="floatingPassword" name="password"
-                                    placeholder="Mật khẩu">
-                                <span class="password-toggle-icon" id="togglePassword">
-                                    <i class="fa fa-eye" aria-hidden="true"></i>
-                                </span>
-                                @error('password')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-
-                            <button class="w-100 btn btn-lg btn-primary" type="submit">Tiếp tục đăng nhập với mật
-                                khẩu</button>
-                        </form>
-
-                        <div class="d-flex justify-content-between mt-3">
-                            <div>
-                                <span>Chưa có tài khoản?</span>
-                                <a href="{{ url('register') }}" class="text-decoration-none">Đăng ký tài khoản</a>
-                            </div>
-                            <div>
-                                <a href="#" class="text-decoration-none">Khôi phục lại mật khẩu?</a>
-                            </div>
+                            @error('status')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
 
-                        <div class="d-flex align-items-center justify-content-between mt-3">
-                            <span class="flex-grow-1">
-                                <hr>
+                        <label for="floatingPassword">Mật khẩu</label>
+                        <div class="form-floating mb-3 position-relative">
+                            <input type="password" class="form-control" id="floatingPassword" name="password"
+                                placeholder="Mật khẩu">
+                            <span class="password-toggle-icon" id="togglePassword">
+                                <i class="fa fa-eye" aria-hidden="true"></i>
                             </span>
-                            <p class="mx-2 mb-0">Hoặc</p>
-                            <span class="flex-grow-1">
-                                <hr>
-                            </span>
+                            @error('password')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <button class="w-100 btn btn-lg btn-primary" type="submit">Tiếp tục đăng nhập với mật
+                            khẩu</button>
+                    </form>
+
+                    <div class="d-flex justify-content-between mt-3">
+                        <div>
+                            <span>Chưa có tài khoản?</span>
+                            <a href="{{ url('register') }}" class="text-decoration-none">Đăng ký tài khoản</a>
+                        </div>
+                        <div>
+                            <a href="#" class="text-decoration-none">Khôi phục lại mật khẩu?</a>
                         </div>
                     </div>
 
+<<<<<<< HEAD
                     <div class="card-footer text-center text-muted">
                         Website by team © Group G
+=======
+                    <div class="d-flex align-items-center justify-content-between mt-3">
+                        <span class="flex-grow-1">
+                            <hr>
+                        </span>
+                        <p class="mx-2 mb-0">Hoặc</p>
+                        <span class="flex-grow-1">
+                            <hr>
+                        </span>
+>>>>>>> detail_user_function
                     </div>
+                </div>
+
+                <div class="card-footer text-center text-muted">
+                    Website by team © Staynest™
                 </div>
             </div>
         </div>
-    </main>
+    </div>
+</main>
 
-    <script>
-        // Hàm chuyển đổi hiện/ẩn mật khẩu
-        function togglePasswordVisibility(fieldId, iconId) {
-            const passwordField = document.getElementById(fieldId);
-            const icon = document.getElementById(iconId).querySelector('i');
-            
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash');
-            } else {
-                passwordField.type = 'password';
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
-            }
+<script>
+    // Hàm chuyển đổi hiện/ẩn mật khẩu
+    function togglePasswordVisibility(fieldId, iconId) {
+        const passwordField = document.getElementById(fieldId);
+        const icon = document.getElementById(iconId).querySelector('i');
+
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            passwordField.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
         }
-        
-        // Thêm sự kiện cho icon hiện/ẩn mật khẩu
-        document.getElementById('togglePassword').addEventListener('click', function() {
-            togglePasswordVisibility('floatingPassword', 'togglePassword');
-        });
+    }
 
-        // Hiệu ứng typing
-        const text = "Đăng nhập hoặc tạo một tài khoản"; // Your text here
-        let index = 0;
-        const typingSpeed = 100; // Speed in milliseconds
-        const element = document.querySelector(".typing-effect");
+    // Thêm sự kiện cho icon hiện/ẩn mật khẩu
+    document.getElementById('togglePassword').addEventListener('click', function () {
+        togglePasswordVisibility('floatingPassword', 'togglePassword');
+    });
 
-        function typeWriter() {
-            if (index < text.length) {
-                element.textContent += text.charAt(index);
-                index++;
-                setTimeout(typeWriter, typingSpeed);
-            }
+    // Hiệu ứng typing
+    const text = "Đăng nhập hoặc tạo một tài khoản"; // Your text here
+    let index = 0;
+    const typingSpeed = 100; // Speed in milliseconds
+    const element = document.querySelector(".typing-effect");
+
+    function typeWriter() {
+        if (index < text.length) {
+            element.textContent += text.charAt(index);
+            index++;
+            setTimeout(typeWriter, typingSpeed);
         }
+    }
 
-        window.onload = () => {
-            typeWriter();
-        };
-    </script>
+    window.onload = () => {
+        typeWriter();
+    };
+</script>
 @endsection
