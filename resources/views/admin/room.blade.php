@@ -73,7 +73,7 @@
                                         <td>{{ $room->name }}</td>
                                         <td>{{ $room->capacity }}</td>
                                         <td>{{ $room->roomType ? $room->roomType->name : 'N/A' }}</td>
-                                        <td>{{ $room->price }}</td>
+                                        <td>{{ number_format($room->price, 0, ',', '.') }} VND
                                         <td>{{ $room->discount_percent }}%</td>
                                     </tr>
                                 @empty

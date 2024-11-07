@@ -360,8 +360,7 @@
                                         </p>
 
                                         <p class="info-hotel-price-old mb-0 mt-5 pt-5">
-                                            {{ number_format($hotel->average_price_sale, 3) }} VND</p>
-                                      
+                                        {{ number_format($hotel->average_price_sale, 0, ',', '.') }} VND</p>
                                         <div class="row group-heart-price">
                                             <div class="col-md-6">
                                                 <a href="#" class="heart-icon" data-hotel-id="{{ $hotel->hotel_id }}">
@@ -369,8 +368,7 @@
                                                 </a>
                                             </div>
                                             <div class="col-md-6 text-right"><span
-                                                    class="info-hotel-price-new">{{ number_format($hotel->average_price, 3) }}
-                                                    VND</span>
+                                                    class="info-hotel-price-new"> {{ number_format($hotel->average_price, 0, ',', '.') }} VND</span>
                                             </div>
                                         </div>
                                     </div>
