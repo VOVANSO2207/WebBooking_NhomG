@@ -60,7 +60,7 @@ class PostsController extends Controller
             'description' => 'required|min:50|max:1000',
             'content1' => 'required|min:100|max:100000',
             'meta_desc' => 'nullable|min:10|max:50|regex:/^[^!@#$%^&*()_+=\-{}\[\];:"\'<>,.?\/~`]+$/u',
-            'status' => 'required|boolean',
+            'status' => 'required|in:0,1',
             'fileUpload' => 'required|image|max:5120',
         ], [
             'title.required' => 'Vui lòng nhập tiêu đề bài viết',
@@ -78,6 +78,7 @@ class PostsController extends Controller
             'meta_desc.max' => 'Từ khoá mô tả bài viết không được quá 50 ký tự',
             'meta_desc.regex' => 'Từ khoá mô tả bài viết không chứa kí tự đặc biệt',
             'status.required' => 'Trạng thái là bắt buộc.',
+            'status.in' => 'Trạng thái không hợp lệ.',
             'fileUpload.required' => 'Vui lòng chọn hình ảnh',
             'fileUpload.image' => 'Tệp không hợp lệ, chỉ cho phép PNG, JPEG, JPG',
             'fileUpload.max' => 'Dung lượng tệp không được vượt quá 5MB',
@@ -127,14 +128,15 @@ class PostsController extends Controller
 
     public function editPost($post_id)
     {
-        // Giải mã ID
         $decodedId = IdEncoder::decodeId($post_id);
+        if (!$decodedId) {
+            return response()->view('errors.404', [], 404);
+        }
         $post = Posts::findPostById($decodedId);
 
         if (!$post) {
-            return redirect()->route('admin.viewpost')->with('error', 'Bài viết không tồn tại.');
+            return response()->view('errors.404', [], 404);
         }
-
         return view('admin.post_edit', compact('post'));
     }
     public function update(Request $request, $post_id)
@@ -145,7 +147,7 @@ class PostsController extends Controller
             'description' => 'required|min:50|max:1000',
             'content1' => 'required|min:100|max:100000',
             'meta_desc' => 'nullable|min:10|max:50|regex:/^[^!@#$%^&*()_+=\-{}\[\];:"\'<>,.?\/~`]+$/u',
-            'status' => 'required|boolean',
+            'status' => 'required|in:0,1',
             'fileUpload' => 'nullable|image|max:1024',
         ], [
             'title.required' => 'Vui lòng nhập tiêu đề bài viết',
@@ -162,6 +164,7 @@ class PostsController extends Controller
             'meta_desc.max' => 'Từ khoá mô tả bài viết không được quá 50 ký tự',
             'meta_desc.regex' => 'Từ khoá mô tả bài viết không chứa kí tự đặc biệt',
             'status.required' => 'Vui lòng chọn trạng thái hiển thị bài viết (show/hidden)',
+            'status.in' => 'Trạng thái không hợp lệ.',
             'fileUpload.image' => 'Tệp không hợp lệ, chỉ cho phép PNG, JPEG, JPG',
             'fileUpload.max' => 'Dung lượng tệp không được vượt quá 1MB',
         ]);
