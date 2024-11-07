@@ -79,7 +79,7 @@
                                 <button type="submit" class="btn btn-outline-success me-2">Save</button>
                             </div>
                         </form>
-                   
+
                     </div>
                 </div>
             </div>
@@ -97,6 +97,12 @@
             var priceInput = document.querySelector('input[name="price"]');
             var discountInput = document.querySelector('input[name="discount_percent"]');
             var salesPriceInput = document.querySelector('input[name="sales_price"]');
+            discountInput.addEventListener('input', function() {
+                if (this.value > 100) {
+                    alert('Giá trị phần trăm giảm giá không được vượt quá 100!');
+                    this.value = ''; 
+                }
+            });
 
             function formatCurrency(value) {
                 return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' VND'; // Định dạng số với dấu phẩy
