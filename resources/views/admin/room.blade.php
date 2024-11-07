@@ -216,7 +216,7 @@
 
                 // Update image slider
                 updateRoomImages(room.room_images);
-                
+
                 // Update delete form action
                 document.getElementById('deleteRoomForm').action = `{{ url('admin/room') }}/${room.room_id}`;
 

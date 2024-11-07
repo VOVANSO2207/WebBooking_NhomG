@@ -683,8 +683,9 @@ outline: none;
  }
 
  .info-hotel-price-new {
-     font-size: 20px;
+     font-size: 18px;
      font-weight: 700;
+     white-space: nowrap;
  }
 
  /* Responsive adjustments */
