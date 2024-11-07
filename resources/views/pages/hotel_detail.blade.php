@@ -184,11 +184,11 @@
                                     <div class="col-md-8">
                                         <div class="card-room-location m-0">
                                             <i class="fa-solid fa-location-dot"></i>
-                                            <span>Đà Nẵng</span>
+                                            <span>{{ $hotel->location }}</span>
                                         </div>
                                         <div class="card-room-hotel-name m-0">
                                             <i class="fa-solid fa-hotel"></i>
-                                            <span>Khách Sạn Maximilan</span>
+                                            <span>{{ $room->name }}</span>
                                         </div>
                                         <div class="group-room-price mt-2">
                                             <ul class="p-0">
