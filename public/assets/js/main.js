@@ -124,4 +124,9 @@ let menu, animate;
   // Auto update menu collapsed/expanded based on the themeConfig
   window.Helpers.setCollapsed(true, false);
 })();
+// UPDATE NEW
+document.querySelector('.menu-link').addEventListener('click', function (e) {
+  const arrowIcon = this.querySelector('.arrow-icon');
+  arrowIcon.classList.toggle('rotate-icon');
+});
 

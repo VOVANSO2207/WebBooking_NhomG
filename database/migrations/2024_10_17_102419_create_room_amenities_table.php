@@ -15,12 +15,10 @@ return new class extends Migration
 
         Schema::create('room_amenities', function (Blueprint $table) {
             $table->increments('amenity_id');
-            $table->integer('room_id');
-            $table->foreign('room_id')->references('room_id')->on('rooms');
             $table->string('amenity_name');
             $table->text('description');
         });
-
+        
         Schema::enableForeignKeyConstraints();
     }
 

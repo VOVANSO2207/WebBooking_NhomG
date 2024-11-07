@@ -29,3 +29,278 @@
 .room-swiper .swiper-button-prev:after {
   font-size: 14px;
 }
+
+.modal-xl {
+  max-width: 60vw !important;
+}
+
+.room-detail-modal .modal-content {
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.room-detail-modal .modal-header {
+  border-bottom: 2px solid #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 15px 15px 0 0;
+}
+
+.room-detail-modal .modal-title {
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.room-detail-modal .btn-close {
+  background-color: #fff;
+  opacity: 0.8;
+}
+
+.room-detail-modal .modal-body {
+  padding: 0;
+}
+
+.room-detail-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+/* Enhanced Image Gallery Section */
+.room-image-swiper img {
+  width: 100%; 
+  height: 400px; 
+  object-fit: cover; 
+  margin: 0 auto; 
+  display: block; 
+}
+
+
+/* Room Info Section */
+.room-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.info-card {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(105, 108, 255, 0.1);
+}
+
+.info-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(105, 108, 255, 0.1);
+  border-color: rgba(105, 108, 255, 0.3);
+}
+
+.info-label {
+  color: #696cff;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-value {
+  font-size: 1.2rem;
+  color: #333;
+  font-weight: 500;
+}
+
+/* Description Section */
+.description-section {
+  background: #fff;
+  border-radius: 15px;
+  padding: 2rem;
+  margin-top: 1rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.description-header {
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid rgba(105, 108, 255, 0.1);
+}
+
+.description-content {
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 1.5rem;
+  line-height: 1.8;
+  color: #444;
+  font-size: 1rem;
+}
+
+.description-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.description-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.description-content::-webkit-scrollbar-thumb {
+  background: #696cff;
+  border-radius: 3px;
+}
+
+/* Modal Footer */
+.modal-footer {
+  border-top: 2px solid #f8f9fa;
+  padding: 1.5rem;
+  gap: 1rem;
+}
+
+.btn-action {
+  padding: 0.8rem 2rem;
+  border-radius: 10px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.btn-delete {
+  background: #dc3545;
+  color: white;
+  border: none;
+}
+
+.btn-delete:hover {
+  background: #bb2d3b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(220, 53, 69, 0.2);
+}
+.btn-edit {
+  background-color: #28a745; 
+  color: white; 
+  border: none; 
+  border-radius: 5px; 
+  padding: 10px 20px; 
+  font-size: 16px; 
+  font-weight: bold; 
+  text-transform: uppercase; 
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ cho nút */
+  cursor: pointer; /* Hiển thị con trỏ chuột khi hover */
+  transition: background-color 0.3s ease, transform 0.2s; /* Hiệu ứng chuyển màu nền và phóng to */
+}
+
+.btn-edit:hover {
+  background-color: #218838; /* Màu nền khi hover */
+  transform: translateY(-2px); /* Nâng nút lên khi hover */
+}
+
+.btn-edit:active {
+  transform: translateY(0); /* Trở lại vị trí ban đầu khi nhấn */
+}
+
+.btn-edit:focus {
+  outline: none; /* Bỏ outline khi nút được chọn */
+}
+
+.btn-close-modal {
+  background: #6c757d;
+  color: white;
+  border: none;
+}
+
+.btn-close-modal:hover {
+  background: #5c636a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(108, 117, 125, 0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .gallery-section {
+      height: 450px;
+  }
+
+  .gallery-main {
+      height: 350px;
+  }
+}
+
+@media (max-width: 768px) {
+  .modal-xl {
+      max-width: 95vw !important;
+  }
+
+  .gallery-section {
+      height: 400px;
+  }
+
+  .gallery-main {
+      height: 300px;
+  }
+
+  .room-info-grid {
+      grid-template-columns: 1fr;
+  }
+
+  .amenities-grid {
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+}
+
+@media (max-width: 576px) {
+  .gallery-section {
+      height: 350px;
+  }
+
+  .gallery-main {
+      height: 250px;
+  }
+
+  .room-detail-container {
+      padding: 1rem;
+  }
+
+  .info-card {
+      padding: 1rem;
+  }
+
+  .amenity-item {
+      padding: 0.6rem 1rem;
+  }
+
+  .btn-action {
+      padding: 0.6rem 1.5rem;
+  }
+}
+
+.card {
+  overflow: hidden; /* Giới hạn phần hiển thị trong vùng chứa */
+  position: relative;
+}
+
+.welcome-message h1 {
+  margin-top: 20px;
+  font-weight: bold; /* Độ đậm của chữ */
+  font-size: 2em; /* Kích thước chữ */
+  color: #3B79C9 !important; /* Màu chữ */
+  white-space: nowrap; /* Không xuống dòng */
+  position: relative;
+  animation: slide-right 10s linear infinite; /* Chạy từ trái sang phải liên tục */
+}
+
+@keyframes slide-right {
+  0% {
+      transform: translateX(-100%); /* Bắt đầu bên trái ngoài vùng .card */
+  }
+  100% {
+      transform: translateX(100%); /* Kết thúc bên phải ngoài vùng .card */
+  }
+}
+
+
+

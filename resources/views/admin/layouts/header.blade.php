@@ -41,43 +41,88 @@
             <div data-i18n="Tables">User</div>
           </a>
         </li>
-        <li class="menu-item">
-          <a href="" class="menu-link">
+        <li class="menu-item has-dropdown">
+          <a href="#" class="menu-link" data-bs-toggle="collapse" data-bs-target="#hotel-dropdown" aria-expanded="false">
             <i class="menu-icon tf-icons bx bx-hotel"></i>
             <div data-i18n="Tables">Hotel</div>
+            <i class="bx bx-chevron-down arrow-icon"></i>
           </a>
+          <ul class="collapse" id="hotel-dropdown">
+            <li class="menu-item">
+              <a href="{{route('admin.viewhotel')}}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-list-ul"></i>
+                <div data-i18n="Hotel List">Danh sách khách sạn</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="{{route('admin.hotel_amenities.index')}}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-bulb"></i> 
+                <div data-i18n="Hotel Amenities">Tiện nghi khách sạn</div>
+              </a>
+            </li>
+          </ul>
         </li>
+
         <li class="menu-item">
           <a href="{{route('admin.viewpost')}}" class="menu-link">
             <i class="menu-icon tf-icons bx bx-news"></i>
             <div data-i18n="Tables">Post</div>
           </a>
         </li>
-        <li class="menu-item">
-          <a href="{{route('admin.viewroom')}}" class="menu-link">
+        <li class="menu-item has-dropdown">
+          <a href="#" class="menu-link" data-bs-toggle="collapse" data-bs-target="#room-dropdown" aria-expanded="false">
             <i class="menu-icon tf-icons bx bx-home"></i>
             <div data-i18n="Tables">Room</div>
+            <i class="bx bx-chevron-down arrow-icon"></i>
           </a>
+          <ul class="collapse" id="room-dropdown">
+            <li class="menu-item">
+              <a href="{{route('admin.viewroom')}}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-list-ul"></i>
+                <div data-i18n="Room List">Danh sách phòng</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="{{route('admin.viewroomtype')}}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-category"></i>
+                <div data-i18n="Room Type">Loại phòng</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="{{route('admin.viewroomamenities')}}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-bulb"></i> 
+                <div data-i18n="Room Amenities">Tiện Nghi Phòng</div>
+              </a>
+            </li>
+          </ul>
         </li>
         <li class="menu-item">
-          <a href="" class="menu-link">
+          <a href="{{route('admin.viewvoucher')}}" class="menu-link">
             <i class="menu-icon tf-icons bx bx-gift"></i>
             <div data-i18n="Tables">Voucher</div>
           </a>
         </li>
         <li class="menu-item">
-          <a href="" class="menu-link">
+          <a href="{{route('admin.viewbooking')}}" class="menu-link">
             <i class="menu-icon tf-icons bx bx-cog"></i>
             <div data-i18n="Tables">Quản lý đặt phòng</div>
           </a>
         </li>
 
-        <!-- Misc -->
+        <li class="menu-item">
+          <label for="switch" class="switch">
+            <input id="switch" type="checkbox" />
+            <span class="slider"></span>
+            <span class="decoration"></span>
+          </label>          
+        </li>
 
+        <!-- Misc -->
+          
       </ul>
     </aside>
     <!-- / Menu -->
 
-    <!-- Layout container -->
+    <!-- Layout container -->   
     <div class="layout-page">
       <!-- Navbar -->

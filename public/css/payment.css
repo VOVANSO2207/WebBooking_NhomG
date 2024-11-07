@@ -1,0 +1,394 @@
+.payment {
+    scale: 0.9;
+}
+
+/* hotel-info */
+.title-pay h4 {
+    font-weight: 700;
+}
+
+.hotel-image img {
+    border-radius: 20px;
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+
+.hotel-card {
+    border-radius: 20px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.hotel-row {
+    align-items: center;
+}
+
+.hotel-name {
+    font-weight: 900;
+}
+
+.hotel-rating {
+    color: yellow;
+    font-size: 20px;
+}
+
+.check-details div .label {
+    font-weight: 700;
+}
+
+.check-details div .info {
+    opacity: .7;
+}
+
+/* Thông tin liên hệ */
+.contact-form {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.contact-form h3 {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.form-control {
+    border-radius: 8px !important;
+    padding: 13px !important;
+    font-size: 14px !important;
+}
+
+.form-label {
+    font-weight: 500;
+    font-size: 16px;
+    opacity: .7;
+}
+
+/* Slider */
+.slider {
+    position: relative;
+    max-width: 600px;
+    margin: auto;
+    overflow: hidden;
+}
+
+.slides {
+    display: flex;
+    transition: transform 0.5s ease;
+}
+
+.slide {
+    min-width: 100%;
+    box-sizing: border-box;
+}
+
+.slide img {
+    width: 100%;
+    display: block;
+    height: 200px;
+    object-fit: cover;
+}
+
+.prev,
+.next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.7);
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    z-index: 1000;
+}
+
+.prev {
+    left: 10px;
+}
+
+.next {
+    right: 10px;
+}
+
+.room-info-card {
+    border-radius: 20px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+
+    hr {
+        scale: 0.9;
+    }
+
+    .room-info-title {
+        font-size: 20px;
+        padding: 15px 0 5px 15px;
+    }
+
+    .availability-container {
+        margin: auto;
+        padding: 15px;
+
+        .group-view-date {
+            text-align: center;
+            padding: 10px;
+        }
+
+        .date-box {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            width: 100%;
+
+            .date-header {
+                font-size: 14px;
+                color: #888;
+            }
+
+            .date-main {
+                font-size: 16px;
+                font-weight: bold;
+            }
+
+            .date-sub {
+                font-size: 14px;
+                color: #888;
+            }
+        }
+
+        .date-divider {
+            font-size: 24px;
+            color: #888;
+        }
+    }
+
+    .rooom-info-amenity {
+        padding: 15px;
+    }
+
+    .room-info-description {
+        padding: 15px;
+    }
+
+}
+
+.request-container {
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    margin: 50px auto;
+    padding: 24px;
+    background-color: #fff;
+    border-radius: 10px;
+
+    .request-title {
+        font-weight: bold;
+        font-size: 20px;
+    }
+
+    .request-description {
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+
+    .checkbox-label {
+        font-size: 16px;
+        color: #333;
+    }
+
+    .other-input {
+        width: 100%;
+        height: 100px;
+        resize: none;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 10px;
+        font-size: 14px;
+
+        &:focus {
+            outline: 1px solid #3B79C9;
+        }
+    }
+
+    .char-limit {
+        font-size: 12px;
+        color: #888;
+        text-align: right;
+        margin-top: 5px;
+    }
+}
+
+.voucher-container {
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    margin: 50px auto;
+    border-radius: 10px;
+    padding: 15px;
+
+    .group-voucherCode {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+
+        .voucher-icon i {
+            font-size: 40px;
+            color: #3B79C9;
+        }
+
+        .title {
+            font-size: 20px;
+            font-weight: 700;
+            width: 100%;
+            margin-bottom: 10px;
+
+            @media (min-width: 576px) {
+                width: auto;
+                margin-bottom: 0;
+            }
+        }
+
+        .voucher-input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #888;
+            outline: none;
+            border-radius: 10px;
+            margin-bottom: 10px;
+
+            &:focus {
+                outline: 1px solid #3B79C9;
+            }
+
+            @media (min-width: 576px) {
+                margin-bottom: 0;
+            }
+        }
+
+        button {
+            width: 100%;
+            border-radius: 10px;
+            background: #3B79C9;
+            border: none;
+            color: #fff;
+            padding: 10px;
+            margin-top: 10px;
+
+            @media (min-width: 576px) {
+                width: auto;
+                margin-top: 0;
+                padding: 10px 15px;
+            }
+        }
+    }
+}
+
+.detail-price {
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    margin: 50px auto;
+    border-radius: 10px;
+    padding: 15px;
+
+    .title {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 15px;
+    }
+
+    .group-info-price {
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 16px;
+            color: #333;
+
+            .item-1 {
+                .discount-code {
+                    font-weight: bold;
+                    font-size: 20px;
+                    color: green;
+                }
+            }
+
+            .discount-amount {
+                font-size: 16px;
+                color: green;
+            }
+
+        }
+
+        .price-room {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .left {
+                flex: 1;
+
+                p {
+                    margin: 0;
+                }
+            }
+
+            .right {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end;
+
+                .sale {
+                    margin-bottom: 5px;
+                    padding: 2px 13px;
+                    border-radius: 5px;
+                    color: #fff;
+                    background: #3B79C9;
+                    text-align: center;
+                    width: fit-content;
+                    font-size: 13px;
+                }
+
+                .price-old {
+                    text-decoration: line-through;
+                    color: #888;
+                }
+
+                .price-new {
+                    font-size: 23px;
+                    font-weight: bold;
+                    color: #333;
+                }
+            }
+        }
+
+        .total-detail-price {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .title-total-price {
+                font-size: 23px;
+                font-weight: bold;
+            }
+
+            .total-price {
+                color: #3B79C9;
+                font-size: 27px;
+                font-weight: bold;
+            }
+        }
+
+        .button-pay {
+            .btn-pay {
+                margin-top: 10px;
+                width: 100%;
+                border-radius: 10px;
+                padding: 10px 0;
+                border: none;
+                background: #3B79C9;
+                color: #fff;
+                text-transform: uppercase;
+
+                &:hover {
+                    background: #2c5589;
+                    transition: all 300ms ease;
+                }
+            }
+        }
+    }
+}
+
+
+/*  */

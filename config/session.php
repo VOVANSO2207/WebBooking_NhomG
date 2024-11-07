@@ -19,7 +19,7 @@ return [
     */
 
     'driver' => env('SESSION_DRIVER', 'database'),
-
+    
     /*
     |--------------------------------------------------------------------------
     | Session Lifetime
@@ -169,7 +169,7 @@ return [
     |
     */
 
-    'secure' => env('SESSION_SECURE_COOKIE'),
+    'secure' => env('SESSION_SECURE_COOKIE',true),
 
     /*
     |--------------------------------------------------------------------------

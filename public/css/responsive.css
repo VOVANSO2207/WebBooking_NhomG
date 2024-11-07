@@ -1,0 +1,107 @@
+/* header */
+.header-staynest {
+    background-size: cover;
+    padding: 20px;
+}
+
+@media (max-width: 768px) {
+    .header-staynest {
+        height: auto !important;
+        padding: 10px;
+    }
+
+    .header-staynest .solgan-staynest p:first-child {
+        font-size: 50px;
+    }
+
+    .name-logo {
+        font-size: 28px;
+    }
+
+    .menu-attribute li a {
+        font-size: 14px;
+        margin: 10px;
+    }
+}
+
+@media (max-width: 576px) {
+    .logo-staynest img {
+        width: 40px;
+    }
+
+    .name-logo {
+        font-size: 24px;
+    }
+
+    .menu-attribute {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .header-staynest .solgan-staynest p:first-child {
+        font-size: 30px;
+    }
+}
+
+/*  Search Bar Adjustments */
+.search-bar-staynest {
+    padding: 20px;
+    margin: 20px 0;
+}
+
+@media (max-width: 768px) {
+    .search-bar-staynest {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .search-bar-staynest .col-md-3,
+    .search-bar-staynest .col-md-4,
+    .search-bar-staynest .col-md-2 {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .button-search-header {
+        width: 100%;
+    }
+}
+
+/* Social Links and Profile */
+.profile-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (max-width: 768px) {
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .link-social {
+        margin-left: 5px;
+        width: 35px;
+        height: 35px;
+    }
+}
+
+@media (max-width: 576px) {
+    .link-social {
+        width: 30px;
+        height: 30px;
+    }
+}
+
+/* Large devices (desktops, 1200px and up) */
+@media (min-width: 1200px) {}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 1199px) {}
+
+/* Small devices (landscape phones, 576px and up) */
+@media (max-width: 767px) {}
+
+/* Extra small devices (phones, less than 576px) */
+@media (max-width: 575px) {}

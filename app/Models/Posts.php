@@ -31,20 +31,42 @@ class Posts extends Model
     {
         return self::create($data);
     }
+    // public static function searchPost($keyword)
+    // {
+    //     // Nếu không có từ khóa, trả về tất cả
+    //     if (empty($keyword)) {
+    //         return static::query(); // Trả về tất cả bài viết
+    //     }
+
+    //     return static::where(function ($query) use ($keyword) {
+    //         $query->where('title', 'LIKE', "%{$keyword}%")
+    //               ->orWhere('description', 'LIKE', "%{$keyword}%");
+    //     });
+    // }
     public static function searchPost($keyword)
     {
-        // Nếu không có từ khóa, trả về tất cả
-        if (empty($keyword)) {
-            return static::query(); // Trả về tất cả bài viết
+        $query = static::query(); // Sử dụng static::query() để giữ nguyên Model và cho phép phân trang
+
+        if (!empty($keyword)) {
+            // Thực hiện tìm kiếm
+            $query->where(function ($query) use ($keyword) {
+                $query->where('title', 'LIKE', "%{$keyword}%")
+                    ->orWhere('description', 'LIKE', "%{$keyword}%")
+                    ->orWhereRaw('MATCH(title, description) AGAINST (? IN BOOLEAN MODE)', [$keyword]);
+            });
         }
 
-        return static::where(function ($query) use ($keyword) {
-            $query->where('title', 'LIKE', "%{$keyword}%")
-                  ->orWhere('description', 'LIKE', "%{$keyword}%");
-        });
+        return $query; // Trả về Query Builder để có thể phân trang
     }
     public function deletePost()
     {
         return $this->delete();
     }
+    public static function getViewBlogs($perPage = 6)
+    {
+        return self::where('status', 1) 
+                    ->orderBy('created_at', 'desc') 
+                    ->paginate($perPage);
+    }
+    
 }
