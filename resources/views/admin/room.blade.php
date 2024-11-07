@@ -1,4 +1,7 @@
     @extends('admin.layouts.master')
+    @php
+        use App\Helpers\IdEncoder;
+    @endphp
     @section('admin-container')
         <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
             id="layout-navbar">
@@ -73,7 +76,8 @@
                                         <td>{{ $room->name }}</td>
                                         <td>{{ $room->capacity }}</td>
                                         <td>{{ $room->roomType ? $room->roomType->name : 'N/A' }}</td>
-                                        <td>{{ $room->price }}</td>
+                                        <td>{{ number_format($room->price, 0, ',', '.') }} VND
+                                        </td>
                                         <td>{{ $room->discount_percent }}%</td>
                                     </tr>
                                 @empty
@@ -175,17 +179,18 @@
 
         <!-- JavaScript -->
         <script>
-            document.querySelectorAll('.table tbody tr').forEach(function (row) {
-                row.addEventListener('click', function (e) {
-                    if (e.target.tagName === 'IMG' || e.target.closest('.swiper-button-next') || e.target.closest('.swiper-button-prev')) {
+            document.querySelectorAll('.table tbody tr').forEach(function(row) {
+                row.addEventListener('click', function(e) {
+                    if (e.target.tagName === 'IMG' || e.target.closest('.swiper-button-next') || e.target
+                        .closest('.swiper-button-prev')) {
                         return;
                     }
-        
+
                     const room = JSON.parse(this.getAttribute('data-room'));
                     showRoomModal(room);
                 });
             });
-        
+
             function showRoomModal(room) {
                 // Update modal information
                 document.getElementById('modalName').innerText = room.name;
@@ -195,31 +200,35 @@
                 document.getElementById('modalPriceBase').innerText = `${room.price} VND`;
                 document.getElementById('modalPriceSales').innerText = `${room.price * (1 - room.discount_percent / 100)} VND`;
                 document.getElementById('modalDiscountPercent').innerText = `${room.discount_percent}%`;
-        
+
                 // Edit Room Button Event
-                document.getElementById('editRoomButton').onclick = function () {
+                document.getElementById('editRoomButton').onclick = function() {
+                    
                     window.location.href = `{{ url('admin/room/edit') }}/${room.room_id}`;
+                
                 };
                 
+
                 // Update amenities
                 const amenitiesContainer = document.getElementById('modalAmenities');
-                amenitiesContainer.innerHTML = room.amenities.map(amenity => `<span class="amenity-tag">${amenity.amenity_name}</span>`).join(',');
-        
+                amenitiesContainer.innerHTML = room.amenities.map(amenity =>
+                    `<span class="amenity-tag">${amenity.amenity_name}</span>`).join(',');
+
                 // Update image slider
                 updateRoomImages(room.room_images);
-        
+                
                 // Update delete form action
                 document.getElementById('deleteRoomForm').action = `{{ url('admin/room') }}/${room.room_id}`;
-        
+
                 // Show modal
                 const roomModal = new bootstrap.Modal(document.getElementById('roomModal'));
                 roomModal.show();
             }
-        
+
             function updateRoomImages(images) {
                 const imagesContainer = document.getElementById('modalImages');
                 imagesContainer.innerHTML = '';
-        
+
                 const imagePromises = images.map(image => {
                     return new Promise(resolve => {
                         const imgUrl = `/images/${image.image_url}`;
@@ -227,7 +236,7 @@
                         const slideDiv = document.createElement('div');
                         slideDiv.className = 'swiper-slide';
                         const imgElement = document.createElement('img');
-                        
+
                         checkImageExists(imgUrl, exists => {
                             imgElement.src = exists ? imgUrl : storageImgUrl;
                             imgElement.style.width = '100%'; // Adjust width as necessary
@@ -237,7 +246,7 @@
                         });
                     });
                 });
-        
+
                 // Wait for all images to load before initializing Swiper
                 Promise.all(imagePromises).then(() => {
                     // Initialize Swiper for modal
@@ -251,7 +260,7 @@
                     });
                 });
             }
-        
+
             // Check if image exists
             function checkImageExists(url, callback) {
                 const img = new Image();
@@ -259,9 +268,9 @@
                 img.onload = () => callback(true);
                 img.onerror = () => callback(false);
             }
-        
+
             // Confirm delete action
-            document.getElementById('deleteRoomForm').addEventListener('submit', function (e) {
+            document.getElementById('deleteRoomForm').addEventListener('submit', function(e) {
                 if (!confirm("Are you sure you want to delete this room?")) {
                     e.preventDefault();
                 } else {
@@ -272,42 +281,44 @@
                     }, 100);
                 }
             });
-        
+
             // Search functionality
-            document.getElementById('search_room').addEventListener('input', function () {
+            document.getElementById('search_room').addEventListener('input', function() {
                 const query = this.value;
-        
+
                 if (query.length >= 3) {
                     fetchResults(query);
                 } else {
                     showOriginalRooms();
                 }
             });
-        
+
             function fetchResults(query) {
                 fetch(`{{ url('admin/room/search') }}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    },
-                    body: JSON.stringify({ query: query }),
-                })
-                .then(response => response.text())
-                .then(html => {
-                    document.getElementById('Content-Room').innerHTML = html;
-        
-                    // Hide the original rooms if search results are present
-                    document.getElementById('Original-Rooms').style.display = html.trim() !== '' ? 'none' : '';
-                })
-                .catch(error => console.error('Error:', error));
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        },
+                        body: JSON.stringify({
+                            query: query
+                        }),
+                    })
+                    .then(response => response.text())
+                    .then(html => {
+                        document.getElementById('Content-Room').innerHTML = html;
+
+                        // Hide the original rooms if search results are present
+                        document.getElementById('Original-Rooms').style.display = html.trim() !== '' ? 'none' : '';
+                    })
+                    .catch(error => console.error('Error:', error));
             }
-        
+
             function showOriginalRooms() {
                 document.getElementById('Original-Rooms').style.display = '';
                 document.getElementById('Content-Room').innerHTML = '';
             }
-        
+
             // Initialize existing Swipers  
             document.querySelectorAll('.room-swiper').forEach(element => {
                 new Swiper(element, {
@@ -320,6 +331,6 @@
                 });
             });
         </script>
-        
+
 
     @endsection
