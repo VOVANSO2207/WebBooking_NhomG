@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\IdEncoder;
 use App\Models\RoomAmenities;
 use App\Models\RoomAmenityRoom;
 use App\Models\RoomImages;
@@ -107,6 +108,8 @@ class RoomController extends Controller
 
     public function edit($room_id)
     {
+        // $decodedId = IdEncoder::decodeId($room_id);
+        // dd($decodedId);
         // Lấy thông tin phòng dựa trên ID
         $room = Rooms::with(['roomType', 'amenities', 'room_images'])->findOrFail($room_id);
 
