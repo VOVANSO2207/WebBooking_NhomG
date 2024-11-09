@@ -211,3 +211,8 @@ Route::post('/favorites', [FavoriteController::class, 'addFavorite'])->name('fav
 Route::delete('/favorites', [FavoriteController::class, 'removeFavorite'])->middleware('auth');
 // Route::get('/show-favorites', [FavoriteController::class, 'showHotelFavorite'])->name('pages.favorites')->middleware('auth');
 Route::get('/account', [FavoriteController::class, 'showHotelFavorite'])->name('pages.account');
+Route::middleware(['auth'])->group(function () {
+    Route::put('/profile/update', [UsersController::class, 'updateProfile'])->name('profile.update');
+    Route::put('/change-password', [UsersController::class, 'changePassword'])->name('change.password');
+
+});

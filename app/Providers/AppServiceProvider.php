@@ -10,6 +10,7 @@ use App\Models\Hotel;
 use App\Models\RoomImages;
 use App\Models\HotelImages;
 use App\Models\HotelAmenities;
+use Illuminate\Support\Facades\Validator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -44,5 +45,36 @@ class AppServiceProvider extends ServiceProvider
         $hotel_amenities_ser = HotelAmenities::all();
         View::share('hotel_amenities_ser', $hotel_amenities_ser);
 
+        // Quy tắc kiểm tra không có khoảng trắng trong email
+        Validator::extend('no_spaces_in_email', function ($attribute, $value, $parameters, $validator) {
+            return !preg_match('/\s/', $value); // Kiểm tra nếu có khoảng trắng
+        });
+
+
+        // Quy tắc kiểm tra tên miền hợp lệ
+        Validator::extend('valid_domain', function ($attribute, $value, $parameters, $validator) {
+            $emailParts = explode('@', $value);
+            if (count($emailParts) != 2) {
+                return false;
+            }
+
+            $domain = $emailParts[1];
+
+            // Kiểm tra tên miền có tồn tại không
+            return checkdnsrr($domain, 'MX');
+        });
+         // Quy tắc kiểm tra tên miền cấp cao (phần mở rộng)
+    Validator::extend('valid_top_level_domain', function ($attribute, $value, $parameters, $validator) {
+        $emailParts = explode('@', $value);
+        if (count($emailParts) != 2) {
+            return false;
+        }
+
+        $domain = $emailParts[1];
+        
+        // Kiểm tra phần mở rộng tên miền (phần sau dấu chấm)
+        return preg_match('/\.[a-zA-Z]{2,}$/', $domain);
+    });
     }
+    
 }

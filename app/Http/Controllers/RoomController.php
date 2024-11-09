@@ -108,11 +108,12 @@ class RoomController extends Controller
 
     public function edit($room_id)
     {
-        // $decodedId = IdEncoder::decodeId($room_id);
+        // dd($room_id);
+        $decodedId = IdEncoder::decodeId($room_id);
         // dd($decodedId);
         // Lấy thông tin phòng dựa trên ID
-        $room = Rooms::with(['roomType', 'amenities', 'room_images'])->findOrFail($room_id);
-
+        $room = Rooms::with(['roomType', 'amenities', 'room_images'])->findOrFail($decodedId);
+        // dd($room);
         // Lấy danh sách loại phòng và tiện nghi để hiển thị trong form
         $roomTypes = RoomType::all();
         $amenities = RoomAmenities::all();
@@ -171,7 +172,7 @@ class RoomController extends Controller
             $existingImages = $request->input('existing_images', []);
             $room->room_images()->whereNotIn('image_id', $existingImages)->delete();
         }
-
+        
         // Cập nhật tiện nghi
         RoomAmenityRoom::where('room_id', $room->room_id)->delete();
 
@@ -254,4 +255,16 @@ class RoomController extends Controller
         // Trả về view với kết quả tìm kiếm
         return view('admin.search_results_room', ['results' => $results])->render(); // Render view và trả về
     }
+    public function encodeId($id)
+    {
+        $encodedId = IdEncoder::encodeId($id);
+        return response()->json(['encoded_id' => $encodedId]);
+    }
+
+    public function decodeId($encodedId)
+    {
+        $decodedId = IdEncoder::decodeId($encodedId);
+        return response()->json(['decoded_id' => $decodedId]);
+    }
+    
 }

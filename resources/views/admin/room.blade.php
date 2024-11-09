@@ -190,7 +190,7 @@
                     showRoomModal(room);
                 });
             });
-
+          
             function showRoomModal(room) {
                 // Update modal information
                 document.getElementById('modalName').innerText = room.name;

@@ -10,19 +10,19 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Auth\Authenticatable as AuthenticatableTrait;
 
-class User extends Model implements Authenticatable // Thêm giao diện
-{
-    use HasFactory, AuthenticatableTrait; // Thêm trait
+    class User extends Model implements Authenticatable // Thêm giao diện
+    {
+        use HasFactory, AuthenticatableTrait; // Thêm trait
 
-    protected $fillable = [
-        'username',
-        'email',
-        'password',
-        'phone_number',
-        'role_id',
-        'status',
-        'avatar',
-    ];
+        protected $fillable = [
+            'username',
+            'email',
+            'password',
+            'phone_number',
+            'role_id',
+            'status',
+            'avatar',
+        ];
 
     protected $primaryKey = 'user_id';
 
@@ -78,6 +78,7 @@ class User extends Model implements Authenticatable // Thêm giao diện
 
     public static function register($data)
     {
+        // $data['password'] = Hash::make($data['password']);  
         // Tạo người dùng mới
         return self::create([
             'username' => $data['username'],
@@ -86,7 +87,7 @@ class User extends Model implements Authenticatable // Thêm giao diện
             'phone_number' => $data['phone_number'],
             'role_id' => $data['role_id'] ?? 2, // Mặc định role là 2
             'status' => $data['status'] ?? 1,  // Mặc định trạng thái là hoạt động
-            'avatar' => $data['avatar'] ?? 'default-avatar.png',
+            'avatar' => $data['avatar'] ?? 'user-profile.png',
         ]);
     }
 
@@ -159,5 +160,72 @@ class User extends Model implements Authenticatable // Thêm giao diện
     {
         return $this->belongsToMany(Hotel::class, 'favorite_hotels');
     }
-    
+
+
+    public function updateProfileUser($data, $userId = null)
+    {
+    try {
+        // Nếu không truyền userId thì lấy id của user hiện tại
+        $userId = $userId ?? auth()->id();
+        
+        $user = self::findOrFail($userId);
+        
+        // Validate email unique nếu email thay đổi
+        if (isset($data['email']) && $data['email'] !== $user->email) {
+            $existingEmail = self::where('email', $data['email'])
+                                ->where('id', '!=', $userId)
+                                ->exists();
+            if ($existingEmail) {
+                throw new \Exception('Email đã tồn tại trong hệ thống.');
+            }
+        }
+
+        // Validate phone unique nếu phone thay đổi  
+        if (isset($data['phone_number']) && $data['phone_number'] !== $user->phone_number) {
+            $existingPhone = self::where('phone_number', $data['phone_number'])
+                                ->where('id', '!=', $userId)
+                                ->exists();
+            if ($existingPhone) {
+                throw new \Exception('Số điện thoại đã tồn tại trong hệ thống.');
+            }
+        }
+
+        // Xử lý upload avatar nếu có
+        if (isset($data['avatar']) && $data['avatar'] instanceof \Illuminate\Http\UploadedFile) {
+            // Xóa avatar cũ nếu có
+            if ($user->avatar && file_exists(public_path('storage/images/' . $user->avatar))) {
+                unlink(public_path('storage/images/' . $user->avatar));
+            }
+
+            // Upload avatar mới
+            $avatar = $data['avatar'];
+            $filename = time() . '_' . $avatar->getClientOriginalName();
+            $avatar->move(public_path('storage/images'), $filename);
+            $data['avatar'] = $filename;
+        }
+
+        // Update password nếu có
+           // if (isset($data['password']) && !empty($data['password'])) {
+        //     $data['password'] = Hash::make($data['password']); // Mã hóa mật khẩu
+        // } else {
+        //     unset($data['password']); // Không update password nếu không có
+        // }
+
+        // Cập nhật thông tin user
+        $user->update([
+            'username' => $data['username'] ?? $user->username,
+            'email' => $data['email'] ?? $user->email,
+            'phone_number' => $data['phone_number'] ?? $user->phone_number,
+            'avatar' => $data['avatar'] ?? $user->avatar,
+            'password' => $data['password'] ?? $user->password  
+        ]);
+
+        return true;
+
+    } catch (\Exception $e) {
+        // Log lỗi nếu cần
+        // \Log::error('Error updating user profile: ' . $e->getMessage());
+        throw $e;
+    }
+}
 }

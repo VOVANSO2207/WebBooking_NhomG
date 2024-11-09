@@ -7,7 +7,11 @@ use App\Models\Roles;
 use Illuminate\Http\Request;
 use App\Helpers\IdEncoder;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+
 class UsersController extends Controller
 {
     public function viewUser()
@@ -185,7 +189,7 @@ class UsersController extends Controller
         if ($request->filled('password')) {
             $user->password = bcrypt($request->password);
         }
-
+        
         $user->phone_number = $request->phone_number;
         $user->role_id = $request->role_id;
         $user->status = $request->status;
@@ -215,4 +219,69 @@ class UsersController extends Controller
         $decodedId = IdEncoder::decodeId($encodedId);
         return response()->json(['decoded_id' => $decodedId]);
     }
+    public function updateProfile(Request $request)
+    {
+        try {
+            $rules = [
+                'username' => 'required|string|min:5|max:100|',
+                'email' => 'required|email|max:255|no_spaces_in_email|valid_domain|valid_top_level_domain', // Quy tắc email sẽ tự động kiểm tra định dạng email
+                'phone_number' => 'required|string|max:15',
+                'avatar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            ];
+            
+            $messages = [
+                'username.required' => 'Vui lòng nhập họ và tên.',
+                'username.min' => 'Họ và tên phải có ít nhất 5 ký tự.', 
+                'username.max' => 'Họ và tên không được dài quá 100 ký tự.',
+                'username.regex' => 'Họ và tên không được chứa ký tự đặc biệt.',
+                'username.not_regex' => 'Vui lòng nhập họ và tên hợp lệ.',
+                'email.required' => 'Vui lòng nhập địa chỉ email.',
+                'email.email' => 'Địa chỉ email không hợp lệ.',
+                'email.valid_domain' => 'Tên miền không hợp lệ hoặc không tồn tại.', 
+                'email.no_spaces_in_email' => 'Địa chỉ email không được chứa khoảng trắng.', // Thông báo lỗi cho trường hợp có khoảng trắng
+                'email.max' => 'Địa chỉ email không được dài quá 255 ký tự.',
+                'email.valid_top_level_domain' => 'Vui lòng cung cấp phần mở rộng tên miền (VD: .com, .net).',  
+                'phone_number.required' => 'Vui lòng nhập số điện thoại.',
+                // 'avatar.image' => 'Tệp phải là một ảnh hợp lệ.',
+                'avatar.mimes' => 'Ảnh chỉ chấp nhận định dạng: jpeg, png, jpg.',
+            ];
+            
+            // dd($request->all());
+            // dd($rules);
+            $validator = Validator::make($request->all(), $rules, $messages);
+            if ($validator->fails()) {
+                return redirect()->back()
+                    // ->with('error', 'Validation error.')
+                    ->withErrors($validator)
+                    ->withInput();
+            }
+            $user = new User();
+            // dd($user);
+            $user->updateProfileUser($request->all());
+            // dd($user);   
+            return redirect()->route('pages.account')->with('success', 'Cập nhập thông tin user thành công.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'An error occurred: ' . $e->getMessage());
+        }
+    }
+    
+    public function changePassword(Request $request)
+    {
+        // Validate input
+        $request->validate([
+            'newPassword' => 'required|string|min:8|confirmed', // 'confirmed' yêu cầu phải có trường 'newPassword_confirmation'
+        ]);
+    
+        // Lấy thông tin người dùng hiện tại
+        $user = auth()->user();
+        // Cập nhật mật khẩu mới
+        $user->update([
+            'password' => $request->newPassword, 
+        ]);
+    
+        // Trả về thông báo thành công
+        return redirect()->route('pages.account')->with('success', 'Mật khẩu đã được thay đổi thành công.');
+    }
+    
+
 }

@@ -36,7 +36,7 @@ class AuthController extends Controller
             'password.required' => 'Vui lòng nhập mật khẩu.',
             'password.confirmed' => 'Vui lòng xác nhận lại mật khẩu.',
         ]);
-
+        
         // Đăng ký người dùng mới
         $user = User::register($request->all());
         $user->save();
@@ -81,5 +81,7 @@ class AuthController extends Controller
 
         return redirect('/')->with('success', 'Đăng xuất thành công');
     }
+
+    
     
 }
