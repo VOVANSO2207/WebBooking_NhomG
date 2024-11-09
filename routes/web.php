@@ -56,7 +56,7 @@ Route::get('/hotel_detail', function () {
 // });
 
 // Admin - Home
-Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
+Route::get('/admin', [AdminController::class, 'index'])->name('admin.index')->middleware('admin');
 Route::get('/admin', action: [AdminController::class, 'showVisitsChart'])->name('admin.visits');
 
 Route::prefix('admin')->group(function () {
