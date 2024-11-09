@@ -307,7 +307,7 @@
                     navigation="true" space-between="30" loop="true">
                     @foreach($favorite->hotel->images as $image)
                         <swiper-slide>
-                            <img src="{{ asset('storage/images/' . $image->image_url) }}" alt="Hotel Image" />
+                            <img src="{{ asset('images/' . $image->image_url) }}" alt="Hotel Image" />
                         </swiper-slide>
                     @endforeach
                 </swiper-container>
