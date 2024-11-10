@@ -288,12 +288,12 @@ class UsersController extends Controller
             'newPassword' => [
                 'required',
                 'string',
-                'min:8', // Mật khẩu phải có ít nhất 8 ký tự
-                'max:32', // Mật khẩu không được dài quá 32 ký tự
-                'regex:/[a-zA-Z]/', // Mật khẩu phải chứa ít nhất một chữ cái
-                'regex:/[0-9]/', // Mật khẩu phải chứa ít nhất một chữ số
-                'regex:/[!@#$%^&*(),.?":{}|<>]/', // Mật khẩu phải chứa ít nhất một ký tự đặc biệt
-                'confirmed', // Yêu cầu xác nhận mật khẩu
+                'min:8', 
+                'max:32', 
+                'regex:/[a-zA-Z]/', 
+                'regex:/[0-9]/', 
+                'regex:/[!@#$%^&*(),.?":{}|<>]/', 
+                'confirmed', 
             ],
         ], [
             'newPassword.required' => 'Vui lòng nhập mật khẩu.',
@@ -303,14 +303,12 @@ class UsersController extends Controller
             'newPassword.confirmed' => 'Mật khẩu xác nhận không khớp.',
         ]);
         
-        
         // Lấy thông tin người dùng hiện tại
         $user = auth()->user();
         // Cập nhật mật khẩu mới
         $user->update([
             'password' => $request->newPassword,
         ]);
-
         // Trả về thông báo thành công
         return redirect()->route('pages.account')->with('success', 'Mật khẩu đã được thay đổi thành công.');
     }

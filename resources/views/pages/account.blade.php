@@ -101,17 +101,15 @@
                                     style="display: block; width: 320px; margin-top: 10px;">Chỉnh sửa thông tin</button>
                                 <div class="action-button d-flex gap-3">
                                     <button type="submit" class="btn btn-primary btn-block mt-3" id="saveInfoBtn"
-                                    style="display: none;">Lưu Thông Tin</button>
-                                <button type="button" class="btn btn-secondary btn-block mt-3" id="cancelInfoBtn"
-                                    style="display: none;">Hủy</button>
+                                        style="display: none;">Lưu Thông Tin</button>
+                                    <button type="button" class="btn btn-secondary btn-block mt-3" id="cancelInfoBtn"
+                                        style="display: none;">Hủy</button>
                                 </div>
-                               
+
                         </form>
                         <form action="{{ route('change.password') }}" method="post">
                             @csrf
                             @method('PUT')
-
-
                             <div class="form-group text-left">
                                 <div class="label">
                                     <label for="newPassword">Mật khẩu mới</label>
@@ -133,12 +131,12 @@
                             </div>
                             <button type="button" class="btn btn-primary btn-block mt-3" id="editPasswordBtn">Đổi
                                 mật khẩu</button>
-                                <div class="action-password d-flex gap-3">
-                                    <button type="submit" class="btn btn-primary btn-block mt-3" id="savePasswordBtn"
+                            <div class="action-password d-flex gap-3">
+                                <button type="submit" class="btn btn-primary btn-block mt-3" id="savePasswordBtn"
                                     style="display: none;">Lưu Mật khẩu</button>
-                                 <button type="button" class="btn btn-secondary btn-block mt-3" id="cancelNewPass"
+                                <button type="button" class="btn btn-secondary btn-block mt-3" id="cancelNewPass"
                                     style="display: none;">Hủy</button>
-                                </div>
+                            </div>
                         </form>
                     </div>
 
@@ -397,8 +395,11 @@
                                     </div>
                                     <div class="group-room-price mt-2">
                                         <p>
-                                            {{ strlen($favorite->hotel->description) > 100 ? substr($favorite->hotel->description, 0, 100) . '...' : $favorite->hotel->description }}
+                                            {!! strlen($favorite->hotel->description) > 100
+                                                ? substr($favorite->hotel->description, 0, 100) . '...'
+                                                : $favorite->hotel->description !!}
                                         </p>
+
                                         {{-- <ul class="p-0">
                                         <li>
                                             <span class="card-room-price-old">1.057.666 đ</span>
@@ -540,8 +541,8 @@
                 input: 'newPassword'
             }
         ];
-        
-      
+
+
 
         const editInfoBtn = document.getElementById('editInfoBtn');
         const saveInfoBtn = document.getElementById('saveInfoBtn');
@@ -634,7 +635,7 @@
 
             editInfoBtn.style.display = 'block';
             saveInfoBtn.style.display = 'none';
-            cancelNewPass.style.display= 'none';
+            cancelNewPass.style.display = 'none';
             // Mark the info editing flag as false
             isEditingInfo = false;
         };
@@ -691,7 +692,7 @@
             document.querySelector('label[for="newPassword"]').style.display = 'none';
             editPasswordBtn.style.display = 'block';
             savePasswordBtn.style.display = 'none';
-            cancelNewPass.style.display= 'none';
+            cancelNewPass.style.display = 'none';
             // Mark the password editing flag as false
             isEditingPassword = false;
         };

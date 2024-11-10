@@ -134,6 +134,16 @@
                 document.getElementById('name-error').style.display = 'inline';
                 valid = false;
             }
+            if (name.length > 100) {
+                document.getElementById('name-error').innerText = 'Họ và Tên không được quá 100 ký tự.';
+                document.getElementById('name-error').style.display = 'inline';
+                valid = false;
+            }
+            if (body.length > 1000) {
+                document.getElementById('body-error').innerText = 'Nội Dung Tin Nhắn không được quá 1000 ký tự.';
+                document.getElementById('body-error').style.display = 'inline';
+                valid = false;
+            }
 
             if (email === '') {
                 document.getElementById('email-error').innerText = 'Email không được để trống.';
@@ -154,7 +164,7 @@
                 valid = false;
             }
 
-            const specialCharPattern = /[!@#$%^&*(),.?":{}|<>]/;
+            const specialCharPattern = /[!@#$%^&*(){}|<>?":;[\]\/\\`~_+=-]/;
             if (specialCharPattern.test(name)) {
                 document.getElementById('name-error').innerText = 'Họ và Tên không được chứa ký tự đặc biệt.';
                 document.getElementById('name-error').style.display = 'inline';

@@ -113,20 +113,22 @@ class PromotionsController extends Controller
         }
     }
     public function editVoucher($promotion_id)
-    {
-        $decodedId = IdEncoder::decodeId($promotion_id);
-        $voucher = Promotions::findVouchersById($decodedId);
+{
+    $decodedId = IdEncoder::decodeId($promotion_id);
 
-        if (!$voucher) {
-            return redirect()->route('admin.viewVoucher')->with('error', 'Voucher không tồn tại.');
-        }
-
-        // Chuyển đổi ngày tháng từ định dạng dd/mm/yyyy sang Y-m-d
-        $start_date = $voucher->start_date ? \Carbon\Carbon::createFromFormat('d/m/Y', $voucher->start_date)->format('Y-m-d') : null;
-        $end_date = $voucher->end_date ? \Carbon\Carbon::createFromFormat('d/m/Y', $voucher->end_date)->format('Y-m-d') : null;
-
-        return view('admin.voucher_edit', compact('voucher', 'start_date', 'end_date'));
+    if (!$decodedId) {
+        return response()->view('errors.404', [], 404);
     }
+    $voucher = Promotions::findVouchersById($decodedId);
+    if (!$voucher) {
+        return response()->view('errors.404', [], 404);
+    }
+
+    $start_date = $voucher->start_date ? \Carbon\Carbon::createFromFormat('d/m/Y', $voucher->start_date)->format('Y-m-d') : null;
+    $end_date = $voucher->end_date ? \Carbon\Carbon::createFromFormat('d/m/Y', $voucher->end_date)->format('Y-m-d') : null;
+
+    return view('admin.voucher_edit', compact('voucher', 'start_date', 'end_date'));
+}
 
     public function updateVoucher(Request $request, $id)
     {

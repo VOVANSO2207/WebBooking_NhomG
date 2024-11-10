@@ -63,18 +63,17 @@ class AppServiceProvider extends ServiceProvider
             // Kiểm tra tên miền có tồn tại không
             return checkdnsrr($domain, 'MX');
         });
-         // Quy tắc kiểm tra tên miền cấp cao (phần mở rộng)
-    Validator::extend('valid_top_level_domain', function ($attribute, $value, $parameters, $validator) {
-        $emailParts = explode('@', $value);
-        if (count($emailParts) != 2) {
-            return false;
-        }
+        // Quy tắc kiểm tra tên miền cấp cao (phần mở rộng)
+        Validator::extend('valid_top_level_domain', function ($attribute, $value, $parameters, $validator) {
+            $emailParts = explode('@', $value);
+            if (count($emailParts) != 2) {
+                return false;
+            }
 
-        $domain = $emailParts[1];
-        
-        // Kiểm tra phần mở rộng tên miền (phần sau dấu chấm)
-        return preg_match('/\.[a-zA-Z]{2,}$/', $domain);
-    });
+            $domain = $emailParts[1];
+
+            // Kiểm tra phần mở rộng tên miền (phần sau dấu chấm)
+            return preg_match('/\.[a-zA-Z]{2,}$/', $domain);
+        });
     }
-    
 }

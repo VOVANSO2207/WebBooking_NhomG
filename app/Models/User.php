@@ -203,21 +203,12 @@ use Illuminate\Auth\Authenticatable as AuthenticatableTrait;
             $avatar->move(public_path('storage/images'), $filename);
             $data['avatar'] = $filename;
         }
-
-        // Update password nếu có
-           // if (isset($data['password']) && !empty($data['password'])) {
-        //     $data['password'] = Hash::make($data['password']); // Mã hóa mật khẩu
-        // } else {
-        //     unset($data['password']); // Không update password nếu không có
-        // }
-
         // Cập nhật thông tin user
         $user->update([
             'username' => $data['username'] ?? $user->username,
             'email' => $data['email'] ?? $user->email,
             'phone_number' => $data['phone_number'] ?? $user->phone_number,
             'avatar' => $data['avatar'] ?? $user->avatar,
-            'password' => $data['password'] ?? $user->password  
         ]);
 
         return true;

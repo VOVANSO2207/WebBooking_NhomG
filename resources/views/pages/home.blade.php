@@ -72,9 +72,9 @@
                     <div class="profile-header col-md-2">
                         <!-- Nếu chưa đăng nhập -->
                         <!-- <div class="group-left-header">
-                                                                                    <a href="#" class="login">Đăng nhập/</a>
-                                                                                    <a href="#" class="register">Đăng ký</a>
-                                                                                </div> -->
+                                                                                        <a href="#" class="login">Đăng nhập/</a>
+                                                                                        <a href="#" class="register">Đăng ký</a>
+                                                                                    </div> -->
                         <!-- Nếu đã đăng nhập -->
                         <div class="loged">
                             <div class="group-left-header d-flex align-items-center justify-content-center">
@@ -236,22 +236,24 @@
                             <div class="card the-top-khach-san">
                                 @foreach ($hotel->images as $index => $image)
                                     @if ($index === 0)
-                                        <img class="image-hotel-1" src="{{ asset('storage/images/' . $image->image_url) }}"
+                                        <img class="image-hotel-1" src="{{ asset('images/' . $image->image_url) }}"
                                             alt="{{ $image->image_url }}" />
                                     @endif
                                 @endforeach
 
                                 <div class="shape">
                                     <p class="country m-0">VIET NAM</p>
-                                    <p class="location m-0">{{ $hotel->location }} - <span
+                                    <p class="location m-0">{{ $hotel->city->city_name }} - <span
                                             class="name-hotel">{{ $hotel->hotel_name }}</span></p>
-                                    <p class="price-old m-0">VNĐ {{ number_format($hotel->price_old, 0, ',', '.') }} VNĐ
+                                    <p class="price-old m-0">
+                                        {{ number_format($hotel->average_price, 0, ',', '.') }} VNĐ
                                     </p>
                                     <div class="row price-top">
                                         <div class="col-md-7">
                                             <span class="price-new">VNĐ
-                                                {{ number_format($hotel->price_new, 0, ',', '.') }} VNĐ
-                                                <span>/ Khách</span> </span>
+                                                {{ number_format($hotel->average_price, 0, ',', '.') }} VNĐ
+                                                <span>/ Khách</span>
+                                            </span>
                                         </div>
                                         <div class="col-md-5">
                                             <a href="{{ route('pages.hotel_detail', ['hotel_id' => $hotel->hotel_id]) }}"
@@ -268,7 +270,9 @@
                                         @endif
                                     @endfor
                                 </div>
-                                <!-- <div class="sale"><span>-</span>50%</div> -->
+                                <div class="sale">
+                                    - {{ number_format($hotel->average_discount_percent) }} %
+                                </div>
                             </div>
                         @endif
                     @endforeach
@@ -339,7 +343,7 @@
                                 <div class="shape-in">
                                     @if ($hotel->images->isNotEmpty())
                                         <img class="image-hotel-2"
-                                            src="{{ asset('storage/images/' . $hotel->images->first()->image_url) }}"
+                                            src="{{ asset('images/' . $hotel->images->first()->image_url) }}"
                                             alt="">
                                     @else
                                         <img class="image-hotel-2" src="{{ asset('/images/defaullt-image.png') }}"
@@ -350,25 +354,33 @@
                                         <p class="info-hotel-name m-0">{{ $hotel->hotel_name }}</p>
 
                                         <p class="info-hotel-location m-0">{{ $hotel->location }},
-                                            {{ $hotel->city->city_name }}</p>
+                                            {{ $hotel->city->city_name }}
+                                        </p>
                                         <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i>
                                             {{ $hotel->reviews->count() }} Đánh giá
                                         </p>
 
                                         <p class="info-hotel-price-old mb-0 mt-5 pt-5">
-                                        {{ number_format($hotel->average_price_sale, 0, ',', '.') }} VND</p>
+                                            {{ number_format($hotel->average_price_sale, 0, ',', '.') }} VND
+                                        </p>
                                         <div class="row group-heart-price">
                                             <div class="col-md-6">
-                                                <a href="#" class="heart-icon" data-hotel-id="{{ $hotel->hotel_id }}">
-                                                    <i class="fa-regular fa-heart @if($hotel->is_favorite) fa-solid red @endif"></i>
+                                                <a href="#" class="heart-icon"
+                                                    data-hotel-id="{{ $hotel->hotel_id }}">
+                                                    <i
+                                                        class="fa-regular fa-heart @if ($hotel->is_favorite) fa-solid red @endif"></i>
                                                 </a>
                                             </div>
-                                            <div class="col-md-6 text-right"><span
-                                                    class="info-hotel-price-new"> {{ number_format($hotel->average_price, 0, ',', '.') }} VND</span>
+                                            <div class="col-md-6 text-right">
+                                                <span class="info-hotel-price-new">
+                                                    {{ number_format($hotel->average_price, 0, ',', '.') }} VNĐ
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="sale-hotel">{{ number_format($hotel->average_discount_percent) }} %</div>
+                                    <div class="sale-hotel">
+                                        {{ number_format($hotel->average_discount_percent) }} %
+                                    </div>
                                 </div>
                             </a>
                         </div>
@@ -442,7 +454,7 @@
             const dropdown = document.getElementById('notificationDropdown');
             dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
         });
-        
+
         // Optional: Close the dropdown if clicking outside of it
         document.addEventListener('click', function(event) {
             const bell = document.getElementById('notificationBell');
@@ -452,41 +464,39 @@
             }
         });
         $(document).ready(function() {
-    $('.heart-icon').on('click', function(event) {
-        event.preventDefault(); 
-        const heart = $(this).find('i');
-        const hotelId = $(this).data('hotel-id'); 
+            $('.heart-icon').on('click', function(event) {
+                event.preventDefault();
+                const heart = $(this).find('i');
+                const hotelId = $(this).data('hotel-id');
 
-        // Kiểm tra trạng thái yêu thích để xác định phương thức
-        const isFavorite = heart.hasClass('fa-solid'); 
+                // Kiểm tra trạng thái yêu thích để xác định phương thức
+                const isFavorite = heart.hasClass('fa-solid');
 
-        // Gửi yêu cầu AJAX để thêm hoặc xóa khách sạn khỏi danh sách yêu thích
-        $.ajax({
-            url: '/favorites',
-            method: isFavorite ? 'DELETE' : 'POST', 
-            data: {
-                hotel_id: hotelId,
-                _token: '{{ csrf_token() }}' 
-            },
-            success: function(response) {
-                // Cập nhật lại trạng thái của biểu tượng trái tim
-                if (isFavorite) {
-                    // Nếu khách sạn đã yêu thích, xóa khỏi yêu thích và đổi lại màu tim
-                    heart.removeClass('fa-solid red').addClass('fa-regular');
-                } else {
-                    // Nếu chưa yêu thích, thêm vào yêu thích và đổi màu tim
-                    heart.removeClass('fa-regular').addClass('fa-solid red');
-                }
-                alert(response.message); 
-            },
-            error: function(xhr) {
-                alert(xhr.responseJSON.message || 'Đã xảy ra lỗi.'); 
-            }
+                // Gửi yêu cầu AJAX để thêm hoặc xóa khách sạn khỏi danh sách yêu thích
+                $.ajax({
+                    url: '/favorites',
+                    method: isFavorite ? 'DELETE' : 'POST',
+                    data: {
+                        hotel_id: hotelId,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        // Cập nhật lại trạng thái của biểu tượng trái tim
+                        if (isFavorite) {
+                            // Nếu khách sạn đã yêu thích, xóa khỏi yêu thích và đổi lại màu tim
+                            heart.removeClass('fa-solid red').addClass('fa-regular');
+                        } else {
+                            // Nếu chưa yêu thích, thêm vào yêu thích và đổi màu tim
+                            heart.removeClass('fa-regular').addClass('fa-solid red');
+                        }
+                        // alert(response.message);
+                    },
+                    error: function(xhr) {
+                        alert(xhr.responseJSON.message || 'Đã xảy ra lỗi.');
+                    }
+                });
+            });
         });
-    });
-});
-
-
     </script>
 @endsection
 

@@ -109,10 +109,10 @@ class RoomController extends Controller
     public function edit($room_id)
     {
         // dd($room_id);
-        $decodedId = IdEncoder::decodeId($room_id);
+        // $decodedId = IdEncoder::decodeId($room_id);
         // dd($decodedId);
         // Lấy thông tin phòng dựa trên ID
-        $room = Rooms::with(['roomType', 'amenities', 'room_images'])->findOrFail($decodedId);
+        $room = Rooms::with(['roomType', 'amenities', 'room_images'])->findOrFail($room_id);
         // dd($room);
         // Lấy danh sách loại phòng và tiện nghi để hiển thị trong form
         $roomTypes = RoomType::all();
