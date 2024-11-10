@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\FavoriteHotel;
 use App\Models\Hotel;
+use App\Models\Rooms;
 use Illuminate\Http\Request;
 
 class FavoriteController extends Controller
@@ -35,7 +36,8 @@ class FavoriteController extends Controller
     {
         $userId = auth()->id();
         $favorites = FavoriteHotel::getUserFavorites($userId);
-    
-        return view('pages.account', compact('favorites'));
+        $rooms = Rooms::with('roomType')->get();
+
+        return view('pages.account', compact('favorites','rooms'));
     }
 }

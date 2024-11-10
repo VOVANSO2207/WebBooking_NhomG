@@ -74,7 +74,8 @@ class FavoriteHotel extends Model
                         'city',
                         'reviews',
                         'rooms' => function ($roomQuery) {
-                            $roomQuery->orderBy('price', 'asc'); // Get the room with the lowest price
+                            $roomQuery->orderBy('price', 'asc')
+                            ->with('roomType');; // Get the room with the lowest price
                         }
                     ]);
                 }
