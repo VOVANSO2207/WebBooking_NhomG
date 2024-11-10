@@ -11,4 +11,7 @@ class HomeController extends Controller
     {
         return view('pages.home'); // Trả về view trang chủ
     }
+    public function introduce(){
+        return view('introduce');
+    }
 }
