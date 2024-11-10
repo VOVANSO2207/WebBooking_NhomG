@@ -44,6 +44,7 @@
                             <th>STT</th>
                             <th>Promotion Code</th>
                             <th>Discount Amount</th>
+                            <th>Promotion Description</th>
                             <th>Start Date</th>
                             <th>End Date</th>
                         </tr>
@@ -72,6 +73,7 @@
                                 <td class="{{ $textClass }}">{{ $key + 1 }}</td>
                                 <td class="{{ $textClass }}">{{ $voucher->promotion_code }}</td>
                                 <td class="{{ $textClass }}">{{ number_format($voucher->discount_amount, 0, ',', '.') }} VND</td>
+                                <td class="{{ $textClass }}">{{ $voucher->pro_description }}</td>
                                 <td class="{{ $textClass }}">{{ $voucher->start_date }}</td>
                                 <td class="{{ $textClass }}">{{ $voucher->end_date }}</td>
                             </tr>
@@ -108,6 +110,11 @@
                         <strong>Discount Amount:</strong>
                         <span id="modalDiscountAmount"></span>
                     </div>
+                    <div class="voucher-detail-item detail-item">
+    <strong>Promotion Description:</strong>
+    <span id="modalProDescription"></span>
+</div>
+
                     <div class="voucher-detail-item detail-item">
                         <strong>Start Date:</strong>
                         <span id="modalStartDate"></span>
@@ -194,8 +201,11 @@
                         let discountAmount = voucher.discount_amount;
                         let formattedAmount = Number(discountAmount).toLocaleString('vi-VN') + ' VND';
                         document.getElementById('modalDiscountAmount').innerText = formattedAmount;
+                        document.getElementById('modalProDescription').innerText = voucher.pro_description || 'Không có mô tả'; // Hiển thị nếu có mô tả, nếu không sẽ hiển thị "Không có mô tả"
+
                         document.getElementById('modalStartDate').innerText = voucher.start_date;
                         document.getElementById('modalEndDate').innerText = voucher.end_date;
+
                         // Thiết lập đường dẫn cho nút Edit
                         const editRoute = "{{ route('voucher.edit', ['promotion_id' => ':id']) }}".replace(':id', currentVoucherId);
 

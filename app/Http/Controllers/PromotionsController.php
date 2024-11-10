@@ -27,6 +27,7 @@ class PromotionsController extends Controller
         return response()->json([
             'promotion_code' => $promotion->promotion_code,
             'discount_amount' => $promotion->discount_amount,
+            'pro_description' => $promotion->pro_description,
             'start_date' => $promotion->start_date,
             'end_date' => $promotion->end_date,
 
@@ -75,6 +76,8 @@ class PromotionsController extends Controller
             'discount_amount' => 'required|numeric|min:0|max:99999999|not_regex:/^0\d+$/|regex:/^\d+$/',
             'start_date' => "required|date|date_format:Y-m-d|after_or_equal:today|before_or_equal:$maxStartDate",
             'end_date' => "required|date|date_format:Y-m-d|after:start_date|after_or_equal:today|before_or_equal:$maxStartDate",
+            'pro_description' => 'required|string|regex:/^[^#&\'()!]*$/|max:255', // Thêm điều kiện cho mô tả
+
         ], [
             'end_date.after' => 'Ngày kết thúc phải lớn hơn ngày bắt đầu.',
             'end_date.required' => 'Vui lòng chọn ngày kết thúc',
@@ -90,6 +93,11 @@ class PromotionsController extends Controller
             'discount_amount.min' => 'Số tiền giảm giá không được là số âm.',
             'discount_amount.max' => 'Số tiền giảm giá không hợp lệ.',
             'discount_amount.not_regex' => 'Số tiền giảm giá không được bắt đầu bằng 0.',
+            'pro_description.required' => 'Mô tả voucher không được để trống',
+            'pro_description.regex' => 'Mô tả không hợp lệ',
+            'pro_description.max' => 'Mô tả không được quá 255 kí tự',
+
+
 
         ]);
 
@@ -102,8 +110,10 @@ class PromotionsController extends Controller
             Promotions::createVoucher([
                 'promotion_code' => $request->promotion_code,
                 'discount_amount' => $request->discount_amount,
+                'pro_description' => $request->pro_description, // Thêm dữ liệu này
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
+                
             ]);
 
             return response()->json(['success' => 'Voucher được tạo thành công'], 200);
@@ -152,6 +162,12 @@ class PromotionsController extends Controller
                 'not_regex:/^0\d+$/',
                 'regex:/^\d+$/',
             ],
+            'pro_description' => [
+                'required',  
+                'regex:/^[^#&\'()!]*$/',   
+                'max:255',
+                'string',
+            ],
             'start_date' => "required|date|date_format:Y-m-d|after_or_equal:today|before_or_equal:$maxStartDate",
             'end_date' => "required|date|date_format:Y-m-d|after:start_date|after_or_equal:today|before_or_equal:$maxStartDate",
         ], [
@@ -174,6 +190,9 @@ class PromotionsController extends Controller
             'discount_amount.min' => 'Số tiền giảm giá không được là số âm.',
             'discount_amount.max' => 'Số tiền giảm giá không hợp lệ.',
             'discount_amount.not_regex' => 'Số tiền giảm giá không được bắt đầu bằng 0.',
+            'pro_description.required' => 'Mô tả voucher không được để trống',
+            'pro_description.regex' => 'Mô tả không hợp lệ',
+            'pro_description.max' => 'Mô tả không được quá 255 kí tự',
         ]);
 
         if ($validator->fails()) {
@@ -189,7 +208,7 @@ class PromotionsController extends Controller
             // Cập nhật các giá trị cho voucher
             $voucher->promotion_code = $request->promotion_code;
             $voucher->discount_amount = $request->discount_amount;
-
+            $voucher->pro_description = $request->pro_description; // Thêm dòng này để cập nhật mô tả
             // Cập nhật ngày
             $voucher->start_date = $request->start_date;
             $voucher->end_date = $request->end_date;
