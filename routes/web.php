@@ -50,6 +50,8 @@ Route::get('/header', function () {
     return view('partials/header');
 });
 
+Route::get('/introduce', [HomeController::class, 'introduce'])->name('introduce');
+
 Route::get('/search_layout', function () {
     return view('partials/search_layout');
 });

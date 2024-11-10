@@ -21,7 +21,7 @@
                                 <label class="form-label">Promotion Code</label>
                                 <input class="form-control" type="text" name="promotion_code" id="promotion_code"
                                     placeholder="Promotion Code"
-                                    value="{{ old('promotion_code', $voucher->promotion_code) }}"  />
+                                    value="{{ old('promotion_code', $voucher->promotion_code) }}" />
                                 @error('promotion_code')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -30,15 +30,24 @@
                                 <label class="form-label">Discount Amount</label>
                                 <input class="form-control" type="number" name="discount_amount" id="discount_amount"
                                     placeholder="Discount Amount"
-                                    value="{{ old('discount_amount', $voucher->discount_amount) }}"  />
+                                    value="{{ old('discount_amount', $voucher->discount_amount) }}" />
                                 @error('discount_amount')
                                     <div class="text-danger">{{ $errors->first('discount_amount') }}</div>
                                 @enderror
                             </div>
+                            <div class="mb-3 col-md-12">
+                                <label class="form-label">Description</label>
+                                <textarea class="form-control" name="pro_description" id="pro_description"
+                                    placeholder="Enter voucher description">{{ old('pro_description', $voucher->pro_description) }}</textarea>
+                                @error('pro_description')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Start Date (Y-m-d)</label>
                                 <input class="form-control" type="date" name="start_date" id="start_date"
-                                    value="{{ old('start_date', $start_date) }}"  />
+                                    value="{{ old('start_date', $start_date) }}" />
                                 @error('start_date')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -46,7 +55,7 @@
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">End Date (Y-m-d)</label>
                                 <input class="form-control" type="date" name="end_date" id="end_date"
-                                    value="{{ old('end_date', $end_date) }}"  />
+                                    value="{{ old('end_date', $end_date) }}" />
                                 @error('end_date')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -99,7 +108,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                <button type="button" class="btn btn-secondary"  onclick="location.reload()">Tải lại trang</button>
+                <button type="button" class="btn btn-secondary" onclick="location.reload()">Tải lại trang</button>
             </div>
         </div>
     </div>
@@ -128,6 +137,7 @@
         // Lưu dữ liệu ban đầu của form để so sánh
         var originalPromotionCode = $('#promotion_code').val();
         var originalDiscountAmount = $('#discount_amount').val();
+        var originalProDescription = $('#pro_description').val();
         var originalStartDate = $('#start_date').val();
         var originalEndDate = $('#end_date').val();
         var updated_at = $('updated_at').val();
@@ -137,6 +147,7 @@
             // Lấy giá trị mới của form
             var promotionCode = $('#promotion_code').val().trim();
             var discountAmount = $('#discount_amount').val();
+            var proDescription = $('#pro_description').val().trim();
             var startDate = $('#start_date').val(); // Định dạng YYYY-MM-DD
             var endDate = $('#end_date').val(); // Định dạng YYYY-MM-DD
             // Xóa các lỗi trước đó
@@ -180,15 +191,23 @@
                 $('<div class="text-danger">Số tiền giảm giá không hợp lệ.</div>').insertAfter('#discount_amount');
                 return;
             }
-
+            if (proDescription === '') {
+                $('<div class="text-danger">Vui lòng nhập mô tả voucher.</div>').insertAfter('#pro_description');
+                return;
+            }
+            if (proDescription.length > 255) {
+                $('<div class="text-danger">Mô tả voucher không được vượt quá 255 ký tự.</div>').insertAfter('#pro_description');
+                return;
+            }
             // Kiểm tra nếu start_date lớn hơn end_date
             if (new Date(startDate) > new Date(endDate)) {
-            $('<div class="text-danger">Ngày bắt đầu không được lớn hơn ngày kết thúc.</div>').insertAfter('#start_date');
-            return;
-        }
+                $('<div class="text-danger">Ngày bắt đầu không được lớn hơn ngày kết thúc.</div>').insertAfter('#start_date');
+                return;
+            }
             // Kiểm tra nếu không có thay đổi
             if (promotionCode === originalPromotionCode &&
                 discountAmount === originalDiscountAmount &&
+                proDescription === originalProDescription &&
                 startDate === originalStartDate &&
                 endDate === originalEndDate) {
                 // Hiển thị modal "Không có cập nhật mới"

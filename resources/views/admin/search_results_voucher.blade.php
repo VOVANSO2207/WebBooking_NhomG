@@ -8,6 +8,8 @@
         <td>{{ $index + 1 }}</td>
         <td>{{ $voucher->promotion_code }}</td>
         <td>{{ number_format($voucher->discount_amount, 0, ',', '.') }} VND</td>
+        <td>{{ $voucher->pro_description }}</td> <!-- Thêm cột mô tả -->
+
         <td>{{ $voucher->start_date }}</td>
         <td>{{ $voucher->end_date }}</td>
     </tr>
@@ -40,9 +42,12 @@
                     let discountAmount = voucher.discount_amount;
                     let formattedAmount = Number(discountAmount).toLocaleString('vi-VN') + ' VND';
                     $('#modalDiscountAmount').text(formattedAmount);
+                    $('#modalProDescription').text(voucher.pro_description);
+
 
                     $('#modalStartDate').text(voucher.start_date);
                     $('#modalEndDate').text(voucher.end_date);
+
                     // Thiết lập đường dẫn cho nút Edit
                     const editRoute = "{{ route('voucher.edit', ['promotion_id' => ':id']) }}".replace(':id', currentVoucherId);
 

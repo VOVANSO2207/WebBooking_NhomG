@@ -28,6 +28,15 @@
                                     <div class="text-danger">{{ $errors->first('discount_amount') }}</div>
                                 @enderror
                             </div>
+                            <div class="mb-3 col-md-12">
+                                <label class="form-label">Promotion Description</label>
+                                <textarea class="form-control" name="pro_description" id="pro_description"
+                                    placeholder="Enter promotion description" rows="3"></textarea>
+                                @error('pro_description')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Start Date</label>
                                 <input class="form-control" type="date" name="start_date" id="start_date" />
@@ -45,7 +54,8 @@
                         </div>
                         <div class="mt-2" style="text-align: right">
                             <button type="reset" class="btn btn-outline-secondary" onclick="resetForm()">Reset</button>
-                            <button type="button" class="btn btn-outline-danger" onclick="window.location.href='{{ route('admin.viewvoucher') }}'">Close</button>
+                            <button type="button" class="btn btn-outline-danger"
+                                onclick="window.location.href='{{ route('admin.viewvoucher') }}'">Close</button>
                             <button type="submit" class="btn btn-outline-success me-2">Save</button>
                         </div>
                     </form>
@@ -80,6 +90,7 @@
         // Lấy giá trị của promotion_code
         var promotionCode = $('#promotion_code').val().trim();
         var discountAmount = $('#discount_amount').val();
+        var proDescription = $('#pro_description').val();
         var startDate = $('#start_date').val();
         var endDate = $('#end_date').val();
         var statusValue = $('#status option:selected').val();
@@ -136,6 +147,7 @@
         formData.append('_token', '{{ csrf_token() }}');
         formData.append('promotion_code', promotionCode);
         formData.append('discount_amount', discountAmount);
+        formData.append('pro_description', proDescription);
         formData.append('start_date', startDate);
         formData.append('end_date', endDate);
         formData.append('status', statusValue);
@@ -151,9 +163,9 @@
                 // Hiển thị modal thông báo thành công
                 const successModal = new bootstrap.Modal(document.getElementById('successModal'));
                 successModal.show();
-                setTimeout(function() {
+                setTimeout(function () {
                     window.location.href = '{{ route('admin.viewvoucher') }}';
-                }, 2000); 
+                }, 2000);
 
             },
             error: function (xhr) {
