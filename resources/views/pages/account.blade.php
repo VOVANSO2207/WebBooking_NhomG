@@ -42,7 +42,7 @@
                                 <img id="avatarPreview"
                                     src="{{ Auth::check() && Auth::user()->avatar ? asset('storage/images/' . Auth::user()->avatar) : asset('images/user-profile.png') }}"
                                     alt="avatar-user"
-                                    style="width: 200px; height: 200px; border-radius: 50%; object-fit: cover;">
+                                    style="width: 200px; height: 200px; border-radius: 50%; object-fit: cover; transition: transform 0.3s ease; border:5px solid #ccc">
 
                                 <!-- Upload Avatar Button (Icon styled) -->
                                 <input type="file" id="avatarUpload" name="avatar" accept="image/*"
@@ -76,7 +76,7 @@
                                         {{ Auth::check() ? Auth::user()->email : 'email@example.com' }}</span>
                                     <input type="email" class="form-control" id="emailUser" name="email"
                                         placeholder="email@example.com" style="display: none;">
-                                        
+
                                 </div>
                                 <div class="form-group text-left">
                                     <div class="label">
@@ -99,8 +99,13 @@
                                 </div>
                                 <button type="button" class="btn btn-primary btn-block" id="editInfoBtn"
                                     style="display: block; width: 320px; margin-top: 10px;">Chỉnh sửa thông tin</button>
-                                <button type="submit" class="btn btn-primary btn-block mt-3" id="saveInfoBtn"
+                                <div class="action-button d-flex gap-3">
+                                    <button type="submit" class="btn btn-primary btn-block mt-3" id="saveInfoBtn"
                                     style="display: none;">Lưu Thông Tin</button>
+                                <button type="button" class="btn btn-secondary btn-block mt-3" id="cancelInfoBtn"
+                                    style="display: none;">Hủy</button>
+                                </div>
+                               
                         </form>
                         <form action="{{ route('change.password') }}" method="post">
                             @csrf
@@ -128,9 +133,12 @@
                             </div>
                             <button type="button" class="btn btn-primary btn-block mt-3" id="editPasswordBtn">Đổi
                                 mật khẩu</button>
-                            <button type="submit" class="btn btn-primary btn-block mt-3" id="savePasswordBtn"
-                                style="display: none;">Lưu Mật khẩu</button>
-
+                                <div class="action-password d-flex gap-3">
+                                    <button type="submit" class="btn btn-primary btn-block mt-3" id="savePasswordBtn"
+                                    style="display: none;">Lưu Mật khẩu</button>
+                                 <button type="button" class="btn btn-secondary btn-block mt-3" id="cancelNewPass"
+                                    style="display: none;">Hủy</button>
+                                </div>
                         </form>
                     </div>
 
@@ -461,28 +469,30 @@
                 </div>
             </div>
         @endif
-@if ($errors->any())
-    <div class="toast-container position-fixed bottom-0 end-0 p-3">
-        @foreach ($errors->all() as $error)
-            <div class="toast align-items-center text-bg-danger border-0 mb-2" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="d-flex">
-                    <div class="toast-body">
-                        {{ $error }}
+        @if ($errors->any())
+            <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                @foreach ($errors->all() as $error)
+                    <div class="toast align-items-center text-bg-danger border-0 mb-2" role="alert"
+                        aria-live="assertive" aria-atomic="true">
+                        <div class="d-flex">
+                            <div class="toast-body">
+                                {{ $error }}
+                            </div>
+                            <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast"
+                                aria-label="Close"></button>
+                        </div>
                     </div>
-                    <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-                </div>
+                @endforeach
             </div>
-        @endforeach
-    </div>
-@endif
+        @endif
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var toastElements = document.querySelectorAll('.toast');
-        toastElements.forEach(function (toastElement) {
-            var toastInstance = new bootstrap.Toast(toastElement);
-            toastInstance.show();
-        });
+            toastElements.forEach(function(toastElement) {
+                var toastInstance = new bootstrap.Toast(toastElement);
+                toastInstance.show();
+            });
         });
         // Chuyển Tab khi click từ home 
         document.addEventListener("DOMContentLoaded", function() {
@@ -531,12 +541,49 @@
             }
         ];
         
+      
 
         const editInfoBtn = document.getElementById('editInfoBtn');
         const saveInfoBtn = document.getElementById('saveInfoBtn');
         const editPasswordBtn = document.getElementById('editPasswordBtn');
         const savePasswordBtn = document.getElementById('savePasswordBtn');
-            
+
+
+
+        const cancelNewPass = document.getElementById('cancelNewPass');
+        cancelNewPass.onclick = function() {
+            // Revert fields to their original state
+            passwordFields.forEach(field => {
+                document.getElementById(field.display).style.display = 'block';
+                const input = document.getElementById(field.input);
+                input.style.display = 'none';
+            });
+
+            editPasswordBtn.style.display = 'block';
+            savePasswordBtn.style.display = 'none';
+            cancelNewPass.style.display = 'none'; // Hide cancel button
+            document.querySelector('label[for="confirmPasswordInput"]').style.display = 'none';
+            document.querySelector('label[for="newPassword"]').style.display = 'none';
+            // Mark the info editing flag as false
+            isEditingPassword = false;
+        };
+        const cancelInfoBtn = document.getElementById('cancelInfoBtn');
+        cancelInfoBtn.onclick = function() {
+            // Revert fields to their original state
+            infoFields.forEach(field => {
+                document.getElementById(field.display).style.display = 'block';
+                const input = document.getElementById(field.input);
+                input.style.display = 'none';
+                document.querySelector('.btn-upload-avatar').style.bottom = '42%';
+            });
+
+            editInfoBtn.style.display = 'block';
+            saveInfoBtn.style.display = 'none';
+            cancelInfoBtn.style.display = 'none'; // Hide cancel button
+
+            // Mark the info editing flag as false
+            isEditingInfo = false;
+        };
         // Track editing state
         let isEditingInfo = false;
         let isEditingPassword = false;
@@ -572,6 +619,7 @@
 
             editInfoBtn.style.display = 'none';
             saveInfoBtn.style.display = 'block';
+            cancelInfoBtn.style.display = 'block';
         };
 
         // Save edited user information
@@ -586,7 +634,7 @@
 
             editInfoBtn.style.display = 'block';
             saveInfoBtn.style.display = 'none';
-
+            cancelNewPass.style.display= 'none';
             // Mark the info editing flag as false
             isEditingInfo = false;
         };
@@ -620,6 +668,7 @@
             document.querySelector('label[for="newPassword"]').style.display = 'block';
             editPasswordBtn.style.display = 'none';
             savePasswordBtn.style.display = 'block';
+            cancelNewPass.style.display = 'block';
         };
 
         // Save new password
@@ -642,7 +691,7 @@
             document.querySelector('label[for="newPassword"]').style.display = 'none';
             editPasswordBtn.style.display = 'block';
             savePasswordBtn.style.display = 'none';
-
+            cancelNewPass.style.display= 'none';
             // Mark the password editing flag as false
             isEditingPassword = false;
         };

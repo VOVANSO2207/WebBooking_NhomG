@@ -456,6 +456,16 @@ class HotelController extends Controller
         $decodedId = IdEncoder::decodeId($encodedId);
         return response()->json(['decoded_id' => $decodedId]);
     }
-   
+       // Chi tiết đặt phòng 
+       public function getInfoPayment($hotel_id, $room_id)
+       {
+           $hotel = Hotel::with(['images', 'city'])->findOrFail($hotel_id);
+           $room = Rooms::with(['room_images', 'amenities'])->where('hotel_id', $hotel_id)->findOrFail($room_id);
+        //    dd($hotel);
+        $firstImage = $hotel->images->first();
+        // dd($firstImage);
+           return view('pages.pay', compact('hotel', 'room',));
+       }
+       
 }
 // 

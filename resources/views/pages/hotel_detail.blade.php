@@ -19,7 +19,7 @@
                 <div class="col-md-6 large-img">
                     @foreach ($hotel->images as $index => $image)
                         @if ($index == 1)
-                            <img src="{{ asset('images/' . $image->image_url) }}" alt="{{ $image->image_url }}" />
+                            <img src="{{ asset('storage/images/' . $image->image_url) }}" alt="{{ $image->image_url }}" />
                         @endif
                     @endforeach
                 </div>
@@ -123,7 +123,7 @@
                                 referrerpolicy="no-referrer-when-downgrade"></iframe>
                         </div>
                         <div class="detail-button">
-                            <a href="#" class="detail-btn-book-room">Đặt Phòng Ngay</a>
+                            <a href="#" class="detail-btn-book-room" id="bookNowBtn">Đặt Phòng Ngay</a>
                         </div>
                     </div>
                 </div>
@@ -154,7 +154,7 @@
                 </div>
             </div>
         </div>
-        <div class="group-detail-book-room">
+        <div class="group-detail-book-room" id="bookingSection">
             <h2 class="detail-title-book-room">
                 Chọn phòng
             </h2>
@@ -169,7 +169,7 @@
                                     navigation="true" space-between="30" loop="true">
                                     @forelse($room->room_images as $image)
                                         <swiper-slide>
-                                            <img src="{{ asset('images/' . $image->image_url) }}" alt="Room Image" />
+                                            <img src="{{ asset('storage/images/' . $image->image_url) }}" alt="Room Image" />
                                         </swiper-slide>
                                     @empty
                                         <p>Không có hình ảnh cho phòng này</p>
@@ -223,7 +223,8 @@
                                             @endif
                                         </div>
                                         <div class="card-room-btn-book">
-                                            <a href="#" class="btn-book-now">đặt ngay</a>
+                                            <a href="{{ route('pages.getInfoPay', ['hotel_id' => $hotel->hotel_id, 'room_id' => $room->room_id]) }}" class="btn-book-now">Đặt ngay</a>
+
                                         </div>
                                     </div>
                                 </div>
@@ -479,6 +480,12 @@
             loadMoreBtn.textContent = "Xem thêm"; // Reset button text
         }
     }
+    document.getElementById('bookNowBtn').addEventListener('click', function (e) {
+    e.preventDefault(); 
+    document.getElementById('bookingSection').scrollIntoView({
+        behavior: 'smooth' // Cuộn mượt mà
+    });
+});
 
 </script>
 

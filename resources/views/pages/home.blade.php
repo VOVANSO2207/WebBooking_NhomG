@@ -102,14 +102,10 @@
                                 </div>
 
                                 <div class="col-md-2 text-center" style="width: 100%;height:100%;">
-                                    @if (Auth::check())
-                                        <img src="{{ Auth::user()->avatar ? asset('storage/images/' . Auth::user()->avatar) : asset('storage/images/user-profile.png') }}"
-                                            alt="Avatar" class="img-fluid rounded-circle"
-                                            style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;">
-                                    @else
-                                        <img src="{{ asset('images/user-profile.png') }}" alt="Default User Profile"
-                                            style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;">
-                                    @endif
+                                    <img src="{{ Auth::check() && Auth::user()->avatar ? asset('storage/images/' . Auth::user()->avatar) : asset('images/user-profile.png') }}"
+                                    alt="Avatar" class="img-fluid rounded-circle"
+                                    style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;">
+                               
                                 </div>
 
 
@@ -240,7 +236,7 @@
                             <div class="card the-top-khach-san">
                                 @foreach ($hotel->images as $index => $image)
                                     @if ($index === 0)
-                                        <img class="image-hotel-1" src="{{ asset('images/' . $image->image_url) }}"
+                                        <img class="image-hotel-1" src="{{ asset('storage/images/' . $image->image_url) }}"
                                             alt="{{ $image->image_url }}" />
                                     @endif
                                 @endforeach
@@ -446,7 +442,7 @@
             const dropdown = document.getElementById('notificationDropdown');
             dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
         });
-
+        
         // Optional: Close the dropdown if clicking outside of it
         document.addEventListener('click', function(event) {
             const bell = document.getElementById('notificationBell');

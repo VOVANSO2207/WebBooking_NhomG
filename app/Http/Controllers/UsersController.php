@@ -26,7 +26,7 @@ class UsersController extends Controller
         $roles = Roles::all();
         // Lấy thông tin người dùng hiện tại (nếu cần)
         $user = auth()->user(); // Lấy người dùng đã xác thực
-            
+
         return view('admin.user_add', compact('roles', 'user')); // Truyền cả $roles và $user vào view
     }
 
@@ -79,7 +79,7 @@ class UsersController extends Controller
             'status.required' => 'Trạng thái là bắt buộc',
             'avatar.image' => 'Ảnh phải là định dạng JPEG, PNG, hoặc JPG.',
             'avatar.max' => 'Kích thước ảnh không được vượt quá 2MB.',
-        ]);        
+        ]);
 
         $user = new User();
         $user->username = $request->username;
@@ -174,7 +174,7 @@ class UsersController extends Controller
             'avatar.image' => 'Ảnh phải là định dạng JPEG, PNG, hoặc JPG.',
             'avatar.max' => 'Kích thước ảnh không được vượt quá 2MB.',
         ]);
-        
+
 
         $user = User::find($user_id);
         if (!$user) {
@@ -189,7 +189,7 @@ class UsersController extends Controller
         if ($request->filled('password')) {
             $user->password = bcrypt($request->password);
         }
-        
+
         $user->phone_number = $request->phone_number;
         $user->role_id = $request->role_id;
         $user->status = $request->status;
@@ -223,29 +223,45 @@ class UsersController extends Controller
     {
         try {
             $rules = [
-                'username' => 'required|string|min:5|max:100|',
-                'email' => 'required|email|max:255|no_spaces_in_email|valid_domain|valid_top_level_domain', // Quy tắc email sẽ tự động kiểm tra định dạng email
-                'phone_number' => 'required|string|max:15',
+                'username' => [
+                    'required',
+                    'string',
+                    'min:5',
+                    'max:100',
+                    'regex:/^[a-zA-ZÀ-ÿ\s]+$/', // Kiểm tra không có ký tự đặc biệt (cho phép chữ cái và khoảng trắng)
+                    'regex:/^(?!.*\s{2,}).*$/',
+                ],
+                'email' => 'required|email|max:255|no_spaces_in_email|valid_domain|valid_top_level_domain',
+                'phone_number' => [
+                    'required',
+                    'string',
+                    'max:15',
+                    'regex:/^(0[1-9]{1}[0-9]{8})$/', // Kiểm tra định dạng số điện thoại (bắt đầu bằng 0 và có 10 chữ số)
+                ],
                 'avatar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             ];
-            
+
             $messages = [
                 'username.required' => 'Vui lòng nhập họ và tên.',
-                'username.min' => 'Họ và tên phải có ít nhất 5 ký tự.', 
+                'username.min' => 'Họ và tên phải có ít nhất 5 ký tự.',
                 'username.max' => 'Họ và tên không được dài quá 100 ký tự.',
-                'username.regex' => 'Họ và tên không được chứa ký tự đặc biệt.',
+             
+                'username.regex' => 'Họ và tên không được chứa ký tự đặc biệt và phải đúng định dạng.',
                 'username.not_regex' => 'Vui lòng nhập họ và tên hợp lệ.',
                 'email.required' => 'Vui lòng nhập địa chỉ email.',
                 'email.email' => 'Địa chỉ email không hợp lệ.',
-                'email.valid_domain' => 'Tên miền không hợp lệ hoặc không tồn tại.', 
+                'email.valid_domain' => 'Tên miền không hợp lệ hoặc không tồn tại.',
                 'email.no_spaces_in_email' => 'Địa chỉ email không được chứa khoảng trắng.', // Thông báo lỗi cho trường hợp có khoảng trắng
                 'email.max' => 'Địa chỉ email không được dài quá 255 ký tự.',
-                'email.valid_top_level_domain' => 'Vui lòng cung cấp phần mở rộng tên miền (VD: .com, .net).',  
+                'email.valid_top_level_domain' => 'Vui lòng cung cấp phần mở rộng tên miền (VD: .com, .net).',
                 'phone_number.required' => 'Vui lòng nhập số điện thoại.',
                 // 'avatar.image' => 'Tệp phải là một ảnh hợp lệ.',
                 'avatar.mimes' => 'Ảnh chỉ chấp nhận định dạng: jpeg, png, jpg.',
+                'phone_number.required' => 'Vui lòng nhập số điện thoại.', 
+                'phone_number.regex' => 'Số điện thoại không hợp lệ. Vui lòng nhập số điện thoại di động gồm 10 chữ số hoặc số điện thoại cố định theo định dạng đúng. Đảm bảo rằng số điện thoại bao gồm mã mạng và không chứa ký tự đặc biệt.',
+                'avatar.max' => 'Ảnh tải lên không được vượt quá 2MB.',
             ];
-            
+
             // dd($request->all());
             // dd($rules);
             $validator = Validator::make($request->all(), $rules, $messages);
@@ -264,24 +280,38 @@ class UsersController extends Controller
             return redirect()->back()->with('error', 'An error occurred: ' . $e->getMessage());
         }
     }
-    
+
     public function changePassword(Request $request)
     {
         // Validate input
         $request->validate([
-            'newPassword' => 'required|string|min:8|confirmed', // 'confirmed' yêu cầu phải có trường 'newPassword_confirmation'
+            'newPassword' => [
+                'required',
+                'string',
+                'min:8', // Mật khẩu phải có ít nhất 8 ký tự
+                'max:32', // Mật khẩu không được dài quá 32 ký tự
+                'regex:/[a-zA-Z]/', // Mật khẩu phải chứa ít nhất một chữ cái
+                'regex:/[0-9]/', // Mật khẩu phải chứa ít nhất một chữ số
+                'regex:/[!@#$%^&*(),.?":{}|<>]/', // Mật khẩu phải chứa ít nhất một ký tự đặc biệt
+                'confirmed', // Yêu cầu xác nhận mật khẩu
+            ],
+        ], [
+            'newPassword.required' => 'Vui lòng nhập mật khẩu.',
+            'newPassword.min' => 'Mật khẩu phải có ít nhất 8 ký tự.',
+            'newPassword.max' => 'Mật khẩu không được dài quá 32 ký tự.',
+            'newPassword.regex' => 'Mật khẩu phải chứa ít nhất một chữ cái, một chữ số và một ký tự đặc biệt.',
+            'newPassword.confirmed' => 'Mật khẩu xác nhận không khớp.',
         ]);
-    
+        
+        
         // Lấy thông tin người dùng hiện tại
         $user = auth()->user();
         // Cập nhật mật khẩu mới
         $user->update([
-            'password' => $request->newPassword, 
+            'password' => $request->newPassword,
         ]);
-    
+
         // Trả về thông báo thành công
         return redirect()->route('pages.account')->with('success', 'Mật khẩu đã được thay đổi thành công.');
     }
-    
-
 }

@@ -216,3 +216,4 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/change-password', [UsersController::class, 'changePassword'])->name('change.password');
 
 });
+Route::get('/payment/{hotel_id}/{room_id}', [HotelController::class, 'getInfoPayment'])->name('pages.getInfoPay');

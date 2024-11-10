@@ -153,6 +153,10 @@
                 infoToast.show();
             }
         });
+        function setDeleteAction(actionUrl) {
+            document.getElementById('deleteForm').action = actionUrl;
+        }
+
         function searchRoomType() {
             const query = document.getElementById('search_roomType').value;
 

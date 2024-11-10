@@ -25,11 +25,11 @@
                     <div class="hotel-card border p-4">
                         <div class="row hotel-row">
                             <div class="col-md-3 hotel-image">
-                                <img src="https://kda.vn/uploads/extra/241/z3718233146736_e5b5625a79f9c061536688f101f3f2af.jpg"
-                                    alt="">
+                                {{-- Lấy hình ảnh đầu tiên của khách sạn --}}
+                                <img src="{{ asset('storage/images/' . $hotel->images->first()->image_url) }}" alt="Hình ảnh khách sạn">
                             </div>
                             <div class="col-md-9 hotel-details">
-                                <h2 class="hotel-name m-0">Lasol Boutique Hotel</h2>
+                                <h2 class="hotel-name m-0">{{$hotel->hotel_name}}</h2>
                                 <div class="hotel-rating">
                                     <span>★</span> <span>★</span> <span>★</span> <span>★</span> <span>★</span>
                                 </div>
