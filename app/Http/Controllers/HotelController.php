@@ -10,9 +10,10 @@ use App\Models\FavoriteHotel;
 use App\Models\HotelImages;
 use App\Models\HotelAmenities;
 use App\Models\Reviews;
-
+use App\Models\Promotions;
 use App\Models\HotelAmenityHotel;
 use App\Models\Rooms;
+use Carbon\Carbon;
 
 class HotelController extends Controller
 {
@@ -40,16 +41,31 @@ class HotelController extends Controller
 
             // Tính phần trăm giảm giá trung bình
             $hotel->average_discount_percent = $hotel->rooms->avg('discount_percent');
-            
+
             // Tính giá sale dựa trên giá gốc và phần trăm giảm giá trung bình
             $hotel->average_price_sale = $hotel->average_price * (1 - $hotel->average_discount_percent / 100);
+        }
+        $vouchers = Promotions::where('end_date', '>=', now())->take(5)->get();
+        $currentDate = Carbon::now();
+        foreach ($vouchers as $voucher) {
+            $voucher->start_date = Carbon::createFromFormat('d/m/Y', $voucher->start_date);
+            $voucher->end_date = Carbon::createFromFormat('d/m/Y', $voucher->end_date);
+
+            if ($voucher->end_date instanceof Carbon) {
+                $daysLeft = $voucher->end_date->diffInDays($currentDate);
+
+                if ($daysLeft <= 1) {
+                    $voucher->borderClass = 'red-border';
+                } else {
+                    $voucher->borderClass = 'blue-border';
+                }
+            }
         }
 
         // dd($hotels);
         // Truyền dữ liệu qua view
-        return view('pages.home', compact('hotels'));
+        return view('pages.home', compact('hotels', 'vouchers'));
     }
-
     // Filter
     public function filterHotels(Request $request)
     {
@@ -75,7 +91,7 @@ class HotelController extends Controller
     // Chi tiết khách sạn
     public function show($hotel_id)
     {
-        $hotel = Hotel::with(['rooms.room_images'], 'images','city')->findOrFail($hotel_id);
+        $hotel = Hotel::with(['rooms.room_images'], 'images', 'city')->findOrFail($hotel_id);
         $rooms = $hotel->rooms()->paginate(4);
         return view('pages.hotel_detail', compact('hotel', 'rooms'));
     }
@@ -456,16 +472,16 @@ class HotelController extends Controller
         $decodedId = IdEncoder::decodeId($encodedId);
         return response()->json(['decoded_id' => $decodedId]);
     }
-       // Chi tiết đặt phòng 
-       public function getInfoPayment($hotel_id, $room_id)
-       {
-           $hotel = Hotel::with(['images', 'city'])->findOrFail($hotel_id);
-           $room = Rooms::with(['room_images', 'amenities'])->where('hotel_id', $hotel_id)->findOrFail($room_id);
+    // Chi tiết đặt phòng 
+    public function getInfoPayment($hotel_id, $room_id)
+    {
+        $hotel = Hotel::with(['images', 'city'])->findOrFail($hotel_id);
+        $room = Rooms::with(['room_images', 'amenities'])->where('hotel_id', $hotel_id)->findOrFail($room_id);
         //    dd($hotel);
         $firstImage = $hotel->images->first();
         // dd($firstImage);
-           return view('pages.pay', compact('hotel', 'room',));
-       }
-       
+        return view('pages.pay', compact('hotel', 'room', ));
+    }
+
 }
 // 

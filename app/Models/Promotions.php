@@ -14,6 +14,7 @@ class Promotions extends Model
         'discount_amount',
         'start_date',
         'end_date',
+        'pro_description',
 
 
     ];
@@ -77,6 +78,7 @@ class Promotions extends Model
         return self::create([
             'promotion_code' => $data['promotion_code'],
             'discount_amount' => $data['discount_amount'],
+            'pro_description' => $data['pro_description'],
             'start_date' => Carbon::parse($data['start_date'])->format('Y-m-d'),
             'end_date' => Carbon::parse($data['end_date'])->format('Y-m-d'),
         ]);
