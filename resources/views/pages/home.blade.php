@@ -312,7 +312,7 @@
                 </div>
             </div>
             <div class="banner-actions">
-                <a href="{{route('pages.detail_voucher')}}" class="view-all-btn">Xem tất cả ưu đãi</a>
+                <a href="{{route('viewVoucherUser')}}" class="view-all-btn">Xem tất cả ưu đãi</a>
             </div>
             <div class="new-badge">Mới</div>
         </div>

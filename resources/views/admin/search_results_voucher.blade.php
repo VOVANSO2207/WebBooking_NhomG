@@ -6,9 +6,10 @@
     <tr class="voucher-detail1" data-id="{{ IdEncoder::encodeId($voucher->promotion_id) }}"
         data-updated-at="{{ $voucher->updated_at }}">
         <td>{{ $index + 1 }}</td>
+        <td>{{ $voucher->pro_title }}</td>
         <td>{{ $voucher->promotion_code }}</td>
         <td>{{ number_format($voucher->discount_amount, 0, ',', '.') }} VND</td>
-        <td>{{ $voucher->pro_description }}</td> <!-- Thêm cột mô tả -->
+        <td>{{ \Str::limit($voucher->pro_description, 10) }}</td>
 
         <td>{{ $voucher->start_date }}</td>
         <td>{{ $voucher->end_date }}</td>
@@ -38,6 +39,7 @@
                 method: 'GET',
                 dataType: 'json',
                 success: function (voucher) {
+                    $('#modalPromotionTitle').text(voucher.pro_title);
                     $('#modalPromotionCode').text(voucher.promotion_code);
                     let discountAmount = voucher.discount_amount;
                     let formattedAmount = Number(discountAmount).toLocaleString('vi-VN') + ' VND';

@@ -467,31 +467,33 @@
 
     <!-- Existing Vouchers Section -->
     <div class="vouchers-container">
+
         <h2 class="section-title">Khám Phá Ưu Đãi Hấp Dẫn Cho Mọi Kỳ Nghỉ Tại Khách Sạn</h2>
         
         <div class="voucher-list" id="voucherList">
+        @foreach($vouchers as $key => $voucher)
             <!-- Voucher Card 1 -->
             <div class="voucher-card">
                 <div class="voucher-header">
-                    <p class="voucher-amount">Giảm 200K</p>
+                    <p class="voucher-amount">Giảm {{ number_format($voucher->discount_amount, 0, ',', '.') }} VND</p>
                     <span class="voucher-type">Áp dụng cho đơn từ 1.000.000đ</span>
                     <span class="voucher-status status-active">Đang hoạt động</span>
                 </div>
                 <div class="voucher-body">
-                    <h3 class="voucher-title">Ưu đãi Đặt Phòng Khách Sạn</h3>
+                    <h3 class="voucher-title">{{$voucher -> pro_title}}</h3>
                     <p class="voucher-description">
-                        Giảm ngay 200.000đ cho đơn đặt phòng từ 1.000.000đ tại các khách sạn và resort.
+                    {{ $voucher -> pro_description}}
                     </p>
                     <div class="voucher-meta">
-                        <span class="voucher-expiry">Hết hạn: 31/12/2024</span>
-                        <span class="voucher-code" onclick="copyVoucherCode(this)">HOTEL200K</span>
+                        <span class="voucher-expiry">Hết hạn: {{$voucher -> end_date}}</span>
+                        <span class="voucher-code" onclick="copyVoucherCode(this)">{{ $voucher -> promotion_code}}</span>
                     </div>
                 </div>
                 <div class="voucher-action">
                     <button class="use-voucher-btn">Sử dụng ngay</button>
                 </div>
             </div>
-
+            @endforeach
             <!-- Voucher Card 2 -->
             <div class="voucher-card">
                 <div class="voucher-header" style="background: linear-gradient(45deg, #4834d4, #686de0);">

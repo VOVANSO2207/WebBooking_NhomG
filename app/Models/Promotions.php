@@ -15,6 +15,7 @@ class Promotions extends Model
         'start_date',
         'end_date',
         'pro_description',
+        'pro_title',
 
 
     ];
@@ -76,6 +77,7 @@ class Promotions extends Model
     public static function createVoucher($data)
     {
         return self::create([
+            'pro_title' => $data['pro_title'],
             'promotion_code' => $data['promotion_code'],
             'discount_amount' => $data['discount_amount'],
             'pro_description' => $data['pro_description'],
