@@ -127,7 +127,7 @@ class HotelController extends Controller
         $hotels = $query->get();
         // Lấy danh sách tiện nghi
         $amenities = HotelAmenities::getAllAmenities();
-
+        
         // Trả dữ liệu về trang search_result
         return view('pages.search_result', compact('hotels', 'amenities', 'location', 'daterange', 'rooms', 'adults', 'children'));
     }
