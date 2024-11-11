@@ -368,23 +368,6 @@
     </div>
 </section>
 
-<<<<<<< HEAD
-<section class="our-offers pb-5">
-    <div class="container">
-        <div class="title mb-2">Ưu đãi của chúng tôi</div>
-        <div class="carousel-container">
-            <div class="carousel-wrapper">
-                @foreach ($hotels as $hotel)
-                    <div class="card">
-                        <a href="#" class="group-offers">
-                            <div class="shape-in">
-                                @if ($hotel->images->isNotEmpty())
-                                    <img class="image-hotel-2" src="{{ asset('images/' . $hotel->images->first()->image_url) }}"
-                                        alt="">
-                                @else
-                                    <img class="image-hotel-2" src="{{ asset('/images/defaullt-image.png') }}" alt="">
-                                @endif
-=======
     <section class="our-offers pb-5">
         <div class="container">
             <div class="title mb-2">Ưu đãi của chúng tôi</div>
@@ -420,7 +403,6 @@
                                         <img class="image-hotel-2" src="{{ asset('/images/defaullt-image.png') }}"
                                             alt="">
                                     @endif
->>>>>>> Fix-Code-0.4-MinhTam
 
                                 <div class="group-info-hotel">
                                     <p class="info-hotel-name m-0">{{ $hotel->hotel_name }}</p>
@@ -668,9 +650,5 @@ function updateHotelList(hotels) {
 
 {{-- Link File JS --}}
 @section('js')
-<<<<<<< HEAD
-<script src="{{ asset('js/home.js') }}"></script>
-=======
     <script src="{{ asset('js/home.js') }}"></script>
->>>>>>> Fix-Code-0.4-MinhTam
 @endsection
