@@ -219,3 +219,5 @@ Route::middleware(['auth'])->group(function () {
 
 });
 Route::get('/payment/{hotel_id}/{room_id}', [HotelController::class, 'getInfoPayment'])->name('pages.getInfoPay');
+Route::get('/detail_voucher', [HomeController::class, 'detail_voucher'])->name('pages.detail_voucher');
+

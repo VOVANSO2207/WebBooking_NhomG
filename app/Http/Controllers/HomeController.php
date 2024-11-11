@@ -14,4 +14,7 @@ class HomeController extends Controller
     public function introduce(){
         return view('introduce');
     }
+    public function detail_voucher(){
+        return view('pages.detail_voucher');
+    }
 }

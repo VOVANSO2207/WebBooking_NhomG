@@ -280,24 +280,43 @@
 </section>
 <!-- VOUCHER -->
 <section>
-<div class="voucher-container">
-        @foreach($vouchers as $voucher)
-            <div class="voucher {{ $voucher->border_class }}">
-                <h3 class="{{ $voucher->border_class === 'red-border' ? 'red' : 'blue' }}">
-                    📑 {{ $voucher->promotion_code }}
-                </h3>
-                <div class="voucher-code">
-                    <span>{{ $voucher->promotion_code }}</span>
-                    <button onclick="copyCode('{{ $voucher->promotion_code }}')">Copy</button>
+    <div class="voucher-banner-container">
+        <div class="voucher-banner">
+            <div class="banner-header">
+                <div class="banner-title">
+                    <span class="title-emoji">✨</span> Ưu đãi đặc biệt tháng 11
                 </div>
-                <div class="voucher-details">
-                    {{ $voucher->pro_description }}
-                </div>
-                <a href="#" class="terms-link">Điều khoản & Điều kiện</a>
+                <div class="banner-subtitle">Khám phá ngay ưu đãi hấp dẫn</div>
             </div>
-        @endforeach
+            <div class="banner-content">
+                <div class="voucher-item">
+                    <div class="voucher-icon">💎</div>
+                    <div class="voucher-details">
+                        <h4>Giảm 200K</h4>
+                        <p>Đơn từ 1.000.000đ</p>
+                    </div>
+                </div>
+                <div class="voucher-item">
+                    <div class="voucher-icon">🌟</div>
+                    <div class="voucher-details">
+                        <h4>Giảm 15%</h4>
+                        <p>Tối đa 500K</p>
+                    </div>
+                </div>
+                <div class="voucher-item">
+                    <div class="voucher-icon">👑</div>
+                    <div class="voucher-details">
+                        <h4>Giảm 50%</h4>
+                        <p>Lần đặt đầu tiên</p>
+                    </div>
+                </div>
+            </div>
+            <div class="banner-actions">
+                <a href="{{route('pages.detail_voucher')}}" class="view-all-btn">Xem tất cả ưu đãi</a>
+            </div>
+            <div class="new-badge">Mới</div>
+        </div>
     </div>
-    <div class="footer-note">👇Tìm vé đặt ngay, sạc đầy năng lượng!👇</div>
 
 </section>
 <section class="popular-destination pb-5">
@@ -405,8 +424,6 @@
         </div>
     </div>
 </section>
-<!-- Back to Top Button -->
-<button id="backToTopBtn" class="back-to-top" title="Back to Top">↑</button>
 
 <script>
     // Carousel functionality
@@ -450,20 +467,7 @@
         updateCarousel(); // Initial call
     });
 
-    // Xử Lý Nút Back to top 
-    const backToTopBtn = document.getElementById("backToTopBtn");
-    if (backToTopBtn) {
-        window.addEventListener("scroll", () => {
-            backToTopBtn.classList.toggle("visible", window.scrollY > 300);
-        });
-
-        backToTopBtn.addEventListener("click", () => {
-            window.scrollTo({
-                top: 0,
-                behavior: "smooth"
-            });
-        });
-    }
+  
     document.getElementById('notificationBell').addEventListener('click', function () {
         const dropdown = document.getElementById('notificationDropdown');
         dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
@@ -514,6 +518,20 @@
     function copyCode(code) {
         navigator.clipboard.writeText(code);
     }
+
+        //  Jiệu ứng lấp lánh
+        function createSparkles() {
+            const header = document.querySelector('.banner-header');
+            for (let i = 0; i < 5; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.top = Math.random() * 100 + '%';
+                sparkle.style.animation = `sparkle ${1 + Math.random()}s infinite ${Math.random()}s`;
+                header.appendChild(sparkle);
+            }
+        }
+        createSparkles();
 </script>
 @endsection
 
