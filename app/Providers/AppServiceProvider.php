@@ -42,6 +42,9 @@ class AppServiceProvider extends ServiceProvider
         $get_hotels = Hotel::orderBy('rating', 'desc')->get();
         View::share('get_hotels_desc', $get_hotels);
 
+        $get_hotels = Hotel::orderBy('rating', 'desc')->get();
+        View::share('get_hotels_desc', $get_hotels);
+
         $hotel_amenities_ser = HotelAmenities::all();
         View::share('hotel_amenities_ser', $hotel_amenities_ser);
 
