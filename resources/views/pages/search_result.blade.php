@@ -140,7 +140,9 @@
                     @else
                         @foreach ($hotels as $hotel)
                             <div class="hotel-card">
-                                <div class="sale-badge">SALE</div>
+                                @if ($hotel->average_discount_percent > 0)
+                                    <div class="sale-badge">SALE</div>
+                                @endif
                                 <div class="hotel-image">
                                     <swiper-container class="mySwiper" pagination="true" pagination-clickable="true"
                                         navigation="true" space-between="30" loop="true" style="height: auto">
@@ -163,15 +165,17 @@
                                             {{ $hotel->hotel_name }}
                                         </h3>
                                         <div class="price-info">
-                                            <span class="old-price">
-                                                {{ number_format($hotel->average_price, 0, ',', '.') }}
-                                                VNĐ</span>
-                                            <span class="discount">
-                                                -{{ number_format($hotel->average_discount_percent) }}%
-                                            </span>
+                                            @if ($hotel->average_discount_percent > 0 && $hotel->average_price > 0)
+                                                <span class="old-price">
+                                                    {{ number_format($hotel->average_price, 0, ',', '.') }}
+                                                    VNĐ</span>
+                                                <span class="discount">
+                                                    -{{ $hotel->average_discount_percent }}%
+                                                </span>
+                                            @endif
                                         </div>
                                         <span class="new-price">
-                                            {{ number_format($hotel->average_price, 0, ',', '.') }} VNĐ
+                                            {{ number_format($hotel->average_price_sale, 0, ',', '.') }} VNĐ
                                             <span>/ Khách</span>
                                         </span>
                                         <div class="rating">
@@ -437,42 +441,55 @@
                             </swiper-container>`;
                             }
 
+                            // Không hiển thị được giá
+                            const oldPrice = hotel.average_price ?? 0;
+                            const newPrice = hotel.average_price_sale ?? 0;
+                            const discount = hotel.average_discount_percent ?? 0;
+
+                            // Format the prices using number_format equivalent
+                            const oldPriceFormatted = new Intl.NumberFormat('vi-VN').format(oldPrice);
+                            const newPriceFormatted = new Intl.NumberFormat('vi-VN').format(newPrice);
+                            const discountFormatted = discount;
+
                             // Add hotel card HTML
                             hotelsContainer.innerHTML += `
-                        <div class="hotel-card">
-                            <div class="sale-badge">SALE</div>
-                            <div class="hotel-image">
-                                ${imagesHtml}
-                            </div>
-                            <div class="hotel-info row">
-                                <div class="col-md-9">
-                                    <p class="reviews">Có ${hotel.rating} lượt đánh giá</p>
-                                    <h4 class="location_hotel">Thành Phố Hồ Chí Minh</h4>
-                                    <h3 class="name_hotel">${hotel.hotel_name}</h3>
-                                    <div class="price-info">
-                                        <span class="old-price">${hotel.old_price} đ</span>
-                                        <span class="discount">${hotel.discount}%</span>
+                                <div class="hotel-card">
+                                    <div class="sale-badge">SALE</div>
+                                    <div class="hotel-image">
+                                        ${imagesHtml}
                                     </div>
-                                    <span class="new-price">${hotel.new_price} đ</span>
-                                    <div class="rating">
-                                        ${'★'.repeat(hotel.rating)}${'☆'.repeat(5 - hotel.rating)}
+                                    <div class="hotel-info row">
+                                        <div class="col-md-9">
+                                            <p class="reviews">Có ${hotel.rating} lượt đánh giá</p>
+                                            <h4 class="location_hotel">
+                                            <i class="fas fa-map-marker-alt icon-location" style="color: #3B79C9;"></i>
+                                            ${hotel.city}
+                                            </h4>
+                                            <h3 class="name_hotel"><i class="fa-solid fa-hotel icon-hotel" style="color: #3B79C9;"></i>${hotel.hotel_name}</h3>
+                                            <div class="price-info">
+                                            <span class="old-price">${oldPriceFormatted} đ</span>
+                                            <span class="discount">-${discountFormatted}%</span>
+                                            </div>
+                                            <span class="new-price">${newPriceFormatted} đ</span>
+                                            <div class="rating">
+                                            ${'★'.repeat(hotel.rating)}${'☆'.repeat(5 - hotel.rating)}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 status-button">
+                                            <div class="status">
+                                                <span class="status-available">ĐƠN</span>
+                                                <span class="status-soldout">ĐÔI</span>
+                                            </div>
+                                            <button class="book-now">Đặt Ngay</button>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-3 status-button">
-                                    <div class="status">
-                                        <span class="status-available">ĐƠN</span>
-                                        <span class="status-soldout">ĐÔI</span>
-                                    </div>
-                                    <button class="book-now">Đặt Ngay</button>
-                                </div>
-                            </div>
-                        </div>
                     `;
                         });
                     }
                 });
         });
     });
-
 </script>
+
 @endsection
