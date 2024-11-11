@@ -556,7 +556,6 @@
         navigator.clipboard.writeText(code);
     }
 
-<<<<<<< HEAD
     //  Jiệu ứng lấp lánh
     function createSparkles() {
         const header = document.querySelector('.banner-header');
@@ -571,7 +570,6 @@
     }
     createSparkles();
 </script>
-=======
 document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.city-btn').forEach(function(button) {
         button.addEventListener('click', function() {
@@ -662,7 +660,6 @@ function updateHotelList(hotels) {
 }
 
     </script>
->>>>>>> Fix-Code-0.4-MinhTam
 @endsection
 
 @section('footer')
