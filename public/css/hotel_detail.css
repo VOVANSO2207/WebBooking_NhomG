@@ -204,6 +204,8 @@ body {
     }
 
     .info-amenities {
+        white-space: nowrap;
+
         .amenity-item i {
             margin: 10px;
             color: #12C84F;

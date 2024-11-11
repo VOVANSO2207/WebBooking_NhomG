@@ -61,7 +61,7 @@
 
                                 <div class="form-group text-left">
                                     <div class="label">
-                                        <label for="nameUser">Họ tên</label>
+                                        <label for="nameUser">Tên Đăng Nhập</label>
                                     </div>
                                     <span class="d-content"
                                         id="displayName">{{ Auth::check() ? Auth::user()->username : 'Guest' }}</span>

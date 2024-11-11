@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Carbon\Carbon;
 class Hotel extends Model
 {
     use HasFactory;
@@ -67,7 +67,7 @@ class Hotel extends Model
     {
         return $this->belongsTo(Cities::class, 'city_id');
     }
-    
+
     // Quan hệ với bảng HotelAmenities thông qua bảng trung gian hotel_amenity_hotel
     public function amenities()
     {
@@ -108,7 +108,7 @@ class Hotel extends Model
     {
         return $this->belongsToMany(User::class, 'favorite_hotels');
     }
-       /**
+    /**
      * Tính giá gốc trung bình
      */
     public function getAveragePriceAttribute()
@@ -133,5 +133,26 @@ class Hotel extends Model
         $averageDiscountPercent = $this->average_discount_percent;
 
         return $averagePrice * (1 - $averageDiscountPercent / 100);
+    }
+
+    // Phương thức tìm kiếm khách sạn
+    public static function searchHotels($location, $checkInDate, $checkOutDate, $rooms, $adults, $children)
+    {
+        return self::where('location', 'LIKE', "%$location%")
+            ->whereHas('rooms', function ($query) use ($checkInDate, $checkOutDate, $rooms, $adults, $children) {
+                $query->where('capacity', '>=', $adults + $children)
+                    ->whereDoesntHave('bookings', function ($query) use ($checkInDate, $checkOutDate) {
+                        $query->where(function ($q) use ($checkInDate, $checkOutDate) {
+                            $q->where('check_in', '<', $checkOutDate)
+                                ->where('check_out', '>', $checkInDate);
+                        });
+                    });
+            })
+            ->with([
+                'rooms' => function ($query) use ($rooms) {
+                    $query->take($rooms); // Giới hạn số lượng phòng hiển thị
+                }
+            ])
+            ->get();
     }
 }

@@ -25,6 +25,7 @@ class PromotionsController extends Controller
         }
 
         return response()->json([
+            'pro_title' => $promotion->pro_title,
             'promotion_code' => $promotion->promotion_code,
             'discount_amount' => $promotion->discount_amount,
             'pro_description' => $promotion->pro_description,
@@ -77,6 +78,7 @@ class PromotionsController extends Controller
             'start_date' => "required|date|date_format:Y-m-d|after_or_equal:today|before_or_equal:$maxStartDate",
             'end_date' => "required|date|date_format:Y-m-d|after:start_date|after_or_equal:today|before_or_equal:$maxStartDate",
             'pro_description' => 'required|string|regex:/^[^#&\'()!]*$/|max:255', // Thêm điều kiện cho mô tả
+            'pro_title' => 'required|string|max:255'
 
         ], [
             'end_date.after' => 'Ngày kết thúc phải lớn hơn ngày bắt đầu.',
@@ -108,6 +110,7 @@ class PromotionsController extends Controller
         // Gọi phương thức createVoucher từ model Promotions
         try {
             Promotions::createVoucher([
+                'pro_title' => $request->pro_title,
                 'promotion_code' => $request->promotion_code,
                 'discount_amount' => $request->discount_amount,
                 'pro_description' => $request->pro_description, // Thêm dữ liệu này
@@ -168,6 +171,7 @@ class PromotionsController extends Controller
                 'max:255',
                 'string',
             ],
+            'pro_title' => 'required|string|max:255', // Thêm validate cho pro_title
             'start_date' => "required|date|date_format:Y-m-d|after_or_equal:today|before_or_equal:$maxStartDate",
             'end_date' => "required|date|date_format:Y-m-d|after:start_date|after_or_equal:today|before_or_equal:$maxStartDate",
         ], [
@@ -209,6 +213,7 @@ class PromotionsController extends Controller
             $voucher->promotion_code = $request->promotion_code;
             $voucher->discount_amount = $request->discount_amount;
             $voucher->pro_description = $request->pro_description; // Thêm dòng này để cập nhật mô tả
+            $voucher->pro_title = $request->pro_title; // Thêm dòng này để cập nhật pro_title
             // Cập nhật ngày
             $voucher->start_date = $request->start_date;
             $voucher->end_date = $request->end_date;
@@ -220,6 +225,11 @@ class PromotionsController extends Controller
             return response()->json(['success' => true]);
         }
 
+    }
+    public function viewVoucherUser()
+    {
+        $vouchers = Promotions::getAllVouchers(3);
+        return view('pages.detail_voucher', compact('vouchers'));
     }
 
 }

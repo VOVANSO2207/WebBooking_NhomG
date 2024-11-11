@@ -312,7 +312,7 @@
                 </div>
             </div>
             <div class="banner-actions">
-                <a href="{{route('pages.detail_voucher')}}" class="view-all-btn">Xem tất cả ưu đãi</a>
+                <a href="{{route('viewVoucherUser')}}" class="view-all-btn">Xem tất cả ưu đãi</a>
             </div>
             <div class="new-badge">Mới</div>
         </div>
@@ -467,7 +467,6 @@
         updateCarousel(); // Initial call
     });
 
-  
     document.getElementById('notificationBell').addEventListener('click', function () {
         const dropdown = document.getElementById('notificationDropdown');
         dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
@@ -519,19 +518,19 @@
         navigator.clipboard.writeText(code);
     }
 
-        //  Jiệu ứng lấp lánh
-        function createSparkles() {
-            const header = document.querySelector('.banner-header');
-            for (let i = 0; i < 5; i++) {
-                const sparkle = document.createElement('div');
-                sparkle.className = 'sparkle';
-                sparkle.style.left = Math.random() * 100 + '%';
-                sparkle.style.top = Math.random() * 100 + '%';
-                sparkle.style.animation = `sparkle ${1 + Math.random()}s infinite ${Math.random()}s`;
-                header.appendChild(sparkle);
-            }
+    //  Jiệu ứng lấp lánh
+    function createSparkles() {
+        const header = document.querySelector('.banner-header');
+        for (let i = 0; i < 5; i++) {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.style.left = Math.random() * 100 + '%';
+            sparkle.style.top = Math.random() * 100 + '%';
+            sparkle.style.animation = `sparkle ${1 + Math.random()}s infinite ${Math.random()}s`;
+            header.appendChild(sparkle);
         }
-        createSparkles();
+    }
+    createSparkles();
 </script>
 @endsection
 

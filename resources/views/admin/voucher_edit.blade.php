@@ -17,6 +17,15 @@
                         @csrf
                         @method('PUT') <!-- Sử dụng phương thức PUT cho việc sửa -->
                         <div class="row">
+                        <div class="mb-3 col-md-12">
+    <label class="form-label">Promotion Title</label>
+    <input class="form-control" type="text" name="pro_title" id="pro_title"
+        placeholder="Promotion Title" value="{{ old('pro_title', $voucher->pro_title) }}" />
+    @error('pro_title')
+        <div class="text-danger">{{ $message }}</div>
+    @enderror
+</div>
+
                             <div class="mb-3 col-md-12">
                                 <label class="form-label">Promotion Code</label>
                                 <input class="form-control" type="text" name="promotion_code" id="promotion_code"
@@ -136,6 +145,7 @@
     $(document).ready(function () {
         // Lưu dữ liệu ban đầu của form để so sánh
         var originalPromotionCode = $('#promotion_code').val();
+        var originalPromotionTitle = $('#pro_title').val();
         var originalDiscountAmount = $('#discount_amount').val();
         var originalProDescription = $('#pro_description').val();
         var originalStartDate = $('#start_date').val();
@@ -146,6 +156,7 @@
 
             // Lấy giá trị mới của form
             var promotionCode = $('#promotion_code').val().trim();
+            var promotionTitle = $('#pro_title').val().trim();
             var discountAmount = $('#discount_amount').val();
             var proDescription = $('#pro_description').val().trim();
             var startDate = $('#start_date').val(); // Định dạng YYYY-MM-DD
@@ -206,6 +217,7 @@
             }
             // Kiểm tra nếu không có thay đổi
             if (promotionCode === originalPromotionCode &&
+            promotionTitle === originalPromotionTitle &&
                 discountAmount === originalDiscountAmount &&
                 proDescription === originalProDescription &&
                 startDate === originalStartDate &&
