@@ -211,3 +211,7 @@ Route::post('/favorites', [FavoriteController::class, 'addFavorite'])->name('fav
 Route::delete('/favorites', [FavoriteController::class, 'removeFavorite'])->middleware('auth');
 // Route::get('/show-favorites', [FavoriteController::class, 'showHotelFavorite'])->name('pages.favorites')->middleware('auth');
 Route::get('/account', [FavoriteController::class, 'showHotelFavorite'])->name('pages.account');
+// Định nghĩa route cho phương thức lọc khách sạn
+Route::get('/hotels/filter', [HotelController::class, 'filterHotelsByCity'])->name('hotels.filter');
+
+

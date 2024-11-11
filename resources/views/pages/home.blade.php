@@ -335,8 +335,26 @@
     <section class="our-offers pb-5">
         <div class="container">
             <div class="title mb-2">Ưu đãi của chúng tôi</div>
+
+            <div class="Popular_filters">
+                <!-- Bộ lọc Thành phố -->
+                <div class="option">
+                    <div class="city-filters d-flex flex-wrap">
+                        @if ($cities->isEmpty())
+                            <span>Chưa có thành phố để hiển thị</span>
+                        @else
+                            @foreach ($cities as $city)
+                                <div class="city-option mb-3">
+                                    <button class="btn btn-outline-primary btn-lg city-btn" data-city-id="{{ $city->city_id }}">{{ $city->city_name }}</button>
+                                </div>
+                            @endforeach
+                        @endif
+                    </div>
+                </div>
+            </div>
+
             <div class="carousel-container">
-                <div class="carousel-wrapper">
+                <div class="carousel-wrapper carousel-wrapper2">
                     @foreach ($hotels as $hotel)
                         <div class="card">
                             <a href="#" class="group-offers">
@@ -490,6 +508,86 @@
     });
 });
 
+document.addEventListener('DOMContentLoaded', function () {
+    // Lắng nghe sự kiện click trên tất cả các button có class 'city-btn'
+    document.querySelectorAll('.city-btn').forEach(function(button) {
+        button.addEventListener('click', function() {
+            // Xóa lớp 'selected' từ tất cả các button
+            document.querySelectorAll('.city-btn').forEach(function(btn) {
+                btn.classList.remove('selected');
+            });
+
+            // Thêm lớp 'selected' vào button hiện tại
+            this.classList.add('selected');
+
+            var cityId = this.getAttribute('data-city-id');
+            console.log('City ID:', cityId);  // Kiểm tra cityId
+
+            if (cityId) {
+                // Xây dựng URL với route hotels.filter và city_id
+                let url = '{{ route('hotels.filter') }}?city_id=' + cityId;
+                console.log('Fetching URL:', url); // In ra URL để kiểm tra
+
+                // Gửi yêu cầu Ajax tới route đã được tạo
+                fetch(url)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log(data); // Xử lý kết quả trả về từ server tại đây
+                        updateHotelList(data.hotels); // Gọi hàm cập nhật danh sách khách sạn
+                    })
+                    .catch(error => console.error('Error:', error));
+            } else {
+                console.error('City ID is not defined.');
+            }
+        });
+    });
+});
+
+function updateHotelList(hotels) {
+    console.log('Hotels data received:', hotels);  // Kiểm tra xem dữ liệu có đến được không
+    const hotelContainer = document.querySelector('.carousel-wrapper2');
+    hotelContainer.innerHTML = '';  // Xóa các khách sạn cũ
+
+    if (hotels.length === 0) {
+        hotelContainer.innerHTML = '<p>Không có khách sạn nào được tìm thấy.</p>';
+        return;
+    }
+
+    hotels.forEach(hotel => {
+        const hotelCard = document.createElement('div');
+        hotelCard.classList.add('card');
+        hotelCard.innerHTML = `
+            <a href="#" class="group-offers">
+                <div class="shape-in">
+                    <img class="image-hotel-2" src="${hotel.image_url}" alt="">
+                    <div class="group-info-hotel">
+                        <p class="info-hotel-name m-0">${hotel.hotel_name}</p>
+                        <p class="info-hotel-location m-0">${hotel.location}, ${hotel.city}</p>
+                        <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i>${hotel.reviews} Đánh giá</p>
+                        <p class="info-hotel-price-old mb-0 mt-5 pt-5">${hotel.old_price}</p>
+                        <div class="row group-heart-price">
+                            <div class="col-md-6">
+                                <a href="#" class="heart-icon" data-hotel-id="${hotel.hotel_id}">
+                                    <i class="fa-regular fa-heart ${hotel.is_favorite ? 'fa-solid red' : ''}"></i>
+                                </a>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <span class="info-hotel-price-new">${hotel.new_price}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sale-hotel">${hotel.discount_percent} %</div>
+                </div>
+            </a>
+        `;
+        hotelContainer.appendChild(hotelCard);
+    });
+}
 
     </script>
 @endsection
