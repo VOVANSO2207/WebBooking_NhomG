@@ -551,7 +551,7 @@
         }
     }
     createSparkles();
-</script>
+
 document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.city-btn').forEach(function(button) {
         button.addEventListener('click', function() {
