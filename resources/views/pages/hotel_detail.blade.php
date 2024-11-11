@@ -19,7 +19,7 @@
                 <div class="col-md-6 large-img">
                     @foreach ($hotel->images as $index => $image)
                         @if ($index == 1)
-                            <img src="{{ asset('storage/images/' . $image->image_url) }}" alt="{{ $image->image_url }}" />
+                            <img src="{{ asset('images/' . $image->image_url) }}" alt="{{ $image->image_url }}" />
                         @endif
                     @endforeach
                 </div>
@@ -223,7 +223,8 @@
                                             @endif
                                         </div>
                                         <div class="card-room-btn-book">
-                                            <a href="{{ route('pages.getInfoPay', ['hotel_id' => $hotel->hotel_id, 'room_id' => $room->room_id]) }}" class="btn-book-now">Đặt ngay</a>
+                                            <a href="{{ route('pages.getInfoPay', ['hotel_id' => $hotel->hotel_id, 'room_id' => $room->room_id]) }}"
+                                                class="btn-book-now">Đặt ngay</a>
 
                                         </div>
                                     </div>
@@ -481,11 +482,11 @@
         }
     }
     document.getElementById('bookNowBtn').addEventListener('click', function (e) {
-    e.preventDefault(); 
-    document.getElementById('bookingSection').scrollIntoView({
-        behavior: 'smooth' // Cuộn mượt mà
+        e.preventDefault();
+        document.getElementById('bookingSection').scrollIntoView({
+            behavior: 'smooth' // Cuộn mượt mà
+        });
     });
-});
 
 </script>
 
