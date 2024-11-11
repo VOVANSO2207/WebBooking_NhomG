@@ -480,7 +480,7 @@
                     <span class="voucher-status status-active">Đang hoạt động</span>
                 </div>
                 <div class="voucher-body">
-                    <h3 class="voucher-title">Ưu đãi Đặt Phòng Khách Sạn</h3>
+                    <h3 class="voucher-title">{{$voucher -> pro_title}}</h3>
                     <p class="voucher-description">
                     {{ $voucher -> pro_description}}
                     </p>
