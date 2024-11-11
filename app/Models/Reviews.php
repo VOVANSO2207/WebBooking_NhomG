@@ -24,4 +24,15 @@ class Reviews extends Model
                     ->with('hotel')
                     ->get(); // Trả về danh sách hotel_id
     }
+
+    // Quan hệ với Hotel
+    public function hotel()
+    {
+        return $this->belongsTo(Hotel::class);
+    }    
+    // Đếm số lượng bình luận cho một khách sạn
+    public static function countReviewsForHotel($hotelId)
+    {
+        return self::where('hotel_id', $hotelId)->count();
+    }
 }

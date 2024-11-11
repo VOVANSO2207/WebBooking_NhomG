@@ -458,6 +458,7 @@ class HotelController extends Controller
         $decodedId = IdEncoder::decodeId($encodedId);
         return response()->json(['decoded_id' => $decodedId]);
     }
+<<<<<<< HEAD
     // Chi tiết đặt phòng 
     public function getInfoPayment($hotel_id, $room_id)
     {
@@ -469,5 +470,61 @@ class HotelController extends Controller
         return view('pages.pay', compact('hotel', 'room', ));
     }
 
+=======
+   
+    // Trong controller
+    public function filterHotelsByCity(Request $request)
+    {
+        $cityId = $request->get('city_id');
+
+        // Eager load quan hệ city và lấy thông tin về tên thành phố
+        $hotels = Hotel::with('city') // Eager load quan hệ city
+                    ->where('city_id', $cityId)
+                    ->get()
+                    ->map(function ($hotel) {
+                        return [
+                            'hotel_id' => $hotel->id,
+                            'hotel_name' => $hotel->hotel_name,
+                            'location' => $hotel->location,
+                            'city' => $hotel->city->city_name, // Lấy tên thành phố
+                            'reviews_count' => Reviews::countReviewsForHotel($hotel->id),
+                            'old_price' => number_format($hotel->average_price_sale, 0, ',', '.'),
+                            'new_price' => number_format($hotel->average_price, 0, ',', '.'),
+                            'is_favorite' => $hotel->is_favorite,
+                            'discount_percent' => number_format($hotel->average_discount_percent),
+                            'image_url' => $hotel->images->isNotEmpty() ? asset('storage/images/' . $hotel->images->first()->image_url) : '/images/default-image.png',
+                        ];
+                    });
+                    
+        return response()->json([
+            'hotels' => $hotels
+        ]);
+    }
+
+    public function getAllHotels(Request $request)
+    {
+        // Lấy tất cả khách sạn mà không lọc theo city_id
+        $hotels = Hotel::with('city') // Eager load quan hệ city
+                    ->get() // Lấy tất cả khách sạn
+                    ->map(function ($hotel) {
+                        return [
+                            'hotel_id' => $hotel->id,
+                            'hotel_name' => $hotel->hotel_name,
+                            'location' => $hotel->location,
+                            'city' => $hotel->city->city_name, // Lấy tên thành phố
+                            'reviews_count' => Reviews::countReviewsForHotel($hotel->id),
+                            'old_price' => number_format($hotel->average_price_sale, 0, ',', '.'),
+                            'new_price' => number_format($hotel->average_price, 0, ',', '.'),
+                            'is_favorite' => $hotel->is_favorite,
+                            'discount_percent' => number_format($hotel->average_discount_percent),
+                            'image_url' => $hotel->images->isNotEmpty() ? asset('storage/images/' . $hotel->images->first()->image_url) : '/images/default-image.png',
+                        ];
+                    });
+                    
+        return response()->json([
+            'hotels' => $hotels
+        ]);
+    }
+>>>>>>> Fix-Code-0.4-MinhTam
 }
 // 
