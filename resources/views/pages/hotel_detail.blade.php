@@ -59,7 +59,7 @@
                     <div class="modal-body p-5">
                         <div class="row">
                             @foreach ($hotel->images as $image)
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-4 mb-3 review-images-details">
                                     <img src="{{ asset('images/' . $image->image_url) }}" alt="{{ $image->image_url }}"
                                         class="img-fluid modal-image-alls">
                                 </div>
@@ -262,13 +262,13 @@
                             <label for="file-input">
                                 <i class="fa-solid fa-circle-plus"></i>
                             </label>
-                            <input type="file" id="file-input" style="display: none;" accept="image/*">
+                            <input type="file" id="file-input" style="display: none;" accept="image/*" multiple>
                         </div>
                     </div>
                     <div class="btn-submit"><button type="submit">ĐĂNG</button></div>
                 </form>
-                <div class="image-preview-review">
-                    <img id="preview" src="" alt="Ảnh xem trước">
+                <div class="image-preview-review d-flex">
+                    <img id="preview" src="" alt="Ảnh xem trước" multiple>
                 </div>
 
                 <!-- HIỂN THỊ ĐÁNH GIÁ -->
@@ -324,78 +324,6 @@
                     </div>
                 </div>
 
-                <!-- HIỂN THỊ ĐÁNH GIÁ -->
-                <div class="box-comment-review mt-3 d-flex">
-                    <div class="icon-profile ms-5">
-                        <i class="fa-solid fa-circle-user"></i>
-                    </div>
-                    <div class="view-review ms-2">
-                        <div class="group-info-review">
-                            <div class="review-user-name">Nguyen Van A</div>
-                            <div class="created_at">2024-09-27</div>
-                            <div class="comment-text">
-                                Phòng đẹp chất lượng dịch vụ tốt, ưng ghê vậy á chàiiiii ♥♥
-                            </div>
-                            <div class="image-review">
-                                <img src="https://cms.imgworlds.com/assets/a5366382-0c26-4726-9873-45d69d24f819.jpg?key=home-gallery"
-                                    alt="">
-                            </div>
-                            <div class="action-review mt-2">
-                                <a href="#" class="like-review me-4"><i class="fa-solid fa-thumbs-up"></i>
-                                    Thích</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- HIỂN THỊ ĐÁNH GIÁ -->
-                <div class="box-comment-review mt-3 d-flex">
-                    <div class="icon-profile ms-5">
-                        <i class="fa-solid fa-circle-user"></i>
-                    </div>
-                    <div class="view-review ms-2">
-                        <div class="group-info-review">
-                            <div class="review-user-name">Nguyen Van A</div>
-                            <div class="created_at">2024-09-27</div>
-                            <div class="comment-text">
-                                Phòng đẹp chất lượng dịch vụ tốt, ưng ghê vậy á chàiiiii ♥♥
-                            </div>
-                            <div class="image-review">
-                                <img src="https://cms.imgworlds.com/assets/a5366382-0c26-4726-9873-45d69d24f819.jpg?key=home-gallery"
-                                    alt="">
-                            </div>
-                            <div class="action-review mt-2">
-                                <a href="#" class="like-review me-4"><i class="fa-solid fa-thumbs-up"></i>
-                                    Thích</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- HIỂN THỊ ĐÁNH GIÁ -->
-                <div class="box-comment-review mt-3 d-flex">
-                    <div class="icon-profile ms-5">
-                        <i class="fa-solid fa-circle-user"></i>
-                    </div>
-                    <div class="view-review ms-2">
-                        <div class="group-info-review">
-                            <div class="review-user-name">Nguyen Van A</div>
-                            <div class="created_at">2024-09-27</div>
-                            <div class="comment-text">
-                                Phòng đẹp chất lượng dịch vụ tốt, ưng ghê vậy á chàiiiii ♥♥
-                            </div>
-                            <div class="image-review">
-                                <img src="https://cms.imgworlds.com/assets/a5366382-0c26-4726-9873-45d69d24f819.jpg?key=home-gallery"
-                                    alt="">
-                            </div>
-                            <div class="action-review mt-2">
-                                <a href="#" class="like-review me-4"><i class="fa-solid fa-thumbs-up"></i>
-                                    Thích</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- PHÂN TRANG -->
                 <div class="review-pagination">
                     <ul class="pagination">
@@ -418,20 +346,90 @@
     </div>
 </section>
 <script>
-    document.getElementById('file-input').addEventListener('change', function (event) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
+    // Hiển thị ảnh xem trước ở bình luận và lưu ảnh vào store để f5 không mất
+    (function () {
+        const EXPIRATION_TIME = 10 * 60 * 1000; // 10 phút tính bằng mili giây
+        const MAX_UPLOAD_COUNT = 10; // Giới hạn số lượng ảnh tối đa 
 
-            reader.onload = function (e) {
-                const preview = document.getElementById('preview');
-                preview.src = e.target.result;
-                preview.style.display = 'block'; // Hiển thị ảnh
+        const fileInput = document.getElementById('file-input');
+        const previewContainer = document.querySelector('.image-preview-review');
+
+        // Hàm hiển thị ảnh xem trước với nút xóa
+        function displayImage(src) {
+            const imgContainer = document.createElement('div');
+            imgContainer.classList.add('preview-container');
+
+            const img = document.createElement('img');
+            img.src = src;
+            img.alt = 'Ảnh xem trước';
+            img.classList.add('preview-image');
+
+            const closeButton = document.createElement('span');
+            closeButton.classList.add('close-button');
+            closeButton.innerHTML = '&times;';
+
+            // Xóa ảnh khi nhấn vào nút X và cập nhật `localStorage`
+            closeButton.addEventListener('click', function () {
+                previewContainer.removeChild(imgContainer);
+
+                // Cập nhật lại danh sách ảnh trong `localStorage`
+                let updatedImages = JSON.parse(localStorage.getItem('previewImages')) || [];
+                updatedImages = updatedImages.filter(item => item.src !== src);
+                localStorage.setItem('previewImages', JSON.stringify(updatedImages));
+            });
+
+            imgContainer.appendChild(img);
+            imgContainer.appendChild(closeButton);
+            previewContainer.appendChild(imgContainer);
+        }
+
+        // Xử lý khi chọn ảnh mới
+        fileInput.addEventListener('change', function (event) {
+            const files = event.target.files;
+            let images = JSON.parse(localStorage.getItem('previewImages')) || [];
+
+            // Kiểm tra số lượng ảnh đã tải lên
+            if (images.length + files.length > MAX_UPLOAD_COUNT) {
+                alert('Bạn chỉ có thể tải tối đa ' + MAX_UPLOAD_COUNT + ' ảnh!');
+                return;
             }
 
-            reader.readAsDataURL(file); // Đọc file dưới dạng URL
-        }
-    });
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const imgData = {
+                        src: e.target.result,
+                        timestamp: Date.now() // Lưu thời gian hiện tại
+                    };
+
+                    images.push(imgData);
+                    localStorage.setItem('previewImages', JSON.stringify(images));
+
+                    // Hiển thị ảnh mới
+                    displayImage(imgData.src);
+                };
+
+                reader.readAsDataURL(file);
+            });
+        });
+
+        // Kiểm tra và hiển thị các ảnh còn hạn sử dụng khi tải lại trang
+        document.addEventListener('DOMContentLoaded', function () {
+            let storedImages = JSON.parse(localStorage.getItem('previewImages')) || [];
+
+            // Lọc và chỉ hiển thị các ảnh còn hạn sử dụng
+            const validImages = storedImages.filter(imgData => {
+                const isValid = Date.now() - imgData.timestamp < EXPIRATION_TIME;
+                if (isValid) displayImage(imgData.src);
+                return isValid;
+            });
+
+            // Cập nhật lại `localStorage` chỉ với các ảnh còn hạn
+            localStorage.setItem('previewImages', JSON.stringify(validImages));
+        });
+    })();
+
     // Khi click ảnh sẽ được gọi class enlarged và phóng to lên
     document.addEventListener('DOMContentLoaded', function () {
         const images = document.querySelectorAll('.modal-image-alls');

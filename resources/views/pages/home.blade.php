@@ -279,7 +279,7 @@
     </div>
 </section>
 <!-- VOUCHER -->
-<section>
+<section style="scale:0.9;">
     <div class="voucher-banner-container">
         <div class="voucher-banner">
             <div class="banner-header">
