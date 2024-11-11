@@ -221,6 +221,11 @@ class PromotionsController extends Controller
         }
 
     }
+    public function viewVoucherUser()
+    {
+        $vouchers = Promotions::getAllVouchers(3);
+        return view('pages.detail_voucher', compact('vouchers'));
+    }
 
 }
 

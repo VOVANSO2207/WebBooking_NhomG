@@ -219,5 +219,6 @@ Route::middleware(['auth'])->group(function () {
 
 });
 Route::get('/payment/{hotel_id}/{room_id}', [HotelController::class, 'getInfoPayment'])->name('pages.getInfoPay');
-Route::get('/detail_voucher', [HomeController::class, 'detail_voucher'])->name('pages.detail_voucher');
+Route::get('/detail_voucher', action: [HomeController::class, 'detail_voucher'])->name(name: 'pages.detail_voucher');
 
+Route::get('/detail_voucher', [PromotionsController::class, 'viewVoucherUser'])->name('viewVoucherUser');
