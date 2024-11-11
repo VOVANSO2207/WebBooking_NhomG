@@ -213,5 +213,7 @@ Route::delete('/favorites', [FavoriteController::class, 'removeFavorite'])->midd
 Route::get('/account', [FavoriteController::class, 'showHotelFavorite'])->name('pages.account');
 // Định nghĩa route cho phương thức lọc khách sạn
 Route::get('/hotels/filter', [HotelController::class, 'filterHotelsByCity'])->name('hotels.filter');
+Route::get('/hotels', [HotelController::class, 'getAllHotels'])->name('hotels.all');
+
 
 

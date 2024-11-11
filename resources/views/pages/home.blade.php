@@ -509,26 +509,35 @@
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-    // Lắng nghe sự kiện click trên tất cả các button có class 'city-btn'
     document.querySelectorAll('.city-btn').forEach(function(button) {
         button.addEventListener('click', function() {
-            // Xóa lớp 'selected' từ tất cả các button
+            if (this.classList.contains('selected')) {
+                this.classList.remove('selected');
+                fetch('{{ route('hotels.all') }}')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        updateHotelList(data.hotels);
+                    })
+                    .catch(error => console.error('Error:', error));
+                return;
+            }
+
             document.querySelectorAll('.city-btn').forEach(function(btn) {
                 btn.classList.remove('selected');
             });
 
-            // Thêm lớp 'selected' vào button hiện tại
             this.classList.add('selected');
 
             var cityId = this.getAttribute('data-city-id');
-            console.log('City ID:', cityId);  // Kiểm tra cityId
 
             if (cityId) {
-                // Xây dựng URL với route hotels.filter và city_id
                 let url = '{{ route('hotels.filter') }}?city_id=' + cityId;
-                console.log('Fetching URL:', url); // In ra URL để kiểm tra
 
-                // Gửi yêu cầu Ajax tới route đã được tạo
                 fetch(url)
                     .then(response => {
                         if (!response.ok) {
@@ -537,8 +546,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         return response.json();
                     })
                     .then(data => {
-                        console.log(data); // Xử lý kết quả trả về từ server tại đây
-                        updateHotelList(data.hotels); // Gọi hàm cập nhật danh sách khách sạn
+                        updateHotelList(data.hotels);
                     })
                     .catch(error => console.error('Error:', error));
             } else {
@@ -549,9 +557,9 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function updateHotelList(hotels) {
-    console.log('Hotels data received:', hotels);  // Kiểm tra xem dữ liệu có đến được không
+    console.log('Hotels data received:', hotels);
     const hotelContainer = document.querySelector('.carousel-wrapper2');
-    hotelContainer.innerHTML = '';  // Xóa các khách sạn cũ
+    hotelContainer.innerHTML = '';
 
     if (hotels.length === 0) {
         hotelContainer.innerHTML = '<p>Không có khách sạn nào được tìm thấy.</p>';
@@ -569,7 +577,7 @@ function updateHotelList(hotels) {
                         <p class="info-hotel-name m-0">${hotel.hotel_name}</p>
                         <p class="info-hotel-location m-0">${hotel.location}, ${hotel.city}</p>
                         <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i>${hotel.reviews} Đánh giá</p>
-                        <p class="info-hotel-price-old mb-0 mt-5 pt-5">${hotel.old_price}</p>
+                        <p class="info-hotel-price-old mb-0 mt-5 pt-5">${hotel.old_price} VND</p>
                         <div class="row group-heart-price">
                             <div class="col-md-6">
                                 <a href="#" class="heart-icon" data-hotel-id="${hotel.hotel_id}">
@@ -577,7 +585,7 @@ function updateHotelList(hotels) {
                                 </a>
                             </div>
                             <div class="col-md-6 text-right">
-                                <span class="info-hotel-price-new">${hotel.new_price}</span>
+                                <span class="info-hotel-price-new">${hotel.new_price} VND</span>
                             </div>
                         </div>
                     </div>
