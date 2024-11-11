@@ -17,11 +17,11 @@
 <link rel="stylesheet" href="{{ asset('css/search_result.css') }}">
 @endsection
 @section('content')
-<div class="container filter-hotel">
+<div class="container filter-hotel mt-5">
     <div class="counter-hotel">
         <h3>Có 554 khách sạn tại Thành Phố Hồ Chí Minh</h3>
     </div>
-    <div class="row d-flex">
+    <div class="row d-flex thu-nho">
         <div class="col-md-3 filter">
             <div class="header_title">
                 <h3>Bộ lọc</h3>
