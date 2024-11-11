@@ -213,7 +213,6 @@ Route::post('/favorites', [FavoriteController::class, 'addFavorite'])->name('fav
 Route::delete('/favorites', [FavoriteController::class, 'removeFavorite'])->middleware('auth');
 // Route::get('/show-favorites', [FavoriteController::class, 'showHotelFavorite'])->name('pages.favorites')->middleware('auth');
 Route::get('/account', [FavoriteController::class, 'showHotelFavorite'])->name('pages.account');
-<<<<<<< HEAD
 Route::middleware(['auth'])->group(function () {
     Route::put('/profile/update', [UsersController::class, 'updateProfile'])->name('profile.update');
     Route::put('/change-password', [UsersController::class, 'changePassword'])->name('change.password');
@@ -223,11 +222,9 @@ Route::get('/payment/{hotel_id}/{room_id}', [HotelController::class, 'getInfoPay
 Route::get('/detail_voucher', action: [HomeController::class, 'detail_voucher'])->name(name: 'pages.detail_voucher');
 
 Route::get('/detail_voucher', [PromotionsController::class, 'viewVoucherUser'])->name('viewVoucherUser');
-=======
 // Định nghĩa route cho phương thức lọc khách sạn
 Route::get('/hotels/filter', [HotelController::class, 'filterHotelsByCity'])->name('hotels.filter');
 Route::get('/hotels', [HotelController::class, 'getAllHotels'])->name('hotels.all');
 
 
 
->>>>>>> Fix-Code-0.4-MinhTam

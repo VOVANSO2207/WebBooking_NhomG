@@ -458,7 +458,6 @@ class HotelController extends Controller
         $decodedId = IdEncoder::decodeId($encodedId);
         return response()->json(['decoded_id' => $decodedId]);
     }
-<<<<<<< HEAD
     // Chi tiết đặt phòng 
     public function getInfoPayment($hotel_id, $room_id)
     {
@@ -470,7 +469,6 @@ class HotelController extends Controller
         return view('pages.pay', compact('hotel', 'room', ));
     }
 
-=======
    
     // Trong controller
     public function filterHotelsByCity(Request $request)
@@ -525,6 +523,5 @@ class HotelController extends Controller
             'hotels' => $hotels
         ]);
     }
->>>>>>> Fix-Code-0.4-MinhTam
 }
 // 
