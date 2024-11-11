@@ -11,4 +11,10 @@ class HomeController extends Controller
     {
         return view('pages.home'); // Trả về view trang chủ
     }
+    public function introduce(){
+        return view('introduce');
+    }
+    public function detail_voucher(){
+        return view('pages.detail_voucher');
+    }
 }

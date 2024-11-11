@@ -417,9 +417,9 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="card-room-status">
-                                        <div class="don">ĐƠN</div>
-                                        <div class="doi">ĐÔI</div>
-                                    </div>
+                                        <div class="don">{{ $rooms->first()->roomType->name }}</div>
+                                    </div>                                    
+                                    
                                     <div class="card-room-btn-book">
                                         <a href="{{ route('pages.hotel_detail', ['hotel_id' => $favorite->hotel->hotel_id]) }}"
                                             class="btn-book-now">đặt ngay</a>

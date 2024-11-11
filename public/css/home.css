@@ -704,38 +704,6 @@ outline: none;
  }
 
 
- /* Back to Top Button Styling */
- .back-to-top {
-     position: fixed;
-     bottom: 20px;
-     right: 20px;
-     width: 40px;
-     height: 40px;
-     background: linear-gradient(135deg, #007bff, #5bc0de);
-     color: white;
-     border: none;
-     border-radius: 30px;
-     font-size: 20px;
-     cursor: pointer;
-     z-index: 1000;
-     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-     opacity: 0;
-     pointer-events: none;
-     transition: opacity 0.4s ease, visibility 0.4s ease, transform 0.3s ease;
-     transform: scale(1.1);
- }
-
- .back-to-top.visible {
-     opacity: 1;
-     pointer-events: auto;
-     transform: scale(1);
- }
- .back-to-top:hover {
-    background: linear-gradient(135deg, #0056b3, #2ca8d1);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
-    transform: scale(1.1);
-}
-
 .notification-dropdown {
     position: absolute;
     top: 152px;
@@ -875,4 +843,287 @@ outline: none;
 
 .footer-note span {
     font-size: 18px;
+}
+
+
+/* Vourcher */
+.voucher-banner-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 40px auto;
+}
+
+.voucher-banner {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    position: relative;
+    animation: floatBanner 3s ease-in-out infinite;
+}
+
+@keyframes floatBanner {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+.banner-header {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    padding: 20px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.banner-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+    transform: translate(30%, -30%);
+    animation: rotate 10s linear infinite;
+}
+
+@keyframes rotate {
+    from { transform: translate(30%, -30%) rotate(0deg); }
+    to { transform: translate(30%, -30%) rotate(360deg); }
+}
+
+.sparkle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: white;
+    opacity: 0;
+}
+
+@keyframes sparkle {
+    0% { transform: scale(0); opacity: 0; }
+    50% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(0); opacity: 0; }
+}
+
+.banner-title {
+    font-size: clamp(1.2rem, 3vw, 1.5rem);
+    font-weight: 700;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+}
+
+.title-emoji {
+    animation: wave 2s infinite;
+    display: inline-block;
+}
+
+@keyframes wave {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(-10deg); }
+    75% { transform: rotate(10deg); }
+    100% { transform: rotate(0deg); }
+}
+
+.banner-subtitle {
+    font-size: clamp(0.9rem, 2vw, 1rem);
+    opacity: 0.9;
+    font-weight: 300;
+}
+
+.banner-content {
+    padding: 20px;
+    display: grid;
+    gap: 15px;
+    background: linear-gradient(to bottom, #ffffff, #f8fafc);
+}
+
+.voucher-item {
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0,0,0,0.05);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.voucher-item:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    border-color: rgba(42,82,152,0.2);
+}
+
+.voucher-item::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        to right,
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,0.3) 50%,
+        rgba(255,255,255,0) 100%
+    );
+    transform: rotate(45deg);
+    transition: all 0.3s ease;
+    opacity: 0;
+}
+
+.voucher-item:hover::after {
+    animation: shine 1.5s ease-out;
+}
+
+@keyframes shine {
+    0% { transform: rotate(45deg) translateX(-100%); opacity: 0; }
+    50% { opacity: 0.7; }
+    100% { transform: rotate(45deg) translateX(100%); opacity: 0; }
+}
+
+.voucher-icon {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    min-width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.voucher-details {
+    flex: 1;
+}
+
+.voucher-details h4 {
+    font-size: clamp(1rem, 2vw, 1.1rem);
+    color: #1a202c;
+    margin-bottom: 4px;
+    font-weight: 600;
+}
+
+.voucher-details p {
+    font-size: clamp(0.8rem, 1.8vw, 0.9rem);
+    color: #64748b;
+    line-height: 1.4;
+}
+
+.banner-actions {
+    padding: 15px 20px;
+    background: #f8fafc;
+    border-top: 1px solid rgba(0,0,0,0.05);
+    text-align: center;
+}
+
+.view-all-btn {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-decoration: none;
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+}
+
+.view-all-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(30,60,114,0.2);
+}
+
+.view-all-btn::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        to right,
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,0.3) 50%,
+        rgba(255,255,255,0) 100%
+    );
+    transform: rotate(45deg);
+    animation: buttonShine 3s infinite;
+}
+
+@keyframes buttonShine {
+    0% { transform: rotate(45deg) translateX(-100%); }
+    50% { transform: rotate(45deg) translateX(100%); }
+    100% { transform: rotate(45deg) translateX(100%); }
+}
+
+.new-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    color: #000;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(255,215,0,0.3);
+    animation: badgePulse 2s infinite;
+}
+
+@keyframes badgePulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@media (min-width: 768px) {
+    .banner-content {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 767px) {
+    .voucher-banner-container {
+        padding: 0 10px;
+        margin: 15px auto;
+    }
+
+    .banner-content {
+        grid-template-columns: 1fr;
+    }
+
+    .voucher-item {
+        padding: 12px;
+    }
+
+    .voucher-icon {
+        min-width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
 }
