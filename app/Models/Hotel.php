@@ -138,8 +138,26 @@ class Hotel extends Model
     // Phương thức tìm kiếm khách sạn
     public static function searchHotels($location, $checkInDate, $checkOutDate, $rooms, $adults, $children)
     {
-        return self::where('location', 'LIKE', "%$location%")
-            ->whereHas('rooms', function ($query) use ($checkInDate, $checkOutDate, $rooms, $adults, $children) {
+        return self::where(function ($query) use ($location, $checkInDate, $checkOutDate, $rooms, $adults, $children) {
+            // Trường hợp 1: Tìm khách sạn có địa điểm và ngày hợp lệ
+            $query->where('location', 'LIKE', "%$location%")
+                ->whereHas('rooms', function ($query) use ($checkInDate, $checkOutDate, $rooms, $adults, $children) {
+                    $query->where('capacity', '>=', $adults + $children)
+                        ->whereDoesntHave('bookings', function ($query) use ($checkInDate, $checkOutDate) {
+                            $query->where(function ($q) use ($checkInDate, $checkOutDate) {
+                                $q->where('check_in', '<', $checkOutDate)
+                                    ->where('check_out', '>', $checkInDate);
+                            });
+                        });
+                });
+
+            // Trường hợp 2: Nếu không có ngày hợp lệ thì tìm theo địa điểm
+            $query->orWhere(function ($query) use ($location) {
+                $query->where('location', 'LIKE', "%$location%");
+            });
+
+            // Trường hợp 3: Nếu không có địa điểm hợp lệ thì tìm theo ngày
+            $query->orWhereHas('rooms', function ($query) use ($checkInDate, $checkOutDate, $adults, $children) {
                 $query->where('capacity', '>=', $adults + $children)
                     ->whereDoesntHave('bookings', function ($query) use ($checkInDate, $checkOutDate) {
                         $query->where(function ($q) use ($checkInDate, $checkOutDate) {
@@ -147,7 +165,8 @@ class Hotel extends Model
                                 ->where('check_out', '>', $checkInDate);
                         });
                     });
-            })
+            });
+        })
             ->with([
                 'rooms' => function ($query) use ($rooms) {
                     $query->take($rooms); // Giới hạn số lượng phòng hiển thị
@@ -155,4 +174,5 @@ class Hotel extends Model
             ])
             ->get();
     }
+
 }
