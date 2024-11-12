@@ -17,11 +17,11 @@
 <link rel="stylesheet" href="{{ asset('css/search_result.css') }}">
 @endsection
 @section('content')
-<div class="container filter-hotel">
+<div class="container filter-hotel mt-5">
     <div class="counter-hotel">
         <h3>Có 554 khách sạn tại Thành Phố Hồ Chí Minh</h3>
     </div>
-    <div class="row d-flex">
+    <div class="row d-flex thu-nho">
         <div class="col-md-3 filter">
             <div class="header_title">
                 <h3>Bộ lọc</h3>
@@ -136,11 +136,13 @@
                         <p class="ms-2">Số trẻ em: {{ $children }} </p>
                     </div>
                     @if ($hotels->isEmpty())
-                        <p>Không tìm thấy khách sạn nào.</p>
+                        <p>Không tìm thấy khách sạn nào phù hợp với yêu cầu của bạn.</p>
                     @else
                         @foreach ($hotels as $hotel)
                             <div class="hotel-card">
-                                <div class="sale-badge">SALE</div>
+                                @if ($hotel->average_discount_percent > 0)
+                                    <div class="sale-badge">SALE</div>
+                                @endif
                                 <div class="hotel-image">
                                     <swiper-container class="mySwiper" pagination="true" pagination-clickable="true"
                                         navigation="true" space-between="30" loop="true" style="height: auto">
@@ -150,6 +152,145 @@
                                             </swiper-slide>
                                         @endforeach
                                     </swiper-container>
+                                </div>
+                                <div class="hotel-info row">
+                                    <div class="col-md-9">
+                                        <p class="reviews">Có {{ $hotel->rating }} lượt đánh giá</p>
+                                        <h4 class="location_hotel">
+                                            <i class="fas fa-map-marker-alt icon-location" style="color: #3B79C9;"></i>
+                                            {{$hotel->location}}
+                                        </h4>
+                                        <h3 class="name_hotel">
+                                            <i class="fa-solid fa-hotel icon-hotel" style="color: #3B79C9;"></i>
+                                            {{ $hotel->hotel_name }}
+                                        </h3>
+                                        <div class="price-info">
+                                            @if ($hotel->average_discount_percent > 0 && $hotel->average_price > 0)
+                                                <span class="old-price">
+                                                    {{ number_format($hotel->average_price, 0, ',', '.') }}
+                                                    VNĐ</span>
+                                                <span class="discount">
+                                                    -{{ $hotel->average_discount_percent }}%
+                                                </span>
+                                            @endif
+                                        </div>
+                                        <span class="new-price">
+                                            {{ number_format($hotel->average_price_sale, 0, ',', '.') }} VNĐ
+                                            <span>/ Khách</span>
+                                        </span>
+                                        <div class="rating">
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                @if ($i <= $hotel->rating)
+                                                    <span>★</span>
+                                                @else
+                                                    <span>☆</span>
+                                                @endif
+                                            @endfor
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-3 status-button">
+                                        <div class="status">
+                                            <span class="status-available">ĐƠN</span>
+                                            <span class="status-soldout">ĐÔI</span>
+                                        </div>
+                                        <button class="book-now">Đặt Ngay</button>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    @endif
+                </div>
+
+                <div id="high-to-low" class="tab_item">
+                    @if ($hotels->isEmpty())
+                        <p>Không tìm thấy khách sạn nào phù hợp với yêu cầu của bạn.</p>
+                    @else
+                        @foreach ($hotels as $hotel)
+                            <div class="hotel-card">
+                                <div class="sale-badge">SALE</div>
+                                <div class="hotel-image">
+                                    <swiper-container class="mySwiper" pagination="true" pagination-clickable="true"
+                                        navigation="true" space-between="30" loop="true" style="height: auto">
+                                        <swiper-slide>
+                                            <img src="https://swiperjs.com/demos/images/nature-1.jpg" alt="Nature Image 1" />
+                                        </swiper-slide>
+                                        <swiper-slide>
+                                            <img src="https://swiperjs.com/demos/images/nature-1.jpg" alt="Nature Image 1" />
+                                        </swiper-slide>
+                                        <swiper-slide>
+                                            <img src="https://swiperjs.com/demos/images/nature-1.jpg" alt="Nature Image 1" />
+                                        </swiper-slide>
+                                        <swiper-slide>
+                                            <img src="https://swiperjs.com/demos/images/nature-1.jpg" alt="Nature Image 1" />
+                                        </swiper-slide>
+                                        <!-- Thêm các slide khác -->
+                                    </swiper-container>
+
+                                </div>
+                                <div class="hotel-info row">
+                                    <div class="col-md-9">
+                                        <p class="reviews">Có {{ $hotel->rating }} lượt đánh giá</p>
+                                        <h4 class="location_hotel">
+                                            <i class="fas fa-map-marker-alt icon-location" style="color: #3B79C9;"></i>
+                                            Thành Phố Hồ Chí Minh
+                                        </h4>
+                                        <h3 class="name_hotel"><i class="fa-solid fa-hotel icon-hotel"
+                                                style="color: #3B79C9;"></i>{{ $hotel->hotel_name }}</h3>
+                                        <div class="price-info">
+                                            <span class="old-price">2.337.999 đ</span>
+                                            <span class="discount">-25%</span>
+                                        </div>
+                                        <span class="new-price">1.763.668 đ</span>
+                                        <div class="rating">
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                @if ($i <= $hotel->rating)
+                                                    <span>★</span>
+                                                @else
+                                                    <span>☆</span>
+                                                @endif
+                                            @endfor
+                                            <div class="status">
+                                                <span class="status-available">ĐƠN</span>
+                                                <span class="status-soldout">ĐÔI</span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-3 status-button">
+                                        <button class="book-now">Đặt Ngay</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        @endforeach
+                    @endif
+                </div>
+                <div id="popular" class="tab_item">
+                    @if ($hotels->isEmpty())
+                        <p>Không tìm thấy khách sạn nào phù hợp với yêu cầu của bạn.</p>
+                    @else
+                        @foreach ($hotels as $hotel)
+                            <div class="hotel-card">
+                                <div class="sale-badge">SALE</div>
+                                <div class="hotel-image">
+                                    <swiper-container class="mySwiper" pagination="true" pagination-clickable="true"
+                                        navigation="true" space-between="30" loop="true" style="height: auto">
+                                        <swiper-slide>
+                                            <img src="https://swiperjs.com/demos/images/nature-1.jpg" alt="Nature Image 1" />
+                                        </swiper-slide>
+                                        <swiper-slide>
+                                            <img src="https://swiperjs.com/demos/images/nature-1.jpg" alt="Nature Image 1" />
+                                        </swiper-slide>
+                                        <swiper-slide>
+                                            <img src="https://swiperjs.com/demos/images/nature-1.jpg" alt="Nature Image 1" />
+                                        </swiper-slide>
+                                        <swiper-slide>
+                                            <img src="https://swiperjs.com/demos/images/nature-1.jpg" alt="Nature Image 1" />
+                                        </swiper-slide>
+                                        <!-- Thêm các slide khác -->
+                                    </swiper-container>
+
                                 </div>
                                 <div class="hotel-info row">
                                     <div class="col-md-9">
@@ -177,6 +318,7 @@
 
                                     </div>
                                     <div class="col-md-3 status-button">
+
                                         <div class="status">
                                             <span class="status-available">ĐƠN</span>
                                             <span class="status-soldout">ĐÔI</span>
@@ -184,129 +326,10 @@
                                         <button class="book-now">Đặt Ngay</button>
                                     </div>
                                 </div>
+
                             </div>
                         @endforeach
                     @endif
-                </div>
-
-                <div id="high-to-low" class="tab_item">
-                    <div class="hotel-card">
-                        <div class="sale-badge">SALE</div>
-                        <div class="hotel-image">
-                            <swiper-container class="mySwiper" pagination="true" pagination-clickable="true"
-                                navigation="true" space-between="30" loop="true" style="height: auto">
-                                <swiper-slide>
-                                    <img src="https://swiperjs.com/demos/images/nature-1.jpg" alt="Nature Image 1" />
-                                </swiper-slide>
-                                <swiper-slide>
-                                    <img src="https://swiperjs.com/demos/images/nature-1.jpg" alt="Nature Image 1" />
-                                </swiper-slide>
-                                <swiper-slide>
-                                    <img src="https://swiperjs.com/demos/images/nature-1.jpg" alt="Nature Image 1" />
-                                </swiper-slide>
-                                <swiper-slide>
-                                    <img src="https://swiperjs.com/demos/images/nature-1.jpg" alt="Nature Image 1" />
-                                </swiper-slide>
-                                <!-- Thêm các slide khác -->
-                            </swiper-container>
-
-                        </div>
-                        <div class="hotel-info row">
-                            <div class="col-md-9">
-                                <p class="reviews">Có {{ $hotel->rating }} lượt đánh giá</p>
-                                <h4 class="location_hotel">
-                                    <i class="fas fa-map-marker-alt icon-location" style="color: #3B79C9;"></i>
-                                    Thành Phố Hồ Chí Minh
-                                </h4>
-                                <h3 class="name_hotel"><i class="fa-solid fa-hotel icon-hotel"
-                                        style="color: #3B79C9;"></i>{{ $hotel->hotel_name }}</h3>
-                                <div class="price-info">
-                                    <span class="old-price">2.337.999 đ</span>
-                                    <span class="discount">-25%</span>
-                                </div>
-                                <span class="new-price">1.763.668 đ</span>
-                                <div class="rating">
-                                    @for ($i = 1; $i <= 5; $i++)
-                                        @if ($i <= $hotel->rating)
-                                            <span>★</span>
-                                        @else
-                                            <span>☆</span>
-                                        @endif
-                                    @endfor
-                                    <div class="status">
-                                        <span class="status-available">ĐƠN</span>
-                                        <span class="status-soldout">ĐÔI</span>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div class="col-md-3 status-button">
-
-
-                                <button class="book-now">Đặt Ngay</button>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <div id="popular" class="tab_item">
-                    <div class="hotel-card">
-                        <div class="sale-badge">SALE</div>
-                        <div class="hotel-image">
-                            <swiper-container class="mySwiper" pagination="true" pagination-clickable="true"
-                                navigation="true" space-between="30" loop="true" style="height: auto">
-                                <swiper-slide>
-                                    <img src="https://swiperjs.com/demos/images/nature-1.jpg" alt="Nature Image 1" />
-                                </swiper-slide>
-                                <swiper-slide>
-                                    <img src="https://swiperjs.com/demos/images/nature-1.jpg" alt="Nature Image 1" />
-                                </swiper-slide>
-                                <swiper-slide>
-                                    <img src="https://swiperjs.com/demos/images/nature-1.jpg" alt="Nature Image 1" />
-                                </swiper-slide>
-                                <swiper-slide>
-                                    <img src="https://swiperjs.com/demos/images/nature-1.jpg" alt="Nature Image 1" />
-                                </swiper-slide>
-                                <!-- Thêm các slide khác -->
-                            </swiper-container>
-
-                        </div>
-                        <div class="hotel-info row">
-                            <div class="col-md-9">
-                                <p class="reviews">Có {{ $hotel->rating }} lượt đánh giá</p>
-                                <h4 class="location_hotel">
-                                    <i class="fas fa-map-marker-alt icon-location" style="color: #3B79C9;"></i>
-                                    Thành Phố Hồ Chí Minh
-                                </h4>
-                                <h3 class="name_hotel"><i class="fa-solid fa-hotel icon-hotel"
-                                        style="color: #3B79C9;"></i>{{ $hotel->hotel_name }}</h3>
-                                <div class="price-info">
-                                    <span class="old-price">2.337.999 đ</span>
-                                    <span class="discount">-25%</span>
-                                </div>
-                                <span class="new-price">1.763.668 đ</span>
-                                <div class="rating">
-                                    @for ($i = 1; $i <= 5; $i++)
-                                        @if ($i <= $hotel->rating)
-                                            <span>★</span>
-                                        @else
-                                            <span>☆</span>
-                                        @endif
-                                    @endfor
-                                </div>
-
-                            </div>
-                            <div class="col-md-3 status-button">
-
-                                <div class="status">
-                                    <span class="status-available">ĐƠN</span>
-                                    <span class="status-soldout">ĐÔI</span>
-                                </div>
-                                <button class="book-now">Đặt Ngay</button>
-                            </div>
-                        </div>
-
-                    </div>
                 </div>
                 <div id="rating" class="tab_item">
                     @foreach ($get_hotels_desc as $hotel)
@@ -418,42 +441,55 @@
                             </swiper-container>`;
                             }
 
+                            // Không hiển thị được giá
+                            const oldPrice = hotel.average_price ?? 0;
+                            const newPrice = hotel.average_price_sale ?? 0;
+                            const discount = hotel.average_discount_percent ?? 0;
+
+                            // Format the prices using number_format equivalent
+                            const oldPriceFormatted = new Intl.NumberFormat('vi-VN').format(oldPrice);
+                            const newPriceFormatted = new Intl.NumberFormat('vi-VN').format(newPrice);
+                            const discountFormatted = discount;
+
                             // Add hotel card HTML
                             hotelsContainer.innerHTML += `
-                        <div class="hotel-card">
-                            <div class="sale-badge">SALE</div>
-                            <div class="hotel-image">
-                                ${imagesHtml}
-                            </div>
-                            <div class="hotel-info row">
-                                <div class="col-md-9">
-                                    <p class="reviews">Có ${hotel.rating} lượt đánh giá</p>
-                                    <h4 class="location_hotel">Thành Phố Hồ Chí Minh</h4>
-                                    <h3 class="name_hotel">${hotel.hotel_name}</h3>
-                                    <div class="price-info">
-                                        <span class="old-price">${hotel.old_price} đ</span>
-                                        <span class="discount">${hotel.discount}%</span>
+                                <div class="hotel-card">
+                                    <div class="sale-badge">SALE</div>
+                                    <div class="hotel-image">
+                                        ${imagesHtml}
                                     </div>
-                                    <span class="new-price">${hotel.new_price} đ</span>
-                                    <div class="rating">
-                                        ${'★'.repeat(hotel.rating)}${'☆'.repeat(5 - hotel.rating)}
+                                    <div class="hotel-info row">
+                                        <div class="col-md-9">
+                                            <p class="reviews">Có ${hotel.rating} lượt đánh giá</p>
+                                            <h4 class="location_hotel">
+                                            <i class="fas fa-map-marker-alt icon-location" style="color: #3B79C9;"></i>
+                                            ${hotel.city}
+                                            </h4>
+                                            <h3 class="name_hotel"><i class="fa-solid fa-hotel icon-hotel" style="color: #3B79C9;"></i>${hotel.hotel_name}</h3>
+                                            <div class="price-info">
+                                            <span class="old-price">${oldPriceFormatted} đ</span>
+                                            <span class="discount">-${discountFormatted}%</span>
+                                            </div>
+                                            <span class="new-price">${newPriceFormatted} đ</span>
+                                            <div class="rating">
+                                            ${'★'.repeat(hotel.rating)}${'☆'.repeat(5 - hotel.rating)}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 status-button">
+                                            <div class="status">
+                                                <span class="status-available">ĐƠN</span>
+                                                <span class="status-soldout">ĐÔI</span>
+                                            </div>
+                                            <button class="book-now">Đặt Ngay</button>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-3 status-button">
-                                    <div class="status">
-                                        <span class="status-available">ĐƠN</span>
-                                        <span class="status-soldout">ĐÔI</span>
-                                    </div>
-                                    <button class="book-now">Đặt Ngay</button>
-                                </div>
-                            </div>
-                        </div>
                     `;
                         });
                     }
                 });
         });
     });
-
 </script>
+
 @endsection

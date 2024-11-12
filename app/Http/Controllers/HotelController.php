@@ -98,7 +98,7 @@ class HotelController extends Controller
 
     public function search(Request $request)
     {
-        // Lấy các giá trị từ request (GET parameters)
+        // Lấy thông tin từ form
         $location = $request->input('location');
         $daterange = $request->input('daterange');
         $rooms = $request->input('rooms');
@@ -106,26 +106,12 @@ class HotelController extends Controller
         $children = $request->input('children');
 
         // Tách ngày đi và ngày về từ daterange
-        $dates = explode(' - ', $daterange);
-        $check_in = isset($dates[0]) ? \Carbon\Carbon::createFromFormat('d/m/Y', trim($dates[0])) : null;
-        $check_out = isset($dates[1]) ? \Carbon\Carbon::createFromFormat('d/m/Y', trim($dates[1])) : null;
+        list($checkInDate, $checkOutDate) = explode(' - ', $daterange);
 
-        // Xây dựng query lọc theo location và các tiêu chí khác (ví dụ: số lượng phòng, người lớn, trẻ em)
-        $query = Hotel::query();
+        // Gọi phương thức tìm kiếm từ model Hotel
+        $hotels = Hotel::searchHotels($location, $checkInDate, $checkOutDate, $rooms, $adults, $children);
 
-        if ($location) {
-            $query->where('city_id', $location);
-        }
-
-        // Nếu có thêm điều kiện lọc ngày check-in và check-out
-        // có thể cần sửa lại nếu có thêm thông tin ngày lưu trữ trong bảng hotels
-
-        // Lọc các tiêu chí khác (nếu có)
-        // Ví dụ: số phòng, số người lớn, số trẻ em
-
-        // Thực hiện query
-        $hotels = $query->get();
-        // Lấy danh sách tiện nghi
+        // Trả về kết quả tìm kiếm tới view
         $amenities = HotelAmenities::getAllAmenities();
 
         // Trả dữ liệu về trang search_result
@@ -483,5 +469,59 @@ class HotelController extends Controller
         return view('pages.pay', compact('hotel', 'room', ));
     }
 
+   
+    // Trong controller
+    public function filterHotelsByCity(Request $request)
+    {
+        $cityId = $request->get('city_id');
+
+        // Eager load quan hệ city và lấy thông tin về tên thành phố
+        $hotels = Hotel::with('city') // Eager load quan hệ city
+                    ->where('city_id', $cityId)
+                    ->get()
+                    ->map(function ($hotel) {
+                        return [
+                            'hotel_id' => $hotel->id,
+                            'hotel_name' => $hotel->hotel_name,
+                            'location' => $hotel->location,
+                            'city' => $hotel->city->city_name, // Lấy tên thành phố
+                            'reviews_count' => Reviews::countReviewsForHotel($hotel->id),
+                            'old_price' => number_format($hotel->average_price_sale, 0, ',', '.'),
+                            'new_price' => number_format($hotel->average_price, 0, ',', '.'),
+                            'is_favorite' => $hotel->is_favorite,
+                            'discount_percent' => number_format($hotel->average_discount_percent),
+                            'image_url' => $hotel->images->isNotEmpty() ? asset('storage/images/' . $hotel->images->first()->image_url) : '/images/default-image.png',
+                        ];
+                    });
+                    
+        return response()->json([
+            'hotels' => $hotels
+        ]);
+    }
+
+    public function getAllHotels(Request $request)
+    {
+        // Lấy tất cả khách sạn mà không lọc theo city_id
+        $hotels = Hotel::with('city') // Eager load quan hệ city
+                    ->get() // Lấy tất cả khách sạn
+                    ->map(function ($hotel) {
+                        return [
+                            'hotel_id' => $hotel->id,
+                            'hotel_name' => $hotel->hotel_name,
+                            'location' => $hotel->location,
+                            'city' => $hotel->city->city_name, // Lấy tên thành phố
+                            'reviews_count' => Reviews::countReviewsForHotel($hotel->id),
+                            'old_price' => number_format($hotel->average_price_sale, 0, ',', '.'),
+                            'new_price' => number_format($hotel->average_price, 0, ',', '.'),
+                            'is_favorite' => $hotel->is_favorite,
+                            'discount_percent' => number_format($hotel->average_discount_percent),
+                            'image_url' => $hotel->images->isNotEmpty() ? asset('storage/images/' . $hotel->images->first()->image_url) : '/images/default-image.png',
+                        ];
+                    });
+                    
+        return response()->json([
+            'hotels' => $hotels
+        ]);
+    }
 }
 // 

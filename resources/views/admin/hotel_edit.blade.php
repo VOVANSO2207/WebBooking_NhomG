@@ -143,9 +143,9 @@ document.getElementById('upload').addEventListener('change', function(event) {
     // Xóa tất cả ảnh hiện tại
     imagePreviewContainer.innerHTML = '';
 
-    // Giới hạn số lượng ảnh upload là 4
-    if (files.length > 4) {
-        alert("Bạn chỉ có thể upload tối đa 4 ảnh.");
+    // Giới hạn số lượng ảnh upload
+    if (files.length > 20) {
+        alert("Bạn chỉ có thể upload tối đa 20 ảnh.");
         return;
     }
 

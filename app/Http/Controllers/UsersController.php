@@ -84,7 +84,7 @@ class UsersController extends Controller
         $user = new User();
         $user->username = $request->username;
         $user->email = $request->email;
-        $user->password = bcrypt($request->password);
+        $user->password = $request->password;
         $user->phone_number = $request->phone_number;
         $user->role_id = $request->role_id;
         $user->status = $request->status;
@@ -187,7 +187,7 @@ class UsersController extends Controller
 
         // Chỉ cập nhật mật khẩu nếu có giá trị
         if ($request->filled('password')) {
-            $user->password = bcrypt($request->password);
+            $user->password = $request->password;
         }
 
         $user->phone_number = $request->phone_number;

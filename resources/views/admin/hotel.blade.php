@@ -176,7 +176,7 @@
                         document.getElementById('modalHotelName').innerText = hotel.hotel_name;
                         document.getElementById('modalHotelLocation').innerText = hotel.location;
                         document.getElementById('modalHotelCity').innerText = hotel.city;
-                        document.getElementById('modalHotelDescription').innerText = hotel.description;
+                        document.getElementById('modalHotelDescription').innerText = hotel.description.length > 50 ? hotel.description.substring(0, 50) + '...' : hotel.description;
                         document.getElementById('modalHotelRating').innerText = hotel.rating;
 
                         const editRoute = "{{ route('hotel.edit', ['hotel_id' => ':hotel_id']) }}";
