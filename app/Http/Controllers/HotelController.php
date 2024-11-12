@@ -266,15 +266,26 @@ class HotelController extends Controller
             }
         }
 
-        // Gán hotel_id cho các phòng được chọn
-        if ($request->has('rooms')) {
-            foreach ($request->rooms as $roomId) {
-                // Cập nhật hotel_id cho từng phòng
-                $room = Rooms::find($roomId);
-                if ($room) {
-                    $room->hotel_id = $hotel->hotel_id;
-                    $room->save();
+        // Kiểm tra xem có 'selected_rooms' hay không và nếu có thì giải mã JSON thành mảng
+        if ($request->has('selected_rooms')) {
+            // Giải mã chuỗi JSON thành mảng
+            $selectedRooms = json_decode($request->input('selected_rooms'), true); // true để trả về mảng
+
+            // Kiểm tra xem $selectedRooms có phải là mảng hợp lệ không
+            if (is_array($selectedRooms)) {
+                foreach ($selectedRooms as $roomId) {
+                    $room = Rooms::find($roomId);
+
+                    if ($room) {
+                        // Gán hotel_id cho phòng
+                        $room->hotel_id = $hotel->hotel_id;
+                        // Lưu thay đổi
+                        $room->save();
+                    }
                 }
+            } else {
+                // Nếu không phải là mảng hợp lệ, có thể trả về lỗi hoặc xử lý khác
+                return response()->json(['error' => 'Invalid room selection'], 400);
             }
         }
 
@@ -319,18 +330,38 @@ class HotelController extends Controller
 
     public function editHotel($hotel_id)
     {
+        // Giải mã ID
         $decodedId = IdEncoder::decodeId($hotel_id);
+        
+        // Tìm khách sạn cụ thể theo ID đã giải mã
         $hotel = Hotel::find($decodedId);
-
+        
+        // Lấy danh sách thành phố
         $cities = Cities::all();
-        $hotelAmenities = HotelAmenities::all(); // Lấy tất cả tiện nghi
-        $currentAmenities = $hotel->amenities()->pluck('amenity_id')->toArray(); // Lấy các tiện nghi hiện tại của khách sạn
-
-        // Lấy tất cả các phòng
-        $rooms = Rooms::all(); // Lấy tất cả phòng, không chỉ phòng của khách sạn cụ thể
-        $currentRooms = $hotel->rooms()->pluck('room_id')->toArray(); // Lấy các phòng hiện tại của khách sạn
-
-        return view('admin.hotel_edit', compact('hotel', 'cities', 'hotelAmenities', 'currentAmenities', 'rooms', 'currentRooms'));
+        
+        // Lấy tất cả các tiện nghi
+        $hotelAmenities = HotelAmenities::all();
+        
+        // Lấy các tiện nghi hiện tại của khách sạn
+        $currentAmenities = $hotel->amenities()->pluck('amenity_id')->toArray();
+        
+        // Lấy tất cả các phòng, bao gồm ảnh đầu tiên của mỗi phòng
+        $rooms = Rooms::with(['room_images' => function($query) {
+            $query->orderBy('image_id', 'asc')->take(1); // Lấy ảnh đầu tiên
+        }])->get();
+        
+        // Lấy các phòng hiện tại của khách sạn
+        $currentRooms = $hotel->rooms()->pluck('room_id')->toArray();
+    
+        // Trả về view với dữ liệu cần thiết
+        return view('admin.hotel_edit', compact(
+            'hotel', 
+            'cities', 
+            'hotelAmenities', 
+            'currentAmenities', 
+            'rooms', 
+            'currentRooms'
+        ));
     }
 
     public function update(Request $request, $hotel_id)
@@ -431,14 +462,14 @@ class HotelController extends Controller
             }
         }
 
-        if ($request->has('rooms')) {
+        if ($request->has('selected_rooms')) {
+            $selectedRooms = json_decode($request->input('selected_rooms'), true);
+    
             $existingRooms = $hotel->rooms()->pluck('room_id')->toArray();
-            $selectedRooms = $request->rooms;
-
             Rooms::whereIn('room_id', $existingRooms)
                 ->whereNotIn('room_id', $selectedRooms)
                 ->update(['hotel_id' => 0]);
-
+    
             foreach ($selectedRooms as $roomId) {
                 Rooms::where('room_id', $roomId)->update(['hotel_id' => $hotel->hotel_id]);
             }

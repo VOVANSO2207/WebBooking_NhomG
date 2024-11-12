@@ -78,16 +78,32 @@
                             </div>
 
                             <div class="mb-3 col-md-5">
-                                <label class="form-label">Hotel Rooms</label>
-                                <select name="rooms[]" class="form-select select2" id="rooms" multiple="multiple">
-                                    @foreach ($rooms as $room)
-                                        <option value="{{ $room->room_id }}" data-name="{{ $room->name }}" data-price="{{ $room->price }}"
-                                            @if(in_array($room->room_id, $currentRooms)) selected @endif>
-                                            {{ $room->name }} - Giá: {{ $room->price }} - Số người tối đa: {{ $room->capacity }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
+                            <label class="form-label">Hotel Rooms</label>
+                            <select name="room_select" class="form-select" id="roomSelect" onchange="addSelectedRoom()">
+                                <option value="">Chọn phòng</option>
+                                @foreach ($rooms as $index => $room)
+                                    <option value="{{ $room->room_id }}" 
+                                            data-name="{{ $room->name }}" 
+                                            data-price="{{ $room->price }}" 
+                                            data-image="{{ $room->room_images->isNotEmpty() ? asset('images/' . $room->room_images[0]->image_url) : asset('images/default_image.jpg') }}"
+                                            {{ $index === 0 ? 'selected' : '' }}>
+                                        {{ $room->name }} - Giá: {{ $room->price }} - Số người tối đa: {{ $room->capacity }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('rooms')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <!-- Khu vực hiển thị các phòng đã chọn -->
+                        <div class="col-md-12 mt-4">
+                            <h5>Selected Rooms</h5>
+                            <div id="selectedRoomsContainer" class="d-flex flex-wrap"></div>
+                        </div>
+
+                        <!-- Input ẩn chứa danh sách phòng đã chọn -->
+                        <input type="hidden" name="selected_rooms" id="selectedRoomsInput" value="{{ old('selected_rooms', json_encode($selectedRooms ?? [])) }}">
 
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Upload Images</label>
@@ -186,6 +202,52 @@ function updateDescriptions() {
             filebrowserUploadUrl: "path/to/upload/image" // Sửa đường dẫn này cho đúng
         });
     };
+
+    let selectedRooms = [];
+
+function addSelectedRoom() {
+    const roomsSelect = document.getElementById('roomSelect');
+    const selectedOption = roomsSelect.options[roomsSelect.selectedIndex];
+    const roomId = selectedOption.value;
+    const roomImageUrl = selectedOption.getAttribute('data-image') || "{{ asset('images/default_image.jpg') }}";
+    const roomName = selectedOption.getAttribute('data-name');
+    const roomPrice = selectedOption.getAttribute('data-price');
+
+    if (roomId === "" || selectedRooms.includes(roomId)) {
+        return; // Bỏ qua nếu phòng đã chọn hoặc không có giá trị
+    }
+
+    // Thêm phòng vào danh sách tạm thời
+    selectedRooms.push(roomId);
+    document.getElementById('selectedRoomsInput').value = JSON.stringify(selectedRooms);
+
+    // Tạo một thẻ div để chứa thông tin phòng đã chọn
+    const roomDiv = document.createElement('div');
+    roomDiv.classList.add('selected-room', 'p-2', 'm-2', 'border', 'position-relative', 'text-center');
+    roomDiv.style.width = '150px';
+    roomDiv.id = `selected-room-${roomId}`;
+
+    roomDiv.innerHTML = `
+        <button type="button" class="btn-close position-absolute" style="top: 5px; right: 5px;" onclick="removeSelectedRoom('${roomId}')"></button>
+        <img src="${roomImageUrl}" alt="Room Image" style="width: 100%; height: auto;">
+        <div style="font-weight: bold; margin-top: 5px;">${roomName}</div>
+        <div>Giá: ${roomPrice} VND</div>
+    `;
+
+    document.getElementById('selectedRoomsContainer').appendChild(roomDiv);
+}
+
+// Hàm xóa phòng đã chọn
+function removeSelectedRoom(roomId) {
+    selectedRooms = selectedRooms.filter(id => id !== roomId);
+    document.getElementById('selectedRoomsInput').value = JSON.stringify(selectedRooms);
+    document.getElementById(`selected-room-${roomId}`).remove();
+}
+
+// Gọi hàm addSelectedRoom() khi trang tải xong để cập nhật phòng mặc định (phòng đầu tiên)
+document.addEventListener("DOMContentLoaded", function() {
+    addSelectedRoom(); // Gọi hàm để thêm phòng đầu tiên vào danh sách đã chọn
+});
 </script>
 
 @endsection

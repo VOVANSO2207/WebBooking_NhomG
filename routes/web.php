@@ -225,6 +225,8 @@ Route::get('/detail_voucher', [PromotionsController::class, 'viewVoucherUser'])-
 // Định nghĩa route cho phương thức lọc khách sạn
 Route::get('/hotels/filter', [HotelController::class, 'filterHotelsByCity'])->name('hotels.filter');
 Route::get('/hotels', [HotelController::class, 'getAllHotels'])->name('hotels.all');
+Route::post('/store-rooms', [RoomController::class, 'storeSelectedRooms']);
+
 
 
 
