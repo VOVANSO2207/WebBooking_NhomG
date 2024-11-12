@@ -25,8 +25,25 @@
                     {!! $post->content !!} <!-- Hiển thị nội dung bài viết -->
                 </div>
                 <p class="text-muted">Ngày đăng: {{ $post->created_at ?? 'N/A' }}</p> <!-- Ngày đăng -->
-            </div>
+                <!-- Thêm các nút chia sẻ Facebook và Gmail -->
+                    <div class="share-buttons">
+                        <h3>Chia sẻ bài viết:</h3>
+                        
+                        <!-- Nút chia sẻ lên Facebook -->
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->full()) }}" 
+                        target="_blank" class="btn btn-primary">
+                        <i class="fab fa-facebook"></i> Chia sẻ Facebook
+                        </a>
 
+                        <!-- Nút chia sẻ qua Gmail -->
+                        <a href="mailto:?subject={{ urlencode($post->title) }}&body={{ urlencode(Request::url()) }}" 
+                        target="_blank" class="btn btn-danger">
+                        <i class="fas fa-envelope"></i> Chia sẻ Gmail
+                        </a>
+                    </div>
+
+            </div>
+            
             <!-- Bên Phải: Bài viết liên quan -->
             <div class="col-md-4">
                 <h2>Bài viết liên quan</h2>
