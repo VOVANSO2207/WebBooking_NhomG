@@ -228,7 +228,28 @@ class PromotionsController extends Controller
     }
     public function viewVoucherUser()
     {
-        $vouchers = Promotions::getAllVouchers(3);
+        $vouchers = Promotions::getAllVouchers(7);
+    
+        foreach ($vouchers as $voucher) {
+            try {
+                // Chuyển đổi end_date sang Carbon và đặt thời gian bắt đầu của ngày
+                $endDate = Carbon::createFromFormat('d/m/Y', $voucher->end_date, 'Asia/Ho_Chi_Minh')->startOfDay();
+                $currentDate = Carbon::now('Asia/Ho_Chi_Minh')->startOfDay();
+    
+                // Kiểm tra ngày hết hạn
+                if ($endDate->isBefore($currentDate)) {
+                    $voucher->status = 'expired'; // Đã hết hạn
+                } elseif ($currentDate->diffInDays($endDate) <= 3) {
+                    $voucher->status = 'expiring_soon'; // Sắp hết hạn trong 2-3 ngày
+                } else {
+                    $voucher->status = 'active'; // Vẫn còn hiệu lực
+                }
+            } catch (\Exception $e) {
+                // Nếu có lỗi khi xử lý ngày
+                $voucher->status = 'unknown';
+            }
+        }
+    
         return view('pages.detail_voucher', compact('vouchers'));
     }
 
