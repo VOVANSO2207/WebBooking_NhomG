@@ -1,4 +1,5 @@
 
+
 @extends('layouts.app')
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -7,7 +8,9 @@
 @include('partials.header') 
 @endsection
 <!--  -->
-
+@php
+    use Carbon\Carbon;
+@endphp
 @section('content')
 <style>
   :root {
@@ -471,73 +474,77 @@
         <h2 class="section-title">Khám Phá Ưu Đãi Hấp Dẫn Cho Mọi Kỳ Nghỉ Tại Khách Sạn</h2>
         
         <div class="voucher-list" id="voucherList">
+       
         @foreach($vouchers as $key => $voucher)
-            <!-- Voucher Card 1 -->
-            <div class="voucher-card">
-                <div class="voucher-header">
-                    <p class="voucher-amount">Giảm {{ number_format($voucher->discount_amount, 0, ',', '.') }} VND</p>
-                    <span class="voucher-type">Áp dụng cho đơn từ 1.000.000đ</span>
-                    <span class="voucher-status status-active">Đang hoạt động</span>
-                </div>
-                <div class="voucher-body">
-                    <h3 class="voucher-title">{{$voucher -> pro_title}}</h3>
-                    <p class="voucher-description">
-                    {{ $voucher -> pro_description}}
-                    </p>
-                    <div class="voucher-meta">
-                        <span class="voucher-expiry">Hết hạn: {{$voucher -> end_date}}</span>
-                        <span class="voucher-code" onclick="copyVoucherCode(this)">{{ $voucher -> promotion_code}}</span>
-                    </div>
-                </div>
-                <div class="voucher-action">
-                    <button class="use-voucher-btn">Sử dụng ngay</button>
+    @if ($voucher->status == 'expired')
+        <!-- Voucher Card 3: Đã hết hạn -->
+        <div class="voucher-card expired-voucher">
+            <div class="voucher-header" style="background: linear-gradient(45deg, #636e72, #b2bec3);">
+                <p class="voucher-amount">Giảm {{ number_format($voucher->discount_amount, 0, ',', '.') }} VND</p>
+                <span class="voucher-type">Đã hết hạn</span>
+                <span class="voucher-status status-expired">Đã hết hạn</span>
+            </div>
+            <div class="voucher-body">
+                <h3 class="voucher-title">{{ $voucher->pro_title }}</h3>
+                <p class="voucher-description">
+                    {{ $voucher->pro_description }}
+                </p>
+                <div class="voucher-meta">
+                    <span class="voucher-expiry">Đã hết hạn</span>
+                    <span class="voucher-code" onclick="copyVoucherCode(this)">{{ $voucher->promotion_code }}</span>
                 </div>
             </div>
-            @endforeach
-            <!-- Voucher Card 2 -->
-            <div class="voucher-card">
-                <div class="voucher-header" style="background: linear-gradient(45deg, #4834d4, #686de0);">
-                    <p class="voucher-amount">Giảm 15%</p>
-                    <span class="voucher-type">Tối đa 500.000đ</span>
-                    <span class="voucher-status status-active">Đang hoạt động</span>
-                </div>
-                <div class="voucher-body">
-                    <h3 class="voucher-title">Ưu đãi Cuối Tuần</h3>
-                    <p class="voucher-description">
-                        Giảm 15% tối đa 500.000đ cho đơn đặt phòng vào cuối tuần tại tất cả các khách sạn.
-                    </p>
-                    <div class="voucher-meta">
-                        <span class="voucher-expiry">Hết hạn: 30/11/2024</span>
-                        <span class="voucher-code" onclick="copyVoucherCode(this)">WEEKEND15</span>
-                    </div>
-                </div>
-                <div class="voucher-action">
-                    <button class="use-voucher-btn">Sử dụng ngay</button>
+            <div class="voucher-action">
+                <button class="use-voucher-btn" disabled style="background: #b2bec3;">Đã hết hạn</button>
+            </div>
+        </div>
+    @elseif ($voucher->status == 'expiring_soon')
+        <!-- Voucher Card 2: Còn 1 ngày nữa hết hạn -->
+        <div class="voucher-card">
+            <div class="voucher-header" style="background: linear-gradient(45deg, #4834d4, #686de0);">
+                <p class="voucher-amount">Giảm {{ number_format($voucher->discount_amount, 0, ',', '.') }} VND</p>
+                <span class="voucher-type">Áp dụng cho đơn từ 1.000.000đ</span>
+                <span class="voucher-status status-warning">Voucher sắp hết hạn</span>
+            </div>
+            <div class="voucher-body">
+                <h3 class="voucher-title">{{ $voucher->pro_title }}</h3>
+                <p class="voucher-description">
+                    {{ $voucher->pro_description }}
+                </p>
+                <div class="voucher-meta">
+                    <span class="voucher-expiry">Hết hạn: {{ $voucher->end_date }}</span>
+                    <span class="voucher-code" onclick="copyVoucherCode(this)">{{ $voucher->promotion_code }}</span>
                 </div>
             </div>
+            <div class="voucher-action">
+                <button class="use-voucher-btn">Sử dụng ngay</button>
+            </div>
+        </div>
+    @else
+        <!-- Voucher Card 1: Đang hoạt động -->
+        <div class="voucher-card">
+            <div class="voucher-header">
+                <p class="voucher-amount">Giảm {{ number_format($voucher->discount_amount, 0, ',', '.') }} VND</p>
+                <span class="voucher-type">Áp dụng cho đơn từ 1.000.000đ</span>
+                <span class="voucher-status status-active">Đang hoạt động</span>
+            </div>
+            <div class="voucher-body">
+                <h3 class="voucher-title">{{ $voucher->pro_title }}</h3>
+                <p class="voucher-description">
+                    {{ $voucher->pro_description }}
+                </p>
+                <div class="voucher-meta">
+                    <span class="voucher-expiry">Hết hạn: {{ $voucher->end_date }}</span>
+                    <span class="voucher-code" onclick="copyVoucherCode(this)">{{ $voucher->promotion_code }}</span>
+                </div>
+            </div>
+            <div class="voucher-action">
+                <button class="use-voucher-btn">Sử dụng ngay</button>
+            </div>
+        </div>
+    @endif
+@endforeach
 
-            <!-- Voucher Card 3 -->
-            <div class="voucher-card">
-                <div class="voucher-header" style="background: linear-gradient(45deg, #636e72, #b2bec3);">
-                    <p class="voucher-amount">Giảm 50%</p>
-                    <span class="voucher-type">Đặt phòng lần đầu</span>
-                    <span class="voucher-status status-expired">Đã hết hạn</span>
-                </div>
-                <div class="voucher-body">
-                    <h3 class="voucher-title">Ưu đãi Người Dùng Mới</h3>
-                    <p class="voucher-description">
-                        Giảm 50% cho lần đặt phòGiảm 50% cho lần đặt phòng đầu tiên, áp dụng cho tất cả các khách sạn.
-                    </p>
-                    <div class="voucher-meta">
-                        <span class="voucher-expiry">Đã hết hạn</span>
-                        <span class="voucher-code" onclick="copyVoucherCode(this)">NEWFIRST50</span>
-                    </div>
-                </div>
-                <div class="voucher-action">
-                    <button class="use-voucher-btn" disabled style="background: #b2bec3;">Đã hết hạn</button>
-                </div>
-            </div>
-            
             
             <div class="view-more-container" id="viewMoreContainer">
                 <button class="view-more-btn" id="viewMoreBtn">
@@ -707,6 +714,15 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+// Ẩn các voucher hết hạn sau 10 giây
+setTimeout(() => {
+    // Lấy tất cả các phần tử có class "expired-voucher"
+    const expiredVouchers = document.querySelectorAll('.expired-voucher');
+    
+    expiredVouchers.forEach(voucher => {
+        voucher.style.display = 'none'; // Ẩn voucher đã hết hạn
+    });
+}, 10000); // 10000ms = 10 giây
 </script>
 @endsection
 @section('footer')
