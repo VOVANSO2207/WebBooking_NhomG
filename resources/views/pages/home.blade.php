@@ -102,7 +102,7 @@
                             </div>
 
                             <div class="col-md-2 text-center" style="width: 100%;height:100%;">
-                                <img src="{{ Auth::check() && Auth::user()->avatar ? asset('storage/images/' . Auth::user()->avatar) : asset('images/user-profile.png') }}"
+                                <img src="{{ Auth::check() && Auth::user()->avatar ? asset('images/' . Auth::user()->avatar) : asset('images/user-profile.png') }}"
                                     alt="Avatar" class="img-fluid rounded-circle"
                                     style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;">
 
@@ -397,7 +397,7 @@
                                 <div class="shape-in">
                                     @if ($hotel->images->isNotEmpty())
                                         <img class="image-hotel-2"
-                                            src="{{ asset('storage/images/' . $hotel->images->first()->image_url) }}"
+                                            src="{{ asset('images/' . $hotel->images->first()->image_url) }}"
                                             alt="">
                                     @else
                                         <img class="image-hotel-2" src="{{ asset('/images/defaullt-image.png') }}"
@@ -620,7 +620,7 @@ function updateHotelList(hotels) {
                     <div class="group-info-hotel">
                         <p class="info-hotel-name m-0">${hotel.hotel_name}</p>
                         <p class="info-hotel-location m-0">${hotel.location}, ${hotel.city}</p>
-                        <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i>${hotel.reviews} Đánh giá</p>
+                        <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i>${hotel.reviews_count} Đánh giá</p>
                         <p class="info-hotel-price-old mb-0 mt-5 pt-5">${hotel.old_price} VND</p>
                         <div class="row group-heart-price">
                             <div class="col-md-6">
