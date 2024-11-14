@@ -515,9 +515,16 @@ body {
                 padding: 15px;
                 border-radius: 10px;
 
-                .image-review img {
-                    width: 200px;
-                    border-radius: 10px;
+                .image-review {
+                    display: grid;
+                    grid-template-columns: 100px 100px 100px 100px;
+                    padding: 10px;
+                    gap: 10px;
+
+                    img {
+                        width: 100px;
+                        border-radius: 10px;
+                    }
                 }
 
                 .group-info-review {
