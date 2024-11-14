@@ -512,7 +512,7 @@ class HotelController extends Controller
                     ->get()
                     ->map(function ($hotel) {
                         return [
-                            'hotel_id' => $hotel->id,
+                            'hotel_id' => $hotel->hotel_id,
                             'hotel_name' => $hotel->hotel_name,
                             'location' => $hotel->location,
                             'city' => $hotel->city->city_name, // Lấy tên thành phố
@@ -537,7 +537,7 @@ class HotelController extends Controller
                     ->get() // Lấy tất cả khách sạn
                     ->map(function ($hotel) {
                         return [
-                            'hotel_id' => $hotel->id,
+                            'hotel_id' => $hotel->hotel_id,
                             'hotel_name' => $hotel->hotel_name,
                             'location' => $hotel->location,
                             'city' => $hotel->city->city_name, // Lấy tên thành phố

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
@@ -175,4 +175,13 @@ class Hotel extends Model
             ->get();
     }
 
+    public function getIsFavoriteAttribute()
+    {
+        if (Auth::check()) {
+            return FavoriteHotel::where('user_id', Auth::id())
+                ->where('hotel_id', $this->hotel_id)
+                ->exists();
+        }
+        return false;
+    }
 }
