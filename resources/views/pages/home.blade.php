@@ -160,7 +160,8 @@
                 <div class="col-md-3">
                     <div class="date-picker-search border">
                         <i class="fa-regular fa-calendar-days ps-2"></i>
-                        <input class="datepicker-staynest form-control p-0 ms-2" type="text" name="daterange" readonly />
+                        <input class="datepicker-staynest form-control p-0 ms-2" type="text" name="daterange"
+                            readonly />
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -238,12 +239,12 @@
                                 <p class="location m-0">{{ $hotel->city->city_name }} - <span
                                         class="name-hotel">{{ $hotel->hotel_name }}</span></p>
                                 <p class="price-old m-0">
-                                    {{ number_format($hotel->average_price, 0, ',', '.') }} VNĐ
+                                    {{ number_format($hotel->average_price, 0, ',', '.') }} VNĐ VNĐ
                                 </p>
                                 <div class="row price-top">
                                     <div class="col-md-7">
                                         <span class="price-new">VNĐ
-                                            {{ number_format($hotel->average_price, 0, ',', '.') }} VNĐ
+                                            {{ number_format($hotel->average_price_sale, 0, ',', '.') }} VNĐ
                                             <span>/ Khách</span>
                                         </span>
                                     </div>
@@ -393,10 +394,10 @@
                         <a href="#" class="group-offers">
                             <div class="shape-in">
                                 @if ($hotel->images->isNotEmpty())
-                                    <img class="image-hotel-2"
-                                        src="{{ asset('storage/images/' . $hotel->images->first()->image_url) }}" alt="">
+                                    <img class="image-hotel-2" src="{{ asset('images/' . $hotel->images->first()->image_url) }}"
+                                        alt="">
                                 @else
-                                    <img class="image-hotel-2" src="{{ asset('/images/defaullt-image.png') }}" alt="">
+                                    <img class="image-hotel-2" src="{{ asset('storage/images/defaullt-image.png') }}" alt="">
                                 @endif
 
                                 <div class="group-info-hotel">
@@ -410,7 +411,7 @@
                                     </p>
 
                                     <p class="info-hotel-price-old mb-0 mt-5 pt-5">
-                                        {{ number_format($hotel->average_price_sale, 0, ',', '.') }} VND
+                                        {{ number_format($hotel->average_price_sale, 0, ',', '.') }} VNĐ
                                     </p>
                                     <div class="row group-heart-price">
                                         <div class="col-md-6">
@@ -427,7 +428,7 @@
                                     </div>
                                 </div>
                                 <div class="sale-hotel">
-                                    {{ number_format($hotel->average_discount_percent) }} %
+                                    -{{ number_format($hotel->average_discount_percent) }}%
                                 </div>
                             </div>
                         </a>
@@ -585,6 +586,7 @@
                             return response.json();
                         })
                         .then(data => {
+                            console.log('Data received:', data);
                             updateHotelList(data.hotels);
                         })
                         .catch(error => console.error('Error:', error));
@@ -615,7 +617,7 @@
                     <div class="group-info-hotel">
                         <p class="info-hotel-name m-0">${hotel.hotel_name}</p>
                         <p class="info-hotel-location m-0">${hotel.location}, ${hotel.city}</p>
-                        <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i>${hotel.reviews_count} Đánh giá</p>
+                        <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i> ${hotel.reviews_count} Đánh giá</p>
                         <p class="info-hotel-price-old mb-0 mt-5 pt-5">${hotel.old_price} VND</p>
                         <div class="row group-heart-price">
                             <div class="col-md-6">
@@ -628,7 +630,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="sale-hotel">${hotel.discount_percent} %</div>
+                    <div class="sale-hotel">-${hotel.discount_percent}%</div>
                 </div>
             </a>
         `;

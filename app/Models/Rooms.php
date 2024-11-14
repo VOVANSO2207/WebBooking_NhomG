@@ -90,4 +90,8 @@ class Rooms extends Model
     {
         return $this->hasMany(Booking::class, 'room_id');
     }
+    public function room_types()
+    {
+        return $this->belongsTo(RoomType::class, 'room_type_id');
+    }
 }

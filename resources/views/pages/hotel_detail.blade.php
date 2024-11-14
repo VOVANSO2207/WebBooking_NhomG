@@ -111,7 +111,7 @@
                     <div class="col-md-4 detail-right-info">
                         <span class="detail-price-main">
                             @if($hotel->rooms->isNotEmpty())
-                                <p class="price">{{ number_format($hotel->rooms->min('price'), 0, ',', '.') . ' VND' }}</p>
+                                <p class="price">{{ number_format($hotel->rooms->min('price'), 0, ',', '.') }}/ đêm</p>
                             @else
                                 <p>N/A</p>
                             @endif
@@ -169,7 +169,7 @@
                                     navigation="true" space-between="30" loop="true">
                                     @forelse($room->room_images as $image)
                                         <swiper-slide>
-                                            <img src="{{ asset('storage/images/' . $image->image_url) }}" alt="Room Image" />
+                                            <img src="{{ asset('images/' . $image->image_url) }}" alt="Room Image" />
                                         </swiper-slide>
                                     @empty
                                         <p>Không có hình ảnh cho phòng này</p>
@@ -190,21 +190,22 @@
                                             <i class="fa-solid fa-hotel"></i>
                                             <span>{{ $room->name }}</span>
                                         </div>
-                                        <div class="group-room-price mt-2">
+                                        <div class="group-room-price">
                                             <ul class="p-0">
                                                 <li>
-                                                    <span
-                                                        class="card-room-price-old">{{ number_format($room->price, 0, ',', '.') }}
-                                                        đ</span>
+                                                    <span class="card-room-price-old">
+                                                    {{ number_format($room->price, 0, ',', '.') }}
+                                                    / Đêm
+                                                    </span>
                                                 </li>
                                                 <li>
-                                                    <span
-                                                        class="card-room-price-new">{{ number_format($room->price * (1 - $room->discount_percent / 100), 0, ',', '.') }}
-                                                        đ</span>
+                                                    <span class="card-room-price-new">
+                                                        {{ number_format($room->price * (1 - $room->discount_percent / 100), 0, ',', '.') }} / Đêm 
+                                                    </span>
                                                 </li>
                                             </ul>
                                         </div>
-                                        <div class="card-room-rating m-0">
+                                        <div class="card-room-rating m-0 p-0">
                                             @for ($i = 1; $i <= 5; $i++)
                                                 @if ($i <= $hotel->rating)
                                                     <span>★</span>
@@ -216,11 +217,11 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="card-room-status">
-                                            @if($room->room_type_id == 1)
-                                                <div class="don">{{ $room->name }}</div>
-                                            @elseif ($room->room_type_id == 2)
-                                                <div class="doi">{{ $room->name }}</div>
-                                            @endif
+                                        @if(optional($room->roomType)->room_type_id == 1)
+                                            <div class="don">{{ optional($room->roomType)->name }}</div>
+                                        @else
+                                            <div class="doi">{{ optional($room->roomType)->name }}</div>
+                                        @endif
                                         </div>
                                         <div class="card-room-btn-book">
                                             <a href="{{ route('pages.getInfoPay', ['hotel_id' => $hotel->hotel_id, 'room_id' => $room->room_id]) }}"
