@@ -37,11 +37,6 @@
      box-sizing: border-box;
  }
 
- .top-header,
- .search-bar-staynest {
-     scale: 0.93;
- }
-
  .header-staynest {
      background: rgb(29, 60, 99);
      background: linear-gradient(90deg, rgba(29, 60, 99, 1) 0%, rgba(59, 121, 201, 1) 100%);
@@ -268,9 +263,6 @@
  }
 
  /*  */
-
- .datepicker-staynest {}
-
  .number {
      font-weight: 700;
  }
@@ -278,7 +270,7 @@
  .num-people {
      border-radius: 10px;
      width: 100%;
-     padding: 0 10px 5px;
+     padding: 10px;
      border: 1px solid black;
      background: #fff;
      position: relative;
@@ -286,26 +278,24 @@
  }
 
 
+ .date-picker-search .datepicker-staynest:focus {
+     outline: none;
+ }
+
+ .date-picker-search .datepicker-staynest {
+     border: none;
+     padding: 10px 0 10px 0 !important;
+     font-size: 17px;
+     cursor: pointer;
+ }
+
  .date-picker-search {
-     position: relative;
+     display: flex;
      background: #fff;
      border-radius: 10px;
-     height: 50px;
- }
-
- .datepicker-staynest:focus {
-     outline: none !important;
-     box-shadow: none !important;
- }
-
- .datepicker-staynest {
-     position: absolute;
-     border: none !important;
      text-align: center;
-     background: transparent !important;
-     border: none;
-     font-weight: 700 !important;
-     cursor: pointer;
+     align-items: center;
+     font-size: 20px;
  }
 
  /*  */

@@ -158,7 +158,7 @@
             <h2 class="detail-title-book-room">
                 Chọn phòng
             </h2>
-            <div class="group-room-card row gx-4">
+            <div class="group-room-card row gx-4" id="searchResults">
                 @forelse($rooms as $room)
                     <!-- CARD ROOM -->
                     <div class="col-md-6">
@@ -224,7 +224,7 @@
                                         </div>
                                         <div class="card-room-btn-book">
                                             <a href="{{ route('pages.getInfoPay', ['hotel_id' => $hotel->hotel_id, 'room_id' => $room->room_id]) }}"
-                                                class="btn-book-now">Đặt ngay</a>
+                                                target="_blank" class="btn-book-now">Đặt ngay</a>
 
                                         </div>
                                     </div>
@@ -284,6 +284,29 @@
                                 Phòng đẹp chất lượng dịch vụ tốt, ưng ghê vậy á chàiiiii ♥♥
                             </div>
                             <div class="image-review">
+                                <img src="https://cms.imgworlds.com/assets/a5366382-0c26-4726-9873-45d69d24f819.jpg?key=home-gallery"
+                                    alt="">
+                                <img src="https://cms.imgworlds.com/assets/a5366382-0c26-4726-9873-45d69d24f819.jpg?key=home-gallery"
+                                    alt="">
+                                <img src="https://cms.imgworlds.com/assets/a5366382-0c26-4726-9873-45d69d24f819.jpg?key=home-gallery"
+                                    alt="">
+                                <img src="https://cms.imgworlds.com/assets/a5366382-0c26-4726-9873-45d69d24f819.jpg?key=home-gallery"
+                                    alt="">
+                                <img src="https://cms.imgworlds.com/assets/a5366382-0c26-4726-9873-45d69d24f819.jpg?key=home-gallery"
+                                    alt="">
+                                <img src="https://cms.imgworlds.com/assets/a5366382-0c26-4726-9873-45d69d24f819.jpg?key=home-gallery"
+                                    alt="">
+                                <img src="https://cms.imgworlds.com/assets/a5366382-0c26-4726-9873-45d69d24f819.jpg?key=home-gallery"
+                                    alt="">
+                                <img src="https://cms.imgworlds.com/assets/a5366382-0c26-4726-9873-45d69d24f819.jpg?key=home-gallery"
+                                    alt="">
+                                <img src="https://cms.imgworlds.com/assets/a5366382-0c26-4726-9873-45d69d24f819.jpg?key=home-gallery"
+                                    alt="">
+                                <img src="https://cms.imgworlds.com/assets/a5366382-0c26-4726-9873-45d69d24f819.jpg?key=home-gallery"
+                                    alt="">
+
+                                <img src="https://cms.imgworlds.com/assets/a5366382-0c26-4726-9873-45d69d24f819.jpg?key=home-gallery"
+                                    alt="">
                                 <img src="https://cms.imgworlds.com/assets/a5366382-0c26-4726-9873-45d69d24f819.jpg?key=home-gallery"
                                     alt="">
                             </div>
@@ -429,7 +452,6 @@
             localStorage.setItem('previewImages', JSON.stringify(validImages));
         });
     })();
-
     // Khi click ảnh sẽ được gọi class enlarged và phóng to lên
     document.addEventListener('DOMContentLoaded', function () {
         const images = document.querySelectorAll('.modal-image-alls');
@@ -479,16 +501,53 @@
             loadMoreBtn.textContent = "Xem thêm"; // Reset button text
         }
     }
+    // 
     document.getElementById('bookNowBtn').addEventListener('click', function (e) {
         e.preventDefault();
         document.getElementById('bookingSection').scrollIntoView({
             behavior: 'smooth' // Cuộn mượt mà
         });
     });
+    // 
+    // document.addEventListener('DOMContentLoaded', function () {
+    //     const searchForm = document.getElementById('searchForm');
 
+    //     searchForm.addEventListener('submit', function (event) {
+    //         event.preventDefault(); // Ngăn form gửi theo cách thông thường
+
+    //         // Lấy URL và tạo query string từ các input
+    //         const url = searchForm.getAttribute('action');
+    //         const formData = new FormData(searchForm);
+    //         const queryString = new URLSearchParams(formData).toString();
+
+    //         // Gửi yêu cầu AJAX với fetch
+    //         fetch(`${url}?${queryString}`, {
+    //             method: 'GET',
+    //             headers: {
+    //                 'X-Requested-With': 'XMLHttpRequest' // Để Laravel nhận diện đây là yêu cầu AJAX
+    //             },
+    //         })
+    //             .then(response => response.text())
+    //             .then(data => {
+    //                 // Hiển thị kết quả tìm kiếm trong div #searchResults
+    //                 document.getElementById('searchResults').innerHTML = data;
+    //             })
+    //             .catch(error => {
+    //                 console.error('Error:', error);
+    //                 document.getElementById('searchResults').innerHTML = '<p>Đã xảy ra lỗi. Vui lòng thử lại sau.</p>';
+    //             });
+    //     });
+    // });
+   
+    // 
+
+    //
+
+    // 
 </script>
 
 @endsection
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
 
 @section('footer')
