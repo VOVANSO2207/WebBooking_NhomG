@@ -79,30 +79,37 @@
                             </div>
                             
                             <div class="mb-3 col-md-5">
-                                <label class="form-label">Hotel Rooms</label>
-                                <select name="rooms[]" class="form-select select2" id="rooms" multiple="multiple">
-                                    @php
-                                        $roomNames = []; // Mảng để theo dõi tên phòng đã hiển thị
-                                        $firstRoomSelected = false; // Biến để kiểm tra xem phòng đầu tiên đã được chọn hay chưa
-                                    @endphp
-                                    @foreach ($hotelRooms as $room)
-                                        @if (!in_array($room->name, $roomNames)) // Kiểm tra nếu tên chưa được thêm vào
-                                            <option value="{{ $room->room_id }}" data-name="{{ $room->name }}"
-                                                data-price="{{ $room->price }}"
-                                                @if (!$firstRoomSelected) selected @endif> <!-- Chọn phòng đầu tiên -->
-                                                {{ $room->name }} - Giá: {{ $room->price }} - Số người tối đa: {{ $room->capacity }}
-                                            </option>
-                                            @php
-                                                $roomNames[] = $room->name; // Thêm tên phòng vào mảng
-                                                $firstRoomSelected = true; // Đánh dấu là phòng đầu tiên đã được chọn
-                                            @endphp
-                                        @endif
-                                    @endforeach
-                                </select>
-                                @error('rooms')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
+                            <label class="form-label">Hotel Rooms</label>
+                            <select name="rooms[]" class="form-select select2" id="rooms" onchange="addSelectedRooms()">
+                                @php
+                                    $roomNames = []; // Mảng để theo dõi tên phòng đã hiển thị
+                                    $firstRoomSelected = false; // Biến để kiểm tra xem phòng đầu tiên đã được chọn hay chưa
+                                @endphp
+                                @foreach ($hotelRooms as $room)
+                                    @if (!in_array($room->name, $roomNames)) // Kiểm tra nếu tên chưa được thêm vào
+                                        <option value="{{ $room->room_id }}" data-name="{{ $room->name }}" data-price="{{ $room->price }}" data-image="{{ $room->room_images->isNotEmpty() ? asset('images/' . $room->room_images[0]->image_url) : asset('images/default_image.jpg') }}" @if (!$firstRoomSelected) selected @endif> <!-- Chọn phòng đầu tiên -->
+                                            {{ $room->name }} - Giá: {{ $room->price }} - Số người tối đa: {{ $room->capacity }}
+                                        </option>
+                                        @php
+                                            $roomNames[] = $room->name; // Thêm tên phòng vào mảng
+                                            $firstRoomSelected = true; // Đánh dấu là phòng đầu tiên đã được chọn
+                                        @endphp
+                                    @endif
+                                @endforeach
+                            </select>
+                            @error('rooms')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <!-- Khu vực hiển thị các phòng đã chọn -->
+                        <div class="col-md-12 mt-4">
+                            <h5>Selected Rooms</h5>
+                            <div id="selectedRoomsContainer" class="d-flex flex-wrap"></div>
+                        </div>
+
+                        <!-- Input ẩn chứa danh sách phòng đã chọn -->
+                        <input type="hidden" name="selected_rooms" id="selectedRoomsInput" value="{{ old('selected_rooms', json_encode($selectedRooms ?? [])) }}">
 
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Upload Images</label>
@@ -215,6 +222,78 @@
             filebrowserUploadUrl: "path/to/upload/image" // Sửa đường dẫn này cho đúng
         });
     };
+
+    let selectedRooms = [];
+
+function addSelectedRooms() {
+    const roomsSelect = document.getElementById('rooms');
+    const selectedOptions = roomsSelect.selectedOptions;
+    
+    // Duyệt qua các phòng được chọn
+    for (let option of selectedOptions) {
+        const roomId = option.value;
+        const roomImageUrl = option.getAttribute('data-image') || "{{ asset('images/default_image.jpg') }}";
+        const roomName = option.getAttribute('data-name');
+        const roomPrice = option.getAttribute('data-price');
+        
+        if (selectedRooms.includes(roomId)) {
+            continue; // Bỏ qua nếu phòng đã chọn
+        }
+
+        // Thêm phòng vào danh sách tạm thời
+        selectedRooms.push(roomId);
+        document.getElementById('selectedRoomsInput').value = JSON.stringify(selectedRooms);
+
+        // Tạo một thẻ div để chứa thông tin phòng đã chọn
+        const roomDiv = document.createElement('div');
+        roomDiv.classList.add('selected-room', 'p-2', 'm-2', 'border', 'position-relative', 'text-center');
+        roomDiv.style.width = '150px';
+        roomDiv.id = `selected-room-${roomId}`;
+
+        roomDiv.innerHTML = `
+            <button type="button" class="btn-close position-absolute" style="top: 5px; right: 5px;" onclick="removeSelectedRoom('${roomId}')"></button>
+            <img src="${roomImageUrl}" alt="Room Image" style="width: 100%; height: auto;">
+            <div style="font-weight: bold; margin-top: 5px;">${roomName}</div>
+            <div>Giá: ${roomPrice} VND</div>
+        `;
+
+        document.getElementById('selectedRoomsContainer').appendChild(roomDiv);
+    }
+}
+
+// Hàm xóa phòng đã chọn
+function removeSelectedRoom(roomId) {
+    selectedRooms = selectedRooms.filter(id => id !== roomId);
+    document.getElementById('selectedRoomsInput').value = JSON.stringify(selectedRooms);
+    document.getElementById(`selected-room-${roomId}`).remove();
+}
+
+// Gọi hàm addSelectedRooms() khi trang tải xong để cập nhật phòng mặc định (phòng đầu tiên)
+document.addEventListener("DOMContentLoaded", function() {
+    addSelectedRooms(); // Gọi hàm để thêm phòng đầu tiên vào danh sách đã chọn
+});
+
+// Hàm gửi dữ liệu qua Ajax
+function submitSelectedRooms() {
+    const selectedRoomsData = JSON.stringify(selectedRooms); // Đảm bảo dữ liệu là chuỗi JSON hợp lệ
+
+    $.ajax({
+        url: '/store-rooms', // Đường dẫn route lưu trữ
+        type: 'POST',
+        data: {
+            _token: '{{ csrf_token() }}',
+            selected_rooms: JSON.stringify(selectedRooms)  // Gửi dưới dạng chuỗi JSON
+        },
+        success: function(response) {
+            alert('Rooms saved successfully');
+        },
+        error: function(error) {
+            console.log(error);
+            alert('There was an error saving the rooms');
+        }
+    });
+
+}
 </script>
 
 @endsection

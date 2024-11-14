@@ -739,6 +739,7 @@ outline: none;
     color: red;
  
 }
+<<<<<<< HEAD
 
 .voucher-container {
     display: flex;
@@ -1127,3 +1128,61 @@ outline: none;
         font-size: 20px;
     }
 }
+=======
+/* Popular_filters */
+.Popular_filters {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.Popular_filters h3 {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Thành phố lọc */
+.city-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: start;
+}
+
+.city-option {
+    margin-bottom: 10px;
+}
+
+.city-btn {
+    border-radius: 25px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.city-btn:hover {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+.city-btn:focus {
+    outline: none;
+}
+
+/* Tăng cường khoảng cách */
+.city-filters .city-option {
+    margin-right: 15px;
+}
+
+.city-btn.selected {
+    background-color: #007bff; /* Màu nền khi button được chọn */
+    color: white; /* Màu chữ khi button được chọn */
+    border-color: #0056b3; /* Màu viền khi button được chọn */
+}
+/* Popular_filters */
+>>>>>>> Fix-Code-0.4-MinhTam

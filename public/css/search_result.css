@@ -606,3 +606,7 @@ input[type="range"]::-moz-range-thumb {
 .filter {
     height: 100%;
 }
+.custom-checkbox:hover {
+    background: #3A77C5;
+    color: #fff;
+}
