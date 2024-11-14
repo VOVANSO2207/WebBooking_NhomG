@@ -45,24 +45,24 @@ class RoomType extends Model
             $roomType->update([
                 'name' => $data['name']
             ]);
-            return $roomType; 
+            return $roomType;
         }
 
-        return false; 
+        return false;
     }
     public static function searchByName($keyword, $perPage = 5)
     {
         $query = self::query();
-    
+
         if (!empty($keyword)) {
             $query->where(function ($query) use ($keyword) {
                 $query->where('name', 'LIKE', "%{$keyword}%")
                     ->orWhereRaw('MATCH(name) AGAINST (? IN BOOLEAN MODE)', [$keyword]);
             });
         }
-    
+
         return $query->paginate($perPage); // Sử dụng paginate thay vì get
     }
-    
-    
+
+
 }
