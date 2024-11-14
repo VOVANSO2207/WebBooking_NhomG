@@ -397,7 +397,7 @@
                                 <div class="shape-in">
                                     @if ($hotel->images->isNotEmpty())
                                         <img class="image-hotel-2"
-                                            src="{{ asset('storage/images/' . $hotel->images->first()->image_url) }}"
+                                            src="{{ asset('images/' . $hotel->images->first()->image_url) }}"
                                             alt="">
                                     @else
                                         <img class="image-hotel-2" src="{{ asset('/images/defaullt-image.png') }}"
