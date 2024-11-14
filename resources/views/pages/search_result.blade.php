@@ -19,7 +19,7 @@
 @section('content')
 <div class="container filter-hotel mt-5">
     <div class="counter-hotel">
-        <h3>Có 554 khách sạn tại Thành Phố Hồ Chí Minh</h3>
+        <h3>Có {{ $hotelCount }} khách sạn tại {{ $cityName }}</h3>
     </div>
     <div class="row d-flex thu-nho">
         <div class="col-md-3 filter">
@@ -170,7 +170,7 @@
                                                     {{ number_format($hotel->average_price, 0, ',', '.') }}
                                                     VNĐ</span>
                                                 <span class="discount">
-                                                    -{{ $hotel->average_discount_percent }}%
+                                                    -{{ number_format($hotel->average_discount_percent, 2) }}%
                                                 </span>
                                             @endif
                                         </div>
@@ -179,7 +179,7 @@
                                             <span>/ Khách</span>
                                         </span>
                                         <div class="rating">
-                                            @for ($i = 1; $i <= 5; $i++)
+                                            @for ($i = 1; $i < 5; $i++)
                                                 @if ($i <= $hotel->rating)
                                                     <span>★</span>
                                                 @else
@@ -187,12 +187,18 @@
                                                 @endif
                                             @endfor
                                         </div>
-
                                     </div>
                                     <div class="col-md-3 status-button">
                                         <div class="status">
-                                            <span class="status-available">ĐƠN</span>
-                                            <span class="status-soldout">ĐÔI</span>
+                                            @if($rooms && $rooms instanceof \Illuminate\Support\Collection)
+                                                @foreach ($rooms as $room)
+                                                    @foreach ($room->room_types as $type)
+                                                        <div class="status-available">{{ $type->name }}</div>
+                                                    @endforeach
+                                                @endforeach
+                                            @else
+                                                <span class="status-soldout">NULL</span>
+                                            @endif
                                         </div>
                                         <button class="book-now">Đặt Ngay</button>
                                     </div>
