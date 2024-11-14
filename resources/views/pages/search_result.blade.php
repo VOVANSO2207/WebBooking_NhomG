@@ -134,7 +134,6 @@
                         <p class="ms-2">Số phòng: {{ $rooms }} </p>
                         <p class="ms-2">Số người lớn: {{ $adults }} </p>
                         <p class="ms-2">Số trẻ em: {{ $children }} </p>
-                        <p class="ms-2">aaa: {{ $location->name }} </p>
                     </div>
                     @if ($hotels->isEmpty())
                         <p>Không tìm thấy khách sạn nào phù hợp với yêu cầu của bạn.</p>

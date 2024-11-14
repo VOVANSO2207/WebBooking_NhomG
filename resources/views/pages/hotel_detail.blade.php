@@ -155,65 +155,6 @@
             </div>
         </div>
         <div class="group-detail-book-room" id="bookingSection">
-            <section class="middle-staynest bg-light d-flex justify-content-center">
-                <div class="ps-0 search-bar-staynest color-light container">
-                    <form id="searchForm" action="{{ route('hotels.search') }}" method="GET" class="row">
-                        @csrf
-                        <div class="col-md-3">
-                            <div class="date-picker-search border">
-                                <i class="fa-regular fa-calendar-days ps-2"></i>
-                                <input class="datepicker-staynest form-control p-0 ms-2" type="text" name="daterange"
-                                    value="{{ session('daterange', '') }}" readonly />
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="num-people border">
-                                <!-- <label class="small-text">Số người</label> -->
-                                <div class="number">
-                                    <span id="people-summary">{{ session('adults', 1) }} người lớn, </span>
-                                    <span id="room-summary">{{ session('rooms', 1) }} phòng, </span>
-                                    <span id="children-summary">{{ session('children', 0) }} trẻ em</span>
-                                </div>
-                            </div>
-                            <div class="drop-counter mt-1 bg-light">
-                                <div class="item">
-                                    <span>Người lớn</span>
-                                    <div class="counter">
-                                        <button type="button" class="decrement-adult">-</button>
-                                        <input type="text" class="value-people" id="adults" name="adults"
-                                            value="{{ session('adults', 1) }}" readonly>
-                                        <button type="button" class="increment-adult">+</button>
-                                    </div>
-                                </div>
-
-                                <div class="item">
-                                    <span>Phòng</span>
-                                    <div class="counter">
-                                        <button type="button" class="decrement-room">-</button>
-                                        <input type="text" class="value-people" id="rooms" name="rooms"
-                                            value="{{ session('rooms', 1) }}" readonly>
-                                        <button type="button" class="increment-room">+</button>
-                                    </div>
-                                </div>
-
-                                <div class="item">
-                                    <span>Trẻ em</span>
-                                    <div class="counter">
-                                        <button type="button" class="decrement-children">-</button>
-                                        <input type="text" class="value-people" id="children" name="children"
-                                            value="{{ session('children', 0) }}" readonly>
-                                        <button type="button" class="increment-children">+</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-2 search-header button-search-header">
-                            <button type="submit" class="btn btn-primary" style="width: 100%; padding:10px;">Thay Đổi
-                                Tìm Kiếm</button>
-                        </div>
-                    </form>
-                </div>
-            </section>
             <h2 class="detail-title-book-room">
                 Chọn phòng
             </h2>
@@ -568,35 +509,36 @@
         });
     });
     // 
-    document.addEventListener('DOMContentLoaded', function () {
-        const searchForm = document.getElementById('searchForm');
+    // document.addEventListener('DOMContentLoaded', function () {
+    //     const searchForm = document.getElementById('searchForm');
 
-        searchForm.addEventListener('submit', function (event) {
-            event.preventDefault(); // Ngăn form gửi theo cách thông thường
+    //     searchForm.addEventListener('submit', function (event) {
+    //         event.preventDefault(); // Ngăn form gửi theo cách thông thường
 
-            // Lấy URL và tạo query string từ các input
-            const url = searchForm.getAttribute('action');
-            const formData = new FormData(searchForm);
-            const queryString = new URLSearchParams(formData).toString();
+    //         // Lấy URL và tạo query string từ các input
+    //         const url = searchForm.getAttribute('action');
+    //         const formData = new FormData(searchForm);
+    //         const queryString = new URLSearchParams(formData).toString();
 
-            // Gửi yêu cầu AJAX với fetch
-            fetch(`${url}?${queryString}`, {
-                method: 'GET',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest' // Để Laravel nhận diện đây là yêu cầu AJAX
-                },
-            })
-                .then(response => response.text())
-                .then(data => {
-                    // Hiển thị kết quả tìm kiếm trong div #searchResults
-                    document.getElementById('searchResults').innerHTML = data;
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    document.getElementById('searchResults').innerHTML = '<p>Đã xảy ra lỗi. Vui lòng thử lại sau.</p>';
-                });
-        });
-    });
+    //         // Gửi yêu cầu AJAX với fetch
+    //         fetch(`${url}?${queryString}`, {
+    //             method: 'GET',
+    //             headers: {
+    //                 'X-Requested-With': 'XMLHttpRequest' // Để Laravel nhận diện đây là yêu cầu AJAX
+    //             },
+    //         })
+    //             .then(response => response.text())
+    //             .then(data => {
+    //                 // Hiển thị kết quả tìm kiếm trong div #searchResults
+    //                 document.getElementById('searchResults').innerHTML = data;
+    //             })
+    //             .catch(error => {
+    //                 console.error('Error:', error);
+    //                 document.getElementById('searchResults').innerHTML = '<p>Đã xảy ra lỗi. Vui lòng thử lại sau.</p>';
+    //             });
+    //     });
+    // });
+   
     // 
 
     //
