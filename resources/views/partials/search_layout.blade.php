@@ -3,14 +3,14 @@
 <script src="{{ asset('js/animation.js') }}"></script>
 <script src="{{ asset('js/counter_control.js') }}"></script>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script> -->
 @section('search-bar')
 <section class="middle-staynest d-flex justify-content-center">
     <div class="search-bar-staynest color-light container">
@@ -86,8 +86,8 @@
     </div>
 </section>
 @endsection
-<script>
-    // Datepicker
+<!-- <script>
+     // Datepicker
      // Gọi hàm initializeDateRangePicker sau khi trang đã được tải
      function initializeDateRangePicker() {
         // Lấy giá trị daterange từ session nếu có
@@ -129,4 +129,4 @@
         $('.select2').select2(); // Khởi tạo Select2 cho các phần tử select2
         initializeDateRangePicker(); // Khởi tạo Datepicker
     });
-</script>
+</script> -->

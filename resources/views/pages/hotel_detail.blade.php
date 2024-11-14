@@ -155,65 +155,6 @@
             </div>
         </div>
         <div class="group-detail-book-room" id="bookingSection">
-            <section class="middle-staynest bg-light d-flex justify-content-center">
-                <div class="ps-0 search-bar-staynest color-light container">
-                    <form id="searchForm" action="{{ route('hotels.search') }}" method="GET" class="row">
-                        @csrf
-                        <div class="col-md-3">
-                            <div class="date-picker-search border">
-                                <i class="fa-regular fa-calendar-days ps-2"></i>
-                                <input class="datepicker-staynest form-control p-0 ms-2" type="text" name="daterange"
-                                    value="{{ session('daterange', '') }}" readonly />
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="num-people border">
-                                <!-- <label class="small-text">Số người</label> -->
-                                <div class="number">
-                                    <span id="people-summary">{{ session('adults', 1) }} người lớn, </span>
-                                    <span id="room-summary">{{ session('rooms', 1) }} phòng, </span>
-                                    <span id="children-summary">{{ session('children', 0) }} trẻ em</span>
-                                </div>
-                            </div>
-                            <div class="drop-counter mt-1 bg-light">
-                                <div class="item">
-                                    <span>Người lớn</span>
-                                    <div class="counter">
-                                        <button type="button" class="decrement-adult">-</button>
-                                        <input type="text" class="value-people" id="adults" name="adults"
-                                            value="{{ session('adults', 1) }}" readonly>
-                                        <button type="button" class="increment-adult">+</button>
-                                    </div>
-                                </div>
-
-                                <div class="item">
-                                    <span>Phòng</span>
-                                    <div class="counter">
-                                        <button type="button" class="decrement-room">-</button>
-                                        <input type="text" class="value-people" id="rooms" name="rooms"
-                                            value="{{ session('rooms', 1) }}" readonly>
-                                        <button type="button" class="increment-room">+</button>
-                                    </div>
-                                </div>
-
-                                <div class="item">
-                                    <span>Trẻ em</span>
-                                    <div class="counter">
-                                        <button type="button" class="decrement-children">-</button>
-                                        <input type="text" class="value-people" id="children" name="children"
-                                            value="{{ session('children', 0) }}" readonly>
-                                        <button type="button" class="increment-children">+</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-2 search-header button-search-header">
-                            <button type="submit" class="btn btn-primary" style="width: 100%; padding:10px;">Thay Đổi
-                                Tìm Kiếm</button>
-                        </div>
-                    </form>
-                </div>
-            </section>
             <h2 class="detail-title-book-room">
                 Chọn phòng
             </h2>
@@ -511,110 +452,6 @@
             localStorage.setItem('previewImages', JSON.stringify(validImages));
         });
     })();
-
-    (function initRoomSelector() {
-        document.addEventListener("DOMContentLoaded", function () {
-            const roomsInput = document.getElementById("rooms");
-            const adultsInput = document.getElementById("adults");
-            const childrenInput = document.getElementById("children");
-            const roomSummary = document.getElementById("room-summary");
-            const peopleSummary = document.getElementById("people-summary");
-            const childrenSummary = document.getElementById("children-summary");
-
-            // Cập nhật hiển thị số lượng
-            function updateSummary() {
-                roomSummary.innerHTML = `${roomsInput.value} phòng, `;
-                peopleSummary.innerHTML = `${adultsInput.value} người lớn, `;
-                childrenSummary.innerHTML = `${childrenInput.value} trẻ em`;
-            }
-
-            // Tính toán số người tối đa
-            function maxPeople() {
-                return roomsInput.value * 4; // Mỗi phòng tối đa 4 người
-            }
-
-            // Kiểm tra và điều chỉnh số lượng người lớn
-            function checkAdults() {
-                const totalPeople = parseInt(adultsInput.value) + parseInt(childrenInput.value);
-                const max = maxPeople();
-                if (totalPeople > max) {
-                    alert(`Tối đa ${max} người cho ${roomsInput.value} phòng.`);
-                    adultsInput.value = max - parseInt(childrenInput.value);
-                    updateButtons();
-                    updateSummary();
-                }
-            }
-
-            // Kiểm tra và điều chỉnh số trẻ em
-            function checkChildren() {
-                const maxChildren = roomsInput.value * 4; // Tối đa 4 trẻ em cho mỗi phòng
-                if (parseInt(childrenInput.value) > maxChildren) {
-                    alert(`Tối đa ${maxChildren} trẻ em cho ${roomsInput.value} phòng.`);
-                    childrenInput.value = maxChildren; // Điều chỉnh trẻ em nếu vượt quá
-                }
-            }
-
-            // Tăng giảm số lượng
-            document.querySelector(".increment-room").onclick = function () {
-                roomsInput.value++;
-                updateButtons();
-                updateSummary();
-            };
-
-            document.querySelector(".decrement-room").onclick = function () {
-                if (roomsInput.value > 1) {
-                    roomsInput.value--;
-                    updateButtons();
-                    updateSummary();
-                }
-            };
-
-            document.querySelector(".increment-adult").onclick = function () {
-                adultsInput.value++;
-                checkAdults();
-                updateButtons();
-                updateSummary();
-            };
-
-            document.querySelector(".decrement-adult").onclick = function () {
-                if (adultsInput.value > 1) {
-                    adultsInput.value--;
-                    updateButtons();
-                    updateSummary();
-                }
-            };
-
-            document.querySelector(".increment-children").onclick = function () {
-                const maxChildren = roomsInput.value * 4; // Tối đa 4 trẻ em cho mỗi phòng
-                if (parseInt(childrenInput.value) < maxChildren) {
-                    childrenInput.value++;
-                }
-                checkChildren();
-                updateButtons();
-                updateSummary();
-            };
-
-            document.querySelector(".decrement-children").onclick = function () {
-                if (childrenInput.value > 0) {
-                    childrenInput.value--;
-                }
-                updateButtons();
-                updateSummary();
-            };
-
-            // Cập nhật trạng thái nút
-            function updateButtons() {
-                document.querySelector(".decrement-room").disabled = roomsInput.value <= 1;
-                document.querySelector(".decrement-adult").disabled = adultsInput.value <= 1;
-                document.querySelector(".decrement-children").disabled = childrenInput.value <= 0;
-            }
-
-            // Khởi tạo hiển thị ban đầu
-            updateSummary();
-            updateButtons();
-        });
-    })();
-
     // Khi click ảnh sẽ được gọi class enlarged và phóng to lên
     document.addEventListener('DOMContentLoaded', function () {
         const images = document.querySelectorAll('.modal-image-alls');
@@ -664,43 +501,49 @@
             loadMoreBtn.textContent = "Xem thêm"; // Reset button text
         }
     }
-
+    // 
     document.getElementById('bookNowBtn').addEventListener('click', function (e) {
         e.preventDefault();
         document.getElementById('bookingSection').scrollIntoView({
             behavior: 'smooth' // Cuộn mượt mà
         });
     });
+    // 
+    // document.addEventListener('DOMContentLoaded', function () {
+    //     const searchForm = document.getElementById('searchForm');
 
-    document.addEventListener('DOMContentLoaded', function () {
-        const searchForm = document.getElementById('searchForm');
+    //     searchForm.addEventListener('submit', function (event) {
+    //         event.preventDefault(); // Ngăn form gửi theo cách thông thường
 
-        searchForm.addEventListener('submit', function (event) {
-            event.preventDefault(); // Ngăn form gửi theo cách thông thường
+    //         // Lấy URL và tạo query string từ các input
+    //         const url = searchForm.getAttribute('action');
+    //         const formData = new FormData(searchForm);
+    //         const queryString = new URLSearchParams(formData).toString();
 
-            // Lấy URL và tạo query string từ các input
-            const url = searchForm.getAttribute('action');
-            const formData = new FormData(searchForm);
-            const queryString = new URLSearchParams(formData).toString();
+    //         // Gửi yêu cầu AJAX với fetch
+    //         fetch(`${url}?${queryString}`, {
+    //             method: 'GET',
+    //             headers: {
+    //                 'X-Requested-With': 'XMLHttpRequest' // Để Laravel nhận diện đây là yêu cầu AJAX
+    //             },
+    //         })
+    //             .then(response => response.text())
+    //             .then(data => {
+    //                 // Hiển thị kết quả tìm kiếm trong div #searchResults
+    //                 document.getElementById('searchResults').innerHTML = data;
+    //             })
+    //             .catch(error => {
+    //                 console.error('Error:', error);
+    //                 document.getElementById('searchResults').innerHTML = '<p>Đã xảy ra lỗi. Vui lòng thử lại sau.</p>';
+    //             });
+    //     });
+    // });
+   
+    // 
 
-            // Gửi yêu cầu AJAX với fetch
-            fetch(`${url}?${queryString}`, {
-                method: 'GET',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest' // Để Laravel nhận diện đây là yêu cầu AJAX
-                },
-            })
-                .then(response => response.text())
-                .then(data => {
-                    // Hiển thị kết quả tìm kiếm trong div #searchResults
-                    document.getElementById('searchResults').innerHTML = data;
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    document.getElementById('searchResults').innerHTML = '<p>Đã xảy ra lỗi. Vui lòng thử lại sau.</p>';
-                });
-        });
-    });
+    //
+
+    // 
 </script>
 
 @endsection
