@@ -106,12 +106,14 @@ class HotelController extends Controller
             'adults' => $request->adults,
             'children' => $request->children,
         ]);
+
         // Lấy thông tin từ form
         $location = $request->input('location');
         $daterange = $request->input('daterange');
         $rooms = $request->input('rooms');
         $adults = $request->input('adults');
         $children = $request->input('children');
+
         // Tách ngày đi và ngày về từ daterange
         list($checkInDate, $checkOutDate) = explode(' - ', $daterange);
 
@@ -122,13 +124,24 @@ class HotelController extends Controller
         $amenities = HotelAmenities::getAllAmenities();
 
         // Kiểm tra nếu là yêu cầu AJAX
-        if ($request->ajax()) {
-            return view('pages.hotel_detail', compact('rooms'))->render();
-        }
+        // if ($request->ajax()) {
+        //     return view('pages.hotel_detail', compact('rooms'))->render();
+        // }
 
-        // // Nếu không phải AJAX, trả về toàn bộ trang
-        return view('pages.search_result', compact('hotels', 'amenities', 'location', 'daterange', 'rooms', 'adults', 'children'));
+        // Trả về kết quả tìm kiếm trong view search_result
+        return view('pages.search_result', [
+            'hotels' => $hotels['hotels'],
+            'hotelCount' => $hotels['hotelCount'],
+            'cityName' => $hotels['cityName'],
+            'amenities' => $amenities,
+            'location' => $location,
+            'daterange' => $daterange,
+            'rooms' => $rooms,
+            'adults' => $adults,
+            'children' => $children
+        ]);
     }
+
 
 
     public function viewHotel()

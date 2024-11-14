@@ -217,7 +217,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="card-room-status">
-                                        @if(optional($room->roomType)->room_type_id == 1)
+                                        @if(optional($room->room_types)->room_type_id == 1)
                                             <div class="don">{{ optional($room->roomType)->name }}</div>
                                         @else
                                             <div class="doi">{{ optional($room->roomType)->name }}</div>
