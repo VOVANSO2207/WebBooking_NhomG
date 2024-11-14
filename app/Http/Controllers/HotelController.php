@@ -516,12 +516,12 @@ class HotelController extends Controller
                             'hotel_name' => $hotel->hotel_name,
                             'location' => $hotel->location,
                             'city' => $hotel->city->city_name, // Lấy tên thành phố
-                            'reviews_count' => Reviews::countReviewsForHotel($hotel->id),
+                            'reviews_count' => $hotel->reviews->count(),
                             'old_price' => number_format($hotel->average_price_sale, 0, ',', '.'),
                             'new_price' => number_format($hotel->average_price, 0, ',', '.'),
                             'is_favorite' => $hotel->is_favorite,
                             'discount_percent' => number_format($hotel->average_discount_percent),
-                            'image_url' => $hotel->images->isNotEmpty() ? asset('storage/images/' . $hotel->images->first()->image_url) : '/images/default-image.png',
+                            'image_url' => $hotel->images->isNotEmpty() ? asset('images/' . $hotel->images->first()->image_url) : '/images/default-image.png',
                         ];
                     });
                     
@@ -541,12 +541,12 @@ class HotelController extends Controller
                             'hotel_name' => $hotel->hotel_name,
                             'location' => $hotel->location,
                             'city' => $hotel->city->city_name, // Lấy tên thành phố
-                            'reviews_count' => Reviews::countReviewsForHotel($hotel->id),
+                            'reviews_count' => $hotel->reviews->count(),
                             'old_price' => number_format($hotel->average_price_sale, 0, ',', '.'),
                             'new_price' => number_format($hotel->average_price, 0, ',', '.'),
                             'is_favorite' => $hotel->is_favorite,
                             'discount_percent' => number_format($hotel->average_discount_percent),
-                            'image_url' => $hotel->images->isNotEmpty() ? asset('storage/images/' . $hotel->images->first()->image_url) : '/images/default-image.png',
+                            'image_url' => $hotel->images->isNotEmpty() ? asset('images/' . $hotel->images->first()->image_url) : '/images/default-image.png',
                         ];
                     });
                     

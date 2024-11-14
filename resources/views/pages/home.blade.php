@@ -620,7 +620,7 @@ function updateHotelList(hotels) {
                     <div class="group-info-hotel">
                         <p class="info-hotel-name m-0">${hotel.hotel_name}</p>
                         <p class="info-hotel-location m-0">${hotel.location}, ${hotel.city}</p>
-                        <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i>${hotel.reviews} Đánh giá</p>
+                        <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i>${hotel.reviews_count} Đánh giá</p>
                         <p class="info-hotel-price-old mb-0 mt-5 pt-5">${hotel.old_price} VND</p>
                         <div class="row group-heart-price">
                             <div class="col-md-6">
