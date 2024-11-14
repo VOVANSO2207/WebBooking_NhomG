@@ -54,7 +54,7 @@
                 <h2>Bộ lọc phổ biến</h2>
                 <div class="option d-flex justify-content-between align-items-center">
                     <p>Nhiều đánh giá</p>
-                    <input type="checkbox" class="check_filter" id="filterMostReviews">
+                    <input type="checkbox" class="check_filter" id="filterMostReviews" data-filter="most_review">
                 </div>
                 <div class="option d-flex justify-content-between align-items-center">
                     <p>Khuyến mãi</p>
@@ -113,7 +113,7 @@
                     <li>
                         <!-- <button class="tab_btn" data-tab="popular">Đánh giá nhiều nhất</button> -->
                         <input type="checkbox" id="high_rating" class="check_filter" data-filter="high_rating"
-                            style="display: none;">
+                            style="display: none;"> 
                         <label for="high_rating" class="custom-checkbox tab_btn">Đánh giá nhiều
                             nhất</label>
                     </li>
@@ -139,6 +139,7 @@
                         <p>Không tìm thấy khách sạn nào phù hợp với yêu cầu của bạn.</p>
                     @else
                         @foreach ($hotels as $hotel)
+                        
                             <div class="hotel-card">
                                 <div class="sale-badge">SALE</div>
                                 <div class="hotel-image">
@@ -190,7 +191,7 @@
                                             <span class="status-available">ĐƠN</span>
                                             <span class="status-soldout">ĐÔI</span>
                                         </div>
-                                        <button class="book-now">Đặt Ngay</button>
+                                        <button class="book-now">Xem phòng</button>
                                     </div>
                                 </div>
                             </div>
@@ -403,7 +404,7 @@
 
             // Get selected filters
             const selectedFilters = Array.from(document.querySelectorAll('.check_filter:checked')).map(cb => cb.getAttribute('data-filter'));
-
+            
             // AJAX Request
             fetch('/filter-hotels', {
                 method: 'POST',

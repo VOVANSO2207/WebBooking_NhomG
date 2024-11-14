@@ -106,7 +106,7 @@
         // Cập nhật giá trị mặc định cho input
         $('input[name="daterange"]').val(startDate.format('DD/MM/YYYY') + ' - ' + endDate.format('DD/MM/YYYY'));
     }
-
+    
     $(document).ready(function () {
         $('.select2').select2(); // Khởi tạo Select2 cho các phần tử có class "select2"
     });

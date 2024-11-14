@@ -67,8 +67,3 @@ starButtons.forEach(button => {
     });
 });
 
-// Initialize slider
-// setHandlePosition(minHandle, currentMin);
-// setHandlePosition(maxHandle, currentMax);
-// updateSliderRange();
-// updatePriceValues();
