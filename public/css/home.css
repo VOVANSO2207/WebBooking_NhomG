@@ -739,7 +739,6 @@ outline: none;
     color: red;
  
 }
-<<<<<<< HEAD
 
 .voucher-container {
     display: flex;
@@ -1128,7 +1127,6 @@ outline: none;
         font-size: 20px;
     }
 }
-=======
 /* Popular_filters */
 .Popular_filters {
     background-color: #f8f9fa;
@@ -1185,4 +1183,3 @@ outline: none;
     border-color: #0056b3; /* Màu viền khi button được chọn */
 }
 /* Popular_filters */
->>>>>>> Fix-Code-0.4-MinhTam
