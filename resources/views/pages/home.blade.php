@@ -611,29 +611,29 @@
             const hotelCard = document.createElement('div');
             hotelCard.classList.add('card');
             hotelCard.innerHTML = `
-            <a href="#" class="group-offers">
-                <div class="shape-in">
-                    <img class="image-hotel-2" src="${hotel.image_url}" alt="">
-                    <div class="group-info-hotel">
-                        <p class="info-hotel-name m-0">${hotel.hotel_name}</p>
-                        <p class="info-hotel-location m-0">${hotel.location}, ${hotel.city}</p>
-                        <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i> ${hotel.reviews_count} Đánh giá</p>
-                        <p class="info-hotel-price-old mb-0 mt-5 pt-5">${hotel.old_price} VND</p>
-                        <div class="row group-heart-price">
-                            <div class="col-md-6">
-                                <a href="#" class="heart-icon" data-hotel-id="${hotel.hotel_id}">
-                                    <i class="fa-regular fa-heart ${hotel.is_favorite ? 'fa-solid red' : ''}"></i>
-                                </a>
-                            </div>
-                            <div class="col-md-6 text-right">
-                                <span class="info-hotel-price-new">${hotel.new_price} VND</span>
+                <a href="${hotel.detail_url}" class="group-offers">
+                    <div class="shape-in">
+                        <img class="image-hotel-2" src="${hotel.image_url}" alt="">
+                        <div class="group-info-hotel">
+                            <p class="info-hotel-name m-0">${hotel.hotel_name}</p>
+                            <p class="info-hotel-location m-0">${hotel.location}, ${hotel.city}</p>
+                            <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i> ${hotel.reviews_count} Đánh giá</p>
+                            <p class="info-hotel-price-old mb-0 mt-5 pt-5">${hotel.old_price} VND</p>
+                            <div class="row group-heart-price">
+                                <div class="col-md-6">
+                                    <a href="#" class="heart-icon" data-hotel-id="${hotel.hotel_id}">
+                                        <i class="fa-regular fa-heart ${hotel.is_favorite ? 'fa-solid red' : ''}"></i>
+                                    </a>
+                                </div>
+                                <div class="col-md-6 text-right">
+                                    <span class="info-hotel-price-new">${hotel.new_price} VND</span>
+                                </div>
                             </div>
                         </div>
+                        <div class="sale-hotel">-${hotel.discount_percent}%</div>
                     </div>
-                    <div class="sale-hotel">-${hotel.discount_percent}%</div>
-                </div>
-            </a>
-        `;
+                </a>
+            `;
             hotelContainer.appendChild(hotelCard);
         });
         $(document).ready(function () {

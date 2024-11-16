@@ -550,6 +550,7 @@ class HotelController extends Controller
                             'is_favorite' => $hotel->is_favorite,
                             'discount_percent' => number_format($hotel->average_discount_percent),
                             'image_url' => $hotel->images->isNotEmpty() ? asset('images/' . $hotel->images->first()->image_url) : '/images/default-image.png',
+                            'detail_url' => route('pages.hotel_detail', ['hotel_id' => $hotel->hotel_id]),
                         ];
                     });
                     
@@ -575,6 +576,7 @@ class HotelController extends Controller
                             'is_favorite' => $hotel->is_favorite,
                             'discount_percent' => number_format($hotel->average_discount_percent),
                             'image_url' => $hotel->images->isNotEmpty() ? asset('images/' . $hotel->images->first()->image_url) : '/images/default-image.png',
+                            'detail_url' => route('pages.hotel_detail', ['hotel_id' => $hotel->hotel_id]),
                         ];
                     });
                     
