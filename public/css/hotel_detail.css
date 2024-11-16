@@ -377,6 +377,11 @@ body {
         border-radius: 10px;
         background: #3B79C9;
 
+        &:hover {
+            background: #043a81;
+            transition: background 300ms ease;
+        }
+
         .btn-book-now {
             color: #fff;
             text-decoration: none;
@@ -569,4 +574,60 @@ body {
             justify-content: end;
         }
     }
+}
+
+.people-summary-container {
+    border-radius: 10px;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid black;
+    background: #fff;
+    position: relative;
+    cursor: pointer;
+}
+
+.people-counter-dropdown {
+    z-index: 10;
+    position: absolute;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+    display: none;
+}
+
+.people-counter-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.counter-container {
+    display: flex;
+    align-items: center;
+}
+
+.counter-container button {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    font-size: 20px;
+    line-height: 0;
+    text-align: center;
+    cursor: pointer;
+}
+
+.counter-container button:hover {
+    background-color: #ddd;
+}
+
+.counter-container .counter-value {
+    width: 30px;
+    text-align: center;
+    border: none;
+    background-color: transparent;
+    font-size: 16px;
+    pointer-events: none;
 }

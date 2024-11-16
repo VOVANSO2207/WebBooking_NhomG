@@ -123,10 +123,22 @@ class HotelController extends Controller
         // Trả về kết quả tìm kiếm tới view
         $amenities = HotelAmenities::getAllAmenities();
 
-        // Kiểm tra nếu là yêu cầu AJAX
-        // if ($request->ajax()) {
-        //     return view('pages.hotel_detail', compact('rooms'))->render();
-        // }
+        // Nếu là yêu cầu AJAX, trả về HTML của danh sách phòng
+        if ($request->ajax()) {
+            // Lấy danh sách rooms từ các khách sạn
+            $rooms = $hotels['hotels']->flatMap(function ($hotel) {
+                return $hotel->rooms;
+            });
+
+            return response()->json([
+                'html' => view('pages.hotel_detail', [
+                    'rooms' => $rooms,
+                    'hotels' => $hotels['hotels'],
+                    'hotelCount' => $hotels['hotelCount'],
+                    'cityName' => $hotels['cityName'],
+                ])->render(),
+            ]);
+        }
 
         // Trả về kết quả tìm kiếm trong view search_result
         return view('pages.search_result', [

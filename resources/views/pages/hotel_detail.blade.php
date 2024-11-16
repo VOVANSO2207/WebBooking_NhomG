@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 <link rel="stylesheet" href="{{ asset('css/hotel_detail.css') }}">
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <!--  -->
 @section('header')
 @include('partials.header') 
@@ -155,87 +155,154 @@
             </div>
         </div>
         <div class="group-detail-book-room" id="bookingSection">
+            @if ($rooms->IsEmpty())
+                <p> </p>
+            @else
+                <!--  -->
+                <div class="search-bar-staynest color-light container p-0">
+                    <form id="searchForm" action="{{ route('hotels.search') }}" method="GET" class="row">
+                        @csrf
+                        <div class="col-md-3">
+                            <div class="date-picker-search border">
+                                <i class="fa-regular fa-calendar-days ps-2"></i>
+                                <input class="datepicker-staynest form-control p-0 ms-2" type="text" name="daterange"
+                                    value="{{ session('daterange', '') }}" readonly />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="people-summary-container border">
+                                <!-- <label class="small-text">Số người</label> -->
+                                <div class="people-summary-display">
+                                    <span id="people-summary-counter">{{ session('adults', 1) }} người lớn, </span>
+                                    <span id="room-summary-counter">{{ session('rooms', 1) }} phòng, </span>
+                                    <span id="children-summary-counter">{{ session('children', 0) }} trẻ em</span>
+                                </div>
+                            </div>
+                            <div class="people-counter-dropdown mt-1 bg-light">
+                                <div class="people-counter-item">
+                                    <span>Người lớn</span>
+                                    <div class="counter-container">
+                                        <button type="button" class="btn-decrement-adult">-</button>
+                                        <input type="text" class="counter-value" id="adultsCounter" name="adults"
+                                            value="{{ session('adults', 1) }}" readonly>
+                                        <button type="button" class="btn-increment-adult">+</button>
+                                    </div>
+                                </div>
+
+                                <div class="people-counter-item">
+                                    <span>Phòng</span>
+                                    <div class="counter-container">
+                                        <button type="button" class="btn-decrement-room">-</button>
+                                        <input type="text" class="counter-value" id="roomsCounter" name="rooms"
+                                            value="{{ session('rooms', 1) }}" readonly>
+                                        <button type="button" class="btn-increment-room">+</button>
+                                    </div>
+                                </div>
+
+                                <div class="people-counter-item">
+                                    <span>Trẻ em</span>
+                                    <div class="counter-container">
+                                        <button type="button" class="btn-decrement-children">-</button>
+                                        <input type="text" class="counter-value" id="childrenCounter" name="children"
+                                            value="{{ session('children', 0) }}" readonly>
+                                        <button type="button" class="btn-increment-children">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 search-header button-search-header">
+                            <button type="submit" class="btn btn-primary" style="width: 100%; padding:10px;">
+                                Thay đổi tìm kiếm
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            @endif
+            <!--  -->
             <h2 class="detail-title-book-room">
                 Chọn phòng
             </h2>
-            <div class="group-room-card row gx-4" id="searchResults">
-                @forelse($rooms as $room)
-                    <!-- CARD ROOM -->
-                    <div class="col-md-6">
-                        <div class="row group-info-room-card">
-                            <!-- Hình ảnh -->
-                            <div class="col-md-5 detail-infor-room-left">
-                                <swiper-container class="mySwiper" pagination="true" pagination-clickable="true"
-                                    navigation="true" space-between="30" loop="true">
-                                    @forelse($room->room_images as $image)
-                                        <swiper-slide>
-                                            <img src="{{ asset('images/' . $image->image_url) }}" alt="Room Image" />
-                                        </swiper-slide>
-                                    @empty
-                                        <p>Không có hình ảnh cho phòng này</p>
-                                    @endforelse
-                                </swiper-container>
-                            </div>
+            <div id="searchResults">
+                <div class="group-room-card row gx-4">
+                    @forelse($rooms as $room)
+                        <!-- CARD ROOM -->
+                        <div class="col-md-6">
+                            <div class="row group-info-room-card">
+                                <!-- Hình ảnh -->
+                                <div class="col-md-5 detail-infor-room-left">
+                                    <swiper-container class="mySwiper" pagination="true" pagination-clickable="true"
+                                        navigation="true" space-between="30" loop="true">
+                                        @forelse($room->room_images as $image)
+                                            <swiper-slide>
+                                                <img src="{{ asset('images/' . $image->image_url) }}" alt="Room Image" />
+                                            </swiper-slide>
+                                        @empty
+                                            <p>Không có hình ảnh cho phòng này</p>
+                                        @endforelse
+                                    </swiper-container>
+                                </div>
 
-                            <!-- Thông tin room -->
-                            <div class="col-md-7 detail-infor-right">
-                                <div class="detail-room-sale">-{{ $room->discount_percent }}%</div>
-                                <div class="row">
-                                    <div class="col-md-8">
-                                        <div class="card-room-location m-0">
-                                            <i class="fa-solid fa-location-dot"></i>
-                                            <span>{{ $hotel->location }}</span>
+                                <!-- Thông tin room -->
+                                <div class="col-md-7 detail-infor-right">
+                                    <div class="detail-room-sale">-{{ $room->discount_percent }}%</div>
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="card-room-location m-0">
+                                                <i class="fa-solid fa-location-dot"></i>
+                                                <span>{{ $hotel->location }}</span>
+                                            </div>
+                                            <div class="card-room-hotel-name m-0">
+                                                <i class="fa-solid fa-bed"></i>
+                                                <span>{{ $room->name }}</span>
+                                            </div>
+                                            <div class="group-room-price">
+                                                <ul class="p-0">
+                                                    <li>
+                                                        <span class="card-room-price-old">
+                                                            {{ number_format($room->price, 0, ',', '.') }} / Đêm
+                                                        </span>
+                                                    </li>
+                                                    <li>
+                                                        <span class="card-room-price-new">
+                                                            {{ number_format($room->price * (1 - $room->discount_percent / 100), 0, ',', '.') }}
+                                                            / Đêm
+                                                        </span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="card-room-rating m-0 p-0">
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    @if ($i <= $hotel->rating)
+                                                        <span>★</span>
+                                                    @else
+                                                        <span>☆</span>
+                                                    @endif
+                                                @endfor
+                                            </div>
                                         </div>
-                                        <div class="card-room-hotel-name m-0">
-                                            <i class="fa-solid fa-hotel"></i>
-                                            <span>{{ $room->name }}</span>
-                                        </div>
-                                        <div class="group-room-price">
-                                            <ul class="p-0">
-                                                <li>
-                                                    <span class="card-room-price-old">
-                                                    {{ number_format($room->price, 0, ',', '.') }}
-                                                    / Đêm
-                                                    </span>
-                                                </li>
-                                                <li>
-                                                    <span class="card-room-price-new">
-                                                        {{ number_format($room->price * (1 - $room->discount_percent / 100), 0, ',', '.') }} / Đêm 
-                                                    </span>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="card-room-rating m-0 p-0">
-                                            @for ($i = 1; $i <= 5; $i++)
-                                                @if ($i <= $hotel->rating)
-                                                    <span>★</span>
+                                        <div class="col-md-4">
+                                            <div class="card-room-status">
+                                                @if(optional($room->room_types)->room_type_id == 1)
+                                                    <div class="don">{{ optional($room->roomType)->name }}</div>
                                                 @else
-                                                    <span>☆</span>
+                                                    <div class="doi">{{ optional($room->roomType)->name }}</div>
                                                 @endif
-                                            @endfor
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="card-room-status">
-                                        @if(optional($room->room_types)->room_type_id == 1)
-                                            <div class="don">{{ optional($room->roomType)->name }}</div>
-                                        @else
-                                            <div class="doi">{{ optional($room->roomType)->name }}</div>
-                                        @endif
-                                        </div>
-                                        <div class="card-room-btn-book">
-                                            <a href="{{ route('pages.getInfoPay', ['hotel_id' => $hotel->hotel_id, 'room_id' => $room->room_id]) }}"
-                                                target="_blank" class="btn-book-now">Đặt ngay</a>
-
+                                            </div>
+                                            <div class="card-room-btn-book">
+                                                <a href="{{ route('pages.getInfoPay', ['hotel_id' => $hotel->hotel_id, 'room_id' => $room->room_id]) }}"
+                                                    target="_blank" class="btn-book-now">Đặt ngay</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                @empty
-                    <div class="404">Không Còn Phòng Nữa !!</div>
-                @endforelse
+                    @empty
+                        <div class="404">
+                            <h5>Hiện tại không còn phòng trống.</h5>
+                        </div>
+                    @endforelse
+                </div>
             </div>
 
             <!-- Links phân trang -->
@@ -510,39 +577,162 @@
         });
     });
     // 
-    // document.addEventListener('DOMContentLoaded', function () {
-    //     const searchForm = document.getElementById('searchForm');
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchForm = document.getElementById('searchForm');
 
-    //     searchForm.addEventListener('submit', function (event) {
-    //         event.preventDefault(); // Ngăn form gửi theo cách thông thường
+        searchForm.addEventListener('submit', function (event) {
+            event.preventDefault(); // Ngăn form gửi theo cách thông thường
 
-    //         // Lấy URL và tạo query string từ các input
-    //         const url = searchForm.getAttribute('action');
-    //         const formData = new FormData(searchForm);
-    //         const queryString = new URLSearchParams(formData).toString();
+            // Lấy URL và tạo query string từ các input
+            const url = searchForm.getAttribute('action');
+            const formData = new FormData(searchForm);
+            const queryString = new URLSearchParams(formData).toString();
 
-    //         // Gửi yêu cầu AJAX với fetch
-    //         fetch(`${url}?${queryString}`, {
-    //             method: 'GET',
-    //             headers: {
-    //                 'X-Requested-With': 'XMLHttpRequest' // Để Laravel nhận diện đây là yêu cầu AJAX
-    //             },
-    //         })
-    //             .then(response => response.text())
-    //             .then(data => {
-    //                 // Hiển thị kết quả tìm kiếm trong div #searchResults
-    //                 document.getElementById('searchResults').innerHTML = data;
-    //             })
-    //             .catch(error => {
-    //                 console.error('Error:', error);
-    //                 document.getElementById('searchResults').innerHTML = '<p>Đã xảy ra lỗi. Vui lòng thử lại sau.</p>';
-    //             });
-    //     });
-    // });
-   
+            // Gửi yêu cầu AJAX với fetch
+            fetch(`${url}?${queryString}`, {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest' // Để Laravel nhận diện đây là yêu cầu AJAX
+                },
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Cập nhật HTML trong div #searchResults
+                    document.getElementById('searchResults').innerHTML = data.html;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('searchResults').innerHTML = '<p>Đã xảy ra lỗi. Vui lòng thử lại sau.</p>';
+                });
+        });
+        
+    });
+
     // 
+    (function () {
+        document.addEventListener("DOMContentLoaded", function () {
+            const peopleSummaryContainer = document.querySelector('.people-summary-container');
+            const peopleCounterDropdown = document.querySelector('.people-counter-dropdown');
+
+            peopleSummaryContainer.addEventListener('click', function () {
+                // Toggle giữa hiển thị và ẩn phần .people-counter-dropdown
+                if (peopleCounterDropdown.style.display === "none" || peopleCounterDropdown.style.display === "") {
+                    peopleCounterDropdown.style.display = "block";
+                } else {
+                    peopleCounterDropdown.style.display = "none";
+                }
+            });
+
+            // Ẩn dropdown khi nhấn ra ngoài
+            document.addEventListener('click', function (e) {
+                if (!peopleSummaryContainer.contains(e.target) && !peopleCounterDropdown.contains(e.target)) {
+                    peopleCounterDropdown.style.display = "none";
+                }
+            });
+        });
+    })();
 
     //
+    document.addEventListener("DOMContentLoaded", function () {
+        const roomsInput = document.getElementById("roomsCounter");
+        const adultsInput = document.getElementById("adultsCounter");
+        const childrenInput = document.getElementById("childrenCounter");
+        const roomSummary = document.getElementById("room-summary-counter");
+        const peopleSummary = document.getElementById("people-summary-counter");
+        const childrenSummary = document.getElementById("children-summary-counter");
+
+        // Cập nhật hiển thị số lượng
+        function updateSummary() {
+            roomSummary.innerHTML = `${roomsInput.value} phòng, `;
+            peopleSummary.innerHTML = `${adultsInput.value} người lớn, `;
+            childrenSummary.innerHTML = `${childrenInput.value} trẻ em`;
+        }
+
+        // Tính toán số người tối đa
+        function maxPeople() {
+            return roomsInput.value * 4; // Mỗi phòng tối đa 4 người
+        }
+
+        // Kiểm tra và điều chỉnh số lượng người lớn
+        function checkAdults() {
+            const totalPeople = parseInt(adultsInput.value) + parseInt(childrenInput.value);
+            const max = maxPeople();
+            if (totalPeople > max) {
+                alert(`Tối đa ${max} người cho ${roomsInput.value} phòng.`);
+                adultsInput.value = max - parseInt(childrenInput.value);
+            }
+            updateSummary();
+        }
+
+        // Kiểm tra và điều chỉnh số trẻ em
+        function checkChildren() {
+            const maxChildren = roomsInput.value * 4; // Tối đa 4 trẻ em cho mỗi phòng
+            if (parseInt(childrenInput.value) > maxChildren) {
+                alert(`Tối đa ${maxChildren} trẻ em cho ${roomsInput.value} phòng.`);
+                childrenInput.value = maxChildren; // Điều chỉnh trẻ em nếu vượt quá
+            }
+            updateSummary();
+        }
+
+        // Tăng giảm số lượng
+        document.querySelector(".btn-increment-room").onclick = function () {
+            roomsInput.value = parseInt(roomsInput.value) + 1;
+            updateButtons();
+            updateSummary();
+        };
+
+        document.querySelector(".btn-decrement-room").onclick = function () {
+            if (roomsInput.value > 1) {
+                roomsInput.value = parseInt(roomsInput.value) - 1;
+                updateButtons();
+                updateSummary();
+            }
+        };
+
+        document.querySelector(".btn-increment-adult").onclick = function () {
+            adultsInput.value = parseInt(adultsInput.value) + 1;
+            checkAdults();
+            updateButtons();
+            updateSummary();
+        };
+
+        document.querySelector(".btn-decrement-adult").onclick = function () {
+            if (adultsInput.value > 1) {
+                adultsInput.value = parseInt(adultsInput.value) - 1;
+                updateButtons();
+                updateSummary();
+            }
+        };
+
+        document.querySelector(".btn-increment-children").onclick = function () {
+            const maxChildren = roomsInput.value * 4; // Tối đa 4 trẻ em cho mỗi phòng
+            if (parseInt(childrenInput.value) < maxChildren) {
+                childrenInput.value = parseInt(childrenInput.value) + 1;
+            }
+            checkChildren();
+            updateButtons();
+            updateSummary();
+        };
+
+        document.querySelector(".btn-decrement-children").onclick = function () {
+            if (childrenInput.value > 0) {
+                childrenInput.value = parseInt(childrenInput.value) - 1;
+            }
+            updateButtons();
+            updateSummary();
+        };
+
+        // Cập nhật trạng thái nút
+        function updateButtons() {
+            document.querySelector(".btn-decrement-room").disabled = roomsInput.value <= 1;
+            document.querySelector(".btn-decrement-adult").disabled = adultsInput.value <= 1;
+            document.querySelector(".btn-decrement-children").disabled = childrenInput.value <= 0;
+        }
+
+        // Khởi tạo hiển thị ban đầu
+        updateSummary();
+        updateButtons();
+    });
 
     // 
 </script>
