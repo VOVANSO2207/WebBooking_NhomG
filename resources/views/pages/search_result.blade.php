@@ -526,9 +526,6 @@ function filterHotelsByPrice(minPrice, maxPrice) {
     });
 }
 
-// Initialize slider on page load
-// updateSlider();
-
 
 </script>
 

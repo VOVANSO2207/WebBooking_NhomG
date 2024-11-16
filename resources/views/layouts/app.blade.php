@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> StayNest</title>
+    <title>StayNest</title>
     <link rel="icon" type="image/" href="{{asset('images/logo-staynest.jpg')}}">
     {{--
     <link rel="stylesheet" href="{{asset('css/search_result.css')}}"> --}}
