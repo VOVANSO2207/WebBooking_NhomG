@@ -26,6 +26,17 @@
 
 <div class="content-wrapper">
     <div class="container-xxl flex-grow-1 container-p-y">
+        <!-- Success/Failure Messages -->
+        @if (session('success'))
+            <div class="alert alert-success" role="alert">
+                {{ session('success') }}
+            </div>
+        @elseif(session('error'))
+            <div class="alert alert-danger" role="alert">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <div class="card">
             <h5 class="card-header" style="background-color: #696cff; border-color: #696cff; color:#fff">USER</h5>
             <div class="add">
@@ -173,40 +184,11 @@
                 },
             })
             .then(response => {
-                if (response.ok) {
-                    alert('User deleted successfully.');
-
-                    // Đóng modal chi tiết và tải lại trang
-                    const userDetailModal = bootstrap.Modal.getInstance(document.getElementById('userDetailModal'));
-                    if (userDetailModal) {
-                        userDetailModal.hide();
-                    }
-                    location.reload();
-                } else {
-                    throw new Error('Failed to delete user.');
-                }
+                window.location.reload();
             })
             .catch(error => {
-                console.error('Error deleting user:', error);
-                alert('An error occurred while deleting the user.');
+                alert('Có lỗi xảy ra trong khi xóa!');
             });
-        });
-
-        // Đóng modal chi tiết và reload trang khi nhấn nút "Close"
-        document.querySelector('#userDetailModal .btn-close, #userDetailModal .btn-secondary').addEventListener('click', function () {
-            const userDetailModal = bootstrap.Modal.getInstance(document.getElementById('userDetailModal'));
-            if (userDetailModal) {
-                userDetailModal.hide();
-            }
-            location.reload();
-        });
-
-        // Lắng nghe sự kiện đóng modal
-        const userDetailModal = document.getElementById('userDetailModal');
-        
-        userDetailModal.addEventListener('hidden.bs.modal', function () {
-            // Tự động reload lại trang khi modal đóng
-            location.reload();
         });
     });
 </script>

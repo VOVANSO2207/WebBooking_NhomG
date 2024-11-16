@@ -109,12 +109,17 @@ class UsersController extends Controller
         // Giải mã ID trước khi thao tác
         $decodedId = IdEncoder::decodeId($user_id);
         $user = User::find($decodedId);
+
         if ($user) {
+            // Xóa người dùng
             $user->delete();
-            return response()->json(['success' => true, 'message' => 'Người dùng đã được xóa.']);
+
+            // Gửi thông báo thành công vào session
+            return redirect()->route('admin.viewuser')->with('success', 'Người dùng đã được xóa thành công.');
         }
 
-        return response()->json(['success' => false, 'message' => 'Người dùng không tồn tại.'], 404);
+        // Nếu không tìm thấy người dùng, gửi thông báo lỗi vào session
+        return redirect()->route('admin.viewuser')->with('error', 'Người dùng không tồn tại.');
     }
 
     public function search(Request $request)
