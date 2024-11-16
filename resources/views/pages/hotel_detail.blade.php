@@ -320,123 +320,176 @@
 
             <!--NHẬP ĐÁNH GIÁ -->
             <div class="box-review">
-                <form class="group-input-review" id="reviewForm">
+                <form class="group-input-review" id="reviewForm" action="{{ route('reviews.store', $hotel->hotel_id) }}"
+                    method="POST" enctype="multipart/form-data">
+                    @csrf
                     <div class="icon-profile">
                         <i class="fa-solid fa-circle-user"></i>
                     </div>
                     <div class="group-text-review">
-                        <input type="text" placeholder="Mời bạn nhập đánh giá..." class="form-control" id="inputReview">
+                        <input type="text" placeholder="Mời bạn nhập đánh giá..." class="form-control" id="inputReview"
+                            name="comment">
+
+
                         <div class="upload-file-review">
                             <label for="file-input">
                                 <i class="fa-solid fa-circle-plus"></i>
                             </label>
-                            <input type="file" id="file-input" style="display: none;" accept="image/*" multiple>
+                            <input type="file" id="file-input" name="images[]" style="display: none;" accept="image/*"
+                                multiple>
                         </div>
+                        <!-- Nút Emoji -->
+                        <button type="button" id="emojiButton" class="btn btn-light">😊</button>
                     </div>
-                    <div class="btn-submit"><button type="submit">ĐĂNG</button></div>
+                    <div class="rating-stars">
+                        <input hidden type="number" name="rating" max="5" min="1" step="1">
+                    </div>
+                    <div class="btn-submit">
+                        <button type="submit">ĐĂNG</button>
+                    </div>
                 </form>
                 <div class="image-preview-review d-flex">
                     <img id="preview" src="" alt="Ảnh xem trước" multiple>
                 </div>
 
                 <!-- HIỂN THỊ ĐÁNH GIÁ -->
-                <div class="box-comment-review mt-3 d-flex">
-                    <div class="icon-profile ms-5">
-                        <i class="fa-solid fa-circle-user"></i>
-                    </div>
-                    <div class="view-review ms-2">
-                        <div class="group-info-review">
-                            <div class="review-user-name">Nguyen Van A</div>
-                            <div class="created_at">2024-09-27</div>
-                            <div class="comment-text">
-                                Phòng đẹp chất lượng dịch vụ tốt, ưng ghê vậy á chàiiiii ♥♥
-                            </div>
-                            <div class="image-review">
-                                <img src="https://cms.imgworlds.com/assets/a5366382-0c26-4726-9873-45d69d24f819.jpg?key=home-gallery"
-                                    alt="">
-                                <img src="https://cms.imgworlds.com/assets/a5366382-0c26-4726-9873-45d69d24f819.jpg?key=home-gallery"
-                                    alt="">
-                                <img src="https://cms.imgworlds.com/assets/a5366382-0c26-4726-9873-45d69d24f819.jpg?key=home-gallery"
-                                    alt="">
-                                <img src="https://cms.imgworlds.com/assets/a5366382-0c26-4726-9873-45d69d24f819.jpg?key=home-gallery"
-                                    alt="">
-                                <img src="https://cms.imgworlds.com/assets/a5366382-0c26-4726-9873-45d69d24f819.jpg?key=home-gallery"
-                                    alt="">
-                                <img src="https://cms.imgworlds.com/assets/a5366382-0c26-4726-9873-45d69d24f819.jpg?key=home-gallery"
-                                    alt="">
-                                <img src="https://cms.imgworlds.com/assets/a5366382-0c26-4726-9873-45d69d24f819.jpg?key=home-gallery"
-                                    alt="">
-                                <img src="https://cms.imgworlds.com/assets/a5366382-0c26-4726-9873-45d69d24f819.jpg?key=home-gallery"
-                                    alt="">
-                                <img src="https://cms.imgworlds.com/assets/a5366382-0c26-4726-9873-45d69d24f819.jpg?key=home-gallery"
-                                    alt="">
-                                <img src="https://cms.imgworlds.com/assets/a5366382-0c26-4726-9873-45d69d24f819.jpg?key=home-gallery"
-                                    alt="">
+                @foreach ($reviews as $review)
+                    <div class="box-comment-review mt-3 d-flex">
+                        <div class="icon-profile ms-5">
+                            <i class="fa-solid fa-circle-user"></i>
+                        </div>
+                        <div class="view-review ms-2">
+                            <div class="group-info-review">
+                                <div class="review-user-name">{{ $review->user->username }}</div>
+                                <div class="created_at">{{ $review->updated_at }}</div>
+                                <div class="comment-text">
+                                    {{ $review->comment }}
+                                </div>
+                                <!-- Hiển thị hình ảnh đánh giá nếu có -->
+                                @foreach ($review->images as $image)
+                                    <div class="image-review">
+                                        <img src="{{ asset($image->image_url) }}" width="20%" alt="Review Image">
+                                    </div>
+                                @endforeach
 
-                                <img src="https://cms.imgworlds.com/assets/a5366382-0c26-4726-9873-45d69d24f819.jpg?key=home-gallery"
-                                    alt="">
-                                <img src="https://cms.imgworlds.com/assets/a5366382-0c26-4726-9873-45d69d24f819.jpg?key=home-gallery"
-                                    alt="">
-                            </div>
-                            <div class="action-review mt-2">
-                                <a href="#" class="like-review me-4"><i class="fa-solid fa-thumbs-up"></i>
-                                    Thích</a>
-                                <a href="#" class="delete-review me-4"><i class="fa-solid fa-trash"></i> Xóa
-                                    Đánh
-                                    Giá</a>
-                                <a href="#" class="edit-review"><i class="fa-solid fa-pen-to-square"></i> Chỉnh
-                                    sửa</a>
+                                <div class="action-review mt-2">
+                                    <a href="#" class="like-review me-4"><i class="fa-solid fa-thumbs-up"></i>
+                                        Thích</a>
+                                    <button type="button" class="delete-review-btn me-4 btn btn-link text-danger"
+                                        data-review-id="{{ $review->review_id }}" data-bs-toggle="modal"
+                                        data-bs-target="#deleteReviewModal">
+                                        <i class="fa-solid fa-trash"></i> Xóa Đánh Giá
+                                    </button>
+                                    <a href="#" class="edit-review"><i class="fa-solid fa-pen-to-square"></i> Chỉnh
+                                        sửa</a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                @endforeach
 
-                <!-- HIỂN THỊ ĐÁNH GIÁ -->
-                <div class="box-comment-review mt-3 d-flex">
-                    <div class="icon-profile ms-5">
-                        <i class="fa-solid fa-circle-user"></i>
-                    </div>
-                    <div class="view-review ms-2">
-                        <div class="group-info-review">
-                            <div class="review-user-name">Nguyen Van A</div>
-                            <div class="created_at">2024-09-27</div>
-                            <div class="comment-text">
-                                Phòng đẹp chất lượng dịch vụ tốt, ưng ghê vậy á chàiiiii ♥♥
-                            </div>
-                            <div class="image-review">
-                                <img src="https://cms.imgworlds.com/assets/a5366382-0c26-4726-9873-45d69d24f819.jpg?key=home-gallery"
-                                    alt="">
-                            </div>
-                            <div class="action-review mt-2">
-                                <a href="#" class="like-review me-4"><i class="fa-solid fa-thumbs-up"></i>
-                                    Thích</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <!-- PHÂN TRANG -->
-                <div class="review-pagination">
-                    <ul class="pagination">
-                        <li class="page-item disabled">
-                            <a class="page-link">
-                                < </a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item active" aria-current="page">
-                            <a class="page-link" href="#">2</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#"> > </a>
-                        </li>
-                    </ul>
+                <div class="d-flex justify-content-center mt-3 pagination-voucher">
+                    {{ $reviews->appends(['csrf_token' => csrf_token()])->links('pagination::bootstrap-4') }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Xác Nhận Xóa -->
+    <div class="modal fade" id="deleteReviewModal" tabindex="-1" aria-labelledby="deleteReviewModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteReviewModalLabel">Xác nhận xóa</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Bạn có chắc chắn muốn xóa bình luận này không?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <form id="deleteReviewForm" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">Xóa</button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </section>
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const deleteButtons = document.querySelectorAll('.delete-review-btn');
+        const deleteForm = document.getElementById('deleteReviewForm');
+
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const reviewId = this.getAttribute('data-review-id');
+                const updatedAt = this.getAttribute('data-updated-at'); // Lấy updated_at từ nút
+
+                // Cập nhật URL action và thêm trường hidden updated_at vào form
+                deleteForm.setAttribute('action', `/review/${reviewId}`);
+                deleteForm.innerHTML += `<input type="hidden" name="updated_at" value="${updatedAt}">`;
+            });
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const emojiButton = document.querySelector('#emojiButton');
+        const inputReview = document.querySelector('#inputReview');
+
+        // Tạo đối tượng EmojiConvertor
+        const emoji = new EmojiConvertor();
+        emoji.img_sets.apple.path = 'https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/'; // Đường dẫn biểu tượng emoji
+        emoji.use_sheet = false;
+
+        // Hiển thị picker emoji khi bấm nút
+        emojiButton.addEventListener('click', () => {
+            const emojiPicker = document.createElement('div');
+            emojiPicker.classList.add('emoji-picker');
+            emojiPicker.style.position = 'absolute';
+            emojiPicker.style.border = '1px solid #ccc';
+            emojiPicker.style.backgroundColor = '#fff';
+            emojiPicker.style.padding = '10px';
+            emojiPicker.style.zIndex = '1000';
+
+            // Danh sách emoji mẫu
+            const emojis = ['😊', '😂', '😍', '🥺', '👍', '🎉', '😢', '❤️'];
+            emojis.forEach(em => {
+                const emojiElement = document.createElement('span');
+                emojiElement.textContent = em;
+                emojiElement.style.cursor = 'pointer';
+                emojiElement.style.margin = '5px';
+                emojiElement.style.fontSize = '20px';
+
+                emojiElement.addEventListener('click', () => {
+                    inputReview.value += em;
+                    emojiPicker.remove(); // Đóng picker khi chọn emoji
+                });
+
+                emojiPicker.appendChild(emojiElement);
+            });
+
+            document.body.appendChild(emojiPicker);
+
+            // Đặt vị trí picker gần nút
+            const rect = emojiButton.getBoundingClientRect();
+            emojiPicker.style.top = `${rect.bottom + window.scrollY}px`;
+            emojiPicker.style.left = `${rect.left + window.scrollX}px`;
+
+            // Đóng picker khi click bên ngoài
+            document.addEventListener('click', function closePicker(event) {
+                if (!emojiPicker.contains(event.target) && event.target !== emojiButton) {
+                    emojiPicker.remove();
+                    document.removeEventListener('click', closePicker);
+                }
+            });
+        });
+    });
+
     // Hiển thị ảnh xem trước ở bình luận và lưu ảnh vào store để f5 không mất
     (function () {
         const EXPIRATION_TIME = 10 * 60 * 1000; // 10 phút tính bằng mili giây
@@ -605,7 +658,7 @@
                     document.getElementById('searchResults').innerHTML = '<p>Đã xảy ra lỗi. Vui lòng thử lại sau.</p>';
                 });
         });
-        
+
     });
 
     // 
