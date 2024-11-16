@@ -738,7 +738,7 @@ outline: none;
 
  }
 
- <<<<<<< HEAD .voucher-container {
+.voucher-container {
      display: flex;
      gap: 20px;
      animation: slideLeftToRight 20s linear infinite;
@@ -1200,7 +1200,6 @@ outline: none;
      }
  }
 
- =======
 
  /* Popular_filters */
  .Popular_filters {
@@ -1262,4 +1261,3 @@ outline: none;
  }
 
  /* Popular_filters */
- >>>>>>>Fix-Code-0.4-MinhTam
