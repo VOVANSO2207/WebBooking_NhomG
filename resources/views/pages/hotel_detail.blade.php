@@ -427,47 +427,44 @@
     </div>
 </section>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const likeButtons = document.querySelectorAll('.like-review');
+document.addEventListener('DOMContentLoaded', function () {
+    const likeButtons = document.querySelectorAll('.like-review'); // Lấy tất cả các nút like
 
-        likeButtons.forEach(button => {
-            button.addEventListener('click', function () {
-                const reviewId = this.getAttribute('data-review-id');
+    likeButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const reviewId = this.getAttribute('data-review-id'); // Lấy review_id từ data attribute
+            const likeCountSpan = document.getElementById(`like-count-${reviewId}`); // Lấy span số like
 
-                // Gửi yêu cầu AJAX đến server để like hoặc unlike
-                fetch(`/review/${reviewId}/like`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    },
-                    body: JSON.stringify({
-                        review_id: reviewId
-                    })
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            // Cập nhật UI: Hiển thị lại số lượt like
-                            const likeCountElement = document.getElementById(`like-count-${reviewId}`);
-                            const likeCount = parseInt(likeCountElement.textContent);
+            // Gửi yêu cầu AJAX để thích hoặc bỏ thích
+            fetch(`/reviews/like/${reviewId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') // CSRF Token
+                },
+                body: JSON.stringify({ review_id: reviewId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Cập nhật số lượng like mới nhận được từ phản hồi của server
+                    likeCountSpan.textContent = data.likes_count;
 
-                            // Tăng/giảm số lượt like
-                            if (data.message.includes('thích')) {
-                                likeCountElement.textContent = likeCount + 1;
-                            } else {
-                                likeCountElement.textContent = likeCount - 1;
-                            }
-                        } else {
-                            alert(data.message); // Nếu có lỗi, thông báo cho người dùng
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Có lỗi khi gửi yêu cầu:', error);
-                    });
+                    // Thêm hoặc bỏ class liked để thay đổi kiểu dáng của nút
+                    if (data.action === 'liked') {
+                        this.classList.add('liked');
+                    } else {
+                        this.classList.remove('liked');
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
             });
         });
     });
+});
+
 
     document.addEventListener('DOMContentLoaded', function () {
         const deleteButtons = document.querySelectorAll('.delete-review-btn');
