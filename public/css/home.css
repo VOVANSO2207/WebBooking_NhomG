@@ -702,6 +702,10 @@ outline: none;
  }
 
 
+.fa-heart.red {
+    color: red;
+ 
+}
  .notification-dropdown {
      position: absolute;
      top: 152px;
@@ -1079,6 +1083,11 @@ outline: none;
      font-weight: 600;
  }
 
+    .voucher-icon {
+        min-width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
  .voucher-details p {
      font-size: clamp(0.8rem, 1.8vw, 0.9rem);
      color: #64748b;
@@ -1142,6 +1151,12 @@ outline: none;
      }
  }
 
+.city-btn.selected {
+    background-color: #007bff; /* Màu nền khi button được chọn */
+    color: white; /* Màu chữ khi button được chọn */
+    border-color: #0056b3; /* Màu viền khi button được chọn */
+}
+/* Popular_filters */
  .new-badge {
      position: absolute;
      top: 15px;
@@ -1260,4 +1275,4 @@ outline: none;
      /* Màu viền khi button được chọn */
  }
 
- /* Popular_filters */
+ 

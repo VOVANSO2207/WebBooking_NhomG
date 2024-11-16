@@ -391,7 +391,7 @@
                                     </div>
                                     <div class="card-room-hotel-name m-0">
                                         <i class="fa-solid fa-hotel"></i>
-                                        <a href="#" class="hotel-link">{{ $favorite->hotel->hotel_name }}</a>
+                                        <a href="#" class="hotel-link" style="text-decoration: none; !important; font-weight:500;">{{ $favorite->hotel->hotel_name }}</a>
                                     </div>
                                     <div class="group-room-price mt-2">
                                         <p>

@@ -160,18 +160,13 @@ class Hotel extends Model
                 });
         })
             ->with([
-                'rooms' => function ($query) use ($rooms, $adults, $children, $checkInDate, $checkOutDate) {
-                    $query->where('capacity', '>=', $adults + $children)
-                        ->whereDoesntHave('bookings', function ($query) use ($checkInDate, $checkOutDate) {
-                            $query->where(function ($q) use ($checkInDate, $checkOutDate) {
-                                $q->where('check_in', '<', $checkOutDate)
-                                    ->where('check_out', '>', $checkInDate);
-                            });
-                        })
-                        ->take($rooms); // Giới hạn số lượng phòng hiển thị
-                }
+                'rooms' => function ($query) use ($rooms) {
+                    $query->take($rooms)
+                    ->with('roomType'); 
+                },
             ])
-            ->orderByRaw("CASE WHEN city_id = ? THEN 1 ELSE 2 END", [$cityId])
+            ->withCount('reviews') 
+            ->orderByRaw("CASE WHEN city_id = ? THEN 1 ELSE 2 END", [$cityId]) // Ưu tiên khách sạn có city_id khớp chính xác
             ->get();
 
         // Trả về cả khách sạn, số lượng khách sạn và tên thành phố

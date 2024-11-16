@@ -80,7 +80,7 @@
                         <div class="group-left-header d-flex align-items-center justify-content-center">
                             <div class="col-md-2 text-center">
                                 <i class="fa-solid fa-bell fa-xl" id="notificationBell" style="cursor: pointer;"></i>
-
+                                    
                                 <!-- Notification Dropdown -->
                                 <div class="notification-dropdown" id="notificationDropdown" style="display: none;">
                                     <h5 class="dropdown-header">Notifications</h5>
@@ -102,7 +102,7 @@
                             </div>
 
                             <div class="col-md-2 text-center" style="width: 100%;height:100%;">
-                                <img src="{{ Auth::check() && Auth::user()->avatar ? asset('images/' . Auth::user()->avatar) : asset('images/user-profile.png') }}"
+                                <img src="{{ Auth::check() && Auth::user()->avatar ? asset('storage/images/' . Auth::user()->avatar) : asset('images/user-profile.png') }}"
                                     alt="Avatar" class="img-fluid rounded-circle"
                                     style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;">
 
@@ -394,7 +394,7 @@
                         <a href="{{ route('pages.hotel_detail', ['hotel_id' => $hotel->hotel_id]) }}" class="group-offers">
                             <div class="shape-in">
                                 @if ($hotel->images->isNotEmpty())
-                                    <img class="image-hotel-2" src="{{ asset('images/' . $hotel->images->first()->image_url) }}"
+                                    <img class="image-hotel-2" src="{{ asset('storage/images/' . $hotel->images->first()->image_url) }}"
                                         alt="">
                                 @else
                                     <img class="image-hotel-2" src="{{ asset('storage/images/defaullt-image.png') }}" alt="">
