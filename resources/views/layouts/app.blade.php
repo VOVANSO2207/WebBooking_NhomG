@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StayNest</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <link rel="icon" type="image/" href="{{asset('images/logo-staynest.jpg')}}">
     {{--
     <link rel="stylesheet" href="{{asset('css/search_result.css')}}"> --}}
@@ -22,6 +24,10 @@
     <script src="{{ asset('js/script.js') }}"></script>
     <script src="{{ asset('js/animation.js') }}"></script>
     <script src="{{ asset('js/counter_control.js') }}"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/emoji-js/3.8.0/emoji.css">
+
+<!-- Thêm JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/emoji-js/3.8.0/emoji.min.js"></script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />

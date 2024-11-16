@@ -14,6 +14,7 @@ use App\Http\Controllers\PromotionsController;
 use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\RoomTypeController;
 use App\Models\HotelAmenities;
+use App\Http\Controllers\ReviewsController;
 use App\Http\Controllers\HotelAmenitiesController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\FavoriteController;
@@ -236,3 +237,10 @@ Route::get('/vnpay-return', [PaymentsController::class, 'paymentReturn'])->name(
 
 
 
+Route::post('/hotel/{hotel_id}/reviews', [ReviewsController::class, 'store'])->name('reviews.store');
+// Thêm phản hồi vào một bình luận
+Route::post('/reviews/{review_id}/reply', [ReviewsController::class, 'reply'])->name('reviews.reply');
+Route::post('reviews/like/{review_id}', [ReviewsController::class, 'like']);
+
+Route::delete('/review/{review_id}', [ReviewsController::class, 'destroy'])->name('reviews.destroy');
+Route::patch('/reviews/{review}', [ReviewsController::class, 'update'])->name('reviews.update');
