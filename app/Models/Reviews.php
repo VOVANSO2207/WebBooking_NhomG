@@ -36,7 +36,10 @@ class Reviews extends Model
         return $this->hasMany(ReviewImages::class, 'review_id', 'review_id');
     }
     
-
+    public function likes()
+    {
+        return $this->hasMany(ReviewLike::class, 'review_id', 'review_id');
+    }
     // Hàm lấy khách sạn có nhiều đánh giá nhất
     public static function hotelsWithMostReviews($limit = 10)
     {

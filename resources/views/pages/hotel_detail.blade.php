@@ -374,15 +374,19 @@
                                 </div>
 
                                 <div class="action-review mt-2">
-                                    <a href="#" class="like-review me-4"><i class="fa-solid fa-thumbs-up"></i>
-                                        Thích</a>
-                                    <a href="#" class="edit-review"><i class="fa-solid fa-pen-to-square"></i> Chỉnh
-                                        sửa</a>
-                                    <button type="button" class="delete-review-btn me-4 btn btn-link"
-                                        data-review-id="{{ $review->review_id }}" data-bs-toggle="modal"
-                                        data-bs-target="#deleteReviewModal">
-                                        <i class="fa-solid fa-trash"></i> Xóa Đánh Giá
-                                    </button>
+                                    <a href="javascript:void(0)" class="like-review me-4"
+                                        id="like-review-{{ $review->review_id }}" data-review-id="{{ $review->review_id }}">
+                                        <i class="fa-solid fa-thumbs-up"></i> <span class="like-count"
+                                            id="like-count-{{ $review->review_id }}">{{ $review->likes_count }}</span> Thích
+                                    </a>
+                                    @if (auth()->check() && (auth()->user()->user_id === $review->user_id || auth()->user()->is_admin))
+            <a href="#" class="edit-review"><i class="fa-solid fa-pen-to-square"></i> Chỉnh sửa</a>
+            <button type="button" class="delete-review-btn me-4 btn btn-link"
+                    data-review-id="{{ $review->review_id }}" data-bs-toggle="modal"
+                    data-bs-target="#deleteReviewModal">
+                <i class="fa-solid fa-trash"></i> Xóa Đánh Giá
+            </button>
+        @endif
                                 </div>
                             </div>
                         </div>
@@ -422,6 +426,48 @@
     </div>
 </section>
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const likeButtons = document.querySelectorAll('.like-review');
+
+        likeButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const reviewId = this.getAttribute('data-review-id');
+
+                // Gửi yêu cầu AJAX đến server để like hoặc unlike
+                fetch(`/review/${reviewId}/like`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({
+                        review_id: reviewId
+                    })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Cập nhật UI: Hiển thị lại số lượt like
+                            const likeCountElement = document.getElementById(`like-count-${reviewId}`);
+                            const likeCount = parseInt(likeCountElement.textContent);
+
+                            // Tăng/giảm số lượt like
+                            if (data.message.includes('thích')) {
+                                likeCountElement.textContent = likeCount + 1;
+                            } else {
+                                likeCountElement.textContent = likeCount - 1;
+                            }
+                        } else {
+                            alert(data.message); // Nếu có lỗi, thông báo cho người dùng
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Có lỗi khi gửi yêu cầu:', error);
+                    });
+            });
+        });
+    });
+
     document.addEventListener('DOMContentLoaded', function () {
         const deleteButtons = document.querySelectorAll('.delete-review-btn');
         const deleteForm = document.getElementById('deleteReviewForm');
