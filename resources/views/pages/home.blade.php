@@ -376,7 +376,7 @@
                     @if ($cities->isEmpty())
                         <span>Chưa có thành phố để hiển thị</span>
                     @else
-                        @foreach ($cities as $city)
+                        @foreach ($cities->take(5) as $city)
                             <div class="city-option mb-3">
                                 <button class="btn btn-outline-primary btn-lg city-btn"
                                     data-city-id="{{ $city->city_id }}">{{ $city->city_name }}</button>
