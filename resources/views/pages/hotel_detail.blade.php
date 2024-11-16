@@ -315,7 +315,7 @@
             <div class="review-title m-0">ĐÁNH GIÁ</div>
             <hr class="m-0">
             <div class="total-review m-0 mb-4">
-                Có tất cả 5 đánh giá
+              Có {{$reviews->count()}} Đánh giá từ người dùng
             </div>
 
             <!--NHẬP ĐÁNH GIÁ -->
