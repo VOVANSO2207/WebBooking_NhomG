@@ -9,7 +9,7 @@ class ReviewImages extends Model
 {
     use HasFactory;
 
-    protected $table = 'review_image';
+    protected $table = 'review_images';
     protected $primaryKey = 'image_id';
     protected $fillable = ['review_id', 'image_url'];
 

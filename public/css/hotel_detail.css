@@ -478,10 +478,26 @@ body {
                     top: calc(100% - 37px);
                     right: 10px;
 
-                    label i {
-                        font-size: 30px;
-                        color: #3B79C9;
-                        cursor: pointer;
+                    .emoj-review {
+                        float: inline-start;
+
+                        button {
+                            margin-top: -5px;
+                            margin-right: 5px;
+
+                            &::after {
+                                content: '😊';
+
+                            }
+                        }
+                    }
+
+                    .upload-file {
+                        label i {
+                            font-size: 30px;
+                            color: #3B79C9;
+                            cursor: pointer;
+                        }
                     }
                 }
             }
@@ -548,6 +564,7 @@ body {
 
                     .action-review {
                         display: flex;
+                        align-items: center;
 
                         .edit-review {
                             text-align: center;
@@ -561,6 +578,15 @@ body {
                                 color: #3B79C9;
                                 text-decoration: underline;
                                 transition: all 300ms ease;
+                            }
+                        }
+
+                        .delete-review-btn {
+                            color: #000;
+                            text-decoration: none;
+
+                            &:hover {
+                                color: red;
                             }
                         }
                     }

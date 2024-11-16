@@ -328,18 +328,19 @@
                     </div>
                     <div class="group-text-review">
                         <input type="text" placeholder="Mời bạn nhập đánh giá..." class="form-control" id="inputReview"
-                            name="comment">
-
-
-                        <div class="upload-file-review">
-                            <label for="file-input">
-                                <i class="fa-solid fa-circle-plus"></i>
-                            </label>
-                            <input type="file" id="file-input" name="images[]" style="display: none;" accept="image/*"
-                                multiple>
+                            name="comment" required>
+                        <div class="upload-file-review d-flex">
+                            <div class="emoj-review">
+                                <button type="button" id="emojiButton" class="btn btn-light"></button>
+                            </div>
+                            <div class="upload-file">
+                                <label for="file-input">
+                                    <i class="fa-solid fa-circle-plus"></i>
+                                </label>
+                                <input type="file" id="file-input" name="images[]" style="display: none;"
+                                    accept="image/*" multiple>
+                            </div>
                         </div>
-                        <!-- Nút Emoji -->
-                        <button type="button" id="emojiButton" class="btn btn-light">😊</button>
                     </div>
                     <div class="rating-stars">
                         <input hidden type="number" name="rating" max="5" min="1" step="1">
@@ -366,22 +367,22 @@
                                     {{ $review->comment }}
                                 </div>
                                 <!-- Hiển thị hình ảnh đánh giá nếu có -->
-                                @foreach ($review->images as $image)
-                                    <div class="image-review">
+                                <div class="image-review">
+                                    @foreach ($review->images as $image)
                                         <img src="{{ asset($image->image_url) }}" width="20%" alt="Review Image">
-                                    </div>
-                                @endforeach
+                                    @endforeach
+                                </div>
 
                                 <div class="action-review mt-2">
                                     <a href="#" class="like-review me-4"><i class="fa-solid fa-thumbs-up"></i>
                                         Thích</a>
-                                    <button type="button" class="delete-review-btn me-4 btn btn-link text-danger"
+                                    <a href="#" class="edit-review"><i class="fa-solid fa-pen-to-square"></i> Chỉnh
+                                        sửa</a>
+                                    <button type="button" class="delete-review-btn me-4 btn btn-link"
                                         data-review-id="{{ $review->review_id }}" data-bs-toggle="modal"
                                         data-bs-target="#deleteReviewModal">
                                         <i class="fa-solid fa-trash"></i> Xóa Đánh Giá
                                     </button>
-                                    <a href="#" class="edit-review"><i class="fa-solid fa-pen-to-square"></i> Chỉnh
-                                        sửa</a>
                                 </div>
                             </div>
                         </div>
@@ -572,6 +573,22 @@
             // Cập nhật lại `localStorage` chỉ với các ảnh còn hạn
             localStorage.setItem('previewImages', JSON.stringify(validImages));
         });
+
+        // Xóa danh sách ảnh khỏi localStorage sau 5 giây và gửi form
+        setTimeout(function () {
+            // Thêm sự kiện xóa ảnh khỏi localStorage khi nhấn nút "ĐĂNG"
+            document.querySelector('.btn-submit button').addEventListener('click', function (event) {
+                // event.preventDefault();
+                // Xóa danh sách ảnh khỏi localStorage
+                localStorage.removeItem('previewImages');
+
+                // Nếu bạn muốn reset giao diện xem trước
+                const previewContainer = document.querySelector('.image-preview-review');
+                while (previewContainer.firstChild) {
+                    previewContainer.removeChild(previewContainer.firstChild);
+                }
+            });
+        }, 3000);
     })();
     // Khi click ảnh sẽ được gọi class enlarged và phóng to lên
     document.addEventListener('DOMContentLoaded', function () {
