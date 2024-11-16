@@ -235,7 +235,7 @@ Route::post('/store-rooms', [RoomController::class, 'storeSelectedRooms']);
 Route::post('/hotel/{hotel_id}/reviews', [ReviewsController::class, 'store'])->name('reviews.store');
 // Thêm phản hồi vào một bình luận
 Route::post('/reviews/{review_id}/reply', [ReviewsController::class, 'reply'])->name('reviews.reply');
-Route::post('/review/{review_id}/like', [ReviewsController::class, 'like'])->name('review.like');
+Route::post('reviews/like/{review_id}', [ReviewsController::class, 'like']);
 
 Route::delete('/review/{review_id}', [ReviewsController::class, 'destroy'])->name('reviews.destroy');
 Route::patch('/reviews/{review}', [ReviewsController::class, 'update'])->name('reviews.update');

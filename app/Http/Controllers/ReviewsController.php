@@ -122,24 +122,40 @@ public function like($review_id)
 {
     $user = auth()->user(); // Lấy người dùng hiện tại
 
-    // Kiểm tra xem người dùng đã thích bình luận chưa
+    // Kiểm tra xem người dùng đã like chưa
     $like = ReviewLike::where('review_id', $review_id)
                       ->where('user_id', $user->user_id)
                       ->first();
 
+    // Nếu đã like, thì bỏ like
     if ($like) {
-        // Nếu đã thích, thì bỏ like
         $like->delete();
-        return response()->json(['success' => true, 'message' => 'Bạn đã bỏ thích bình luận này.']);
+        // Cập nhật lại số lượng like sau khi bỏ thích
+        $likes_count = Reviews::find($review_id)->likes()->count();
+        return response()->json([
+            'success' => true,
+            'action' => 'unliked',
+            'likes_count' => $likes_count, // Trả về số lượng like mới nhất
+            'message' => 'Bạn đã bỏ thích bình luận này.'
+        ]);
     } else {
-        // Nếu chưa thích, thì thêm like
+        // Nếu chưa like, thì thêm like
         ReviewLike::create([
             'review_id' => $review_id,
             'user_id' => $user->user_id,
         ]);
-        return response()->json(['success' => true, 'message' => 'Bạn đã thích bình luận này.']);
+        // Cập nhật lại số lượng like sau khi thích
+        $likes_count = Reviews::find($review_id)->likes()->count();
+        return response()->json([
+            'success' => true,
+            'action' => 'liked',
+            'likes_count' => $likes_count, // Trả về số lượng like mới nhất
+            'message' => 'Bạn đã thích bình luận này.'
+        ]);
     }
 }
+
+
 
     
     
