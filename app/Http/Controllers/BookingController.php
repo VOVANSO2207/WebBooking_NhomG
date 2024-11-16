@@ -8,6 +8,8 @@ use App\Models\Rooms;
 use App\Models\Promotions;
 use Illuminate\Http\Request;
 use App\Helpers\IdEncoder;
+use App\Models\Payments;
+use Illuminate\Support\Str;
 class BookingController extends Controller
 {
     public function viewBooking()
@@ -174,4 +176,195 @@ class BookingController extends Controller
 
         return redirect()->route('admin.viewbooking')->with('success', 'Cập nhật đặt phòng thành công.');
     }
+
+    private $endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
+    private $partnerCode = "MOMOBKUN20180529"; // Replace with your MoMo partner code
+    private $accessKey = "klm05TvNBzhg7h7j"; // Replace with your MoMo access key
+    private $secretKey = "at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa"; // Replace with your MoMo secret key
+    
+    public function createBooking(Request $request)
+    {
+        // Validate the booking request
+        $validated = $request->validate([
+            'check_in' => 'required|date',
+            'check_out' => 'required|date|after:check_in',
+            'room_id' => 'required',
+            'full_name' => 'required|string',
+            'email' => 'required|email',
+            'phone' => 'required|string',
+            'payment_method' => 'required|in:momo,card,banking,cod',
+            'total_price' => 'required|numeric',
+        ]);
+
+        // Create booking record
+        $booking = Booking::create([
+            'user_id' => 1,
+            'room_id' => 1,
+            'promotion_id' => 1,
+            'check_in' => $request->check_in,
+            'check_out' => $request->check_out,
+            'total_price' => $request->total_price,
+            'status' => 'pending'
+        ]);
+
+        // If payment method is MoMo, process MoMo payment
+        if ($request->payment_method === 'momo') {
+            return $this->processMoMoPayment($booking);
+        }
+
+        // Handle other payment methods...
+        return response()->json(['message' => 'Booking created successfully']);
+    }
+
+    private function processMoMoPayment($booking)
+    {
+        $orderId = Str::random(32);
+        $requestId = Str::random(32);
+        $amount = $booking->total_price;
+        $orderInfo = "Payment for booking #" . $booking->booking_id;
+    
+        // Create payment record
+        $payment = Payments::create([
+            'booking_id' => $booking->booking_id,
+            'payment_status' => 'pending',
+            'payment_method' => 'momo',
+            'amount' => $amount,
+            'payment_date' => now()
+        ]);
+    
+        // Prepare the request to MoMo
+        $rawHash = "accessKey=" . $this->accessKey .
+            "&amount=" . $amount .
+            "&extraData=" .
+            "&ipnUrl=" . route('momo.ipn') .
+            "&orderId=" . $orderId .
+            "&orderInfo=" . $orderInfo .
+            "&partnerCode=" . $this->partnerCode .
+            "&redirectUrl=" . route('momo.return') .
+            "&requestId=" . $requestId .
+            "&requestType=captureWallet";
+    
+        $signature = hash_hmac('sha256', $rawHash, $this->secretKey);
+    
+        $data = [
+            'partnerCode' => $this->partnerCode,
+            'requestId' => $requestId,
+            'amount' => $amount,
+            'orderId' => $orderId,
+            'orderInfo' => $orderInfo,
+            'redirectUrl' => route('momo.return'),
+            'ipnUrl' => route('momo.ipn'),
+            'requestType' => 'captureWallet',
+            'extraData' => '',
+            'signature' => $signature
+        ];
+    
+        // Send request to MoMo
+        $ch = curl_init($this->endpoint);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen(json_encode($data))
+        ]);
+    
+        $result = curl_exec($ch);
+        $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+    
+        $response = json_decode($result, true);
+    
+        if ($status == 200 && isset($response['payUrl'])) {
+            // Store MoMo order ID for later verification
+            $payment->update([
+                'payment_id' => $orderId
+            ]);
+    
+            return response()->json([
+                'status' => 'success',
+                'payUrl' => $response['payUrl']
+            ]);
+        }
+    
+        // Return detailed error message if available
+        $errorMessage = isset($response['message']) ? $response['message'] : 'Failed to create MoMo payment';
+    
+        return response()->json([
+            'status' => 'error',
+            'message' => $errorMessage
+        ], 500);
+    }
+
+
+    public function handleMoMoIPN(Request $request)
+    {
+        // Verify the signature from MoMo
+        $rawHash = "accessKey=" . $this->accessKey .
+            "&amount=" . $request->amount .
+            "&extraData=" . $request->extraData .
+            "&message=" . $request->message .
+            "&orderId=" . $request->orderId .
+            "&orderInfo=" . $request->orderInfo .
+            "&orderType=" . $request->orderType .
+            "&partnerCode=" . $request->partnerCode .
+            "&payType=" . $request->payType .
+            "&requestId=" . $request->requestId .
+            "&responseTime=" . $request->responseTime .
+            "&resultCode=" . $request->resultCode .
+            "&transId=" . $request->transId;
+
+        $signature = hash_hmac('sha256', $rawHash, $this->secretKey);
+
+        if ($signature !== $request->signature) {
+            return response()->json([
+                'message' => 'Invalid signature'
+            ], 400);
+        }
+
+        // Find the payment record
+        $payment = Payments::where('payment_id', $request->orderId)->first();
+        
+        if (!$payment) {
+            return response()->json([
+                'message' => 'Payment not found'
+            ], 404);
+        }
+
+        // Update payment status based on MoMo response
+        if ($request->resultCode == 0) {
+            $payment->update([
+                'payment_status' => 'completed',
+                'payment_id' => $request->transId
+            ]);
+
+            // Update booking status
+            $payment->booking->update([
+                'status' => 'confirmed'
+            ]);
+        } else {
+            $payment->update([
+                'payment_status' => 'failed'
+            ]);
+
+            $payment->booking->update([
+                'status' => 'payment_failed'
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'IPN processed successfully'
+        ]);
+    }
+
+    public function handleMoMoReturn(Request $request)
+    {
+        // Handle the return from MoMo payment page
+        if ($request->resultCode == 0) {
+            return redirect()->route('booking.success');
+        }
+
+        return redirect()->route('booking.failed');
+    }   
+
 }

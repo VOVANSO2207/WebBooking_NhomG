@@ -229,5 +229,10 @@ Route::get('/hotels', [HotelController::class, 'getAllHotels'])->name('hotels.al
 Route::post('/store-rooms', [RoomController::class, 'storeSelectedRooms']);
 
 
+// Cổng thanh toán 
+Route::post('/vnpay_payment',[PaymentsController::class,'payment_vnpay'])->name('payment.vnpay');
+Route::get('/vnpay-return', [PaymentsController::class, 'paymentReturn'])->name('vnpay.return');
+
+
 
 

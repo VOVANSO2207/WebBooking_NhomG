@@ -290,7 +290,7 @@
                                             </div>
                                             <div class="card-room-btn-book">
                                                 <a href="{{ route('pages.getInfoPay', ['hotel_id' => $hotel->hotel_id, 'room_id' => $room->room_id]) }}"
-                                                    target="_blank" class="btn-book-now">Đặt ngay</a>
+                                                     class="btn-book-now">Đặt ngay</a>
                                             </div>
                                         </div>
                                     </div>

@@ -20,6 +20,7 @@ class Booking extends Model
     ];
 
     protected $primaryKey = 'booking_id';
+    public $timestamps = true;
 
     public static function getAllBookings($perPage = 7)
     {
