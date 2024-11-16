@@ -42,25 +42,26 @@ class PromotionsController extends Controller
         return view('admin.search_results_voucher', compact('vouchers'));
     }
 
-
     public function destroy(Request $request, $promotion_id)
     {
         // Validate request
-        Validator::make($request->all(), [
+        $validated = $request->validate([
             'updated_at' => 'required|date',
-        ])->validate();
+        ]);
 
-        // Giải mã ID (nếu sử dụng mã hóa ID)
         $decodedId = IdEncoder::decodeId($promotion_id);
 
-        // Gọi hàm xóa từ model Promotions
-        $isDeleted = Promotions::deleteVoucher($decodedId, $request->updated_at);
+        if (!$decodedId) {
+            return response()->json(['error' => 'Voucher không tồn tại'], 404);
+        }
+
+        $isDeleted = Promotions::deleteVoucher($decodedId, $validated['updated_at']);
 
         if (!$isDeleted) {
             return response()->json(['error' => 'Voucher có thể bị xoá vui lòng cập nhật lại'], 409);
         }
 
-        return response()->json(['success' => 'XOÁ VOUCHER THÀNH CÔNG']);
+        return response()->json(['success' => 'Xóa voucher thành công']);
     }
 
     public function voucherAdd()
@@ -69,79 +70,31 @@ class PromotionsController extends Controller
     }
     public function storeVoucher(Request $request)
     {
-        $maxStartDate = Carbon::today()->addYear()->format('Y-m-d');
+        $result = Promotions::createVoucher($request->all());
 
-        // Validate dữ liệu
-        $validator = Validator::make($request->all(), [
-            'promotion_code' => 'required|max:15|min:10|alpha_num|unique:promotions,promotion_code|regex:/^(?=.*[a-zA-Z])(?=.*[0-9]).+$/',
-            'discount_amount' => 'required|numeric|min:0|max:99999999|not_regex:/^0\d+$/|regex:/^\d+$/',
-            'start_date' => "required|date|date_format:Y-m-d|after_or_equal:today|before_or_equal:$maxStartDate",
-            'end_date' => "required|date|date_format:Y-m-d|after:start_date|after_or_equal:today|before_or_equal:$maxStartDate",
-            'pro_description' => 'required|string|regex:/^[^#&\'()!]*$/|max:255', // Thêm điều kiện cho mô tả
-            'pro_title' => 'required|string|max:255'
-
-        ], [
-            'end_date.after' => 'Ngày kết thúc phải lớn hơn ngày bắt đầu.',
-            'end_date.required' => 'Vui lòng chọn ngày kết thúc',
-            'end_date.after_or_equal' => 'Ngày kết thúc không được là ngày trong quá khứ.',
-            'end_date.before_or_equal' => 'Ngày kết thúc không được chọn quá xa.', 
-            'start_date.required' => 'Vui lòng chọn ngày bắt đầu',
-            'start_date.after_or_equal' => 'Ngày bắt đầu không được là ngày trong quá khứ.',
-            'start_date.before_or_equal' => 'Ngày bắt đầu không được chọn quá xa.',
-            'promotion_code.required' => 'Vui lòng nhập tên voucher.',
-            'promotion_code.unique' => 'Tên voucher đã tồn tại',
-            'discount_amount.required' => 'Vui lòng nhập số tiền giảm giá.',
-            'discount_amount.regex' => 'Vui lòng không nhập ký tự đặc biệt.',
-            'discount_amount.min' => 'Số tiền giảm giá không được là số âm.',
-            'discount_amount.max' => 'Số tiền giảm giá không hợp lệ.',
-            'discount_amount.not_regex' => 'Số tiền giảm giá không được bắt đầu bằng 0.',
-            'pro_description.required' => 'Mô tả voucher không được để trống',
-            'pro_description.regex' => 'Mô tả không hợp lệ',
-            'pro_description.max' => 'Mô tả không được quá 255 kí tự',
-
-
-
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+        if (!$result['success']) {
+            return response()->json(['errors' => $result['errors'] ?? $result['error']], 422);
         }
 
-        // Gọi phương thức createVoucher từ model Promotions
-        try {
-            Promotions::createVoucher([
-                'pro_title' => $request->pro_title,
-                'promotion_code' => $request->promotion_code,
-                'discount_amount' => $request->discount_amount,
-                'pro_description' => $request->pro_description, // Thêm dữ liệu này
-                'start_date' => $request->start_date,
-                'end_date' => $request->end_date,
-                
-            ]);
-
-            return response()->json(['success' => 'Voucher được tạo thành công'], 200);
-        } catch (\Exception $e) {
-            // \Log::error('Error creating voucher: ' . $e->getMessage());
-            return response()->json(['error' => 'Đã có lỗi xảy ra trong quá trình lưu.'], 500);
-        }
+        return response()->json(['success' => $result['message']], 200);
     }
     public function editVoucher($promotion_id)
-{
-    $decodedId = IdEncoder::decodeId($promotion_id);
+    {
+        $decodedId = IdEncoder::decodeId($promotion_id);
 
-    if (!$decodedId) {
-        return response()->view('errors.404', [], 404);
+        if (!$decodedId) {
+            return response()->view('errors.404', [], 404);
+        }
+        $voucher = Promotions::findVouchersById($decodedId);
+        if (!$voucher) {
+            return response()->view('errors.404', [], 404);
+        }
+
+        $start_date = $voucher->start_date ? \Carbon\Carbon::createFromFormat('d/m/Y', $voucher->start_date)->format('Y-m-d') : null;
+        $end_date = $voucher->end_date ? \Carbon\Carbon::createFromFormat('d/m/Y', $voucher->end_date)->format('Y-m-d') : null;
+
+        return view('admin.voucher_edit', compact('voucher', 'start_date', 'end_date'));
     }
-    $voucher = Promotions::findVouchersById($decodedId);
-    if (!$voucher) {
-        return response()->view('errors.404', [], 404);
-    }
-
-    $start_date = $voucher->start_date ? \Carbon\Carbon::createFromFormat('d/m/Y', $voucher->start_date)->format('Y-m-d') : null;
-    $end_date = $voucher->end_date ? \Carbon\Carbon::createFromFormat('d/m/Y', $voucher->end_date)->format('Y-m-d') : null;
-
-    return view('admin.voucher_edit', compact('voucher', 'start_date', 'end_date'));
-}
 
     public function updateVoucher(Request $request, $id)
     {
@@ -166,8 +119,8 @@ class PromotionsController extends Controller
                 'regex:/^\d+$/',
             ],
             'pro_description' => [
-                'required',  
-                'regex:/^[^#&\'()!]*$/',   
+                'required',
+                'regex:/^[^#&\'()!]*$/',
                 'max:255',
                 'string',
             ],
@@ -179,7 +132,7 @@ class PromotionsController extends Controller
             'end_date.required' => 'Vui lòng chọn ngày kết thúc.',
             'end_date.date_format' => 'Ngày kết thúc phải ở định dạng yyyy-mm-dd.',
             'end_date.after_or_equal' => 'Ngày kết thúc không được là ngày trong quá khứ.',
-            'end_date.before_or_equal' => 'Ngày kết thúc không được chọn quá xa.', 
+            'end_date.before_or_equal' => 'Ngày kết thúc không được chọn quá xa.',
             'start_date.required' => 'Vui lòng chọn ngày bắt đầu.',
             'start_date.date_format' => 'Ngày bắt đầu phải ở định dạng yyyy-mm-dd.',
             'start_date.after_or_equal' => 'Ngày bắt đầu không được là ngày trong quá khứ.',
@@ -229,13 +182,13 @@ class PromotionsController extends Controller
     public function viewVoucherUser()
     {
         $vouchers = Promotions::getAllVouchers(7);
-    
+
         foreach ($vouchers as $voucher) {
             try {
                 // Chuyển đổi end_date sang Carbon và đặt thời gian bắt đầu của ngày
                 $endDate = Carbon::createFromFormat('d/m/Y', $voucher->end_date, 'Asia/Ho_Chi_Minh')->startOfDay();
                 $currentDate = Carbon::now('Asia/Ho_Chi_Minh')->startOfDay();
-    
+
                 // Kiểm tra ngày hết hạn
                 if ($endDate->isBefore($currentDate)) {
                     $voucher->status = 'expired'; // Đã hết hạn
@@ -249,7 +202,7 @@ class PromotionsController extends Controller
                 $voucher->status = 'unknown';
             }
         }
-    
+
         return view('pages.detail_voucher', compact('vouchers'));
     }
 
