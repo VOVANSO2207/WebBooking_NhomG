@@ -391,7 +391,7 @@
             <div class="carousel-wrapper carousel-wrapper2">
                 @foreach ($hotels as $hotel)
                     <div class="card">
-                        <a href="#" class="group-offers">
+                        <a href="{{ route('pages.hotel_detail', ['hotel_id' => $hotel->hotel_id]) }}" class="group-offers">
                             <div class="shape-in">
                                 @if ($hotel->images->isNotEmpty())
                                     <img class="image-hotel-2" src="{{ asset('images/' . $hotel->images->first()->image_url) }}"
