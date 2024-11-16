@@ -115,7 +115,7 @@ class Promotions extends Model
             'start_date' => "required|date|date_format:Y-m-d|after_or_equal:today|before_or_equal:$maxStartDate",
             'end_date' => "required|date|date_format:Y-m-d|after:start_date|after_or_equal:today|before_or_equal:$maxStartDate",
             'pro_description' => 'required|string|regex:/^[^#&\'()!]*$/|max:255',
-            'pro_title' => 'required|string|max:255'
+            'pro_title' => 'required|string|min:30|max:255|regex:/^[^#&\'()!]*$/',
         ], [
             'end_date.after' => 'Ngày kết thúc phải lớn hơn ngày bắt đầu.',
             'end_date.required' => 'Vui lòng chọn ngày kết thúc',
@@ -134,6 +134,13 @@ class Promotions extends Model
             'pro_description.required' => 'Mô tả voucher không được để trống',
             'pro_description.regex' => 'Mô tả không hợp lệ',
             'pro_description.max' => 'Mô tả không được quá 255 kí tự',
+            'pro_title.regex' => 'Tên hiển thị voucher không hợp lệ',
+            'pro_title.required' => 'Tên hiển thị voucher không được để trống',
+            'pro_title.min' => 'Tên hiển thị voucher không dưới 30 kí tự',
+            'pro_title.max' => 'Tên hiển thị voucher không quá 200 kí tự',
+
+
+            
         ]);
 
         // Kiểm tra lỗi validate
