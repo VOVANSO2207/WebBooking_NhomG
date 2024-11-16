@@ -704,42 +704,10 @@ outline: none;
  }
 
 
-.notification-dropdown {
-    position: absolute;
-    top: 152px;
-    right: 335px;
-    width: 250px;
-    background-color: rgb(23, 2, 2);
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-    text-align: left;
-}
-
-.dropdown-header {
-    display: block;
-    font-weight: bold;
-    padding: 20px;
-    border-bottom: 1px solid #ddd;
-    background-color: #000;
-}
-
-.notification-item {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-    cursor: pointer;
-}
-
-.notification-item:hover {
-    background-color: #f1f1f1;
-}
-
 .fa-heart.red {
     color: red;
  
 }
-<<<<<<< HEAD
 
 .voucher-container {
     display: flex;
@@ -1128,7 +1096,6 @@ outline: none;
         font-size: 20px;
     }
 }
-=======
 /* Popular_filters */
 .Popular_filters {
     background-color: #f8f9fa;
@@ -1185,4 +1152,3 @@ outline: none;
     border-color: #0056b3; /* Màu viền khi button được chọn */
 }
 /* Popular_filters */
->>>>>>> Fix-Code-0.4-MinhTam

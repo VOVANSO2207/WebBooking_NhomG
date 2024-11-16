@@ -20,7 +20,7 @@ class HotelAmenities extends Model
     public $timestamps = false; // Không sử dụng cột created_at và updated_at
 
     // Lấy danh sách tất cả các tiện ích
-    public static function getAllAmenities($perPage = 5)
+    public static function getAllAmenities($perPage = 10)
     {
         return self::orderBy('amenity_id', 'DESC')->paginate($perPage); // Sử dụng amenity_id để sắp xếp
     }

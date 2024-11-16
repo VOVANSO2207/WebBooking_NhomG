@@ -169,9 +169,11 @@ class Hotel extends Model
         })
             ->with([
                 'rooms' => function ($query) use ($rooms) {
-                    $query->take($rooms); // Giới hạn số lượng phòng hiển thị
-                }
+                    $query->take($rooms)
+                    ->with('roomType'); 
+                },
             ])
+            ->withCount('reviews') 
             ->get();
     }
 

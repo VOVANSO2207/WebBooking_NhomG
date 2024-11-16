@@ -66,26 +66,103 @@ class HotelController extends Controller
         // Truyền dữ liệu qua view
         return view('pages.home', compact('hotels', 'vouchers'));
     }
-    // Filter
+    // Filter Hotels 
     public function filterHotels(Request $request)
     {
-        $filters = $request->input('filters', []);
-        $hotels = Hotel::query();
+        try {
+            $filters = $request->input('filters', []);
+            // $minPrice = $request->input('min_price');
+            // $maxPrice = $request->input('max_price');
+            $hotels = Hotel::query();         
+            // $hotels = Hotel::whereHas('rooms', function($query) use ($minPrice, $maxPrice) {
+            //     $query->whereBetween('price', [$minPrice, $maxPrice]);
+            // })->with('rooms')->get();
+        
+            // Lọc theo số hạng sao
+            if (in_array('two_start', $filters)) {
+                $hotels->where('rating', 2);
+            }
+            if (in_array('three_start', $filters)) {
+                $hotels->where('rating', '>=', 3)->where('rating', '<', 4); // Lọc khách sạn từ 3 sao đến dưới 4 sao
+            }
+            if (in_array('four_start', $filters)) {
+                $hotels->where('rating', '>=', 4)->where('rating', '<', 5); // Lọc khách sạn từ 4 sao đến dưới 5 sao
+            }
+            if (in_array('five_start', $filters)) {
+                $hotels->where('rating', 5); // Lọc khách sạn có 5 sao
+            }
 
-        if (in_array('high_rating', $filters)) {
-            $hotels->where('rating', '>=', 4); // Lọc theo rating từ 4-5
+            // Sắp xếp theo rating giảm dần nếu có yêu cầu
+            if (in_array('desc_rating', $filters)) {
+                $hotels->orderBy('rating', 'desc')->get();
+            }
+            // Lọc theo số lượng đánh giá nhiều nhất nếu có yêu cầu
+            if (in_array('high_rating', $filters)) {
+                $hotels->withCount('reviews')->orderBy('reviews_count', 'desc');
+            }
+            // Lọc theo khách sạn có khuyến mãi nếu có 
+            if (in_array('promotions', $filters)) {
+                $hotels->whereHas('rooms', function ($query) {
+                    $query->where('discount_percent', '>', 0);
+                });
+            }
+            if (in_array('single_room', $filters)) {
+                $hotels->whereHas('rooms.roomType', function ($query) {
+                    $query->where('name', 'Phòng Đơn');
+                });
+            }
+            if (in_array('double_room', $filters)) {
+                $hotels->whereHas('rooms.roomType', function ($query) {
+                    $query->where('name', 'Phòng Đôi');
+                });
+            }
+
+            $amenities = $request->input('amenities', []);
+            if (!empty($amenities)) {
+                $hotels->whereHas('amenities', function ($query) use ($amenities) {
+                    $query->whereIn('hotel_amenity_hotel.amenity_id', $amenities);
+                });
+            }
+            // Lọc theo giá rẻ
+            if (in_array('low_price', $filters)) {
+                $hotels->addSelect([
+                    'min_price' => Rooms::select('price')
+                        ->whereColumn('rooms.hotel_id', 'hotels.hotel_id')
+                        ->orderBy('price', 'asc')
+                        ->limit(1)
+                ])->orderBy('min_price', 'asc');
+            }
+
+            // Lọc theo giá đắt
+            if (in_array('high_price', $filters)) {
+                $hotels->addSelect([
+                    'max_price' => Rooms::select('price')
+                        ->whereColumn('rooms.hotel_id', 'hotels.hotel_id')
+                        ->orderBy('price', 'desc')
+                        ->limit(1)
+                ])->orderBy('max_price', 'desc');
+            }
+            
+            $hotels = $hotels->with('images', 'city', 'rooms')->get();
+            foreach ($hotels as $hotel) {
+
+                // Tính giá gốc trung bình
+                $hotel->average_price = $hotel->rooms->avg('price');
+
+                // Tính phần trăm giảm giá trung bình
+                $hotel->average_discount_percent = $hotel->rooms->avg('discount_percent');
+
+                // Tính giá sale dựa trên giá gốc và phần trăm giảm giá trung bình
+                $hotel->average_price_sale = $hotel->average_price * (1 - $hotel->average_discount_percent / 100);
+                // Format giá theo định dạng Việt Nam
+                $hotel->formatted_average_price = number_format($hotel->average_price, 0, ',', '.') . ' VND';
+                $hotel->formatted_average_price_sale = number_format($hotel->average_price_sale, 0, ',', '.') . ' VND';
+            }
+            return response()->json(['hotels' => $hotels]);
+        } catch (\Exception $e) {
+            // \Log::error('Error filtering hotels: ' . $e->getMessage());
+            return response()->json(['error' => 'An error occurred while processing your request.'], 500);
         }
-
-        // Sắp xếp theo rating giảm dần nếu có yêu cầu
-        if (in_array('desc_rating', $filters)) {
-            $hotels->orderBy('rating', 'desc')->get();
-        }
-        // Thêm điều kiện cho các bộ lọc
-        // ...
-
-        $hotels = $hotels->with('images')->get();
-
-        return response()->json(['hotels' => $hotels]);
     }
 
     // Chi tiết khách sạn
@@ -113,7 +190,7 @@ class HotelController extends Controller
 
         // Trả về kết quả tìm kiếm tới view
         $amenities = HotelAmenities::getAllAmenities();
-        
+
         // Trả dữ liệu về trang search_result
         return view('pages.search_result', compact('hotels', 'amenities', 'location', 'daterange', 'rooms', 'adults', 'children'));
     }
@@ -332,34 +409,34 @@ class HotelController extends Controller
     {
         // Giải mã ID
         $decodedId = IdEncoder::decodeId($hotel_id);
-        
+
         // Tìm khách sạn cụ thể theo ID đã giải mã
         $hotel = Hotel::find($decodedId);
-        
+
         // Lấy danh sách thành phố
         $cities = Cities::all();
-        
+
         // Lấy tất cả các tiện nghi
         $hotelAmenities = HotelAmenities::all();
-        
+
         // Lấy các tiện nghi hiện tại của khách sạn
         $currentAmenities = $hotel->amenities()->pluck('amenity_id')->toArray();
-        
+
         // Lấy tất cả các phòng, bao gồm ảnh đầu tiên của mỗi phòng
-        $rooms = Rooms::with(['room_images' => function($query) {
+        $rooms = Rooms::with(['room_images' => function ($query) {
             $query->orderBy('image_id', 'asc')->take(1); // Lấy ảnh đầu tiên
         }])->get();
-        
+
         // Lấy các phòng hiện tại của khách sạn
         $currentRooms = $hotel->rooms()->pluck('room_id')->toArray();
-    
+
         // Trả về view với dữ liệu cần thiết
         return view('admin.hotel_edit', compact(
-            'hotel', 
-            'cities', 
-            'hotelAmenities', 
-            'currentAmenities', 
-            'rooms', 
+            'hotel',
+            'cities',
+            'hotelAmenities',
+            'currentAmenities',
+            'rooms',
             'currentRooms'
         ));
     }
@@ -464,12 +541,12 @@ class HotelController extends Controller
 
         if ($request->has('selected_rooms')) {
             $selectedRooms = json_decode($request->input('selected_rooms'), true);
-    
+
             $existingRooms = $hotel->rooms()->pluck('room_id')->toArray();
             Rooms::whereIn('room_id', $existingRooms)
                 ->whereNotIn('room_id', $selectedRooms)
                 ->update(['hotel_id' => 0]);
-    
+
             foreach ($selectedRooms as $roomId) {
                 Rooms::where('room_id', $roomId)->update(['hotel_id' => $hotel->hotel_id]);
             }
@@ -497,10 +574,10 @@ class HotelController extends Controller
         //    dd($hotel);
         $firstImage = $hotel->images->first();
         // dd($firstImage);
-        return view('pages.pay', compact('hotel', 'room', ));
+        return view('pages.pay', compact('hotel', 'room',));
     }
 
-   
+
     // Trong controller
     public function filterHotelsByCity(Request $request)
     {
@@ -508,23 +585,23 @@ class HotelController extends Controller
 
         // Eager load quan hệ city và lấy thông tin về tên thành phố
         $hotels = Hotel::with('city') // Eager load quan hệ city
-                    ->where('city_id', $cityId)
-                    ->get()
-                    ->map(function ($hotel) {
-                        return [
-                            'hotel_id' => $hotel->id,
-                            'hotel_name' => $hotel->hotel_name,
-                            'location' => $hotel->location,
-                            'city' => $hotel->city->city_name, // Lấy tên thành phố
-                            'reviews_count' => Reviews::countReviewsForHotel($hotel->id),
-                            'old_price' => number_format($hotel->average_price_sale, 0, ',', '.'),
-                            'new_price' => number_format($hotel->average_price, 0, ',', '.'),
-                            'is_favorite' => $hotel->is_favorite,
-                            'discount_percent' => number_format($hotel->average_discount_percent),
-                            'image_url' => $hotel->images->isNotEmpty() ? asset('storage/images/' . $hotel->images->first()->image_url) : '/images/default-image.png',
-                        ];
-                    });
-                    
+            ->where('city_id', $cityId)
+            ->get()
+            ->map(function ($hotel) {
+                return [
+                    'hotel_id' => $hotel->id,
+                    'hotel_name' => $hotel->hotel_name,
+                    'location' => $hotel->location,
+                    'city' => $hotel->city->city_name, // Lấy tên thành phố
+                    'reviews_count' => Reviews::countReviewsForHotel($hotel->id),
+                    'old_price' => number_format($hotel->average_price_sale, 0, ',', '.'),
+                    'new_price' => number_format($hotel->average_price, 0, ',', '.'),
+                    'is_favorite' => $hotel->is_favorite,
+                    'discount_percent' => number_format($hotel->average_discount_percent),
+                    'image_url' => $hotel->images->isNotEmpty() ? asset('storage/images/' . $hotel->images->first()->image_url) : '/images/default-image.png',
+                ];
+            });
+
         return response()->json([
             'hotels' => $hotels
         ]);
@@ -534,22 +611,22 @@ class HotelController extends Controller
     {
         // Lấy tất cả khách sạn mà không lọc theo city_id
         $hotels = Hotel::with('city') // Eager load quan hệ city
-                    ->get() // Lấy tất cả khách sạn
-                    ->map(function ($hotel) {
-                        return [
-                            'hotel_id' => $hotel->id,
-                            'hotel_name' => $hotel->hotel_name,
-                            'location' => $hotel->location,
-                            'city' => $hotel->city->city_name, // Lấy tên thành phố
-                            'reviews_count' => Reviews::countReviewsForHotel($hotel->id),
-                            'old_price' => number_format($hotel->average_price_sale, 0, ',', '.'),
-                            'new_price' => number_format($hotel->average_price, 0, ',', '.'),
-                            'is_favorite' => $hotel->is_favorite,
-                            'discount_percent' => number_format($hotel->average_discount_percent),
-                            'image_url' => $hotel->images->isNotEmpty() ? asset('storage/images/' . $hotel->images->first()->image_url) : '/images/default-image.png',
-                        ];
-                    });
-                    
+            ->get() // Lấy tất cả khách sạn
+            ->map(function ($hotel) {
+                return [
+                    'hotel_id' => $hotel->id,
+                    'hotel_name' => $hotel->hotel_name,
+                    'location' => $hotel->location,
+                    'city' => $hotel->city->city_name, // Lấy tên thành phố
+                    'reviews_count' => Reviews::countReviewsForHotel($hotel->id),
+                    'old_price' => number_format($hotel->average_price_sale, 0, ',', '.'),
+                    'new_price' => number_format($hotel->average_price, 0, ',', '.'),
+                    'is_favorite' => $hotel->is_favorite,
+                    'discount_percent' => number_format($hotel->average_discount_percent),
+                    'image_url' => $hotel->images->isNotEmpty() ? asset('storage/images/' . $hotel->images->first()->image_url) : '/images/default-image.png',
+                ];
+            });
+
         return response()->json([
             'hotels' => $hotels
         ]);

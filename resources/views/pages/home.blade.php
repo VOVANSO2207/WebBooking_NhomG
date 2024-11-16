@@ -80,7 +80,7 @@
                         <div class="group-left-header d-flex align-items-center justify-content-center">
                             <div class="col-md-2 text-center">
                                 <i class="fa-solid fa-bell fa-xl" id="notificationBell" style="cursor: pointer;"></i>
-
+                                    
                                 <!-- Notification Dropdown -->
                                 <div class="notification-dropdown" id="notificationDropdown" style="display: none;">
                                     <h5 class="dropdown-header">Notifications</h5>

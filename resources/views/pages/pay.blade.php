@@ -163,7 +163,42 @@
                             <button type="button" class="ms-2">SỬ DỤNG</button>
                         </div>
                     </div>
-
+                    {{-- Chọn phương thức thanh toán --}}
+                    <div class="payment-methods">
+                        <div class="payment-title">Phương thức thanh toán</div>
+                        
+                        <label class="payment-option">
+                            <input type="radio" name="payment" value="card">
+                            <div class="payment-icon">
+                                <i class="fa-solid fa-credit-card"></i>
+                            </div>
+                            <div class="payment-label">Thẻ tín dụng/Ghi nợ</div>
+                        </label>
+                
+                        <label class="payment-option">
+                            <input type="radio" name="payment" value="momo">
+                            <div class="payment-icon">
+                                <i class="fa-solid fa-wallet"></i>
+                            </div>
+                            <div class="payment-label">Ví MoMo</div>
+                        </label>
+                        
+                        <label class="payment-option">
+                            <input type="radio" name="payment" value="banking">
+                            <div class="payment-icon">
+                                <i class="fa-solid fa-building-columns"></i>
+                            </div>
+                            <div class="payment-label">Chuyển khoản ngân hàng</div>
+                        </label>
+                
+                        <label class="payment-option">
+                            <input type="radio" name="payment" value="cod">
+                            <div class="payment-icon">
+                                <i class="fa-solid fa-money-bill"></i>
+                            </div>
+                            <div class="payment-label">Thanh toán khi nhận hàng (COD)</div>
+                        </label>
+                    </div>
                     <div class="detail-price">
                         <div class="title">Chi tiết giá</div>
                         <div class="group-info-price">
@@ -192,7 +227,7 @@
                                 <span class="total-price">100.000 VND</span>
                             </div>
                             <div class="button-pay">
-                                <button type="submit" id="btnPay" class="btn-pay">Tiếp tục thanh toán</button>
+                                <button type="submit" id="btnPay" class="btn-pay"> Thanh toán</button>
                             </div>
                         </div>
                     </div>
