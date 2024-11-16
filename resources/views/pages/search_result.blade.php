@@ -184,12 +184,16 @@
                                     <div class="col-md-3 status-button">
                                         <div class="status">
                                             @foreach ($hotel->rooms as $room)
-                                                <span class="status-available">{{ $room->name }}</span>
-                                            @endforeach
+                                            @if ($room->roomType)
+                                                <span class="status-available">{{ $room->roomType->name }}</span>
+                                            @endif
+                                        @endforeach                                        
+                                         
                                         </div>
                                         <a href="{{ route('pages.hotel_detail', ['hotel_id' => $hotel->hotel_id]) }}"
                                             class="book-now" style="text-decoration: none;">Xem phòng</a>
                                     </div>
+                                    {{-- {{dd($hotel)}} --}}
                                 </div>
                             </div>
                         @endforeach
@@ -266,7 +270,8 @@
                                                 <span class="status-soldout">NULL</span>
                                             @endif
                                         </div>
-                                        <button class="book-now">Đặt Ngay</button>
+                                        <a href="{{ route('pages.hotel_detail', ['hotel_id' => $hotel->hotel_id]) }}"
+                                            class="book-now" style="text-decoration: none;">Xem phòng</a>
                                     </div>
                                 </div>
                             </div>
@@ -290,6 +295,9 @@
 <script>
     // Hàm tạo thẻ HTML cho khách sạn
     function generateHotelCard(hotel) {
+        const hotelDetailUrl = `{{ route('pages.hotel_detail', ['hotel_id' => ':id']) }}`;
+        const url = hotelDetailUrl.replace(':id', hotel.hotel_id);
+
         let imagesHtml = '';
         if (hotel.images && hotel.images.length > 0) {
             imagesHtml = `
@@ -334,10 +342,10 @@
                 </div>
                 <div class="col-md-3 status-button">
                     <div class="status">
-                        <span class="status-available">ĐƠN</span>
-                        <span class="status-soldout">ĐÔI</span>
+                      ${hotel.rooms.length > 0 && hotel.rooms[0].room_type ? `<span class="status-available">${hotel.rooms[0].room_type.name}</span>` : ''}
+
                     </div>
-                    <button class="book-now">Đặt Ngay</button>
+                  <a href="${url}" class="book-now" style="text-decoration: none;">Xem phòng</a>
                 </div>
             </div>
         </div>`;
@@ -449,7 +457,7 @@ function filterHotelsByPrice(minPrice, maxPrice) {
     fetch('/filter-hotels', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json', 
             'X-CSRF-TOKEN': '{{ csrf_token() }}' // Laravel CSRF Token
         },
         body: JSON.stringify({

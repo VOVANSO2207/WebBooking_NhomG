@@ -143,7 +143,7 @@ class HotelController extends Controller
                 ])->orderBy('max_price', 'desc');
             }
             
-            $hotels = $hotels->with('images', 'city', 'rooms')->get();
+            $hotels = $hotels->with('images', 'city', 'rooms.roomType','amenities')->get();
             foreach ($hotels as $hotel) {
 
                 // Tính giá gốc trung bình
