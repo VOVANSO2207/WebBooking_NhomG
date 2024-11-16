@@ -168,16 +168,10 @@ class HotelController extends Controller
     // Chi tiết khách sạn
     public function show($hotel_id)
     {
-        // Lấy thông tin khách sạn cùng với các quan hệ
-        $hotel = Hotel::with(['rooms.room_images', 'images', 'city', 'reviews.user'])->findOrFail($hotel_id);
-        
-        // Lấy 7 bình luận mới nhất và phân trang nếu có nhiều hơn
-        $reviews = $hotel->reviews()->latest()->paginate(7);
-        
-        // Lấy các phòng của khách sạn và phân trang nếu cần
+        $hotel = Hotel::with(['rooms.room_images', 'images', 'city', 'reviews.user', 'reviews.likes'])->findOrFail($hotel_id);
         $rooms = $hotel->rooms()->paginate(4);
-        
-        // Trả về view với dữ liệu cần thiết
+        $reviews = $hotel->reviews()->withCount('likes')->latest()->paginate(7);  // Đếm số lượt like
+    
         return view('pages.hotel_detail', compact('hotel', 'rooms', 'reviews'));
     }
     

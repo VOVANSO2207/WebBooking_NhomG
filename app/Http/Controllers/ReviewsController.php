@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Reviews;
 use App\Models\ReviewImages;
+use App\Models\ReviewLike;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;  // Để tạo UUID cho tên file
 
@@ -81,18 +82,22 @@ class ReviewsController extends Controller
     {
         // Tìm bình luận theo review_id
         $review = Reviews::findOrFail($review_id);
-
-        // Xóa tất cả các ảnh liên quan (nếu có)
-        // Nếu bạn có liên kết đến bảng ReviewImages thì bạn có thể xóa ảnh ở đây
-        // $review->images()->delete();
-
+    
+        // Kiểm tra xem người dùng có quyền xóa bình luận này không
+        $user = auth()->user();
+    
+        if ($user->user_id !== $review->user_id && !$user->is_admin) {
+            return response()->json(['success' => false, 'message' => 'Bạn không có quyền xóa bình luận này.']);
+        }
+    
         // Xóa bình luận
         $review->delete();
-
-        // Trả về thông báo thành công và điều hướng lại
+    
+        // Trả về thông báo thành công
         return back()->with('success', 'Bình luận đã được xóa.');
     }
-
+    
+    
     
     public function update(Request $request, $review_id)
 {
@@ -112,6 +117,28 @@ class ReviewsController extends Controller
     $review->save();
 
     return response()->json(['success' => true, 'message' => 'Bình luận đã được chỉnh sửa.', 'comment' => $review->comment]);
+}
+public function like($review_id)
+{
+    $user = auth()->user(); // Lấy người dùng hiện tại
+
+    // Kiểm tra xem người dùng đã thích bình luận chưa
+    $like = ReviewLike::where('review_id', $review_id)
+                      ->where('user_id', $user->user_id)
+                      ->first();
+
+    if ($like) {
+        // Nếu đã thích, thì bỏ like
+        $like->delete();
+        return response()->json(['success' => true, 'message' => 'Bạn đã bỏ thích bình luận này.']);
+    } else {
+        // Nếu chưa thích, thì thêm like
+        ReviewLike::create([
+            'review_id' => $review_id,
+            'user_id' => $user->user_id,
+        ]);
+        return response()->json(['success' => true, 'message' => 'Bạn đã thích bình luận này.']);
+    }
 }
 
     
