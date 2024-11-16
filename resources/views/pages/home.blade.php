@@ -333,7 +333,7 @@
                     <img class="image-destitation-1"
                         src="https://letsflytravel.vn/assets/source/2_5_2024_Up/nha-trang-city-tour/nha-trang-letsflytravel.jpg"
                         alt="image">
-                    <p class="name-location-1">ĐÀ NẴNG</p>
+                    <p class="name-location-1">Nha Trang</p>
             </div>
             </a>
         </div>
