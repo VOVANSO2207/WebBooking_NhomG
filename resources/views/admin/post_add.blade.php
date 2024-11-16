@@ -38,8 +38,8 @@
                             </div>
                             <div class="mb-3 col-md-12">
                                 <label class="form-label">Content</label>
-                                <textarea name="content1" id="content1"></textarea>
-                                @error('content1')
+                                <textarea name="content" id="content"></textarea>
+                                @error('content')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -97,7 +97,7 @@
 
 <script>
     window.onload = function () {
-        CKEDITOR.replace('content1', {
+        CKEDITOR.replace('content', {
             filebrowserUploadUrl: "path/to/upload/image"
         });
     };
@@ -118,36 +118,37 @@
     });
 
     $('#postForm').on('submit', function (event) {
-        event.preventDefault();
-        var img = $('#upload')[0].files[0];
+    event.preventDefault();
+    var img = $('#upload')[0].files[0];
 
-        var title = $('#title').val();
-        var description = CKEDITOR.instances.description.getData();
-        var content = CKEDITOR.instances.content1.getData();
-        var meta_desc = $('#meta_desc').val();
-        var statusValue = $('#status option:selected').val();
-        var url_seo = $('#url_seo').val();
+    var title = $('#title').val();
+    var description = CKEDITOR.instances.description.getData();
+    var content = CKEDITOR.instances.content.getData();
+    var meta_desc = $('#meta_desc').val();
+    var statusValue = $('#status option:selected').val();
+    var url_seo = $('#url_seo').val();
 
-        var formData = new FormData();
-        formData.append('_token', '{{ csrf_token() }}');
-        formData.append('title', title);
-        formData.append('description', description);
-        formData.append('content1', content);
-        formData.append('meta_desc', meta_desc);
-        formData.append('status', statusValue);
-        formData.append('url_seo', url_seo);
-        if (img) {
-            formData.append('fileUpload', img);
-        }
+    var formData = new FormData();
+    formData.append('_token', '{{ csrf_token() }}');
+    formData.append('title', title);
+    formData.append('description', description);
+    formData.append('content', content);
+    formData.append('meta_desc', meta_desc);
+    formData.append('status', statusValue);
+    formData.append('url_seo', url_seo);
+    if (img) {
+        formData.append('fileUpload', img);
+    }
 
-        // Gửi dữ liệu qua AJAX
-        $.ajax({
-            url: "{{ route('admin.post.store') }}",
-            method: 'POST',
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function (response) {
+    // Gửi dữ liệu qua AJAX
+    $.ajax({
+        url: "{{ route('admin.post.store') }}",
+        method: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            if (response.success) {
                 // Hiển thị modal thông báo thành công
                 const successModal = new bootstrap.Modal(document.getElementById('successModal'));
                 successModal.show();
@@ -156,28 +157,29 @@
                 setTimeout(function() {
                     window.location.href = '{{ route('admin.viewpost') }}';
                 }, 2000); // Thay đổi thời gian (ms) nếu cần
-            },
-            error: function (xhr) {
-                // Xóa lỗi cũ trước đó
-                $('.text-danger').remove();
+            }
+        },
+        error: function (xhr) {
+            // Xóa lỗi cũ trước đó
+            $('.text-danger').remove();
 
-                // Xử lý lỗi
-                var errors = xhr.responseJSON.errors;
-                for (var key in errors) {
-                    if (errors.hasOwnProperty(key)) {
-                        // Tạo phần tử thông báo lỗi mới
-                        var errorDiv = $('<div class="text-danger"></div>').text(errors[key][0]);
-                        // Thêm thông báo lỗi vào trường input tương ứng
-                        $('[name="' + key + '"]').after(errorDiv);
-                    }
+            // Xử lý lỗi
+            var errors = xhr.responseJSON.errors;
+            for (var key in errors) {
+                if (errors.hasOwnProperty(key)) {
+                    // Tạo phần tử thông báo lỗi mới
+                    var errorDiv = $('<div class="text-danger"></div>').text(errors[key][0]);
+                    // Thêm thông báo lỗi vào trường input tương ứng
+                    $('[name="' + key + '"]').after(errorDiv);
                 }
             }
-        });
+        }
     });
+});
 
     function resetForm() {
         $('#postForm')[0].reset();
-        CKEDITOR.instances['content1'].setData('');
+        CKEDITOR.instances['content'].setData('');
         CKEDITOR.instances['description'].setData('');
         $("#fileUpload").attr("src", "{{ asset('/images/img-upload.jpg') }}");
         $("#url_seo").val('');
