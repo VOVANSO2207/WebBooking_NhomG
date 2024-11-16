@@ -111,7 +111,7 @@
                     <div class="col-md-4 detail-right-info">
                         <span class="detail-price-main">
                             @if($hotel->rooms->isNotEmpty())
-                                <p class="price">{{ number_format($hotel->rooms->min('price'), 0, ',', '.') . ' VND' }}</p>
+                                <p class="price">{{ number_format($hotel->rooms->min('price'), 0, ',', '.') }}/ đêm</p>
                             @else
                                 <p>N/A</p>
                             @endif
@@ -158,7 +158,7 @@
             <h2 class="detail-title-book-room">
                 Chọn phòng
             </h2>
-            <div class="group-room-card row gx-4">
+            <div class="group-room-card row gx-4" id="searchResults">
                 @forelse($rooms as $room)
                     <!-- CARD ROOM -->
                     <div class="col-md-6">
@@ -169,7 +169,7 @@
                                     navigation="true" space-between="30" loop="true">
                                     @forelse($room->room_images as $image)
                                         <swiper-slide>
-                                            <img src="{{ asset('storage/images/' . $image->image_url) }}" alt="Room Image" />
+                                            <img src="{{ asset('images/' . $image->image_url) }}" alt="Room Image" />
                                         </swiper-slide>
                                     @empty
                                         <p>Không có hình ảnh cho phòng này</p>
@@ -190,21 +190,22 @@
                                             <i class="fa-solid fa-hotel"></i>
                                             <span>{{ $room->name }}</span>
                                         </div>
-                                        <div class="group-room-price mt-2">
+                                        <div class="group-room-price">
                                             <ul class="p-0">
                                                 <li>
-                                                    <span
-                                                        class="card-room-price-old">{{ number_format($room->price, 0, ',', '.') }}
-                                                        đ</span>
+                                                    <span class="card-room-price-old">
+                                                    {{ number_format($room->price, 0, ',', '.') }}
+                                                    / Đêm
+                                                    </span>
                                                 </li>
                                                 <li>
-                                                    <span
-                                                        class="card-room-price-new">{{ number_format($room->price * (1 - $room->discount_percent / 100), 0, ',', '.') }}
-                                                        đ</span>
+                                                    <span class="card-room-price-new">
+                                                        {{ number_format($room->price * (1 - $room->discount_percent / 100), 0, ',', '.') }} / Đêm 
+                                                    </span>
                                                 </li>
                                             </ul>
                                         </div>
-                                        <div class="card-room-rating m-0">
+                                        <div class="card-room-rating m-0 p-0">
                                             @for ($i = 1; $i <= 5; $i++)
                                                 @if ($i <= $hotel->rating)
                                                     <span>★</span>
@@ -216,15 +217,15 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="card-room-status">
-                                            @if($room->room_type_id == 1)
-                                                <div class="don">{{ $room->name }}</div>
-                                            @elseif ($room->room_type_id == 2)
-                                                <div class="doi">{{ $room->name }}</div>
-                                            @endif
+                                        @if(optional($room->room_types)->room_type_id == 1)
+                                            <div class="don">{{ optional($room->roomType)->name }}</div>
+                                        @else
+                                            <div class="doi">{{ optional($room->roomType)->name }}</div>
+                                        @endif
                                         </div>
                                         <div class="card-room-btn-book">
                                             <a href="{{ route('pages.getInfoPay', ['hotel_id' => $hotel->hotel_id, 'room_id' => $room->room_id]) }}"
-                                                class="btn-book-now">Đặt ngay</a>
+                                                target="_blank" class="btn-book-now">Đặt ngay</a>
 
                                         </div>
                                     </div>
@@ -284,6 +285,29 @@
                                 Phòng đẹp chất lượng dịch vụ tốt, ưng ghê vậy á chàiiiii ♥♥
                             </div>
                             <div class="image-review">
+                                <img src="https://cms.imgworlds.com/assets/a5366382-0c26-4726-9873-45d69d24f819.jpg?key=home-gallery"
+                                    alt="">
+                                <img src="https://cms.imgworlds.com/assets/a5366382-0c26-4726-9873-45d69d24f819.jpg?key=home-gallery"
+                                    alt="">
+                                <img src="https://cms.imgworlds.com/assets/a5366382-0c26-4726-9873-45d69d24f819.jpg?key=home-gallery"
+                                    alt="">
+                                <img src="https://cms.imgworlds.com/assets/a5366382-0c26-4726-9873-45d69d24f819.jpg?key=home-gallery"
+                                    alt="">
+                                <img src="https://cms.imgworlds.com/assets/a5366382-0c26-4726-9873-45d69d24f819.jpg?key=home-gallery"
+                                    alt="">
+                                <img src="https://cms.imgworlds.com/assets/a5366382-0c26-4726-9873-45d69d24f819.jpg?key=home-gallery"
+                                    alt="">
+                                <img src="https://cms.imgworlds.com/assets/a5366382-0c26-4726-9873-45d69d24f819.jpg?key=home-gallery"
+                                    alt="">
+                                <img src="https://cms.imgworlds.com/assets/a5366382-0c26-4726-9873-45d69d24f819.jpg?key=home-gallery"
+                                    alt="">
+                                <img src="https://cms.imgworlds.com/assets/a5366382-0c26-4726-9873-45d69d24f819.jpg?key=home-gallery"
+                                    alt="">
+                                <img src="https://cms.imgworlds.com/assets/a5366382-0c26-4726-9873-45d69d24f819.jpg?key=home-gallery"
+                                    alt="">
+
+                                <img src="https://cms.imgworlds.com/assets/a5366382-0c26-4726-9873-45d69d24f819.jpg?key=home-gallery"
+                                    alt="">
                                 <img src="https://cms.imgworlds.com/assets/a5366382-0c26-4726-9873-45d69d24f819.jpg?key=home-gallery"
                                     alt="">
                             </div>
@@ -429,7 +453,6 @@
             localStorage.setItem('previewImages', JSON.stringify(validImages));
         });
     })();
-
     // Khi click ảnh sẽ được gọi class enlarged và phóng to lên
     document.addEventListener('DOMContentLoaded', function () {
         const images = document.querySelectorAll('.modal-image-alls');
@@ -479,16 +502,53 @@
             loadMoreBtn.textContent = "Xem thêm"; // Reset button text
         }
     }
+    // 
     document.getElementById('bookNowBtn').addEventListener('click', function (e) {
         e.preventDefault();
         document.getElementById('bookingSection').scrollIntoView({
             behavior: 'smooth' // Cuộn mượt mà
         });
     });
+    // 
+    // document.addEventListener('DOMContentLoaded', function () {
+    //     const searchForm = document.getElementById('searchForm');
 
+    //     searchForm.addEventListener('submit', function (event) {
+    //         event.preventDefault(); // Ngăn form gửi theo cách thông thường
+
+    //         // Lấy URL và tạo query string từ các input
+    //         const url = searchForm.getAttribute('action');
+    //         const formData = new FormData(searchForm);
+    //         const queryString = new URLSearchParams(formData).toString();
+
+    //         // Gửi yêu cầu AJAX với fetch
+    //         fetch(`${url}?${queryString}`, {
+    //             method: 'GET',
+    //             headers: {
+    //                 'X-Requested-With': 'XMLHttpRequest' // Để Laravel nhận diện đây là yêu cầu AJAX
+    //             },
+    //         })
+    //             .then(response => response.text())
+    //             .then(data => {
+    //                 // Hiển thị kết quả tìm kiếm trong div #searchResults
+    //                 document.getElementById('searchResults').innerHTML = data;
+    //             })
+    //             .catch(error => {
+    //                 console.error('Error:', error);
+    //                 document.getElementById('searchResults').innerHTML = '<p>Đã xảy ra lỗi. Vui lòng thử lại sau.</p>';
+    //             });
+    //     });
+    // });
+   
+    // 
+
+    //
+
+    // 
 </script>
 
 @endsection
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
 
 @section('footer')

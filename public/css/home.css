@@ -336,7 +336,7 @@ outline: none;
  .num-people {
      border-radius: 10px;
      width: 100%;
-     padding: 0 10px 5px;
+     padding: 10px;
      border: 1px solid black;
      background: #fff;
      position: relative;
@@ -344,26 +344,24 @@ outline: none;
  }
 
 
+ .date-picker-search .datepicker-staynest:focus {
+     outline: none;
+ }
+
+ .date-picker-search .datepicker-staynest {
+     border: none;
+     padding: 10px 0 10px 0 !important;
+     font-size: 17px;
+     cursor: pointer;
+ }
+
  .date-picker-search {
-     position: relative;
+     display: flex;
      background: #fff;
      border-radius: 10px;
-     height: 50px;
- }
-
- .datepicker-staynest:focus {
-     outline: none !important;
-     box-shadow: none !important;
- }
-
- .datepicker-staynest {
-     position: absolute;
-     border: none !important;
      text-align: center;
-     background: transparent !important;
-     border: none;
-     font-weight: 700 !important;
-     cursor: pointer;
+     align-items: center;
+     font-size: 20px;
  }
 
  /*  */
@@ -708,443 +706,450 @@ outline: none;
     color: red;
  
 }
+ .notification-dropdown {
+     position: absolute;
+     top: 152px;
+     right: 335px;
+     width: 250px;
+     background-color: rgb(23, 2, 2);
+     border: 1px solid #ddd;
+     border-radius: 8px;
+     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+     z-index: 1000;
+     text-align: left;
+ }
+
+ .dropdown-header {
+     display: block;
+     font-weight: bold;
+     padding: 20px;
+     border-bottom: 1px solid #ddd;
+     background-color: #000;
+ }
+
+ .notification-item {
+     padding: 10px;
+     border-bottom: 1px solid #ddd;
+     cursor: pointer;
+ }
+
+ .notification-item:hover {
+     background-color: #f1f1f1;
+ }
+
+ .fa-heart.red {
+     color: red;
+
+ }
 
 .voucher-container {
-    display: flex;
-    gap: 20px;
-    animation: slideLeftToRight 20s linear infinite; /* Thêm animation lặp lại */
-    padding: 20px;
-}
+     display: flex;
+     gap: 20px;
+     animation: slideLeftToRight 20s linear infinite;
+     /* Thêm animation lặp lại */
+     padding: 20px;
+ }
 
-.voucher {
-    border: 1px solid #dcdcdc;
-    border-radius: 8px;
-    padding: 20px;
-    width: 300px;
-    background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    position: relative;
-    border-left: 8px solid #2e75d3
-}
+ .voucher {
+     border: 1px solid #dcdcdc;
+     border-radius: 8px;
+     padding: 20px;
+     width: 300px;
+     background-color: #fff;
+     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+     position: relative;
+     border-left: 8px solid #2e75d3
+ }
 
-/* Thêm viền màu ở cạnh trái */
-.voucher.blue-border {
-    border-left: 5px solid #2e75d3;
-}
+ /* Thêm viền màu ở cạnh trái */
+ .voucher.blue-border {
+     border-left: 5px solid #2e75d3;
+ }
 
-.voucher.red-border {
-    border-left: 5px solid #d32e2e;
-}
+ .voucher.red-border {
+     border-left: 5px solid #d32e2e;
+ }
 
-/* Animation cho hiệu ứng di chuyển */
-@keyframes slideLeftToRight {
-    0% {
-        transform: translateX(-100%); /* Bắt đầu từ ngoài màn hình bên trái */
-    }
-    100% {
-        transform: translateX(100%); /* Di chuyển ra ngoài màn hình bên phải */
-    }
-}
+ /* Animation cho hiệu ứng di chuyển */
+ @keyframes slideLeftToRight {
+     0% {
+         transform: translateX(-100%);
+         /* Bắt đầu từ ngoài màn hình bên trái */
+     }
 
-/* Các phần tử con không có hiệu ứng di chuyển riêng */
-.voucher h3 {
-    font-size: 18px;
-    margin: 0 0 10px;
-}
+     100% {
+         transform: translateX(100%);
+         /* Di chuyển ra ngoài màn hình bên phải */
+     }
+ }
 
-.voucher h3.blue {
-    color: #2e75d3;
-}
+ /* Các phần tử con không có hiệu ứng di chuyển riêng */
+ .voucher h3 {
+     font-size: 18px;
+     margin: 0 0 10px;
+ }
 
-.voucher h3.red {
-    color: #d32e2e;
-}
-.red-border {
-    border-left: 5px solid red;
-}
+ .voucher h3.blue {
+     color: #2e75d3;
+ }
 
-.blue-border {
-    border-left: 5px solid blue;
-}
-.voucher-code {
-    font-size: 16px;
-    font-weight: bold;
-    background-color: #f1f1f1;
-    padding: 8px;
-    border-radius: 4px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+ .voucher h3.red {
+     color: #d32e2e;
+ }
 
-.voucher-code button {
-    border: none;
-    background: none;
-    color: #2e75d3;
-    font-weight: bold;
-    cursor: pointer;
-}
+ .red-border {
+     border-left: 5px solid red;
+ }
 
-.voucher-details {
-    font-size: 14px;
-    color: #555;
-    margin-top: 10px;
-    line-height: 1.5;
-}
+ .blue-border {
+     border-left: 5px solid blue;
+ }
 
-.voucher-details b {
-    font-weight: bold;
-}
+ .voucher-code {
+     font-size: 16px;
+     font-weight: bold;
+     background-color: #f1f1f1;
+     padding: 8px;
+     border-radius: 4px;
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+ }
 
-.terms-link {
-    display: block;
-    margin-top: 10px;
-    color: #2e75d3;
-    text-decoration: none;
-    font-size: 14px;
-}
+ .voucher-code button {
+     border: none;
+     background: none;
+     color: #2e75d3;
+     font-weight: bold;
+     cursor: pointer;
+ }
 
-.footer-note {
-    text-align: center;
-    font-size: 14px;
-    margin-top: 20px;
-}
+ .voucher-details {
+     font-size: 14px;
+     color: #555;
+     margin-top: 10px;
+     line-height: 1.5;
+ }
 
-.footer-note span {
-    font-size: 18px;
-}
+ .voucher-details b {
+     font-weight: bold;
+ }
+
+ .terms-link {
+     display: block;
+     margin-top: 10px;
+     color: #2e75d3;
+     text-decoration: none;
+     font-size: 14px;
+ }
+
+ .footer-note {
+     text-align: center;
+     font-size: 14px;
+     margin-top: 20px;
+ }
+
+ .footer-note span {
+     font-size: 18px;
+ }
 
 
-/* Vourcher */
-.voucher-banner-container {
-    width: 100%;
-    max-width: 1200px;
-    margin: 40px auto;
-}
+ /* Vourcher */
+ .voucher-banner-container {
+     width: 100%;
+     max-width: 1200px;
+     margin: 40px auto;
+ }
 
-.voucher-banner {
-    background: white;
-    border-radius: 16px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-    overflow: hidden;
-    transition: all 0.3s ease;
-    position: relative;
-    animation: floatBanner 3s ease-in-out infinite;
-}
+ .voucher-banner {
+     background: white;
+     border-radius: 16px;
+     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+     overflow: hidden;
+     transition: all 0.3s ease;
+     position: relative;
+     animation: floatBanner 3s ease-in-out infinite;
+ }
 
-@keyframes floatBanner {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
-    100% { transform: translateY(0px); }
-}
+ @keyframes floatBanner {
+     0% {
+         transform: translateY(0px);
+     }
 
-.banner-header {
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-    padding: 20px;
-    color: white;
-    position: relative;
-    overflow: hidden;
-}
+     50% {
+         transform: translateY(-10px);
+     }
 
-.banner-header::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 200px;
-    height: 200px;
-    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
-    transform: translate(30%, -30%);
-    animation: rotate 10s linear infinite;
-}
+     100% {
+         transform: translateY(0px);
+     }
+ }
 
-@keyframes rotate {
-    from { transform: translate(30%, -30%) rotate(0deg); }
-    to { transform: translate(30%, -30%) rotate(360deg); }
-}
+ .banner-header {
+     background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+     padding: 20px;
+     color: white;
+     position: relative;
+     overflow: hidden;
+ }
 
-.sparkle {
-    position: absolute;
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background-color: white;
-    opacity: 0;
-}
+ .banner-header::before {
+     content: '';
+     position: absolute;
+     top: 0;
+     right: 0;
+     width: 200px;
+     height: 200px;
+     background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+     transform: translate(30%, -30%);
+     animation: rotate 10s linear infinite;
+ }
 
-@keyframes sparkle {
-    0% { transform: scale(0); opacity: 0; }
-    50% { transform: scale(1); opacity: 0.8; }
-    100% { transform: scale(0); opacity: 0; }
-}
+ @keyframes rotate {
+     from {
+         transform: translate(30%, -30%) rotate(0deg);
+     }
 
-.banner-title {
-    font-size: clamp(1.2rem, 3vw, 1.5rem);
-    font-weight: 700;
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    position: relative;
-}
+     to {
+         transform: translate(30%, -30%) rotate(360deg);
+     }
+ }
 
-.title-emoji {
-    animation: wave 2s infinite;
-    display: inline-block;
-}
+ .sparkle {
+     position: absolute;
+     width: 4px;
+     height: 4px;
+     border-radius: 50%;
+     background-color: white;
+     opacity: 0;
+ }
 
-@keyframes wave {
-    0% { transform: rotate(0deg); }
-    25% { transform: rotate(-10deg); }
-    75% { transform: rotate(10deg); }
-    100% { transform: rotate(0deg); }
-}
+ @keyframes sparkle {
+     0% {
+         transform: scale(0);
+         opacity: 0;
+     }
 
-.banner-subtitle {
-    font-size: clamp(0.9rem, 2vw, 1rem);
-    opacity: 0.9;
-    font-weight: 300;
-}
+     50% {
+         transform: scale(1);
+         opacity: 0.8;
+     }
 
-.banner-content {
-    padding: 20px;
-    display: grid;
-    gap: 15px;
-    background: linear-gradient(to bottom, #ffffff, #f8fafc);
-}
+     100% {
+         transform: scale(0);
+         opacity: 0;
+     }
+ }
 
-.voucher-item {
-    background: white;
-    padding: 15px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    transition: all 0.3s ease;
-    border: 1px solid rgba(0,0,0,0.05);
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-}
+ .banner-title {
+     font-size: clamp(1.2rem, 3vw, 1.5rem);
+     font-weight: 700;
+     margin-bottom: 8px;
+     display: flex;
+     align-items: center;
+     gap: 8px;
+     position: relative;
+ }
 
-.voucher-item:hover {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-    border-color: rgba(42,82,152,0.2);
-}
+ .title-emoji {
+     animation: wave 2s infinite;
+     display: inline-block;
+ }
 
-.voucher-item::after {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(
-        to right,
-        rgba(255,255,255,0) 0%,
-        rgba(255,255,255,0.3) 50%,
-        rgba(255,255,255,0) 100%
-    );
-    transform: rotate(45deg);
-    transition: all 0.3s ease;
-    opacity: 0;
-}
+ @keyframes wave {
+     0% {
+         transform: rotate(0deg);
+     }
 
-.voucher-item:hover::after {
-    animation: shine 1.5s ease-out;
-}
+     25% {
+         transform: rotate(-10deg);
+     }
 
-@keyframes shine {
-    0% { transform: rotate(45deg) translateX(-100%); opacity: 0; }
-    50% { opacity: 0.7; }
-    100% { transform: rotate(45deg) translateX(100%); opacity: 0; }
-}
+     75% {
+         transform: rotate(10deg);
+     }
 
-.voucher-icon {
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-    min-width: 45px;
-    height: 45px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
-    color: white;
-    position: relative;
-    overflow: hidden;
-    animation: pulse 2s infinite;
-}
+     100% {
+         transform: rotate(0deg);
+     }
+ }
 
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
-}
+ .banner-subtitle {
+     font-size: clamp(0.9rem, 2vw, 1rem);
+     opacity: 0.9;
+     font-weight: 300;
+ }
 
-.voucher-details {
-    flex: 1;
-}
+ .banner-content {
+     padding: 20px;
+     display: grid;
+     gap: 15px;
+     background: linear-gradient(to bottom, #ffffff, #f8fafc);
+ }
 
-.voucher-details h4 {
-    font-size: clamp(1rem, 2vw, 1.1rem);
-    color: #1a202c;
-    margin-bottom: 4px;
-    font-weight: 600;
-}
+ .voucher-item {
+     background: white;
+     padding: 15px;
+     border-radius: 12px;
+     display: flex;
+     align-items: center;
+     gap: 15px;
+     transition: all 0.3s ease;
+     border: 1px solid rgba(0, 0, 0, 0.05);
+     cursor: pointer;
+     position: relative;
+     overflow: hidden;
+ }
 
-.voucher-details p {
-    font-size: clamp(0.8rem, 1.8vw, 0.9rem);
-    color: #64748b;
-    line-height: 1.4;
-}
+ .voucher-item:hover {
+     transform: translateY(-2px) scale(1.02);
+     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+     border-color: rgba(42, 82, 152, 0.2);
+ }
 
-.banner-actions {
-    padding: 15px 20px;
-    background: #f8fafc;
-    border-top: 1px solid rgba(0,0,0,0.05);
-    text-align: center;
-}
+ .voucher-item::after {
+     content: '';
+     position: absolute;
+     top: -50%;
+     left: -50%;
+     width: 200%;
+     height: 200%;
+     background: linear-gradient(to right,
+             rgba(255, 255, 255, 0) 0%,
+             rgba(255, 255, 255, 0.3) 50%,
+             rgba(255, 255, 255, 0) 100%);
+     transform: rotate(45deg);
+     transition: all 0.3s ease;
+     opacity: 0;
+ }
 
-.view-all-btn {
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 0.95rem;
-    font-weight: 500;
-    text-decoration: none;
-    display: inline-block;
-    position: relative;
-    overflow: hidden;
-}
+ .voucher-item:hover::after {
+     animation: shine 1.5s ease-out;
+ }
 
-.view-all-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(30,60,114,0.2);
-}
+ @keyframes shine {
+     0% {
+         transform: rotate(45deg) translateX(-100%);
+         opacity: 0;
+     }
 
-.view-all-btn::after {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(
-        to right,
-        rgba(255,255,255,0) 0%,
-        rgba(255,255,255,0.3) 50%,
-        rgba(255,255,255,0) 100%
-    );
-    transform: rotate(45deg);
-    animation: buttonShine 3s infinite;
-}
+     50% {
+         opacity: 0.7;
+     }
 
-@keyframes buttonShine {
-    0% { transform: rotate(45deg) translateX(-100%); }
-    50% { transform: rotate(45deg) translateX(100%); }
-    100% { transform: rotate(45deg) translateX(100%); }
-}
+     100% {
+         transform: rotate(45deg) translateX(100%);
+         opacity: 0;
+     }
+ }
 
-.new-badge {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-    color: #000;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    box-shadow: 0 4px 12px rgba(255,215,0,0.3);
-    animation: badgePulse 2s infinite;
-}
+ .voucher-icon {
+     background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+     min-width: 45px;
+     height: 45px;
+     border-radius: 12px;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     font-size: 22px;
+     color: white;
+     position: relative;
+     overflow: hidden;
+     animation: pulse 2s infinite;
+ }
 
-@keyframes badgePulse {
-    0% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.1); opacity: 0.8; }
-    100% { transform: scale(1); opacity: 1; }
-}
+ @keyframes pulse {
+     0% {
+         transform: scale(1);
+     }
 
-@media (min-width: 768px) {
-    .banner-content {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
+     50% {
+         transform: scale(1.05);
+     }
 
-@media (max-width: 767px) {
-    .voucher-banner-container {
-        padding: 0 10px;
-        margin: 15px auto;
-    }
+     100% {
+         transform: scale(1);
+     }
+ }
 
-    .banner-content {
-        grid-template-columns: 1fr;
-    }
+ .voucher-details {
+     flex: 1;
+ }
 
-    .voucher-item {
-        padding: 12px;
-    }
+ .voucher-details h4 {
+     font-size: clamp(1rem, 2vw, 1.1rem);
+     color: #1a202c;
+     margin-bottom: 4px;
+     font-weight: 600;
+ }
 
     .voucher-icon {
         min-width: 40px;
         height: 40px;
         font-size: 20px;
     }
-}
-/* Popular_filters */
-.Popular_filters {
-    background-color: #f8f9fa;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
+ .voucher-details p {
+     font-size: clamp(0.8rem, 1.8vw, 0.9rem);
+     color: #64748b;
+     line-height: 1.4;
+ }
 
-.Popular_filters h3 {
-    font-size: 1.25rem;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 20px;
-}
+ .banner-actions {
+     padding: 15px 20px;
+     background: #f8fafc;
+     border-top: 1px solid rgba(0, 0, 0, 0.05);
+     text-align: center;
+ }
 
-/* Thành phố lọc */
-.city-filters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: start;
-}
+ .view-all-btn {
+     background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+     color: white;
+     border: none;
+     padding: 12px 24px;
+     border-radius: 10px;
+     cursor: pointer;
+     transition: all 0.3s ease;
+     font-size: 0.95rem;
+     font-weight: 500;
+     text-decoration: none;
+     display: inline-block;
+     position: relative;
+     overflow: hidden;
+ }
 
-.city-option {
-    margin-bottom: 10px;
-}
+ .view-all-btn:hover {
+     transform: translateY(-2px);
+     box-shadow: 0 8px 20px rgba(30, 60, 114, 0.2);
+ }
 
-.city-btn {
-    border-radius: 25px;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
+ .view-all-btn::after {
+     content: '';
+     position: absolute;
+     top: -50%;
+     left: -50%;
+     width: 200%;
+     height: 200%;
+     background: linear-gradient(to right,
+             rgba(255, 255, 255, 0) 0%,
+             rgba(255, 255, 255, 0.3) 50%,
+             rgba(255, 255, 255, 0) 100%);
+     transform: rotate(45deg);
+     animation: buttonShine 3s infinite;
+ }
 
-.city-btn:hover {
-    background-color: #007bff;
-    color: #fff;
-    border-color: #007bff;
-}
+ @keyframes buttonShine {
+     0% {
+         transform: rotate(45deg) translateX(-100%);
+     }
 
-.city-btn:focus {
-    outline: none;
-}
+     50% {
+         transform: rotate(45deg) translateX(100%);
+     }
 
-/* Tăng cường khoảng cách */
-.city-filters .city-option {
-    margin-right: 15px;
-}
+     100% {
+         transform: rotate(45deg) translateX(100%);
+     }
+ }
 
 .city-btn.selected {
     background-color: #007bff; /* Màu nền khi button được chọn */
@@ -1152,3 +1157,120 @@ outline: none;
     border-color: #0056b3; /* Màu viền khi button được chọn */
 }
 /* Popular_filters */
+ .new-badge {
+     position: absolute;
+     top: 15px;
+     right: 15px;
+     background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+     color: #000;
+     padding: 6px 12px;
+     border-radius: 20px;
+     font-size: 0.8rem;
+     font-weight: 600;
+     box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+     animation: badgePulse 2s infinite;
+ }
+
+ @keyframes badgePulse {
+     0% {
+         transform: scale(1);
+         opacity: 1;
+     }
+
+     50% {
+         transform: scale(1.1);
+         opacity: 0.8;
+     }
+
+     100% {
+         transform: scale(1);
+         opacity: 1;
+     }
+ }
+
+ @media (min-width: 768px) {
+     .banner-content {
+         grid-template-columns: repeat(3, 1fr);
+     }
+ }
+
+ @media (max-width: 767px) {
+     .voucher-banner-container {
+         padding: 0 10px;
+         margin: 15px auto;
+     }
+
+     .banner-content {
+         grid-template-columns: 1fr;
+     }
+
+     .voucher-item {
+         padding: 12px;
+     }
+
+     .voucher-icon {
+         min-width: 40px;
+         height: 40px;
+         font-size: 20px;
+     }
+ }
+ /* Popular_filters */
+ .Popular_filters {
+     background-color: #f8f9fa;
+     padding: 20px;
+     border-radius: 8px;
+     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+ }
+
+ .Popular_filters h3 {
+     font-size: 1.25rem;
+     font-weight: bold;
+     color: #333;
+     margin-bottom: 20px;
+ }
+
+ /* Thành phố lọc */
+ .city-filters {
+     display: flex;
+     flex-wrap: wrap;
+     gap: 10px;
+     justify-content: start;
+ }
+
+ .city-option {
+     margin-bottom: 10px;
+ }
+
+ .city-btn {
+     border-radius: 25px;
+     padding: 10px 20px;
+     font-size: 16px;
+     cursor: pointer;
+     transition: all 0.3s ease;
+ }
+
+ .city-btn:hover {
+     background-color: #007bff;
+     color: #fff;
+     border-color: #007bff;
+ }
+
+ .city-btn:focus {
+     outline: none;
+ }
+
+ /* Tăng cường khoảng cách */
+ .city-filters .city-option {
+     margin-right: 15px;
+ }
+
+ .city-btn.selected {
+     background-color: #007bff;
+     /* Màu nền khi button được chọn */
+     color: white;
+     /* Màu chữ khi button được chọn */
+     border-color: #0056b3;
+     /* Màu viền khi button được chọn */
+ }
+
+ 

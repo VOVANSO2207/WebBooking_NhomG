@@ -175,6 +175,15 @@ class HotelController extends Controller
 
     public function search(Request $request)
     {
+        // Lưu các tham số tìm kiếm vào session
+        $request->session()->put([
+            'location' => $request->location,
+            'daterange' => $request->daterange,
+            'rooms' => $request->rooms,
+            'adults' => $request->adults,
+            'children' => $request->children,
+        ]);
+
         // Lấy thông tin từ form
         $location = $request->input('location');
         $daterange = $request->input('daterange');
@@ -191,9 +200,26 @@ class HotelController extends Controller
         // Trả về kết quả tìm kiếm tới view
         $amenities = HotelAmenities::getAllAmenities();
 
-        // Trả dữ liệu về trang search_result
-        return view('pages.search_result', compact('hotels', 'amenities', 'location', 'daterange', 'rooms', 'adults', 'children'));
+        // Kiểm tra nếu là yêu cầu AJAX
+        // if ($request->ajax()) {
+        //     return view('pages.hotel_detail', compact('rooms'))->render();
+        // }
+
+        // Trả về kết quả tìm kiếm trong view search_result
+        return view('pages.search_result', [
+            'hotels' => $hotels['hotels'],
+            'hotelCount' => $hotels['hotelCount'],
+            'cityName' => $hotels['cityName'],
+            'amenities' => $amenities,
+            'location' => $location,
+            'daterange' => $daterange,
+            'rooms' => $rooms,
+            'adults' => $adults,
+            'children' => $children
+        ]);
     }
+
+
 
     public function viewHotel()
     {
@@ -423,9 +449,11 @@ class HotelController extends Controller
         $currentAmenities = $hotel->amenities()->pluck('amenity_id')->toArray();
 
         // Lấy tất cả các phòng, bao gồm ảnh đầu tiên của mỗi phòng
-        $rooms = Rooms::with(['room_images' => function ($query) {
-            $query->orderBy('image_id', 'asc')->take(1); // Lấy ảnh đầu tiên
-        }])->get();
+        $rooms = Rooms::with([
+            'room_images' => function ($query) {
+                $query->orderBy('image_id', 'asc')->take(1); // Lấy ảnh đầu tiên
+            }
+        ])->get();
 
         // Lấy các phòng hiện tại của khách sạn
         $currentRooms = $hotel->rooms()->pluck('room_id')->toArray();
@@ -614,16 +642,16 @@ class HotelController extends Controller
             ->get() // Lấy tất cả khách sạn
             ->map(function ($hotel) {
                 return [
-                    'hotel_id' => $hotel->id,
+                    'hotel_id' => $hotel->hotel_id,
                     'hotel_name' => $hotel->hotel_name,
                     'location' => $hotel->location,
                     'city' => $hotel->city->city_name, // Lấy tên thành phố
-                    'reviews_count' => Reviews::countReviewsForHotel($hotel->id),
+                    'reviews_count' => $hotel->reviews->count(),
                     'old_price' => number_format($hotel->average_price_sale, 0, ',', '.'),
                     'new_price' => number_format($hotel->average_price, 0, ',', '.'),
                     'is_favorite' => $hotel->is_favorite,
                     'discount_percent' => number_format($hotel->average_discount_percent),
-                    'image_url' => $hotel->images->isNotEmpty() ? asset('storage/images/' . $hotel->images->first()->image_url) : '/images/default-image.png',
+                    'image_url' => $hotel->images->isNotEmpty() ? asset('images/' . $hotel->images->first()->image_url) : '/images/default-image.png',
                 ];
             });
 
@@ -632,4 +660,3 @@ class HotelController extends Controller
         ]);
     }
 }
-// 

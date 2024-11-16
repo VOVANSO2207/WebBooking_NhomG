@@ -40,7 +40,7 @@
                             @method('PUT')
                             <div class="image-user col-auto" style="position: relative;">
                                 <img id="avatarPreview"
-                                    src="{{ Auth::check() && Auth::user()->avatar ? asset('storage/images/' . Auth::user()->avatar) : asset('images/user-profile.png') }}"
+                                    src="{{ Auth::check() && Auth::user()->avatar ? asset('images/' . Auth::user()->avatar) : asset('images/user-profile.png') }}"
                                     alt="avatar-user"
                                     style="width: 200px; height: 200px; border-radius: 50%; object-fit: cover; transition: transform 0.3s ease; border:5px solid #ccc">
 

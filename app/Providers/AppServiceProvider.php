@@ -53,6 +53,17 @@ class AppServiceProvider extends ServiceProvider
             return !preg_match('/\s/', $value); // Kiểm tra nếu có khoảng trắng
         });
 
+        // Đếm số lượng khách sạn trong thành phố
+        $cityId = '';
+        $city = Cities::find($cityId);
+        $cityName = $city ? $city->name : ''; // fallback nếu không tìm thấy thành phố
+
+        // Đếm số lượng khách sạn trong thành phố
+        $hotelCount = Hotel::where('city_id', $cityId)->count();
+
+        // Chia sẻ với tất cả view
+        view()->share('hotelCount', $hotelCount);
+        view()->share('cityName', $cityName);
 
         // Quy tắc kiểm tra tên miền hợp lệ
         Validator::extend('valid_domain', function ($attribute, $value, $parameters, $validator) {

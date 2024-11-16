@@ -102,7 +102,7 @@
                             </div>
 
                             <div class="col-md-2 text-center" style="width: 100%;height:100%;">
-                                <img src="{{ Auth::check() && Auth::user()->avatar ? asset('storage/images/' . Auth::user()->avatar) : asset('images/user-profile.png') }}"
+                                <img src="{{ Auth::check() && Auth::user()->avatar ? asset('images/' . Auth::user()->avatar) : asset('images/user-profile.png') }}"
                                     alt="Avatar" class="img-fluid rounded-circle"
                                     style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;">
 
@@ -159,16 +159,13 @@
                 </div>
                 <div class="col-md-3">
                     <div class="date-picker-search border">
-                        <div class="d-flex justify-content-around">
-                            <div class="label-date">Ngày đi</div>
-                            <div class="label-date">Ngày về</div>
-                        </div>
-                        <input class="datepicker-staynest form-control p-0 m-0" type="text" name="daterange" readonly />
+                        <i class="fa-regular fa-calendar-days ps-2"></i>
+                        <input class="datepicker-staynest form-control p-0 ms-2" type="text" name="daterange"
+                            readonly />
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="num-people border">
-                        <label class="small-text">Số người</label>
                         <div class="number">
                             <span id="people-summary">1 người lớn, </span>
                             <span id="room-summary">1 phòng, </span>
@@ -242,12 +239,12 @@
                                 <p class="location m-0">{{ $hotel->city->city_name }} - <span
                                         class="name-hotel">{{ $hotel->hotel_name }}</span></p>
                                 <p class="price-old m-0">
-                                    {{ number_format($hotel->average_price, 0, ',', '.') }} VNĐ
+                                    {{ number_format($hotel->average_price, 0, ',', '.') }} VNĐ VNĐ
                                 </p>
                                 <div class="row price-top">
                                     <div class="col-md-7">
                                         <span class="price-new">VNĐ
-                                            {{ number_format($hotel->average_price, 0, ',', '.') }} VNĐ
+                                            {{ number_format($hotel->average_price_sale, 0, ',', '.') }} VNĐ
                                             <span>/ Khách</span>
                                         </span>
                                     </div>
@@ -279,7 +276,7 @@
     </div>
 </section>
 <!-- VOUCHER -->
-<section style="scale:0.9;">
+<section>
     <div class="voucher-banner-container">
         <div class="voucher-banner">
             <div class="banner-header">
@@ -368,41 +365,40 @@
     </div>
 </section>
 
-    <section class="our-offers pb-5">
-        <div class="container">
-            <div class="title mb-2">Ưu đãi của chúng tôi</div>
+<section class="our-offers pb-5">
+    <div class="container">
+        <div class="title mb-2">Ưu đãi của chúng tôi</div>
 
-            <div class="Popular_filters">
-                <!-- Bộ lọc Thành phố -->
-                <div class="option">
-                    <div class="city-filters d-flex flex-wrap">
-                        @if ($cities->isEmpty())
-                            <span>Chưa có thành phố để hiển thị</span>
-                        @else
-                            @foreach ($cities as $city)
-                                <div class="city-option mb-3">
-                                    <button class="btn btn-outline-primary btn-lg city-btn" data-city-id="{{ $city->city_id }}">{{ $city->city_name }}</button>
-                                </div>
-                            @endforeach
-                        @endif
-                    </div>
+        <div class="Popular_filters">
+            <!-- Bộ lọc Thành phố -->
+            <div class="option">
+                <div class="city-filters d-flex flex-wrap">
+                    @if ($cities->isEmpty())
+                        <span>Chưa có thành phố để hiển thị</span>
+                    @else
+                        @foreach ($cities as $city)
+                            <div class="city-option mb-3">
+                                <button class="btn btn-outline-primary btn-lg city-btn"
+                                    data-city-id="{{ $city->city_id }}">{{ $city->city_name }}</button>
+                            </div>
+                        @endforeach
+                    @endif
                 </div>
             </div>
+        </div>
 
-            <div class="carousel-container">
-                <div class="carousel-wrapper carousel-wrapper2">
-                    @foreach ($hotels as $hotel)
-                        <div class="card">
-                            <a href="#" class="group-offers">
-                                <div class="shape-in">
-                                    @if ($hotel->images->isNotEmpty())
-                                        <img class="image-hotel-2"
-                                            src="{{ asset('storage/images/' . $hotel->images->first()->image_url) }}"
-                                            alt="">
-                                    @else
-                                        <img class="image-hotel-2" src="{{ asset('/images/defaullt-image.png') }}"
-                                            alt="">
-                                    @endif
+        <div class="carousel-container">
+            <div class="carousel-wrapper carousel-wrapper2">
+                @foreach ($hotels as $hotel)
+                    <div class="card">
+                        <a href="#" class="group-offers">
+                            <div class="shape-in">
+                                @if ($hotel->images->isNotEmpty())
+                                    <img class="image-hotel-2" src="{{ asset('images/' . $hotel->images->first()->image_url) }}"
+                                        alt="">
+                                @else
+                                    <img class="image-hotel-2" src="{{ asset('storage/images/defaullt-image.png') }}" alt="">
+                                @endif
 
                                 <div class="group-info-hotel">
                                     <p class="info-hotel-name m-0">{{ $hotel->hotel_name }}</p>
@@ -415,7 +411,7 @@
                                     </p>
 
                                     <p class="info-hotel-price-old mb-0 mt-5 pt-5">
-                                        {{ number_format($hotel->average_price_sale, 0, ',', '.') }} VND
+                                        {{ number_format($hotel->average_price_sale, 0, ',', '.') }} VNĐ
                                     </p>
                                     <div class="row group-heart-price">
                                         <div class="col-md-6">
@@ -432,7 +428,7 @@
                                     </div>
                                 </div>
                                 <div class="sale-hotel">
-                                    {{ number_format($hotel->average_discount_percent) }} %
+                                    -{{ number_format($hotel->average_discount_percent) }}%
                                 </div>
                             </div>
                         </a>
@@ -552,75 +548,76 @@
     }
     createSparkles();
 
-document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.city-btn').forEach(function(button) {
-        button.addEventListener('click', function() {
-            if (this.classList.contains('selected')) {
-                this.classList.remove('selected');
-                fetch('{{ route('hotels.all') }}')
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        updateHotelList(data.hotels);
-                    })
-                    .catch(error => console.error('Error:', error));
-                return;
-            }
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.city-btn').forEach(function (button) {
+            button.addEventListener('click', function () {
+                if (this.classList.contains('selected')) {
+                    this.classList.remove('selected');
+                    fetch('{{ route('hotels.all') }}')
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            updateHotelList(data.hotels);
+                        })
+                        .catch(error => console.error('Error:', error));
+                    return;
+                }
 
-            document.querySelectorAll('.city-btn').forEach(function(btn) {
-                btn.classList.remove('selected');
+                document.querySelectorAll('.city-btn').forEach(function (btn) {
+                    btn.classList.remove('selected');
+                });
+
+                this.classList.add('selected');
+
+                var cityId = this.getAttribute('data-city-id');
+
+                if (cityId) {
+                    let url = '{{ route('hotels.filter') }}?city_id=' + cityId;
+
+                    fetch(url)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log('Data received:', data);
+                            updateHotelList(data.hotels);
+                        })
+                        .catch(error => console.error('Error:', error));
+                } else {
+                    console.error('City ID is not defined.');
+                }
             });
-
-            this.classList.add('selected');
-
-            var cityId = this.getAttribute('data-city-id');
-
-            if (cityId) {
-                let url = '{{ route('hotels.filter') }}?city_id=' + cityId;
-
-                fetch(url)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        updateHotelList(data.hotels);
-                    })
-                    .catch(error => console.error('Error:', error));
-            } else {
-                console.error('City ID is not defined.');
-            }
         });
     });
-});
 
-function updateHotelList(hotels) {
-    console.log('Hotels data received:', hotels);
-    const hotelContainer = document.querySelector('.carousel-wrapper2');
-    hotelContainer.innerHTML = '';
+    function updateHotelList(hotels) {
+        console.log('Hotels data received:', hotels);
+        const hotelContainer = document.querySelector('.carousel-wrapper2');
+        hotelContainer.innerHTML = '';
 
-    if (hotels.length === 0) {
-        hotelContainer.innerHTML = '<p>Không có khách sạn nào được tìm thấy.</p>';
-        return;
-    }
+        if (hotels.length === 0) {
+            hotelContainer.innerHTML = '<p>Không có khách sạn nào được tìm thấy.</p>';
+            return;
+        }
 
-    hotels.forEach(hotel => {
-        const hotelCard = document.createElement('div');
-        hotelCard.classList.add('card');
-        hotelCard.innerHTML = `
+        hotels.forEach(hotel => {
+            const hotelCard = document.createElement('div');
+            hotelCard.classList.add('card');
+            hotelCard.innerHTML = `
             <a href="#" class="group-offers">
                 <div class="shape-in">
                     <img class="image-hotel-2" src="${hotel.image_url}" alt="">
                     <div class="group-info-hotel">
                         <p class="info-hotel-name m-0">${hotel.hotel_name}</p>
                         <p class="info-hotel-location m-0">${hotel.location}, ${hotel.city}</p>
-                        <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i>${hotel.reviews} Đánh giá</p>
+                        <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i> ${hotel.reviews_count} Đánh giá</p>
                         <p class="info-hotel-price-old mb-0 mt-5 pt-5">${hotel.old_price} VND</p>
                         <div class="row group-heart-price">
                             <div class="col-md-6">
@@ -633,15 +630,15 @@ function updateHotelList(hotels) {
                             </div>
                         </div>
                     </div>
-                    <div class="sale-hotel">${hotel.discount_percent} %</div>
+                    <div class="sale-hotel">-${hotel.discount_percent}%</div>
                 </div>
             </a>
         `;
-        hotelContainer.appendChild(hotelCard);
-    });
-}
+            hotelContainer.appendChild(hotelCard);
+        });
+    }
 
-    </script>
+</script>
 @endsection
 
 @section('footer')
@@ -650,5 +647,5 @@ function updateHotelList(hotels) {
 
 {{-- Link File JS --}}
 @section('js')
-    <script src="{{ asset('js/home.js') }}"></script>
+<script src="{{ asset('js/home.js') }}"></script>
 @endsection
