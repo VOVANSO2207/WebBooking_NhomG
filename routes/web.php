@@ -125,13 +125,14 @@ Route::prefix('admin')->group(function () {
     Route::delete('/hotel_amenities/{id}/delete', [HotelAmenitiesController::class, 'destroy'])->name('amenities.delete');
 
     // Admin - Tiện nghi phòng
-    Route::get('/room-amenities', [RoomAmenitiesController::class, 'getAllRoomAmenties'])->name('admin.viewroomamenities');});
-    Route::delete('/room-amenities/delete/{id}', [RoomAmenitiesController::class, 'deleteRoomAmenities'])->name('admin.room_amenities.delete');
-    Route::get('/room-amenities/add', [RoomAmenitiesController::class, 'showAddRoomAmenities'])->name('room_amenities_add');
-    Route::post('/room-amenities/store', [RoomAmenitiesController::class, 'AddRoomAmenities'])->name('admin.room_amenities.store');
-    Route::get('/admin/room-amenities/edit/{id}', [RoomAmenitiesController::class, 'editRoomAmenity'])->name('admin.room_amenities.edit');
-    Route::put('/admin/room-amenities/update/{id}', [RoomAmenitiesController::class, 'updateRoomAmenity'])->name('admin.room_amenities.update');
-    Route::get('admin/room-amenities/search', [RoomAmenitiesController::class, 'search'])->name('roomAmenities.search');
+    Route::get('/room-amenities', [RoomAmenitiesController::class, 'getAllRoomAmenties'])->name('admin.viewroomamenities');
+});
+Route::delete('/room-amenities/delete/{id}', [RoomAmenitiesController::class, 'deleteRoomAmenities'])->name('admin.room_amenities.delete');
+Route::get('/room-amenities/add', [RoomAmenitiesController::class, 'showAddRoomAmenities'])->name('room_amenities_add');
+Route::post('/room-amenities/store', [RoomAmenitiesController::class, 'AddRoomAmenities'])->name('admin.room_amenities.store');
+Route::get('/admin/room-amenities/edit/{id}', [RoomAmenitiesController::class, 'editRoomAmenity'])->name('admin.room_amenities.edit');
+Route::put('/admin/room-amenities/update/{id}', [RoomAmenitiesController::class, 'updateRoomAmenity'])->name('admin.room_amenities.update');
+Route::get('admin/room-amenities/search', [RoomAmenitiesController::class, 'search'])->name('roomAmenities.search');
 // Admin-Post Detail
 Route::get('/posts/{post_id}/detail', action: [PostsController::class, 'getPostDetail'])->name('post.detail');
 Route::get('/search', [PostsController::class, 'search'])->name('search');
