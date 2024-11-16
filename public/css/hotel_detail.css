@@ -657,3 +657,6 @@ body {
     font-size: 16px;
     pointer-events: none;
 }
+.like-review.liked {
+    color: red !important;/* Màu đỏ khi đã thích */
+}
