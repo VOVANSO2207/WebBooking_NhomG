@@ -109,11 +109,15 @@ class HotelAmenitiesController extends Controller
         $decodedId = IdEncoder::decodeId($amenity_id);
         $amenity = HotelAmenities::find($decodedId);
         if ($amenity) {
+            // Xóa tiện ích
             $amenity->delete();
-            return response()->json(['success' => true, 'message' => 'Tiện ích đã được xóa.']);
+
+            // Gửi thông báo thành công vào session
+            return redirect()->route('admin.hotel_amenities')->with('success', 'Tiện ích đã được xóa thành công.');
         }
 
-        return response()->json(['success' => false, 'message' => 'Tiện ích không tồn tại.'], 404);
+        // Nếu không tìm thấy tiện ích, gửi thông báo lỗi vào session
+        return redirect()->route('admin.hotel_amenities')->with('error', 'Tiện ích không tồn tại.');
     }
 
 
