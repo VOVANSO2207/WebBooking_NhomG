@@ -315,7 +315,8 @@
             <div class="review-title m-0">ĐÁNH GIÁ</div>
             <hr class="m-0">
             <div class="total-review m-0 mb-4">
-              Có {{$reviews->count()}} Đánh giá từ người dùng
+            Có {{$reviews->count()}} Đánh giá từ người dùng
+
             </div>
 
             <!--NHẬP ĐÁNH GIÁ -->
@@ -376,19 +377,17 @@
                                 <div class="action-review mt-2">
                                     <a href="javascript:void(0)" class="like-review me-4"
                                         id="like-review-{{ $review->review_id }}" data-review-id="{{ $review->review_id }}">
-                                        <i class="fa-solid fa-thumbs-up"></i>
-                                        <span class="like-count"
+                                        <i class="fa-solid fa-thumbs-up"></i> <span class="like-count"
                                             id="like-count-{{ $review->review_id }}">{{ $review->likes_count }}</span> Thích
                                     </a>
-
                                     @if (auth()->check() && (auth()->user()->user_id === $review->user_id || auth()->user()->is_admin))
-                                        <a href="#" class="edit-review"><i class="fa-solid fa-pen-to-square"></i> Chỉnh sửa</a>
-                                        <button type="button" class="delete-review-btn me-4 btn btn-link"
-                                            data-review-id="{{ $review->review_id }}" data-bs-toggle="modal"
-                                            data-bs-target="#deleteReviewModal">
-                                            <i class="fa-solid fa-trash"></i> Xóa Đánh Giá
-                                        </button>
-                                    @endif
+            <a href="#" class="edit-review"><i class="fa-solid fa-pen-to-square"></i> Chỉnh sửa</a>
+            <button type="button" class="delete-review-btn me-4 btn btn-link"
+                    data-review-id="{{ $review->review_id }}" data-bs-toggle="modal"
+                    data-bs-target="#deleteReviewModal">
+                <i class="fa-solid fa-trash"></i> Xóa Đánh Giá
+            </button>
+        @endif
                                 </div>
                             </div>
                         </div>
@@ -428,45 +427,43 @@
     </div>
 </section>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const likeButtons = document.querySelectorAll('.like-review'); // Lấy tất cả các nút like
+document.addEventListener('DOMContentLoaded', function () {
+    const likeButtons = document.querySelectorAll('.like-review'); // Lấy tất cả các nút like
 
-        likeButtons.forEach(button => {
-            button.addEventListener('click', function () {
-                const reviewId = this.getAttribute('data-review-id'); // Lấy review_id từ data attribute
-                const likeCountSpan = document.getElementById(`like-count-${reviewId}`); // Lấy span số like
+    likeButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const reviewId = this.getAttribute('data-review-id'); // Lấy review_id từ data attribute
+            const likeCountSpan = document.getElementById(`like-count-${reviewId}`); // Lấy span số like
 
-                // Gửi yêu cầu AJAX để thích hoặc bỏ thích
-                fetch(`/reviews/like/${reviewId}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') // CSRF Token
-                    },
-                    body: JSON.stringify({ review_id: reviewId })
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            // Cập nhật số lượng like mới nhận được từ phản hồi của server
-                            likeCountSpan.textContent = data.likes_count;
+            // Gửi yêu cầu AJAX để thích hoặc bỏ thích
+            fetch(`/reviews/like/${reviewId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') // CSRF Token
+                },
+                body: JSON.stringify({ review_id: reviewId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Cập nhật số lượng like mới nhận được từ phản hồi của server
+                    likeCountSpan.textContent = data.likes_count;
 
-                            // Thêm hoặc bỏ class liked để thay đổi kiểu dáng của nút
-                            if (data.action === 'liked') {
-                                this.classList.add('liked');
-                            } else {
-                                this.classList.remove('liked');
-                            }
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    });
+                    // Thêm hoặc bỏ class liked để thay đổi kiểu dáng của nút
+                    if (data.action === 'liked') {
+                        this.classList.add('liked');
+                    } else {
+                        this.classList.remove('liked');
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
             });
         });
     });
-
-
+});
 
 
     document.addEventListener('DOMContentLoaded', function () {
