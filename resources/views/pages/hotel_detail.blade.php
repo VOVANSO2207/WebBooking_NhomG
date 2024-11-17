@@ -315,14 +315,16 @@
             <div class="review-title m-0">ĐÁNH GIÁ</div>
             <hr class="m-0">
             <div class="total-review m-0 mb-4">
-            Có {{$reviews->count()}} Đánh giá từ người dùng
+                Có {{$reviews->count()}} Đánh giá từ người dùng
 
             </div>
 
             <!--NHẬP ĐÁNH GIÁ -->
             <div class="box-review">
-                <form class="group-input-review" id="reviewForm" action="{{ route('reviews.store', $hotel->hotel_id) }}"
-                    method="POST" enctype="multipart/form-data">
+                <form class="group-input-review" id="reviewForm" @if (auth()->check())
+                    action="{{ route('reviews.store', $hotel->hotel_id) }}" method="POST" enctype="multipart/form-data"
+                @else action="javascript:void(0)" onclick="showLoginModal()" @endif>
+                    @csrf
                     @csrf
                     <div class="icon-profile">
                         <i class="fa-solid fa-circle-user"></i>
@@ -344,7 +346,12 @@
                         </div>
                     </div>
                     <div class="rating-stars">
-                        <input hidden type="number" name="rating" max="5" min="1" step="1">
+                        <input type="hidden" name="rating" id="ratingInput" value="0">
+                        <i class="fa-solid fa-star star" data-value="1"></i>
+                        <i class="fa-solid fa-star star" data-value="2"></i>
+                        <i class="fa-solid fa-star star" data-value="3"></i>
+                        <i class="fa-solid fa-star star" data-value="4"></i>
+                        <i class="fa-solid fa-star star" data-value="5"></i>
                     </div>
                     <div class="btn-submit">
                         <button type="submit">ĐĂNG</button>
@@ -364,6 +371,16 @@
                             <div class="group-info-review">
                                 <div class="review-user-name">{{ $review->user->username }}</div>
                                 <div class="created_at">{{ $review->updated_at }}</div>
+                                <!-- Hiển thị số sao đánh giá -->
+                                <div class="review-rating">
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        @if ($i <= $review->rating)
+                                            <i class="fa-solid fa-star" style="color: #ff4500;"></i> <!-- Sao được đánh giá -->
+                                        @else
+                                            <i class="fa-regular fa-star" style="color: #ccc;"></i> <!-- Sao chưa được đánh giá -->
+                                        @endif
+                                    @endfor
+                                </div>
                                 <div class="comment-text">
                                     {{ $review->comment }}
                                 </div>
@@ -381,13 +398,13 @@
                                             id="like-count-{{ $review->review_id }}">{{ $review->likes_count }}</span> Thích
                                     </a>
                                     @if (auth()->check() && (auth()->user()->user_id === $review->user_id || auth()->user()->is_admin))
-            <a href="#" class="edit-review"><i class="fa-solid fa-pen-to-square"></i> Chỉnh sửa</a>
-            <button type="button" class="delete-review-btn me-4 btn btn-link"
-                    data-review-id="{{ $review->review_id }}" data-bs-toggle="modal"
-                    data-bs-target="#deleteReviewModal">
-                <i class="fa-solid fa-trash"></i> Xóa Đánh Giá
-            </button>
-        @endif
+                                        <a href="#" class="edit-review"><i class="fa-solid fa-pen-to-square"></i> Chỉnh sửa</a>
+                                        <button type="button" class="delete-review-btn me-4 btn btn-link"
+                                            data-review-id="{{ $review->review_id }}" data-bs-toggle="modal"
+                                            data-bs-target="#deleteReviewModal">
+                                            <i class="fa-solid fa-trash"></i> Xóa Đánh Giá
+                                        </button>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -425,45 +442,101 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="loginRequiredModal" tabindex="-1" aria-labelledby="loginRequiredModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loginRequiredModalLabel">Thông báo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Vui lòng <a href="{{ route('login') }}">đăng nhập</a> để bình luận.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </section>
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const likeButtons = document.querySelectorAll('.like-review'); // Lấy tất cả các nút like
+    function showLoginModal() {
+        const loginModal = new bootstrap.Modal(document.getElementById('loginRequiredModal'));
+        loginModal.show();
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+        const likeButtons = document.querySelectorAll('.like-review'); // Lấy tất cả các nút like
 
-    likeButtons.forEach(button => {
-        button.addEventListener('click', function () {
-            const reviewId = this.getAttribute('data-review-id'); // Lấy review_id từ data attribute
-            const likeCountSpan = document.getElementById(`like-count-${reviewId}`); // Lấy span số like
+        likeButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const reviewId = this.getAttribute('data-review-id'); // Lấy review_id từ data attribute
+                const likeCountSpan = document.getElementById(`like-count-${reviewId}`); // Lấy span số like
 
-            // Gửi yêu cầu AJAX để thích hoặc bỏ thích
-            fetch(`/reviews/like/${reviewId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') // CSRF Token
-                },
-                body: JSON.stringify({ review_id: reviewId })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Cập nhật số lượng like mới nhận được từ phản hồi của server
-                    likeCountSpan.textContent = data.likes_count;
+                // Gửi yêu cầu AJAX để thích hoặc bỏ thích
+                fetch(`/reviews/like/${reviewId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') // CSRF Token
+                    },
+                    body: JSON.stringify({ review_id: reviewId })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Cập nhật số lượng like mới nhận được từ phản hồi của server
+                            likeCountSpan.textContent = data.likes_count;
 
-                    // Thêm hoặc bỏ class liked để thay đổi kiểu dáng của nút
-                    if (data.action === 'liked') {
-                        this.classList.add('liked');
-                    } else {
-                        this.classList.remove('liked');
-                    }
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
+                            // Thêm hoặc bỏ class liked để thay đổi kiểu dáng của nút
+                            if (data.action === 'liked') {
+                                this.classList.add('liked');
+                            } else {
+                                this.classList.remove('liked');
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
             });
         });
     });
-});
+    document.addEventListener('DOMContentLoaded', function () {
+        const stars = document.querySelectorAll('.rating-stars .star');
+        const ratingInput = document.getElementById('ratingInput');
+
+        stars.forEach(star => {
+            star.addEventListener('click', function () {
+                // Lấy giá trị số sao được chọn
+                const rating = this.getAttribute('data-value');
+                ratingInput.value = rating;
+
+                // Reset tất cả sao
+                stars.forEach(s => s.classList.remove('selected'));
+
+                // Tô màu các sao đến giá trị được chọn
+                for (let i = 0; i < rating; i++) {
+                    stars[i].classList.add('selected');
+                }
+            });
+
+            // Thêm hiệu ứng hover để tô màu tạm thời khi rê chuột
+            star.addEventListener('mouseover', function () {
+                stars.forEach(s => s.classList.remove('hover'));
+                for (let i = 0; i < this.getAttribute('data-value'); i++) {
+                    stars[i].classList.add('hover');
+                }
+            });
+
+            // Bỏ hiệu ứng hover khi chuột rời khỏi
+            star.addEventListener('mouseout', function () {
+                stars.forEach(s => s.classList.remove('hover'));
+            });
+        });
+    });
+
 
 
     document.addEventListener('DOMContentLoaded', function () {

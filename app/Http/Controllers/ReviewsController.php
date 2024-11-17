@@ -12,6 +12,13 @@ class ReviewsController extends Controller
 {
     public function store(Request $request, $hotel_id)
     {
+        // Kiểm tra người dùng đã đăng nhập chưa
+    if (!auth()->check()) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Vui lòng đăng nhập để bình luận.'
+        ], 401); // 401: Unauthorized
+    }
         // Validate dữ liệu đầu vào
         $request->validate([
             'comment' => 'required|string|max:1000',
