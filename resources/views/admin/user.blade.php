@@ -175,20 +175,22 @@
             });
         });
 
-        // Xử lý xóa người dùng khi nhấn nút "Delete"
-        document.getElementById('deleteUserButton').addEventListener('click', function () {
-            fetch(`/users/${currentUserId}/delete`, {
-                method: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                },
-            })
-            .then(response => {
+        // Xử lý xóa người dùng
+        deleteUserButton.addEventListener('click', async function () {
+            if (!confirm('Bạn có chắc chắn muốn xóa người dùng này?')) return;
+
+            try {
+                const response = await fetch(`/users/${currentUserId}/delete`, {
+                    method: 'DELETE',
+                    headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                });
+                // Ẩn dòng dữ liệu ngay lập tức
+                document.querySelector(`tr[data-id="${currentUserId}"]`).remove();
                 window.location.reload();
-            })
-            .catch(error => {
-                alert('Có lỗi xảy ra trong khi xóa!');
-            });
+
+            } catch (error) {
+                console.error('Error deleting user:', error);
+            }
         });
     });
 </script>

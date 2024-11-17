@@ -101,7 +101,10 @@ class UsersController extends Controller
 
         $user->save();
 
-        return redirect()->route('admin.viewuser')->with('success', 'Thêm người dùng thành công.');
+        // Thêm thông báo thành công vào session
+        session()->flash('success', 'Thêm người dùng thành công.');
+
+        return redirect()->route('admin.viewuser');
     }
 
     public function deleteUser($user_id)
@@ -125,16 +128,18 @@ class UsersController extends Controller
     public function search(Request $request)
     {
         $keyword = $request->get('search');
+        
         if (empty($keyword)) {
             // Nếu từ khóa tìm kiếm trống, hiển thị tất cả kết quả
             $results = User::getAllUsers();
         } else {
             // Nếu có từ khóa, tìm kiếm theo từ khóa
-            $results = User::whereRaw('MATCH(username, email) AGAINST(? IN BOOLEAN MODE)', [$keyword])
-                ->paginate(5);
+            $results = User::searchUser($keyword)->paginate(5);
         }
+
         return view('admin.search_results_user', compact('results'));
     }
+
     public function editUser($user_id)
     {
         // Giải mã ID
