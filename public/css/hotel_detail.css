@@ -450,6 +450,7 @@ body {
 
         .group-input-review {
             display: flex;
+            position: relative;
 
             .icon-profile {
                 font-size: 45px;
@@ -500,6 +501,26 @@ body {
                         }
                     }
                 }
+            }
+
+            .rating-stars {
+                display: flex;
+                gap: 5px;
+                position: absolute;
+                left: 60px;
+                bottom: 7px;
+
+                .star {
+                    font-size: 24px;
+                    color: #ccc;
+                    cursor: pointer;
+                    transition: color 0.3s ease;
+                }
+            }
+
+            .rating-stars .star.selected,
+            .rating-stars .star:hover~.star {
+                color: #ff4500;
             }
         }
 
@@ -657,22 +678,7 @@ body {
     font-size: 16px;
     pointer-events: none;
 }
+
 .like-review.liked {
-    color: red !important;/* Màu đỏ khi đã thích */
-}
-.rating-stars {
-    display: flex;
-    gap: 5px;
-}
-
-.rating-stars .star {
-    font-size: 24px;
-    color: #ccc; /* Màu mặc định */
-    cursor: pointer;
-    transition: color 0.3s ease;
-}
-
-.rating-stars .star.selected,
-.rating-stars .star:hover ~ .star {
-    color: #ff4500; /* Màu đỏ cho sao được chọn */
+    color: red !important;
 }
