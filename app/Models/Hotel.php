@@ -41,9 +41,11 @@ class Hotel extends Model
     public static function searchHotel($keyword)
     {
         if (empty($keyword)) {
-            return static::query(); // Trả về tất cả khách sạn
+            // Trả về tất cả các khách sạn nếu từ khóa rỗng
+            return static::query();
         }
 
+        // Thực hiện tìm kiếm theo từ khóa trong các trường hotel_name và location
         return static::where(function ($query) use ($keyword) {
             $query->where('hotel_name', 'LIKE', "%{$keyword}%")
                 ->orWhere('location', 'LIKE', "%{$keyword}%");

@@ -41,9 +41,11 @@ class HotelAmenities extends Model
     public static function searchAmenity($keyword)
     {
         if (empty($keyword)) {
-            return static::query(); // Trả về tất cả tiện ích nếu không có từ khóa
+            // Trả về tất cả các tiện ích nếu từ khóa tìm kiếm rỗng
+            return static::query();
         }
 
+        // Thực hiện tìm kiếm theo từ khóa trong các trường amenity_name và description
         return static::where(function ($query) use ($keyword) {
             $query->where('amenity_name', 'LIKE', "%{$keyword}%")
                 ->orWhere('description', 'LIKE', "%{$keyword}%");

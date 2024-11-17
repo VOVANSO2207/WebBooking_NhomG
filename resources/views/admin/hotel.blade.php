@@ -26,6 +26,17 @@
 
 <div class="content-wrapper">
     <div class="container-xxl flex-grow-1 container-p-y">
+        <!-- Success/Failure Messages -->
+        @if (session('success'))
+            <div class="alert alert-success" role="alert">
+                {{ session('success') }}
+            </div>
+        @elseif(session('error'))
+            <div class="alert alert-danger" role="alert">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <div class="card">
             <h5 class="card-header" style="background-color: #696cff; color: #fff;">HOTELS</h5>
             <div class="add">
@@ -227,16 +238,8 @@
                 'Content-Type': 'application/json',
             },
         })
-        .then(response => {
-            if (response.ok) {
-                location.reload();
-            } else {
-                alert('Có lỗi xảy ra. Vui lòng thử lại sau.');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+        if (!confirm('Bạn có chắc chắn muốn khách sạn này?')) return;
+        location.reload();
     });
     const hotelDetailModal = document.getElementById('hotelDetailModal');
 
