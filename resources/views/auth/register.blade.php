@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="card-header text-center py-3 header">
-        <h2 class="mb-0">STAYNEST</h2>
+        <h2 class="mb-0 text-light">STAYNEST</h2>
     </div>
 
     <main class="container login-container">
@@ -14,7 +14,10 @@
                         <form id="registerForm" method="POST" action="{{ route('register') }}">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             @csrf
-                            <h4 class="typing-effect"></h4>
+                            <div class="terminal-loader mb-2">
+                                <h2 class="text">Đăng ký một tài khoản</h2>
+                            </div>
+                            <!-- <h4 class="typing-effect"></h4> -->
                             <label for="username">Tên đăng nhập</label>
                             <div class="mb-3">
                                 <input type="text" class="form-control" id="username" name="username"
@@ -71,19 +74,7 @@
                                 <a href="{{ url('login') }}" class="text-decoration-none">Đăng nhập ngay</a>
                             </div>
                         </div>
-
-                        <div class="d-flex align-items-center justify-content-between mt-3">
-                            <span class="flex-grow-1">
-                                <hr>
-                            </span>
-                            <p class="mx-2 mb-0">Hoặc</p>
-                            <span class="flex-grow-1">
-                                <hr>
-                            </span>
-                        </div>
-
                     </div>
-
                     <div class="card-footer text-center text-muted">
                         Website by team © Staynest™
                     </div>
@@ -189,21 +180,21 @@
         });
 
         // Hiệu ứng typing cho tiêu đề
-        const text = "Đăng ký một tài khoản"; // Văn bản cần hiệu ứng typing
-        let index = 0;
-        const typingSpeed = 100; // Tốc độ typing (ms)
-        const element = document.querySelector(".typing-effect");
+        // const text = "Đăng ký một tài khoản"; // Văn bản cần hiệu ứng typing
+        // let index = 0;
+        // const typingSpeed = 100; // Tốc độ typing (ms)
+        // const element = document.querySelector(".typing-effect");
 
-        function typeWriter() {
-            if (index < text.length) {
-                element.textContent += text.charAt(index);
-                index++;
-                setTimeout(typeWriter, typingSpeed);
-            }
-        }
+        // function typeWriter() {
+        //     if (index < text.length) {
+        //         element.textContent += text.charAt(index);
+        //         index++;
+        //         setTimeout(typeWriter, typingSpeed);
+        //     }
+        // }
 
-        window.onload = () => {
-            typeWriter();
-        };
+        // window.onload = () => {
+        //     typeWriter();
+        // };
     </script>
 @endsection

@@ -41,9 +41,24 @@ body {
 
 .typing-effect {
     font-size: 24px;
-    /* font-family: 'Time', Courier, monospace; */
     white-space: nowrap;
-    border-right: 2px solid;
-    width: 100%;
-    overflow: hidden;
+    width: fit-content;
+}
+
+/*  */
+@keyframes animation_text {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 100%;
+    }
+}
+
+.login-card {
+    display: flex;
+    justify-content: center;
+    height: 80vh;
+    align-items: center;
 }
