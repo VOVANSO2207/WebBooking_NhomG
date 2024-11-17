@@ -26,6 +26,17 @@
 
 <div class="content-wrapper">
     <div class="container-xxl flex-grow-1 container-p-y">
+         <!-- Success/Failure Messages -->
+         @if (session('success'))
+            <div class="alert alert-success" role="alert">
+                {{ session('success') }}
+            </div>
+        @elseif(session('error'))
+            <div class="alert alert-danger" role="alert">
+                {{ session('error') }}
+            </div>
+        @endif
+        
         <div class="card">
             <h5 class="card-header text-white" style="background-color: #696cff; border-color: #696cff;">BOOKING</h5>
             <div class="table-responsive text-nowrap content1">
@@ -181,16 +192,8 @@
                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
                     }
                 })
-                    .then(response => {
-                        if (response.ok) {
-                            location.reload(); // Cập nhật danh sách sau khi xóa
-                        } else {
-                            console.error('Lỗi khi xóa đặt phòng:', response.statusText);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Lỗi khi thực hiện yêu cầu xóa:', error);
-                    });
+                if (!confirm('Bạn có chắc chắn muốn đơn đặt phòng này?')) return;
+                location.reload();
             }
         });
         const bookingDetailModal = document.getElementById('bookingDetailModal');

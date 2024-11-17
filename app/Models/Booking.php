@@ -43,11 +43,24 @@ class Booking extends Model
             return static::query(); // Trả về tất cả đặt phòng
         }
 
-        return static::where(function ($query) use ($keyword) {
-            $query->where('user_id', 'LIKE', "%{$keyword}%")
-                ->orWhere('room_id', 'LIKE', "%{$keyword}%")
-                ->orWhere('promotion_id', 'LIKE', "%{$keyword}%");
-        });
+        return self::query()
+            ->when($keyword, function ($query, $keyword) {
+                $query->where(function ($q) use ($keyword) {
+                    // Tìm kiếm trên trường 'username' từ bảng 'users' với LIKE
+                    $q->whereHas('user', function ($queryUser) use ($keyword) {
+                        $queryUser->where('username', 'LIKE', "%{$keyword}%")
+                                ->orWhere('email', 'LIKE', "%{$keyword}%"); // Thêm tìm kiếm email
+                    })
+                    // Tìm kiếm trên trường 'name' từ bảng 'rooms'
+                    ->orWhereHas('room', function ($queryRoom) use ($keyword) {
+                        $queryRoom->where('name', 'LIKE', "%{$keyword}%");
+                    })
+                    // Tìm kiếm trên trường 'promotion_code' từ bảng 'promotions'
+                    ->orWhereHas('promotion', function ($queryPromo) use ($keyword) {
+                        $queryPromo->where('promotion_code', 'LIKE', "%{$keyword}%");
+                    });
+                });
+            });
     }
 
     public function deleteBooking()
