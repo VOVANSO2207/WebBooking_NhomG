@@ -371,7 +371,7 @@
                         <div class="view-review ms-2">
                             <div class="group-info-review">
                                 <div class="review-user-name">{{ $review->user->username }}</div>
-                                <div class="created_at">{{ $review->updated_at }}</div>
+                                <div class="created_at">{{ $review->created_at }}</div>
                                 <!-- Hiển thị số sao đánh giá -->
                                 <div class="review-rating">
                                     @for ($i = 1; $i <= 5; $i++)
@@ -509,30 +509,36 @@
         const ratingInput = document.getElementById('ratingInput');
 
         stars.forEach(star => {
+            // Khi click
             star.addEventListener('click', function () {
-                // Lấy giá trị số sao được chọn
                 const rating = this.getAttribute('data-value');
                 ratingInput.value = rating;
 
-                // Reset tất cả sao
+                // Reset các sao
                 stars.forEach(s => s.classList.remove('selected'));
 
-                // Tô màu các sao đến giá trị được chọn
+                // Tô màu từ sao đầu tiên đến ngôi sao được chọn
                 for (let i = 0; i < rating; i++) {
                     stars[i].classList.add('selected');
                 }
             });
 
-            // Thêm hiệu ứng hover để tô màu tạm thời khi rê chuột
+            // Khi hover
             star.addEventListener('mouseover', function () {
+                const hoverValue = this.getAttribute('data-value');
+
+                // Reset hover
                 stars.forEach(s => s.classList.remove('hover'));
-                for (let i = 0; i < this.getAttribute('data-value'); i++) {
+
+                // Tô màu từ sao đầu tiên đến ngôi sao được hover
+                for (let i = 0; i < hoverValue; i++) {
                     stars[i].classList.add('hover');
                 }
             });
 
-            // Bỏ hiệu ứng hover khi chuột rời khỏi
+            // Khi chuột rời khỏi
             star.addEventListener('mouseout', function () {
+                // Xóa hiệu ứng hover
                 stars.forEach(s => s.classList.remove('hover'));
             });
         });

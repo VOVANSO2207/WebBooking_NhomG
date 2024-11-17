@@ -518,10 +518,14 @@ body {
                 }
             }
 
-            .rating-stars .star.selected,
-            .rating-stars .star:hover~.star {
+            .rating-stars .star.selected {
                 color: #ff4500;
             }
+
+            .rating-stars .star.hover {
+                color: #ff4500;
+            }
+
         }
 
         .btn-submit button {

@@ -26,11 +26,6 @@
                     </ul>
                 </div>
                 <div class="profile-header col-md-2">
-                    <!-- Nếu chưa đăng nhập -->
-                    <div class="group-left-header">
-                        <a href="{{ route('login') }}" class="login">Đăng nhập/</a>
-                        <a href="{{ url('register') }}" class="register ms-2">Đăng ký</a>
-                    </div>
                     @if (auth()->check())
                         <div class="loged">
                             <div class="group-left-header d-flex align-items-center justify-content-center">
@@ -79,6 +74,12 @@
                                     @csrf
                                 </form>
                             </div>
+                        </div>
+                    @else
+                        <!-- Nếu chưa đăng nhập -->
+                        <div class="group-left-header">
+                            <a href="{{ route('login') }}" class="login">Đăng nhập/</a>
+                            <a href="{{ url('register') }}" class="register ms-2">Đăng ký</a>
                         </div>
                     @endif
                 </div>
