@@ -328,10 +328,10 @@ class HotelController extends Controller
             // Xóa khách sạn mà không xóa các phòng, hình ảnh hay tiện nghi
             $hotel->delete();
 
-            return response()->json(['success' => true, 'message' => 'Khách sạn đã được xóa.']);
+            return redirect()->route('admin.viewhotel')->with('success', 'Khách sạn đã được xóa.');
         }
 
-        return response()->json(['success' => false, 'message' => 'Khách sạn không tồn tại.'], 404);
+        return redirect()->route('admin.viewhotel')->with('error', 'Khách sạn không tồn tại.');
     }
 
 
@@ -340,18 +340,13 @@ class HotelController extends Controller
         // Lấy từ khóa tìm kiếm từ request
         $keyword = $request->get('search');
 
-        // Kiểm tra nếu từ khóa tìm kiếm rỗng, hiển thị tất cả kết quả
-        if (empty($keyword)) {
-            $hotels = Hotel::getAllHotels();
-        } else {
-            // Thực hiện tìm kiếm toàn văn trên các trường name và description
-            $hotels = Hotel::whereRaw('MATCH(hotel_name, description) AGAINST(? IN BOOLEAN MODE)', [$keyword])
-                ->paginate(5);
-        }
+        // Thực hiện tìm kiếm bằng phương thức searchHotel từ model
+        $hotels = Hotel::searchHotel($keyword)->paginate(5);
 
         // Trả về view với kết quả tìm kiếm
         return view('admin.search_results_hotel', compact('hotels'));
     }
+
 
 
     public function editHotel($hotel_id)
