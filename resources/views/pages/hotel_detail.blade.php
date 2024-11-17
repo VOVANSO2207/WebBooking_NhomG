@@ -325,13 +325,14 @@
                     action="{{ route('reviews.store', $hotel->hotel_id) }}" method="POST" enctype="multipart/form-data"
                 @else action="javascript:void(0)" onclick="showLoginModal()" @endif>
                     @csrf
-                    @csrf
                     <div class="icon-profile">
                         <i class="fa-solid fa-circle-user"></i>
                     </div>
                     <div class="group-text-review">
-                        <input type="text" placeholder="Mời bạn nhập đánh giá..." class="form-control" id="inputReview"
-                            name="comment" required>
+                        <textarea name="comment" id="inputReview" placeholder="Mời bạn nhập đánh giá..."
+                            class="form-control" required></textarea>
+                        <!-- <input type="text" placeholder="Mời bạn nhập đánh giá..." class="form-control" id="inputReview"
+                            name="comment" required> -->
                         <div class="upload-file-review d-flex">
                             <div class="emoj-review">
                                 <button type="button" id="emojiButton" class="btn btn-light"></button>
@@ -382,7 +383,7 @@
                                     @endfor
                                 </div>
                                 <div class="comment-text">
-                                    {{ $review->comment }}
+                                    {!! $review->comment !!}
                                 </div>
                                 <!-- Hiển thị hình ảnh đánh giá nếu có -->
                                 <div class="image-review">

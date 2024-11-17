@@ -144,14 +144,16 @@ class Hotel extends Model
         $cityName = $city ? $city->city_name : 'Chưa xác định';
 
         // Đếm số lượng khách sạn tại thành phố
-        $hotelCount = self::where('city_id', $cityId)->count();
+        $hotelCount = self::where('city_id', $cityId)
+            ->count(); // Đếm số lượng khách sạn hợp lệ
 
         // dd($adults . ' ' . $children . ' ' . $adults + $children . ' ' . $rooms . ' ' . $cityId);
 
         // Tiến hành tìm kiếm các khách sạn
-        $hotels = self::where(function ($query) use ($cityId, $checkInDate, $checkOutDate, $adults, $children) {
-            $query->where('city_id', $cityId)
-                ->whereHas('rooms', function ($query) use ($checkInDate, $checkOutDate, $adults, $children) {
+        $hotels = self::where(function ($query) use ($cityId, $checkInDate, $checkOutDate, $rooms, $adults, $children) {
+            // Trường hợp 1: Tìm khách sạn có địa điểm và ngày hợp lệ
+            $query->where('city_id', 'LIKE', "%$cityId%")
+                ->whereHas('rooms', function ($query) use ($checkInDate, $checkOutDate, $rooms, $adults, $children) {
                     $query->where('capacity', '>=', $adults + $children)
                         ->whereDoesntHave('bookings', function ($query) use ($checkInDate, $checkOutDate) {
                             $query->where(function ($q) use ($checkInDate, $checkOutDate) {
@@ -160,14 +162,25 @@ class Hotel extends Model
                             });
                         });
                 });
+            // Trường hợp 2: Nếu không có ngày hợp lệ thì tìm theo địa điểm
+            $query->orWhere('city_id', $cityId);
+
+            // Trường hợp 3: Nếu không có địa điểm hợp lệ thì tìm theo ngày
+            $query->orWhereHas('rooms', function ($query) use ($checkInDate, $checkOutDate, $adults, $children) {
+                $query->where('capacity', '>=', $adults + $children)
+                    ->whereDoesntHave('bookings', function ($query) use ($checkInDate, $checkOutDate) {
+                        $query->where(function ($q) use ($checkInDate, $checkOutDate) {
+                            $q->where('check_in', '<', $checkOutDate)
+                                ->where('check_out', '>', $checkInDate);
+                        });
+                    });
+            });
         })
             ->with([
                 'rooms' => function ($query) use ($rooms) {
-                    $query->take($rooms)
-                    ->with('roomType'); 
-                },
+                    $query->take($rooms); // Giới hạn số lượng phòng hiển thị
+                }
             ])
-            ->withCount('reviews') 
             ->orderByRaw("CASE WHEN city_id = ? THEN 1 ELSE 2 END", [$cityId]) // Ưu tiên khách sạn có city_id khớp chính xác
             ->get();
 
@@ -178,7 +191,6 @@ class Hotel extends Model
             'cityName' => $cityName
         ];
     }
-
     public function getIsFavoriteAttribute()
     {
         if (Auth::check()) {
