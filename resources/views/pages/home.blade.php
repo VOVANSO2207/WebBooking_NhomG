@@ -239,11 +239,11 @@
                                 <p class="location m-0">{{ $hotel->city->city_name }} - <span
                                         class="name-hotel">{{ $hotel->hotel_name }}</span></p>
                                 <p class="price-old m-0">
-                                    {{ number_format($hotel->average_price, 0, ',', '.') }} VNĐ VNĐ
+                                    {{ number_format($hotel->average_price, 0, ',', '.') }} VNĐ
                                 </p>
                                 <div class="row price-top">
                                     <div class="col-md-7">
-                                        <span class="price-new">VNĐ
+                                        <span class="price-new">
                                             {{ number_format($hotel->average_price_sale, 0, ',', '.') }} VNĐ
                                             <span>/ Khách</span>
                                         </span>
