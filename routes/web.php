@@ -8,7 +8,7 @@ use App\Http\Controllers\RoomController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HotelController;
-use App\Http\Controllers\CitiesController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\PromotionsController;
 use App\Http\Controllers\PaymentsController;
@@ -239,3 +239,4 @@ Route::post('reviews/like/{review_id}', [ReviewsController::class, 'like']);
 
 Route::delete('/review/{review_id}', [ReviewsController::class, 'destroy'])->name('reviews.destroy');
 Route::patch('/reviews/{review}', [ReviewsController::class, 'update'])->name('reviews.update');
+Route::delete('/notifications/{key}', [NotificationController::class, 'deleteNotification']);

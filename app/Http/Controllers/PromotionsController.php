@@ -75,6 +75,21 @@ class PromotionsController extends Controller
         if (!$result['success']) {
             return response()->json(['errors' => $result['errors'] ?? $result['error']], 422);
         }
+        
+         // Lấy thông tin từ $result
+        $promotionCode = $request['promotion_code'];
+        $discountAmount = $request['discount_amount'];
+        $description = $request['pro_description'];
+        $startDate = $request['start_date'];
+        $endDate = $request['end_date'];
+        $formattedAmount = number_format($discountAmount, 0, ',', '.') . ' VND';
+
+        // Thêm thông báo vào session cho tất cả người dùng
+        $notifications = session('notifications', []);
+        $notifications[] = [
+            'content' => "Mã khuyến mãi mới '{$promotionCode}' đã có! Giảm giá {$formattedAmount} . {$description}. Áp dụng từ ngày {$startDate} đến hết ngày {$endDate}.",
+        ];
+        session(['notifications' => $notifications]);
 
         return response()->json(['success' => $result['message']], 200);
     }

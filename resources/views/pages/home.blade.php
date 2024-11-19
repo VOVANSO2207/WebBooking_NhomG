@@ -83,11 +83,13 @@
 
                                 <!-- Notification Dropdown -->
                                 <div class="notification-dropdown" id="notificationDropdown" style="display: none;">
-                                    <h5 class="dropdown-header">Notifications</h5>
-                                    <div class="notification-item">You have a new message</div>
-                                    <div class="notification-item">Booking confirmed</div>
-                                    <div class="notification-item">Special offer just for you!</div>
-                                    <div class="notification-item">Your review has been approved</div>
+                                    <h5 class="dropdown-header p-3">Thông báo</h5>
+                                    @foreach(session('notifications', []) as $key => $notification)
+                                        <div class="notification-item d-flex justify-content-between align-items-center">
+                                            <span>{{ $notification['content'] }}</span>
+                                            <button class="btn btn-sm btn-danger delete-notification" data-key="{{ $key }}">Xóa</button>
+                                        </div>
+                                    @endforeach
                                 </div>
                             </div>
 
@@ -671,6 +673,31 @@
             });
         });
     }
+
+    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('click', function (e) {
+        if (e.target.classList.contains('delete-notification')) {
+            const key = e.target.getAttribute('data-key'); // Lấy key của thông báo
+
+            // Gửi yêu cầu xóa thông báo
+            fetch(`/notifications/${key}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                },
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.success) {
+                    // Xóa thông báo khỏi giao diện
+                    e.target.closest('.notification-item').remove();
+                }
+            })
+            .catch((error) => console.error('Error deleting notification:', error));
+        }
+    });
+
+});
 
 </script>
 @endsection
