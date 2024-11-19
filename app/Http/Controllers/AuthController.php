@@ -61,6 +61,11 @@ class AuthController extends Controller
             // Lưu session token vào Laravel session
             $request->session()->put('session_token', $sessionToken);
     
+            // Thiết lập thông báo vào session
+            session(['notifications' => [
+                ['content' => 'Stay Nest xin chào bạn!'],
+            ]]);
+
             // Điều hướng người dùng dựa trên vai trò
             return match ($user->role_id) {
                 1 => redirect()->route('admin.index'),
