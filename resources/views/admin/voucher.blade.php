@@ -1,8 +1,8 @@
 @extends('admin.layouts.master')
 
 @php
-use App\Helpers\IdEncoder;
-use Carbon\Carbon;
+    use App\Helpers\IdEncoder;
+    use Carbon\Carbon;
 @endphp
 
 @section('admin-container')
@@ -71,7 +71,7 @@ use Carbon\Carbon;
                                                                     <tr class="voucher-detail" data-id="{{ IdEncoder::encodeId($voucher->promotion_id) }}"
                                                                         data-updated-at="{{ $voucher->updated_at }}">
                                                                         <td class="{{ $textClass }}">{{ $key + 1 }}</td>
-                                                                        <td class="{{ $textClass }}">{{ $voucher->pro_title }}</td>
+                                                                        <td class="{{ $textClass }}">{{ Str::limit( $voucher->pro_title, 30)}}</td>
                                                                         <td class="{{ $textClass }}">{{ $voucher->promotion_code }}</td>
                                                                         <td class="{{ $textClass }}">{{ number_format($voucher->discount_amount, 0, ',', '.') }} VND
                                                                         </td>
@@ -79,6 +79,7 @@ use Carbon\Carbon;
                                                                         <td class="{{ $textClass }}">{{ $voucher->start_date }}</td>
                                                                         <td class="{{ $textClass }}">{{ $voucher->end_date }}</td>
                                                                     </tr>
+                                                                   
                                                 @endforeach
                         @endif
                     </tbody>
@@ -104,7 +105,7 @@ use Carbon\Carbon;
             </div>
             <div class="modal-body">
                 <div class="voucher-detail">
-                <div class="voucher-detail-item detail-item">
+                    <div class="voucher-detail-item detail-item">
                         <strong>Promotion Title:</strong>
                         <span id="modalPromotionTitle"></span>
                     </div>
@@ -208,7 +209,7 @@ use Carbon\Carbon;
                         let discountAmount = voucher.discount_amount;
                         let formattedAmount = Number(discountAmount).toLocaleString('vi-VN') + ' VND';
                         document.getElementById('modalDiscountAmount').innerText = formattedAmount;
-                        document.getElementById('modalProDescription').innerText = voucher.pro_description ? voucher.pro_description.substring(0, 10) : 'Không có mô tả'; 
+                        document.getElementById('modalProDescription').innerText = voucher.pro_description ? voucher.pro_description.substring(0, 10) : 'Không có mô tả';
 
                         document.getElementById('modalStartDate').innerText = voucher.start_date;
                         document.getElementById('modalEndDate').innerText = voucher.end_date;
