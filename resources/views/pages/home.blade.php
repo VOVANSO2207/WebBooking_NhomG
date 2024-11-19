@@ -70,49 +70,55 @@
                     </ul>
                 </div>
                 <div class="profile-header col-md-2">
-
+                    <!-- Nếu chưa đăng nhập -->
+                    <!-- <div class="group-left-header">
+                                                                                        <a href="#" class="login">Đăng nhập/</a>
+                                                                                        <a href="#" class="register">Đăng ký</a>
+                                                                                    </div> -->
                     <!-- Nếu đã đăng nhập -->
-                    @if (auth()->check())
-                        <div class="loged">
-                            <div class="group-left-header d-flex align-items-center justify-content-center">
-                                <div class="col-md-2 text-center">
-                                    <i class="fa-solid fa-bell fa-xl" id="notificationBell" style="cursor: pointer;"></i>
+                    <div class="loged">
+                        <div class="group-left-header d-flex align-items-center justify-content-center">
+                            <div class="col-md-2 text-center">
+                                <i class="fa-solid fa-bell fa-xl" id="notificationBell" style="cursor: pointer;"></i>
 
-                                    <!-- Notification Dropdown -->
-                                    <div class="notification-dropdown" id="notificationDropdown" style="display: none;">
-                                        <h5 class="dropdown-header">Notifications</h5>
-                                        <div class="notification-item">You have a new message</div>
-                                        <div class="notification-item">Booking confirmed</div>
-                                        <div class="notification-item">Special offer just for you!</div>
-                                        <div class="notification-item">Your review has been approved</div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-8 text-center ms-3 me-2">
-                                    <p class="name-user m-0 p-0" id="userIcon">
-                                        <span style="display: inline-block; transform: rotate(90deg);">&gt;</span>
-                                        <abbr title="{{ Auth::check() ? Auth::user()->username : 'Guest' }}"
-                                            style="text-decoration: none;">
-                                            {{ Auth::check() ? Auth::user()->username : 'Guest' }}
-                                        </abbr>
-                                    </p>
-                                </div>
-
-                                <div class="col-md-2 text-center" style="width: 100%;height:100%;">
-                                    <img src="{{ Auth::check() && Auth::user()->avatar ? asset('storage/images/' . Auth::user()->avatar) : asset('images/user-profile.png') }}"
-                                        alt="Avatar" class="img-fluid rounded-circle"
-                                        style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;">
-
+                                <!-- Notification Dropdown -->
+                                <div class="notification-dropdown" id="notificationDropdown" style="display: none;">
+                                    <h5 class="dropdown-header">Notifications</h5>
+                                    <div class="notification-item">You have a new message</div>
+                                    <div class="notification-item">Booking confirmed</div>
+                                    <div class="notification-item">Special offer just for you!</div>
+                                    <div class="notification-item">Your review has been approved</div>
                                 </div>
                             </div>
-                            <div class="dropdown-menu" id="userDropdown" style="display: none;">
-                                <a class="dropdown-item dropdown-item-staynest" href="{{ route('pages.account') }}">Tài
-                                    Khoản</a>
-                                <a class="dropdown-item dropdown-item-staynest"
-                                    href="{{ route('pages.account') }}?tab=nav-contact">Yêu Thích</a>
-                                <a class="dropdown-item dropdown-item-staynest"
-                                    href="{{ route('pages.account') }}?tab=nav-profile">Hóa Đơn</a>
-                                <a class="dropdown-item dropdown-item-staynest" href="#">Voucher</a>
+
+                            <div class="col-md-8 text-center ms-3 me-2">
+                                <p class="name-user m-0 p-0" id="userIcon">
+                                    <span style="display: inline-block; transform: rotate(90deg);">&gt;</span>
+                                    <abbr title="{{ Auth::check() ? Auth::user()->username : 'Guest' }}"
+                                        style="text-decoration: none;">
+                                        {{ Auth::check() ? Auth::user()->username : 'Guest' }}
+                                    </abbr>
+                                </p>
+                            </div>
+
+                            <div class="col-md-2 text-center" style="width: 100%;height:100%;">
+                                <img src="{{ Auth::check() && Auth::user()->avatar ? asset('images/' . Auth::user()->avatar) : asset('images/user-profile.png') }}"
+                                    alt="Avatar" class="img-fluid rounded-circle"
+                                    style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;">
+
+                            </div>
+
+
+                        </div>
+                        <div class="dropdown-menu" id="userDropdown" style="display: none;">
+                            <a class="dropdown-item dropdown-item-staynest" href="{{ route('pages.account') }}">Tài
+                                Khoản</a>
+                            <a class="dropdown-item dropdown-item-staynest"
+                                href="{{ route('pages.account') }}?tab=nav-contact">Yêu Thích</a>
+                            <a class="dropdown-item dropdown-item-staynest"
+                                href="{{ route('pages.account') }}?tab=nav-profile">Hóa Đơn</a>
+                            <a class="dropdown-item dropdown-item-staynest" href="#">Voucher</a>
+                            @if (Auth::check())
                                 <a href="#" class="dropdown-item dropdown-item-staynest text-danger"
                                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     Đăng Xuất
@@ -120,15 +126,13 @@
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                     @csrf
                                 </form>
-                            </div>
+                            @else
+                                <a href="{{ route('login') }}" class="dropdown-item dropdown-item-staynest">
+                                    Đăng Nhập
+                                </a>
+                            @endif
                         </div>
-                    @else
-                        <!-- Nếu chưa đăng nhập -->
-                        <div class="group-left-header">
-                            <a href="{{ route('login') }}" class="login">Đăng nhập/</a>
-                            <a href="{{ url('register') }}" class="register ms-2">Đăng ký</a>
-                        </div>
-                    @endif
+                    </div>
                 </div>
             </div>
         </div>
@@ -390,8 +394,8 @@
                         <a href="{{ route('pages.hotel_detail', ['hotel_id' => $hotel->hotel_id]) }}" class="group-offers">
                             <div class="shape-in">
                                 @if ($hotel->images->isNotEmpty())
-                                    <img class="image-hotel-2"
-                                        src="{{ asset('storage/images/' . $hotel->images->first()->image_url) }}" alt="">
+                                    <img class="image-hotel-2" src="{{ asset('storage/images/' . $hotel->images->first()->image_url) }}"
+                                        alt="">
                                 @else
                                     <img class="image-hotel-2" src="{{ asset('storage/images/defaullt-image.png') }}" alt="">
                                 @endif
@@ -633,39 +637,39 @@
             hotelContainer.appendChild(hotelCard);
         });
         $(document).ready(function () {
-            $('.heart-icon').on('click', function (event) {
-                event.preventDefault();
-                const heart = $(this).find('i');
-                const hotelId = $(this).data('hotel-id');
+        $('.heart-icon').on('click', function (event) {
+            event.preventDefault();
+            const heart = $(this).find('i');
+            const hotelId = $(this).data('hotel-id');
 
-                // Kiểm tra trạng thái yêu thích để xác định phương thức
-                const isFavorite = heart.hasClass('fa-solid');
+            // Kiểm tra trạng thái yêu thích để xác định phương thức
+            const isFavorite = heart.hasClass('fa-solid');
 
-                // Gửi yêu cầu AJAX để thêm hoặc xóa khách sạn khỏi danh sách yêu thích
-                $.ajax({
-                    url: '/favorites',
-                    method: isFavorite ? 'DELETE' : 'POST',
-                    data: {
-                        hotel_id: hotelId,
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function (response) {
-                        // Cập nhật lại trạng thái của biểu tượng trái tim
-                        if (isFavorite) {
-                            // Nếu khách sạn đã yêu thích, xóa khỏi yêu thích và đổi lại màu tim
-                            heart.removeClass('fa-solid red').addClass('fa-regular');
-                        } else {
-                            // Nếu chưa yêu thích, thêm vào yêu thích và đổi màu tim
-                            heart.removeClass('fa-regular').addClass('fa-solid red');
-                        }
-                        // alert(response.message);
-                    },
-                    error: function (xhr) {
-                        alert(xhr.responseJSON.message || 'Đã xảy ra lỗi.');
+            // Gửi yêu cầu AJAX để thêm hoặc xóa khách sạn khỏi danh sách yêu thích
+            $.ajax({
+                url: '/favorites',
+                method: isFavorite ? 'DELETE' : 'POST',
+                data: {
+                    hotel_id: hotelId,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function (response) {
+                    // Cập nhật lại trạng thái của biểu tượng trái tim
+                    if (isFavorite) {
+                        // Nếu khách sạn đã yêu thích, xóa khỏi yêu thích và đổi lại màu tim
+                        heart.removeClass('fa-solid red').addClass('fa-regular');
+                    } else {
+                        // Nếu chưa yêu thích, thêm vào yêu thích và đổi màu tim
+                        heart.removeClass('fa-regular').addClass('fa-solid red');
                     }
-                });
+                    // alert(response.message);
+                },
+                error: function (xhr) {
+                    alert(xhr.responseJSON.message || 'Đã xảy ra lỗi.');
+                }
             });
         });
+    });
     }
 
 </script>
