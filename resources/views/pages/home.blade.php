@@ -394,10 +394,10 @@
                         <a href="{{ route('pages.hotel_detail', ['hotel_id' => $hotel->hotel_id]) }}" class="group-offers">
                             <div class="shape-in">
                                 @if ($hotel->images->isNotEmpty())
-                                    <img class="image-hotel-2" src="{{ asset('storage/images/' . $hotel->images->first()->image_url) }}"
+                                    <img class="image-hotel-2" src="{{ asset('images/' . $hotel->images->first()->image_url) }}"
                                         alt="">
                                 @else
-                                    <img class="image-hotel-2" src="{{ asset('storage/images/defaullt-image.png') }}" alt="">
+                                    <img class="image-hotel-2" src="{{ asset('images/defaullt-image.png') }}" alt="">
                                 @endif
 
                                 <div class="group-info-hotel">
@@ -637,39 +637,39 @@
             hotelContainer.appendChild(hotelCard);
         });
         $(document).ready(function () {
-        $('.heart-icon').on('click', function (event) {
-            event.preventDefault();
-            const heart = $(this).find('i');
-            const hotelId = $(this).data('hotel-id');
+            $('.heart-icon').on('click', function (event) {
+                event.preventDefault();
+                const heart = $(this).find('i');
+                const hotelId = $(this).data('hotel-id');
 
-            // Kiểm tra trạng thái yêu thích để xác định phương thức
-            const isFavorite = heart.hasClass('fa-solid');
+                // Kiểm tra trạng thái yêu thích để xác định phương thức
+                const isFavorite = heart.hasClass('fa-solid');
 
-            // Gửi yêu cầu AJAX để thêm hoặc xóa khách sạn khỏi danh sách yêu thích
-            $.ajax({
-                url: '/favorites',
-                method: isFavorite ? 'DELETE' : 'POST',
-                data: {
-                    hotel_id: hotelId,
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function (response) {
-                    // Cập nhật lại trạng thái của biểu tượng trái tim
-                    if (isFavorite) {
-                        // Nếu khách sạn đã yêu thích, xóa khỏi yêu thích và đổi lại màu tim
-                        heart.removeClass('fa-solid red').addClass('fa-regular');
-                    } else {
-                        // Nếu chưa yêu thích, thêm vào yêu thích và đổi màu tim
-                        heart.removeClass('fa-regular').addClass('fa-solid red');
+                // Gửi yêu cầu AJAX để thêm hoặc xóa khách sạn khỏi danh sách yêu thích
+                $.ajax({
+                    url: '/favorites',
+                    method: isFavorite ? 'DELETE' : 'POST',
+                    data: {
+                        hotel_id: hotelId,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function (response) {
+                        // Cập nhật lại trạng thái của biểu tượng trái tim
+                        if (isFavorite) {
+                            // Nếu khách sạn đã yêu thích, xóa khỏi yêu thích và đổi lại màu tim
+                            heart.removeClass('fa-solid red').addClass('fa-regular');
+                        } else {
+                            // Nếu chưa yêu thích, thêm vào yêu thích và đổi màu tim
+                            heart.removeClass('fa-regular').addClass('fa-solid red');
+                        }
+                        // alert(response.message);
+                    },
+                    error: function (xhr) {
+                        alert(xhr.responseJSON.message || 'Đã xảy ra lỗi.');
                     }
-                    // alert(response.message);
-                },
-                error: function (xhr) {
-                    alert(xhr.responseJSON.message || 'Đã xảy ra lỗi.');
-                }
+                });
             });
         });
-    });
     }
 
 </script>
