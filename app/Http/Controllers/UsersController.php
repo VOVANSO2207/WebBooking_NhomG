@@ -93,7 +93,7 @@ class UsersController extends Controller
         if ($request->hasFile('avatar')) {
             // Lưu ảnh vào thư mục public/storage/images
             $avatarName = time() . '.' . $request->avatar->extension();
-            $request->avatar->move(public_path('images'), $avatarName);
+            $request->avatar->move(public_path('storage/images'), $avatarName);
             $user->avatar = $avatarName; // Lưu tên ảnh vào cơ sở dữ liệu
         } else {
             $user->avatar = 'default-avatar.png';
@@ -128,7 +128,7 @@ class UsersController extends Controller
     public function search(Request $request)
     {
         $keyword = $request->get('search');
-        
+
         if (empty($keyword)) {
             // Nếu từ khóa tìm kiếm trống, hiển thị tất cả kết quả
             $results = User::getAllUsers();
@@ -208,7 +208,7 @@ class UsersController extends Controller
         if ($request->hasFile('avatar')) {
             // Lưu ảnh vào thư mục public/images
             $avatarName = time() . '.' . $request->avatar->extension();
-            $request->avatar->move(public_path('images'), $avatarName);
+            $request->avatar->move(public_path('storage/images'), $avatarName);
             $user->avatar = $avatarName; // Cập nhật tên ảnh vào trường avatar
         }
 
@@ -255,7 +255,7 @@ class UsersController extends Controller
                 'username.required' => 'Vui lòng nhập họ và tên.',
                 'username.min' => 'Họ và tên phải có ít nhất 5 ký tự.',
                 'username.max' => 'Họ và tên không được dài quá 100 ký tự.',
-             
+
                 'username.regex' => 'Họ và tên không được chứa ký tự đặc biệt và phải đúng định dạng.',
                 'username.not_regex' => 'Vui lòng nhập họ và tên hợp lệ.',
                 'email.required' => 'Vui lòng nhập địa chỉ email.',
@@ -267,7 +267,7 @@ class UsersController extends Controller
                 'phone_number.required' => 'Vui lòng nhập số điện thoại.',
                 // 'avatar.image' => 'Tệp phải là một ảnh hợp lệ.',
                 'avatar.mimes' => 'Ảnh chỉ chấp nhận định dạng: jpeg, png, jpg.',
-                'phone_number.required' => 'Vui lòng nhập số điện thoại.', 
+                'phone_number.required' => 'Vui lòng nhập số điện thoại.',
                 'phone_number.regex' => 'Số điện thoại không hợp lệ. Vui lòng nhập số điện thoại di động gồm 10 chữ số hoặc số điện thoại cố định theo định dạng đúng. Đảm bảo rằng số điện thoại bao gồm mã mạng và không chứa ký tự đặc biệt.',
                 'avatar.max' => 'Ảnh tải lên không được vượt quá 2MB.',
             ];
@@ -298,12 +298,12 @@ class UsersController extends Controller
             'newPassword' => [
                 'required',
                 'string',
-                'min:8', 
-                'max:32', 
-                'regex:/[a-zA-Z]/', 
-                'regex:/[0-9]/', 
-                'regex:/[!@#$%^&*(),.?":{}|<>]/', 
-                'confirmed', 
+                'min:8',
+                'max:32',
+                'regex:/[a-zA-Z]/',
+                'regex:/[0-9]/',
+                'regex:/[!@#$%^&*(),.?":{}|<>]/',
+                'confirmed',
             ],
         ], [
             'newPassword.required' => 'Vui lòng nhập mật khẩu.',
@@ -312,7 +312,7 @@ class UsersController extends Controller
             'newPassword.regex' => 'Mật khẩu phải chứa ít nhất một chữ cái, một chữ số và một ký tự đặc biệt.',
             'newPassword.confirmed' => 'Mật khẩu xác nhận không khớp.',
         ]);
-        
+
         // Lấy thông tin người dùng hiện tại
         $user = auth()->user();
         // Cập nhật mật khẩu mới

@@ -57,39 +57,41 @@
                     </thead>
                     <tbody>
                         @forelse ($hotels as $index => $hotel)
-                            <tr class="hotel-detail" data-id="{{ IdEncoder::encodeId($hotel->hotel_id) }}">
-                                <td>{{ $index + 1 }}</td>
-                                <td>
-                                    <div class="swiper room-swiper">
-                                        <div class="swiper-wrapper">
-                                            @if ($hotel->images->isEmpty())
-                                                <div class="swiper-slide">
-                                                    <img src="{{ asset('images/img-upload.jpg') }}" alt="Default Image">
-                                                </div>
-                                            @else
-                                                <div class="swiper-slide">
-                                                    @php
-                                                        $firstImage = $hotel->images->first();
-                                                    @endphp
-                                                    @if (file_exists(public_path('images/' . $firstImage->image_url)))
-                                                        <img src="{{ asset('images/' . $firstImage->image_url) }}" alt="Room Image">
-                                                    @elseif (file_exists(public_path('storage/images/' . $firstImage->image_url)))
-                                                        <img src="{{ asset('storage/images/' . $firstImage->image_url) }}" alt="Room Image">
-                                                    @else
-                                                        <img src="{{ asset('images/img-upload.jpg') }}" alt="Default Image">
-                                                    @endif
-                                                </div>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </td>
+                                            <tr class="hotel-detail" data-id="{{ IdEncoder::encodeId($hotel->hotel_id) }}">
+                                                <td>{{ $index + 1 }}</td>
+                                                <td>
+                                                    <div class="swiper room-swiper">
+                                                        <div class="swiper-wrapper">
+                                                            @if ($hotel->images->isEmpty())
+                                                                <div class="swiper-slide">
+                                                                    <img src="{{ asset('images/img-upload.jpg') }}" alt="Default Image">
+                                                                </div>
+                                                            @else
+                                                                                                <div class="swiper-slide">
+                                                                                                    @php
+                                                                                                        $firstImage = $hotel->images->first();
+                                                                                                    @endphp
+                                                                                                    @if (file_exists(public_path('images/' . $firstImage->image_url)))
+                                                                                                        <img src="{{ asset('images/' . $firstImage->image_url) }}" alt="Room Image"
+                                                                                                            style="width: 100%; height: 100px; width: 100px; object-fit:cover; border-radius:50%;">
+                                                                                                    @elseif (file_exists(public_path('storage/images/' . $firstImage->image_url)))
+                                                                                                        <img src="{{ asset('storage/images/' . $firstImage->image_url) }}"
+                                                                                                            alt="Room Image">
+                                                                                                    @else
+                                                                                                        <img src="{{ asset('images/img-upload.jpg') }}" alt="Default Image">
+                                                                                                    @endif
+                                                                                                </div>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                </td>
 
-                                <td>{{ $hotel->hotel_name }}</td>
-                                <td>{{ $hotel->location }}</td>
-                                <td>{!! Str::limit(strip_tags($hotel->description), 50, '...') !!}</td>
-                                <td>{{ $hotel->city->city_name ?? 'N/A' }}</td>
-                                <td>{{ $hotel->rating }}</td>
-                            </tr>
+                                                <td>{{ $hotel->hotel_name }}</td>
+                                                <td>{{ $hotel->location }}</td>
+                                                <td>{!! Str::limit(strip_tags($hotel->description), 50, '...') !!}</td>
+                                                <td>{{ $hotel->city->city_name ?? 'N/A' }}</td>
+                                                <td>{{ $hotel->rating }}</td>
+                                            </tr>
                         @empty
                             <tr>
                                 <td colspan="7" class="text-center">Không có khách sạn nào để hiển thị.</td>
@@ -231,24 +233,24 @@
         });
 
         document.getElementById('confirmDeleteHotelButton').addEventListener('click', function () {
-        fetch(`/hotels/${currentHotelId}/delete`, {
-            method: 'DELETE',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Content-Type': 'application/json',
-            },
-        })
-        if (!confirm('Bạn có chắc chắn muốn khách sạn này?')) return;
-        location.reload();
-    });
-    const hotelDetailModal = document.getElementById('hotelDetailModal');
+            fetch(`/hotels/${currentHotelId}/delete`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Content-Type': 'application/json',
+                },
+            })
+            if (!confirm('Bạn có chắc chắn muốn khách sạn này?')) return;
+            location.reload();
+        });
+        const hotelDetailModal = document.getElementById('hotelDetailModal');
 
-    // Lắng nghe sự kiện đóng modal
-    hotelDetailModal.addEventListener('hidden.bs.modal', function () {
-        // Tự động reload lại trang khi modal đóng
-        location.reload();
+        // Lắng nghe sự kiện đóng modal
+        hotelDetailModal.addEventListener('hidden.bs.modal', function () {
+            // Tự động reload lại trang khi modal đóng
+            location.reload();
+        });
     });
-});
 </script>
 
 @endsection
