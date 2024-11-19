@@ -128,7 +128,7 @@ class PromotionsController extends Controller
         }
 
         return response()->json(['success' => true]);
-
+        
     }
     public function viewVoucherUser()
     {
@@ -136,6 +136,7 @@ class PromotionsController extends Controller
 
         foreach ($vouchers as $voucher) {
             try {
+                // Chuyển đổi end_date sang Carbon và đặt thời gian bắt đầu của ngày
                 $endDate = Carbon::createFromFormat('d/m/Y', $voucher->end_date, 'Asia/Ho_Chi_Minh')->startOfDay();
                 $currentDate = Carbon::now('Asia/Ho_Chi_Minh')->startOfDay();
 
