@@ -171,10 +171,10 @@ class HotelController extends Controller
         $hotel = Hotel::with(['rooms.room_images', 'images', 'city', 'reviews.user', 'reviews.likes'])->findOrFail($hotel_id);
         $rooms = $hotel->rooms()->paginate(4);
         $reviews = $hotel->reviews()->withCount('likes')->latest()->paginate(7);  // Đếm số lượt like
-    
+
         return view('pages.hotel_detail', compact('hotel', 'rooms', 'reviews'));
     }
-    
+
     public function search(Request $request)
     {
         // Lưu các tham số tìm kiếm vào session
@@ -195,6 +195,8 @@ class HotelController extends Controller
 
         // Tách ngày đi và ngày về từ daterange
         list($checkInDate, $checkOutDate) = explode(' - ', $daterange);
+        $daterange = session('daterange'); // Lấy dữ liệu từ session
+
 
         // Gọi phương thức tìm kiếm từ model Hotel
         $hotels = Hotel::searchHotels($location, $checkInDate, $checkOutDate, $rooms, $adults, $children);
@@ -229,7 +231,8 @@ class HotelController extends Controller
             'daterange' => $daterange,
             'rooms' => $rooms,
             'adults' => $adults,
-            'children' => $children
+            'children' => $children,
+
         ]);
     }
 
@@ -609,18 +612,120 @@ class HotelController extends Controller
         return response()->json(['decoded_id' => $decodedId]);
     }
     // Chi tiết đặt phòng 
-    public function getInfoPayment($hotel_id, $room_id)
+    public function getInfoPayment(Request $request, $hotel_id, $room_id)
     {
+        $daterange = $request->input('daterange');
+        if ($daterange) {
+            $request->session()->put('daterange', $daterange);
+        } else {
+            $daterange = session('daterange');
+        }
+
         $hotel = Hotel::with(['images', 'city'])->findOrFail($hotel_id);
         $room = Rooms::with(['room_images', 'amenities'])->where('hotel_id', $hotel_id)->findOrFail($room_id);
         $firstImage = $hotel->images->first();
 
-        // Tính giá giảm
         $originalPrice = $room->price;
         $discountedPrice = $originalPrice - ($originalPrice * ($room->discount_percent / 100));
 
-        return view('pages.pay', compact('hotel', 'room', 'originalPrice', 'discountedPrice'));
+        if ($daterange) {
+            list($checkIn, $checkOut) = explode(' - ', $daterange);
+        
+            // Thiết lập ngôn ngữ tiếng Việt
+            \Carbon\Carbon::setLocale('vi');
+        
+            // Chuyển đổi ngày nhận phòng và trả phòng thành đối tượng Carbon
+            $checkInDay = \Carbon\Carbon::createFromFormat('d/m/Y', trim($checkIn));
+            $checkOutDay = \Carbon\Carbon::createFromFormat('d/m/Y', trim($checkOut));
+
+            
+        
+            // Tính số ngày (bao gồm cả ngày nhận và trả phòng)
+            $days = $checkInDay->diffInDays($checkOutDay) + 1; // +1 để tính cả ngày nhận và ngày trả
+        
+            // Tính số đêm (số ngày - 1)
+            $nights = $days - 1;
+        
+            // Xử lý định dạng ngày check-in
+            $checkInFormattedDay = $checkInDay->format('D'); // Lấy thứ trong tuần
+            switch ($checkInFormattedDay) {
+                case 'Mon':
+                    $checkInFormattedDay = 'Thứ 2';
+                    break;
+                case 'Tue':
+                    $checkInFormattedDay = 'Thứ 3';
+                    break;
+                case 'Wed':
+                    $checkInFormattedDay = 'Thứ 4';
+                    break;
+                case 'Thu':
+                    $checkInFormattedDay = 'Thứ 5';
+                    break;
+                case 'Fri':
+                    $checkInFormattedDay = 'Thứ 6';
+                    break;
+                case 'Sat':
+                    $checkInFormattedDay = 'Thứ 7';
+                    break;
+                case 'Sun':
+                    $checkInFormattedDay = 'CN';
+                    break;
+            }
+        
+            // Định dạng ngày check-in
+            $checkInFormatted = $checkInFormattedDay . ', ' . $checkInDay->format('j') . ' thg ' . $checkInDay->format('m') . ' ' . $checkInDay->format('Y');
+        
+            // Xử lý định dạng ngày check-out
+            $checkOutFormattedDay = $checkOutDay->format('D'); 
+            switch ($checkOutFormattedDay) {
+                case 'Mon':
+                    $checkOutFormattedDay = 'Thứ 2';
+                    break;
+                case 'Tue':
+                    $checkOutFormattedDay = 'Thứ 3';
+                    break;
+                case 'Wed':
+                    $checkOutFormattedDay = 'Thứ 4';
+                    break;
+                case 'Thu':
+                    $checkOutFormattedDay = 'Thứ 5';
+                    break;
+                case 'Fri':
+                    $checkOutFormattedDay = 'Thứ 6';
+                    break;
+                case 'Sat':
+                    $checkOutFormattedDay = 'Thứ 7';
+                    break;
+                case 'Sun':
+                    $checkOutFormattedDay = 'CN';
+                    break;
+            }
+        
+            // Định dạng ngày check-out
+            $checkOutFormatted = $checkOutFormattedDay . ', ' . $checkOutDay->format('j') . ' thg ' . $checkOutDay->format('m') . ' ' . $checkOutDay->format('Y');
+        
+            // Định dạng số đêm và số ngày
+            $nightText = $nights == 1 ? '1 đêm' : "$nights đêm";
+            $dayText = $days == 1 ? '1 ngày' : "$days ngày";
+        } else {
+            $checkInFormatted = null;
+            $checkOutFormatted = null;
+            $nightText = null;
+            $dayText = null;
+        }
+        
+        // Tính tổng tiền thanh toán trước thuế
+        $totalAmountBeforeTax = $discountedPrice * $nights;
+
+        // Tính thuế
+        $taxRate = 0.08; // 8%
+        $taxAmount = $totalAmountBeforeTax * $taxRate;
+
+        // Tổng tiền phải thanh toán 
+        $totalAmount = $totalAmountBeforeTax + $taxAmount;
+        return view('pages.pay', compact('hotel', 'room', 'originalPrice', 'discountedPrice', 'checkInFormatted', 'checkOutFormatted', 'nightText', 'dayText', 'totalAmount','taxAmount'));
     }
+
 
 
     // Trong controller

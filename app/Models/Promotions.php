@@ -166,6 +166,8 @@ class Promotions extends Model
             ];
         }
     }
-
-
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class, 'promotion_id', 'promotion_id');
+    }
 }

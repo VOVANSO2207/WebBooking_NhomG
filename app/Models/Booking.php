@@ -21,6 +21,10 @@ class Booking extends Model
 
     protected $primaryKey = 'booking_id';
     public $timestamps = true;
+    public function payments()
+    {
+        return $this->hasMany(Payments::class, 'booking_id', 'booking_id');
+    }
 
     public static function getAllBookings($perPage = 7)
     {

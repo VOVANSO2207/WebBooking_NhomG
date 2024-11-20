@@ -21,7 +21,7 @@
                         thanh toán.</span>
                 </div>
                 <div class="col-md-8">
-                    <form action="{{route('payment.vnpay')}}" method="POST">
+                    <form action="{{ route('payment.vnpay') }}" method="POST">
                         @csrf
                         <!-- THÔNG TIN KHÁCH SẠN -->
                         <div class="hotel-card border p-4">
@@ -67,21 +67,21 @@
                             </div>
                             <hr>
                             <div class="check-details row">
-                                <div class="check-in col-md-3">
+                                <div class="check-in col-md-4">
                                     <p class="label m-0">Nhận phòng</p>
-                                    <p class="info">14:00, T2, 30 tháng 9</p>
+                                    <p class="info">14:00, {{ $checkInFormatted }}</p>
                                 </div>
                                 <div class="check-out col-md-4">
                                     <p class="label m-0">Trả phòng</p>
-                                    <p class="info">12:00, T3, 01 tháng 10</p>
+                                    <p class="info">12:00, {{ $checkOutFormatted }}</p>
                                 </div>
                                 <div class="night-count col-md-2">
                                     <p class="label m-0">Số đêm</p>
-                                    <p class="info">1</p>
+                                    <p class="info">{{ $nightText }}</p>
                                 </div>
-                                <div class="room-info col-md-3">
+                                <div class="room-info col-md-2">
                                     <p class="label m-0">Số phòng</p>
-                                    <p class="info">x1 Đơn, x2 Đôi</p>
+                                    <p class="info">x1 {{ $room->name }}</p>
                                 </div>
                             </div>
                         </div>
@@ -167,37 +167,27 @@
                         {{-- Chọn phương thức thanh toán --}}
                         <div class="payment-methods">
                             <div class="payment-title">Phương thức thanh toán</div>
-
                             <label class="payment-option">
-                                <input type="radio" name="payment" value="card">
+                                <input type="radio" name="payment_method" value="vnpay">
                                 <div class="payment-icon">
                                     <i class="fa-solid fa-credit-card"></i>
                                 </div>
-                                <div class="payment-label">Thẻ tín dụng/Ghi nợ</div>
+                                <div class="payment-label">Thanh toán qua VNPAY</div>
                             </label>
 
                             <label class="payment-option">
-                                <input type="radio" name="payment" value="momo">
+                                <input type="radio" name="payment_method" value="momo">
                                 <div class="payment-icon">
                                     <i class="fa-solid fa-wallet"></i>
                                 </div>
                                 <div class="payment-label">Ví MoMo</div>
                             </label>
-
                             <label class="payment-option">
-                                <input type="radio" name="payment" value="banking">
-                                <div class="payment-icon">
-                                    <i class="fa-solid fa-building-columns"></i>
-                                </div>
-                                <div class="payment-label">Chuyển khoản ngân hàng</div>
-                            </label>
-
-                            <label class="payment-option">
-                                <input type="radio" name="payment" value="cod">
+                                <input type="radio" name="payment_method" value="cod">
                                 <div class="payment-icon">
                                     <i class="fa-solid fa-money-bill"></i>
                                 </div>
-                                <div class="payment-label">Thanh toán khi nhận hàng (COD)</div>
+                                <div class="payment-label">Thanh toán khi nhận phòng (COD)</div>
                             </label>
                         </div>
                         <div class="detail-price">
@@ -205,11 +195,12 @@
                             <div class="group-info-price">
                                 <div class="row price-room">
                                     <div class="col-md-6 left">
+                                        <p class="m-0">Thuế và phí dịch vụ khách sạn</p>
                                         <p class="m-0">Giá phòng</p>
-                                        <p>(x1) Phòng - Lasol Boutique Hotel (1 đêm)</p>
+                                        <p>(x1) {{ $room->name }} - ({{ $nightText }})</p>
                                     </div>
                                     <div class="col-md-6 right">
-                                        <div class="sale">-10%</div>
+                                        <div class="sale">8%</div>
                                         <div class="price-old">{{ number_format($originalPrice, 0, ',', '.') }} VND</div>
                                         <div class="price-new">{{ number_format($discountedPrice, 0, ',', '.') }} VND
                                         </div>
@@ -219,16 +210,26 @@
                                 <div class="price-item">
                                     <div class="item-1">
                                         <span>Mã giảm giá</span>
-                                        <span class="discount-code ms-2">GIAMGIACHOTOINHA</span>
+                                        <span class="discount-code ms-2"></span>
                                     </div>
-                                    <span class="discount-amount">-55.908 VND</span>
+                                    <span class="discount-amount"></span>
                                 </div>
                                 <hr>
                                 {{-- {{dd($room)}} --}}
                                 <div class="total-detail-price">
-                                    <span class="title-total-price">Tổng giá</span>
-                                    <span class="total-price">100.000 VND</span>
+                                    <span class="title-total-price">Tổng tiền thanh toán</span>
+                                    <span class="total-price">{{ number_format($totalAmount, 0, ',', '.') }} VND</span>
                                 </div>
+                                <span class="tax-included">Đã bao gồm thuế, phí, VAT</span>
+                                <input type="hidden" name="total_amount" id="total_amount"
+                                    value="{{ $totalAmount }}">
+                                <input type="hidden" name="user_id" value="{{ Auth::id() }}">
+                                <input type="hidden" name="room_id" value="{{ $room->room_id }}">
+                                <input type="hidden" name="check_in" value="{{ $checkInFormatted }}">
+                                <input type="hidden" name="check_out" value="{{ $checkOutFormatted }}">
+                                <input type="hidden" name="total_price" value="{{ $totalAmount }}">
+                                <input type="hidden" name="promotion_id" id="promotion_id" value="">
+                                {{-- <input type="hidden" name="promotion_id" value="{{ $promotion_id }}">f --}}
                                 <div class="button-pay">
                                     <button type="submit" id="btnPay" class="btn-pay">Thanh toán</button>
                                 </div>
@@ -259,7 +260,7 @@
                                 <div class="col">
                                     <div class="date-box">
                                         <div class="date-header">Nhận phòng</div>
-                                        <div class="date-main">Thứ 4, 2 thg 10 2024</div>
+                                        <div class="date-main">{{ $checkInFormatted }}</div>
                                         <div class="date-sub">Từ 14:00</div>
                                     </div>
                                 </div>
@@ -269,7 +270,7 @@
                                 <div class="col">
                                     <div class="date-box">
                                         <div class="date-header">Trả phòng</div>
-                                        <div class="date-main">Thứ 4, 2 thg 10 2024</div>
+                                        <div class="date-main">{{ $checkOutFormatted }}</div>
                                         <div class="date-sub">Trước 12:00</div>
                                     </div>
                                 </div>
@@ -315,11 +316,152 @@
                     </div>
                 </div>
             </div>
+            <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 11;">
+                @if (session('success'))
+                    <div class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive"
+                        aria-atomic="true" id="successToast">
+                        <div class="d-flex">
+                            <div class="toast-body">
+                                <i class="bi bi-check-circle me-2"></i>
+                                {{ session('success') }}
+                            </div>
+                            <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast"
+                                aria-label="Close"></button>
+                        </div>
+                    </div>
+                @endif
+        
+                @if (session('error'))
+                    <div class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive"
+                        aria-atomic="true" id="errorToast">
+                        <div class="d-flex">
+                            <div class="toast-body">
+                                <i class="fas fa-exclamation-circle me-2"></i>
+                                {{ session('error') }}
+                            </div>
+                            <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast"
+                                aria-label="Close"></button>
+                        </div>
+                    </div>
+                @endif
+            </div>
     </section>
 @endsection
 
 <script>
-  
+       document.addEventListener('DOMContentLoaded', function() {
+            var toastElements = document.querySelectorAll('.toast');
+            toastElements.forEach(function(toastElement) {
+                var toastInstance = new bootstrap.Toast(toastElement);
+                toastInstance.show();
+            });
+        });
+    // Frontend JavaScript
+    document.addEventListener('DOMContentLoaded', function() {
+        const voucherButton = document.querySelector('.group-voucherCode button');
+        const voucherInput = document.querySelector('#voucherCode');
+        const totalPriceElement = document.querySelector('.total-price');
+        const discountCodeElement = document.querySelector('.discount-code');
+        const discountAmountElement = document.querySelector('.discount-amount');
+        const priceItemElement = document.querySelector('.price-item');
+
+        voucherButton.addEventListener('click', async function() {
+            const promotionCode = voucherInput.value.trim();
+
+            if (!promotionCode) {
+                alert('Vui lòng nhập mã giảm giá!');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/apply-promotion', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+                    },
+                    body: JSON.stringify({
+                        promotion_code: promotionCode,
+                        original_amount: getOriginalAmount()
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    updatePriceDisplay(data);
+                    showSuccessMessage(
+                        `Áp dụng mã giảm giá thành công! Giảm ${data.discount_percentage}%`);
+                } else {
+                    showErrorMessage(data.message || 'Mã giảm giá không hợp lệ!');
+                }
+            } catch (error) {
+                showErrorMessage('Đã có lỗi xảy ra. Vui lòng thử lại sau!');
+                console.error(error);
+            }
+        });
+
+        function updatePriceDisplay(data) {
+            // Update discount code display
+            discountCodeElement.textContent = data.promotion_code;
+
+            // Update discount amount
+            const formattedDiscount = new Intl.NumberFormat('vi-VN').format(data.calculated_discount);
+            discountAmountElement.textContent = `-${formattedDiscount} VND`;
+
+            // Update total price
+            const formattedTotal = new Intl.NumberFormat('vi-VN').format(data.new_total);
+            totalPriceElement.textContent = `${formattedTotal} VND`;
+
+            // Show discount row
+            priceItemElement.style.display = 'flex';
+
+            // Add hidden inputs for form submission
+            const form = document.querySelector('form');
+
+            // Add promotion code to form
+            let promotionInput = form.querySelector('input[name="promotion_code"]');
+            if (!promotionInput) {
+                promotionInput = document.createElement('input');
+                promotionInput.type = 'hidden';
+                promotionInput.name = 'promotion_code';
+                form.appendChild(promotionInput);
+            }
+            promotionInput.value = data.promotion_code;
+            const promotionIdInput = document.querySelector('#promotion_id');
+            if (promotionIdInput) {
+                promotionIdInput.value = data.promotion_id;
+            }
+
+            // Add discount amount to form
+            let discountInput = form.querySelector('input[name="discount_amount"]');
+            if (!discountInput) {
+                discountInput = document.createElement('input');
+                discountInput.type = 'hidden';
+                discountInput.name = 'discount_amount';
+                form.appendChild(discountInput);
+            }
+            discountInput.value = data.calculated_discount;
+            // Cập nhật giá trị input hidden total_amount
+            const totalAmountInput = document.querySelector('#total_amount');
+            if (totalAmountInput) {
+                totalAmountInput.value = data.new_total;
+            }
+        }
+
+        function getOriginalAmount() {
+            const priceText = document.querySelector('.total-price').textContent;
+            return parseInt(priceText.replace(/[^\d]/g, ''));
+        }
+
+        function showSuccessMessage(message) {
+            alert(message);
+        }
+
+        function showErrorMessage(message) {
+            alert(message);
+        }
+    });
 
     function slideShowImage() {
         let currentSlide = 0;

@@ -18,4 +18,8 @@ class Payments extends Model
 
     protected $primaryKey = 'payment_id';
     public $timestamps = false;
+    public function booking()
+    {
+        return $this->belongsTo(Booking::class, 'booking_id', 'booking_id');
+    }
 }

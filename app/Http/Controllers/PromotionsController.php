@@ -206,6 +206,53 @@ class PromotionsController extends Controller
         return view('pages.detail_voucher', compact('vouchers'));
     }
 
+
+    public function applyPromotion(Request $request)
+    {
+        $request->validate([
+            'promotion_code' => 'required|string',
+            'original_amount' => 'required|numeric|min:0'
+        ]);
+
+        try {
+            $promotion = Promotions::where('promotion_code', $request->promotion_code)
+                ->where('start_date', '<=', Carbon::now())
+                ->where('end_date', '>=', Carbon::now())
+                ->first();
+
+            if (!$promotion) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Mã giảm giá không tồn tại hoặc đã hết hạn!'
+                ]);
+            }
+
+            // Calculate discount amount based on percentage
+            $discountPercentage = $promotion->discount_amount;
+            $calculatedDiscount = round(($request->original_amount * $discountPercentage) / 100);
+            
+            // Calculate new total after discount
+            $newTotal = $request->original_amount - $calculatedDiscount;
+            // session(['applied_promotion_id' => $promotion->promotion_id]);
+            return response()->json([
+                'success' => true,
+                'promotion_code' => $promotion->promotion_code,
+                'discount_percentage' => $discountPercentage,
+                'calculated_discount' => $calculatedDiscount,
+                'new_total' => $newTotal,
+                'message' => $promotion->pro_title,
+                'description' => $promotion->pro_description,
+                'promotion_id' => $promotion->promotion_id,
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Đã có lỗi xảy ra khi áp dụng mã giảm giá.'
+            ]);
+        }
+    }
+
 }
 
 

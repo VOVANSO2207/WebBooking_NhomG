@@ -231,9 +231,9 @@ Route::post('/store-rooms', [RoomController::class, 'storeSelectedRooms']);
 
 
 // Cổng thanh toán 
-Route::post('/vnpay_payment',[PaymentsController::class,'payment_vnpay'])->name('payment.vnpay');
-Route::get('/vnpay-return', [PaymentsController::class, 'paymentReturn'])->name('vnpay.return');
-
+Route::post('/vnpay_payment',[PaymentsController::class,'processPayment'])->name('payment.vnpay');
+Route::get('/vnpay-return', [PaymentsController::class, 'paymentReturn'])->name('booking.return');
+Route::get('/cod-return', [PaymentsController::class, 'codPaymentReturn'])->name('booking.return_cod');
 
 
 
@@ -244,3 +244,8 @@ Route::post('reviews/like/{review_id}', [ReviewsController::class, 'like']);
 
 Route::delete('/review/{review_id}', [ReviewsController::class, 'destroy'])->name('reviews.destroy');
 Route::patch('/reviews/{review}', [ReviewsController::class, 'update'])->name('reviews.update');
+Route::post('/api/apply-promotion', [PromotionsController::class,'applyPromotion']);
+// Route::post('/booking/store', [BookingController::class, 'createBooking'])->name('booking.store');
+// Route::get('/vnpay/return', [BookingController::class, 'vnPayReturn'])->name('vnpay.return');
+// Route::get('/booking/success', [BookingController::class, 'success'])->name('booking.success');
+// Route::get('/booking/error', [BookingController::class, 'error'])->name('booking.error');
