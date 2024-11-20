@@ -73,11 +73,11 @@ class HotelController extends Controller
             $filters = $request->input('filters', []);
             // $minPrice = $request->input('min_price');
             // $maxPrice = $request->input('max_price');
-            $hotels = Hotel::query();         
+            $hotels = Hotel::query();
             // $hotels = Hotel::whereHas('rooms', function($query) use ($minPrice, $maxPrice) {
             //     $query->whereBetween('price', [$minPrice, $maxPrice]);
             // })->with('rooms')->get();
-        
+
             // Lọc theo số hạng sao
             if (in_array('two_start', $filters)) {
                 $hotels->where('rating', 2);
@@ -142,8 +142,8 @@ class HotelController extends Controller
                         ->limit(1)
                 ])->orderBy('max_price', 'desc');
             }
-            
-            $hotels = $hotels->with('images', 'city', 'rooms.roomType','amenities')->get();
+
+            $hotels = $hotels->with('images', 'city', 'rooms.roomType', 'amenities')->get();
             foreach ($hotels as $hotel) {
 
                 // Tính giá gốc trung bình
@@ -171,10 +171,10 @@ class HotelController extends Controller
         $hotel = Hotel::with(['rooms.room_images', 'images', 'city', 'reviews.user', 'reviews.likes'])->findOrFail($hotel_id);
         $rooms = $hotel->rooms()->paginate(4);
         $reviews = $hotel->reviews()->withCount('likes')->latest()->paginate(7);  // Đếm số lượt like
-    
+
         return view('pages.hotel_detail', compact('hotel', 'rooms', 'reviews'));
     }
-    
+
     public function search(Request $request)
     {
         // Lưu các tham số tìm kiếm vào session
@@ -195,10 +195,12 @@ class HotelController extends Controller
 
         // Tách ngày đi và ngày về từ daterange
         list($checkInDate, $checkOutDate) = explode(' - ', $daterange);
+        $daterange = session('daterange'); // Lấy dữ liệu từ session
+
 
         // Gọi phương thức tìm kiếm từ model Hotel
         $hotels = Hotel::searchHotels($location, $checkInDate, $checkOutDate, $rooms, $adults, $children);
-
+        // dd($daterange);
         // Trả về kết quả tìm kiếm tới view
         $amenities = HotelAmenities::getAllAmenities();
 
@@ -229,7 +231,8 @@ class HotelController extends Controller
             'daterange' => $daterange,
             'rooms' => $rooms,
             'adults' => $adults,
-            'children' => $children
+            'children' => $children,
+
         ]);
     }
 
@@ -604,15 +607,120 @@ class HotelController extends Controller
         return response()->json(['decoded_id' => $decodedId]);
     }
     // Chi tiết đặt phòng 
-    public function getInfoPayment($hotel_id, $room_id)
+    public function getInfoPayment(Request $request, $hotel_id, $room_id)
     {
+        $daterange = $request->input('daterange');
+        if ($daterange) {
+            $request->session()->put('daterange', $daterange);
+        } else {
+            $daterange = session('daterange');
+        }
+
         $hotel = Hotel::with(['images', 'city'])->findOrFail($hotel_id);
         $room = Rooms::with(['room_images', 'amenities'])->where('hotel_id', $hotel_id)->findOrFail($room_id);
-        //    dd($hotel);
         $firstImage = $hotel->images->first();
-        // dd($firstImage);
-        return view('pages.pay', compact('hotel', 'room',));
+
+        $originalPrice = $room->price;
+        $discountedPrice = $originalPrice - ($originalPrice * ($room->discount_percent / 100));
+
+        if ($daterange) {
+            list($checkIn, $checkOut) = explode(' - ', $daterange);
+        
+            // Thiết lập ngôn ngữ tiếng Việt
+            \Carbon\Carbon::setLocale('vi');
+        
+            // Chuyển đổi ngày nhận phòng và trả phòng thành đối tượng Carbon
+            $checkInDay = \Carbon\Carbon::createFromFormat('d/m/Y', trim($checkIn));
+            $checkOutDay = \Carbon\Carbon::createFromFormat('d/m/Y', trim($checkOut));
+
+            
+        
+            // Tính số ngày (bao gồm cả ngày nhận và trả phòng)
+            $days = $checkInDay->diffInDays($checkOutDay) + 1; // +1 để tính cả ngày nhận và ngày trả
+        
+            // Tính số đêm (số ngày - 1)
+            $nights = $days - 1;
+        
+            // Xử lý định dạng ngày check-in
+            $checkInFormattedDay = $checkInDay->format('D'); // Lấy thứ trong tuần
+            switch ($checkInFormattedDay) {
+                case 'Mon':
+                    $checkInFormattedDay = 'Thứ 2';
+                    break;
+                case 'Tue':
+                    $checkInFormattedDay = 'Thứ 3';
+                    break;
+                case 'Wed':
+                    $checkInFormattedDay = 'Thứ 4';
+                    break;
+                case 'Thu':
+                    $checkInFormattedDay = 'Thứ 5';
+                    break;
+                case 'Fri':
+                    $checkInFormattedDay = 'Thứ 6';
+                    break;
+                case 'Sat':
+                    $checkInFormattedDay = 'Thứ 7';
+                    break;
+                case 'Sun':
+                    $checkInFormattedDay = 'CN';
+                    break;
+            }
+        
+            // Định dạng ngày check-in
+            $checkInFormatted = $checkInFormattedDay . ', ' . $checkInDay->format('j') . ' thg ' . $checkInDay->format('m') . ' ' . $checkInDay->format('Y');
+        
+            // Xử lý định dạng ngày check-out
+            $checkOutFormattedDay = $checkOutDay->format('D'); 
+            switch ($checkOutFormattedDay) {
+                case 'Mon':
+                    $checkOutFormattedDay = 'Thứ 2';
+                    break;
+                case 'Tue':
+                    $checkOutFormattedDay = 'Thứ 3';
+                    break;
+                case 'Wed':
+                    $checkOutFormattedDay = 'Thứ 4';
+                    break;
+                case 'Thu':
+                    $checkOutFormattedDay = 'Thứ 5';
+                    break;
+                case 'Fri':
+                    $checkOutFormattedDay = 'Thứ 6';
+                    break;
+                case 'Sat':
+                    $checkOutFormattedDay = 'Thứ 7';
+                    break;
+                case 'Sun':
+                    $checkOutFormattedDay = 'CN';
+                    break;
+            }
+        
+            // Định dạng ngày check-out
+            $checkOutFormatted = $checkOutFormattedDay . ', ' . $checkOutDay->format('j') . ' thg ' . $checkOutDay->format('m') . ' ' . $checkOutDay->format('Y');
+        
+            // Định dạng số đêm và số ngày
+            $nightText = $nights == 1 ? '1 đêm' : "$nights đêm";
+            $dayText = $days == 1 ? '1 ngày' : "$days ngày";
+        } else {
+            $checkInFormatted = null;
+            $checkOutFormatted = null;
+            $nightText = null;
+            $dayText = null;
+        }
+        
+        // Tính tổng tiền thanh toán trước thuế
+        $totalAmountBeforeTax = $discountedPrice * $nights;
+
+        // Tính thuế
+        $taxRate = 0.08; // 8%
+        $taxAmount = $totalAmountBeforeTax * $taxRate;
+
+        // Tổng tiền phải thanh toán 
+        $totalAmount = $totalAmountBeforeTax + $taxAmount;
+        return view('pages.pay', compact('hotel', 'room', 'originalPrice', 'discountedPrice', 'checkInFormatted', 'checkOutFormatted', 'nightText', 'dayText', 'totalAmount','taxAmount'));
     }
+
 
 
     // Trong controller
@@ -622,24 +730,24 @@ class HotelController extends Controller
 
         // Eager load quan hệ city và lấy thông tin về tên thành phố
         $hotels = Hotel::with('city') // Eager load quan hệ city
-                    ->where('city_id', $cityId)
-                    ->get()
-                    ->map(function ($hotel) {
-                        return [
-                            'hotel_id' => $hotel->hotel_id,
-                            'hotel_name' => $hotel->hotel_name,
-                            'location' => $hotel->location,
-                            'city' => $hotel->city->city_name, // Lấy tên thành phố
-                            'reviews_count' => $hotel->reviews->count(),
-                            'old_price' => number_format($hotel->average_price_sale, 0, ',', '.'),
-                            'new_price' => number_format($hotel->average_price, 0, ',', '.'),
-                            'is_favorite' => $hotel->is_favorite,
-                            'discount_percent' => number_format($hotel->average_discount_percent),
-                            'image_url' => $hotel->images->isNotEmpty() ? asset('images/' . $hotel->images->first()->image_url) : '/images/default-image.png',
-                            'detail_url' => route('pages.hotel_detail', ['hotel_id' => $hotel->hotel_id]),
-                        ];
-                    });
-                    
+            ->where('city_id', $cityId)
+            ->get()
+            ->map(function ($hotel) {
+                return [
+                    'hotel_id' => $hotel->hotel_id,
+                    'hotel_name' => $hotel->hotel_name,
+                    'location' => $hotel->location,
+                    'city' => $hotel->city->city_name, // Lấy tên thành phố
+                    'reviews_count' => $hotel->reviews->count(),
+                    'old_price' => number_format($hotel->average_price_sale, 0, ',', '.'),
+                    'new_price' => number_format($hotel->average_price, 0, ',', '.'),
+                    'is_favorite' => $hotel->is_favorite,
+                    'discount_percent' => number_format($hotel->average_discount_percent),
+                    'image_url' => $hotel->images->isNotEmpty() ? asset('images/' . $hotel->images->first()->image_url) : '/images/default-image.png',
+                    'detail_url' => route('pages.hotel_detail', ['hotel_id' => $hotel->hotel_id]),
+                ];
+            });
+
         return response()->json([
             'hotels' => $hotels
         ]);
@@ -649,23 +757,23 @@ class HotelController extends Controller
     {
         // Lấy tất cả khách sạn mà không lọc theo city_id
         $hotels = Hotel::with('city') // Eager load quan hệ city
-                    ->get() // Lấy tất cả khách sạn
-                    ->map(function ($hotel) {
-                        return [
-                            'hotel_id' => $hotel->hotel_id,
-                            'hotel_name' => $hotel->hotel_name,
-                            'location' => $hotel->location,
-                            'city' => $hotel->city->city_name, // Lấy tên thành phố
-                            'reviews_count' => $hotel->reviews->count(),
-                            'old_price' => number_format($hotel->average_price_sale, 0, ',', '.'),
-                            'new_price' => number_format($hotel->average_price, 0, ',', '.'),
-                            'is_favorite' => $hotel->is_favorite,
-                            'discount_percent' => number_format($hotel->average_discount_percent),
-                            'image_url' => $hotel->images->isNotEmpty() ? asset('images/' . $hotel->images->first()->image_url) : '/images/default-image.png',
-                            'detail_url' => route('pages.hotel_detail', ['hotel_id' => $hotel->hotel_id]),
-                        ];
-                    });
-                    
+            ->get() // Lấy tất cả khách sạn
+            ->map(function ($hotel) {
+                return [
+                    'hotel_id' => $hotel->hotel_id,
+                    'hotel_name' => $hotel->hotel_name,
+                    'location' => $hotel->location,
+                    'city' => $hotel->city->city_name, // Lấy tên thành phố
+                    'reviews_count' => $hotel->reviews->count(),
+                    'old_price' => number_format($hotel->average_price_sale, 0, ',', '.'),
+                    'new_price' => number_format($hotel->average_price, 0, ',', '.'),
+                    'is_favorite' => $hotel->is_favorite,
+                    'discount_percent' => number_format($hotel->average_discount_percent),
+                    'image_url' => $hotel->images->isNotEmpty() ? asset('images/' . $hotel->images->first()->image_url) : '/images/default-image.png',
+                    'detail_url' => route('pages.hotel_detail', ['hotel_id' => $hotel->hotel_id]),
+                ];
+            });
+
         return response()->json([
             'hotels' => $hotels
         ]);

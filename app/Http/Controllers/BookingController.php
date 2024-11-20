@@ -8,6 +8,9 @@ use App\Models\Rooms;
 use App\Models\Promotions;
 use Illuminate\Http\Request;
 use App\Helpers\IdEncoder;
+use App\Models\Payments;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 class BookingController extends Controller
 {
     public function viewBooking()
@@ -162,4 +165,6 @@ class BookingController extends Controller
 
         return redirect()->route('admin.viewbooking')->with('success', 'Cập nhật đơn đặt phòng thành công.');
     }
+
+
 }

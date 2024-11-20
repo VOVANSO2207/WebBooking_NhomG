@@ -218,7 +218,10 @@ Route::get('/account', [FavoriteController::class, 'showHotelFavorite'])->name('
 Route::middleware(['auth'])->group(function () {
     Route::put('/profile/update', [UsersController::class, 'updateProfile'])->name('profile.update');
     Route::put('/change-password', [UsersController::class, 'changePassword'])->name('change.password');
-
+    // Cổng thanh toán 
+    Route::post('/vnpay_payment', [PaymentsController::class, 'processPayment'])->name('payment.vnpay');
+    Route::get('/vnpay-return', [PaymentsController::class, 'paymentReturn'])->name('booking.return');
+    Route::get('/cod-return', [PaymentsController::class, 'codPaymentReturn'])->name('booking.return_cod');
 });
 Route::get('/payment/{hotel_id}/{room_id}', [HotelController::class, 'getInfoPayment'])->name('pages.getInfoPay');
 Route::get('/detail_voucher', action: [HomeController::class, 'detail_voucher'])->name(name: 'pages.detail_voucher');
@@ -240,3 +243,8 @@ Route::post('reviews/like/{review_id}', [ReviewsController::class, 'like']);
 Route::delete('/review/{review_id}', [ReviewsController::class, 'destroy'])->name('reviews.destroy');
 Route::patch('/reviews/{review}', [ReviewsController::class, 'update'])->name('reviews.update');
 Route::delete('/notifications/{key}', [NotificationController::class, 'deleteNotification']);
+Route::post('/api/apply-promotion', [PromotionsController::class, 'applyPromotion']);
+// Route::post('/booking/store', [BookingController::class, 'createBooking'])->name('booking.store');
+// Route::get('/vnpay/return', [BookingController::class, 'vnPayReturn'])->name('vnpay.return');
+// Route::get('/booking/success', [BookingController::class, 'success'])->name('booking.success');
+// Route::get('/booking/error', [BookingController::class, 'error'])->name('booking.error');

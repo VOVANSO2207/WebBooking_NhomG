@@ -2,6 +2,9 @@
 
 namespace App\Mail;
 
+use App\Models\Booking;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -9,33 +12,25 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class ContactMail extends Mailable
+class BookingConfirmationMail extends Mailable
 {
     use Queueable, SerializesModels;
-
-  
-    public $email;
-    
-
+    public $booking;
+    public $payment;
+    public $user;
     /**
      * Create a new message instance.
      */
-    public function __construct($name, $email, $body)
+    public function __construct($booking, $payment, $user)
     {
-        $this->name= $name;
-        $this->email= $email;
-        $this->body = $body;
+        $this->booking = $booking;
+        $this->payment = $payment;
+        $this->user = $user;
     }
-    
     public function build()
     {
-        return $this->subject('Liên hệ mới từ ' . $this->name)
-                    ->view('email.contact')
-                    ->with([
-                        'name' => $this->name,
-                        'email' => $this->email,
-                        'body' => $this->body,
-                    ]);
+        return $this->subject('Xác nhận đặt phòng thành công #' . $this->booking->booking_id)
+                    ->view('email.booking-confirmation');
     }
     /**
      * Get the message envelope.
@@ -43,7 +38,7 @@ class ContactMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'StayNest',
+            subject: 'Booking Confirmation Mail',
         );
     }
 
@@ -53,7 +48,7 @@ class ContactMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'email.contact',
+            view: 'email.booking-confirmation',
         );
     }
 

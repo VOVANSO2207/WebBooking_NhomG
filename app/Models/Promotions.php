@@ -245,4 +245,8 @@ class Promotions extends Model
         return ['success' => true];
     }
 
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class, 'promotion_id', 'promotion_id');
+    }
 }
