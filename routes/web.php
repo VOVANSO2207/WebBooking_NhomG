@@ -71,7 +71,7 @@ Route::get('/hotel_detail', function () {
 // Route::get('/home', function () {
 //     return view('pages/home');
 // });
-
+Route::middleware('staff')->group(function () {
 // Admin - Home
 // Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
 Route::middleware('auth')->group(function () {
@@ -179,7 +179,7 @@ Route::put('/admin/voucher/update/{id}', [PromotionsController::class, 'updateVo
 // Admin - Tiện ích khách sạn
 Route::get('/hotel-amenities', [HotelAmenitiesController::class, 'list'])->name('hotel_amenities.list');
 Route::get('/hotel-amenities/search', [HotelAmenitiesController::class, 'search'])->name('hotel_amenities.search');
-Route::get('/hotel_amenities/{id}/detail', [HotelAmenitiesController::class, 'showDetail'])->name('hotel_amenities.detail');
+Route::get('/hotel_amenities/{id}/detail', [HotelAmenitiesController::class, 'showDetail'])->name('hotel_amenities.detail'); });
 // Search
 // Route::get('/search', [SearchController::class, 'index'])->name('search');
 Route::get('/hotels', [HotelController::class, 'viewSearchHotel'])->name('hotels.index');
