@@ -104,6 +104,10 @@
                     .content {
                         display: flex;
                         flex-wrap: wrap;
+
+                        p {
+                            margin-right: 20px;
+                        }
                     }
                 }
 
@@ -305,6 +309,6 @@
 }
 
 .image-user:hover img {
-    transform: scale(1.05); 
+    transform: scale(1.05);
     filter: brightness(1.1);
 }
