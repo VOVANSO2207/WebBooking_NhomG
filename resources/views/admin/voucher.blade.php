@@ -73,7 +73,7 @@
                                                                         <td class="{{ $textClass }}">{{ $key + 1 }}</td>
                                                                         <td class="{{ $textClass }}">{{ Str::limit( $voucher->pro_title, 30)}}</td>
                                                                         <td class="{{ $textClass }}">{{ $voucher->promotion_code }}</td>
-                                                                        <td class="{{ $textClass }}">{{ number_format($voucher->discount_amount, 0, ',', '.') }} VND
+                                                                        <td class="{{ $textClass }}">{{ $voucher->discount_amount }}%
                                                                         </td>
                                                                         <td class="{{ $textClass }}">{{ \Str::limit($voucher->pro_description, 10) }}</td>
                                                                         <td class="{{ $textClass }}">{{ $voucher->start_date }}</td>
@@ -207,7 +207,7 @@
                         document.getElementById('modalPromotionTitle').innerText = voucher.pro_title;
                         document.getElementById('modalPromotionCode').innerText = voucher.promotion_code;
                         let discountAmount = voucher.discount_amount;
-                        let formattedAmount = Number(discountAmount).toLocaleString('vi-VN') + ' VND';
+                        let formattedAmount = Number(discountAmount).toLocaleString('vi-VN') + '%';
                         document.getElementById('modalDiscountAmount').innerText = formattedAmount;
                         document.getElementById('modalProDescription').innerText = voucher.pro_description ? voucher.pro_description.substring(0, 10) : 'Không có mô tả';
 

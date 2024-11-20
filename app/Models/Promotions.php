@@ -111,7 +111,7 @@ class Promotions extends Model
         // Validate dữ liệu
         $validator = Validator::make($data, [
             'promotion_code' => 'required|max:15|min:10|alpha_num|unique:promotions,promotion_code|regex:/^(?=.*[a-zA-Z])(?=.*[0-9]).+$/',
-            'discount_amount' => 'required|numeric|min:0|max:99999999|not_regex:/^0\d+$/|regex:/^\d+$/',
+            'discount_amount' => 'required|numeric|min:0|max:100|not_regex:/^0\d+$/|regex:/^\d+$/',
             'start_date' => "required|date|date_format:Y-m-d|after_or_equal:today|before_or_equal:$maxStartDate",
             'end_date' => "required|date|date_format:Y-m-d|after:start_date|after_or_equal:today|before_or_equal:$maxStartDate",
             'pro_description' => 'required|string|regex:/^[^#&\'()!]*$/|max:255',
@@ -183,8 +183,8 @@ class Promotions extends Model
             'discount_amount' => [
                 'required',
                 'numeric',
-                'min:0.01',
-                'max:99999999',
+                'min:0',
+                'max:1000',
                 'not_regex:/^0\d+$/',
                 'regex:/^\d+$/',
             ],

@@ -8,7 +8,7 @@
         <td>{{ $index + 1 }}</td>
         <td>{{ $voucher->pro_title }}</td>
         <td>{{ $voucher->promotion_code }}</td>
-        <td>{{ number_format($voucher->discount_amount, 0, ',', '.') }} VND</td>
+        <td>{{ $voucher->discount_amount }}%</td>
         <td>{{ \Str::limit($voucher->pro_description, 10) }}</td>
 
         <td>{{ $voucher->start_date }}</td>
