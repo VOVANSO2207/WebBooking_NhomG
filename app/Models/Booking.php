@@ -54,14 +54,14 @@ class Booking extends Model
                     // Tìm kiếm trên trường 'username' từ bảng 'users' với LIKE
                     $q->whereHas('user', function ($queryUser) use ($keyword) {
                         $queryUser->where('username', 'LIKE', "%{$keyword}%")
-                                ->orWhere('email', 'LIKE', "%{$keyword}%"); // Thêm tìm kiếm email
+                            ->orWhere('email', 'LIKE', "%{$keyword}%"); // Thêm tìm kiếm email
                     })
-                    // Tìm kiếm trên trường 'name' từ bảng 'rooms'
-                    ->orWhereHas('room', function ($queryRoom) use ($keyword) {
+                        // Tìm kiếm trên trường 'name' từ bảng 'rooms'
+                        ->orWhereHas('room', function ($queryRoom) use ($keyword) {
                         $queryRoom->where('name', 'LIKE', "%{$keyword}%");
                     })
-                    // Tìm kiếm trên trường 'promotion_code' từ bảng 'promotions'
-                    ->orWhereHas('promotion', function ($queryPromo) use ($keyword) {
+                        // Tìm kiếm trên trường 'promotion_code' từ bảng 'promotions'
+                        ->orWhereHas('promotion', function ($queryPromo) use ($keyword) {
                         $queryPromo->where('promotion_code', 'LIKE', "%{$keyword}%");
                     });
                 });

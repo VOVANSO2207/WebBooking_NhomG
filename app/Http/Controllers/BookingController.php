@@ -18,6 +18,12 @@ class BookingController extends Controller
         $bookings = Booking::getAllBookings();
         return view('admin.booking', compact('bookings'));
     }
+    public function showBookingBill()
+    {
+        $bookings = Booking::where('user_id', auth()->id())->paginate(2);
+
+        return view('pages.account', compact('bookings'));
+    }
 
     public function bookingAdd()
     {
@@ -104,8 +110,8 @@ class BookingController extends Controller
         $bookings = Booking::searchBooking($keyword)->paginate(7);
 
         return view('admin.search_results_booking', compact('bookings'));
-    } 
-    
+    }
+
     public function editBooking($booking_id)
     {
         // Tìm booking theo ID
