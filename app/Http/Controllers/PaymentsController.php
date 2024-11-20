@@ -34,7 +34,7 @@ class PaymentsController extends Controller
         if (!$promotion && $request->promotion_id) {
             return back()->with('error', 'Mã giảm giá không hợp lệ');
         }
-        // Nếu promotion không tồn tại hoặc không hợp lệ, sử dụng giá trị mặc định
+        // không có mã voucher thì lưu vào 0
         $finalPromotionId = $promotion ? $request->promotion_id : 0;
         // First create the booking record
         $booking = Booking::create([

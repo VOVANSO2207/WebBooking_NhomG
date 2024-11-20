@@ -4,7 +4,7 @@
 
     <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
       <div class="app-brand demo">
-        <a href=""
+        <a href="{{asset('/')}}"
           style="color: #3B79C9; font-weight: bold; text-transform: uppercase; display: flex; align-items: center;"
           class="app-brand-link">
           <img src="{{ asset('/images/logo-staynest.jpg')}}" alt="Logo" style="width: 50px; height: fit-content; ">

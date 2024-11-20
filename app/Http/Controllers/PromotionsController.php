@@ -160,6 +160,7 @@ class PromotionsController extends Controller
 
     public function applyPromotion(Request $request)
     {
+        
         $request->validate([
             'promotion_code' => 'required|string',
             'original_amount' => 'required|numeric|min:0'
@@ -167,7 +168,7 @@ class PromotionsController extends Controller
 
         try {
             $promotion = Promotions::where('promotion_code', $request->promotion_code)
-                ->where('start_date', '<=', Carbon::now())
+                // ->where('start_date', '<=', Carbon::now())
                 ->where('end_date', '>=', Carbon::now())
                 ->first();
 

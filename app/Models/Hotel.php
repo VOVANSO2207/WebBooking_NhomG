@@ -181,6 +181,7 @@ class Hotel extends Model
                     $query->take($rooms); // Giới hạn số lượng phòng hiển thị
                 }
             ])
+            ->withCount('reviews') 
             ->orderByRaw("CASE WHEN city_id = ? THEN 1 ELSE 2 END", [$cityId]) // Ưu tiên khách sạn có city_id khớp chính xác
             ->get();
 

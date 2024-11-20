@@ -62,15 +62,6 @@ Route::get('/hotel_detail', function () {
     return view('pages/hotel_detail');
 });
 
-
-// Route::get('/account', function () {
-//     return view('pages/account');
-// })->name('pages.account');
-
-
-// Route::get('/home', function () {
-//     return view('pages/home');
-// });
 Route::middleware('staff')->group(function () {
 // Admin - Home
 // Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');

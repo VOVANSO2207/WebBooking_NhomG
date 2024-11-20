@@ -330,7 +330,7 @@
                         </div>
                     </div>
                 @endif
-        
+
                 @if (session('error'))
                     <div class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive"
                         aria-atomic="true" id="errorToast">
@@ -349,13 +349,13 @@
 @endsection
 
 <script>
-       document.addEventListener('DOMContentLoaded', function() {
-            var toastElements = document.querySelectorAll('.toast');
-            toastElements.forEach(function(toastElement) {
-                var toastInstance = new bootstrap.Toast(toastElement);
-                toastInstance.show();
-            });
+    document.addEventListener('DOMContentLoaded', function() {
+        var toastElements = document.querySelectorAll('.toast');
+        toastElements.forEach(function(toastElement) {
+            var toastInstance = new bootstrap.Toast(toastElement);
+            toastInstance.show();
         });
+    });
     // Frontend JavaScript
     document.addEventListener('DOMContentLoaded', function() {
         const voucherButton = document.querySelector('.group-voucherCode button');
@@ -364,10 +364,18 @@
         const discountCodeElement = document.querySelector('.discount-code');
         const discountAmountElement = document.querySelector('.discount-amount');
         const priceItemElement = document.querySelector('.price-item');
-
+        let usedVoucherCodes = [];
+        let hasUsedVoucher = false;
         voucherButton.addEventListener('click', async function() {
             const promotionCode = voucherInput.value.trim();
-
+            if (usedVoucherCodes.includes(promotionCode)) {
+                showErrorMessage('Mã giảm giá này đã được sử dụng!');
+                return;
+            }
+            if (hasUsedVoucher) {
+                showErrorMessage('Bạn chỉ được sử dụng một mã giảm giá!');
+                return;
+            }
             if (!promotionCode) {
                 alert('Vui lòng nhập mã giảm giá!');
                 return;
@@ -389,6 +397,12 @@
                 const data = await response.json();
 
                 if (data.success) {
+                    // Lưu mã voucher đã sử dụng
+                    usedVoucherCodes.push(promotionCode);
+                    hasUsedVoucher = true;
+                    // Vô hiệu hóa nút và input
+                    // voucherButton.disabled = true;
+                    // voucherInput.disabled = true;
                     updatePriceDisplay(data);
                     showSuccessMessage(
                         `Áp dụng mã giảm giá thành công! Giảm ${data.discount_percentage}%`);
