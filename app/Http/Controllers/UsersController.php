@@ -139,7 +139,7 @@ class UsersController extends Controller
 
         return view('admin.search_results_user', compact('results'));
     }
-
+    
     public function editUser($user_id)
     {
         // Giải mã ID

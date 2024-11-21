@@ -721,8 +721,6 @@ class HotelController extends Controller
         return view('pages.pay', compact('hotel', 'room', 'originalPrice', 'discountedPrice', 'checkInFormatted', 'checkOutFormatted', 'nightText', 'dayText', 'totalAmount','taxAmount'));
     }
 
-
-
     // Trong controller
     public function filterHotelsByCity(Request $request)
     {

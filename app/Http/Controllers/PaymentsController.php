@@ -15,7 +15,7 @@ class PaymentsController extends Controller
 {
     public function payment_vnpay(Request $request)
     {
-        $totalAmount = $request->total_price;
+        $totalAmount = $request->total_amount;
         $daterange = $request->input('daterange') ?? session('daterange');
 
         // Validate daterange exists
@@ -31,24 +31,26 @@ class PaymentsController extends Controller
             // ->where('start_date', '<=', Carbon::now())
             // ->where('end_date', '>=', Carbon::now())
             ->first();
-        if (!$promotion && $request->promotion_id) {
-            return back()->with('error', 'Mã giảm giá không hợp lệ');
-        }
-        if ($promotion->start_date > Carbon::now()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Mã giảm giá chưa tới ngày áp dụng.'
-            ]);
-        }
-          
-        if ($promotion->end_date < Carbon::now()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Mã giảm giá đã hết hạn.'
-            ]);
-        }
-        // không có mã voucher thì lưu vào 0
-        $finalPromotionId = $promotion ? $request->promotion_id : 0;
+            $promotionId = $request->promotion_id ?? 0;
+
+            $promotion = null;
+            // Chỉ truy vấn mã giảm giá nếu promotion_id khác 0
+            if ($promotionId > 0) {
+                $promotion = Promotions::where('promotion_id', $promotionId)->first();
+    
+                if (!$promotion) {
+                    return back()->with('error', 'Mã giảm giá không hợp lệ');
+                }
+    
+                if ($promotion->start_date > Carbon::now()) {
+                    return back()->with('error', 'Mã giảm giá chưa tới ngày áp dụng.');
+                }
+                
+                if ($promotion->end_date < Carbon::now()) {
+                    return back()->with('error', 'Mã giảm giá đã hết hạn.');
+                }
+            }
+            $finalPromotionId = $promotion ? $promotionId : 0;
         // First create the booking record
         $booking = Booking::create([
             'user_id' => auth()->id(), // Assuming user is logged in
@@ -158,7 +160,7 @@ class PaymentsController extends Controller
     }
     public function payment_on_checkin(Request $request)
     {
-        $totalAmount = $request->total_price;
+        $totalAmount = $request->total_amount;
         $daterange = $request->input('daterange') ?? session('daterange');
 
         // Validate daterange exists
@@ -178,24 +180,26 @@ class PaymentsController extends Controller
             // ->where('start_date', '<=', Carbon::now())
             // ->where('end_date', '>=', Carbon::now())
             ->first();
+        $promotionId = $request->promotion_id ?? 0;
 
-        if (!$promotion && $request->promotion_id) {
-            return back()->with('error', 'Mã giảm giá không hợp lệ');
+        $promotion = null;
+        // Chỉ truy vấn mã giảm giá nếu promotion_id khác 0
+        if ($promotionId > 0) {
+            $promotion = Promotions::where('promotion_id', $promotionId)->first();
+
+            if (!$promotion) {
+                return back()->with('error', 'Mã giảm giá không hợp lệ');
+            }
+
+            if ($promotion->start_date > Carbon::now()) {
+                return back()->with('error', 'Mã giảm giá chưa tới ngày áp dụng.');
+            }
+
+            if ($promotion->end_date < Carbon::now()) {
+                return back()->with('error', 'Mã giảm giá đã hết hạn.');
+            }
         }
-        if ($promotion->start_date > Carbon::now()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Mã giảm giá chưa tới ngày áp dụng.'
-            ]);
-        }
-          
-        if ($promotion->end_date < Carbon::now()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Mã giảm giá đã hết hạn.'
-            ]);
-        }
-        $finalPromotionId = $promotion ? $request->promotion_id : 0;
+        $finalPromotionId = $promotion ? $promotionId : 0;
 
         // Create booking record with pending status
         $booking = Booking::create([
@@ -205,16 +209,16 @@ class PaymentsController extends Controller
             'check_in' => $checkInDay->format('Y-m-d'),
             'check_out' => $checkOutDay->format('Y-m-d'),
             'total_price' => $totalAmount,
-            'status' => 'pending', 
-            'payment_method' => 'check_in' 
+            'status' => 'pending',
+            'payment_method' => 'check_in'
         ]);
-        
+
         // Create a payment record with pending status
         $payment = Payments::create([
             'booking_id' => $booking->booking_id,
             'payment_status' => 'pending',
-            'payment_method' => 'check_in',
-            'amount' => $request->total_amount,
+            'payment_method' => 'check_in', 
+            'amount' => $totalAmount,
             'payment_date' => now()
         ]);
         session(['booking_id' => $booking->booking_id]);
