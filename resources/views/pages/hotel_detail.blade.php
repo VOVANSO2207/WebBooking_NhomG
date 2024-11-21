@@ -359,10 +359,10 @@
                                         </div>
                                         <div class="group-text-review">
                                             <textarea name="comment" id="inputReview" placeholder="Mời bạn nhập đánh giá..."
-                                                class="form-control" required></textarea>
+                                                class="form-control"></textarea>
                                                 @error('comment')
-                        <span class="text-danger" style="font-size: 14px; margin-bottom: -25px">{{ $message }}</span>
-                    @enderror
+                                                    <span class="text-danger" style="font-size: 14px; margin-bottom: -25px">{{ $message }}</span>
+                                                @enderror
                                             <div class="upload-file-review d-flex">
                                                 <div class="emoj-review">
                                                     <button type="button" id="emojiButton" class="btn btn-light"></button>
@@ -373,6 +373,9 @@
                                                     </label>
                                                     <input type="file" id="file-input" name="images[]" style="display: none;"
                                                         accept="image/*" multiple>
+                                                        @error('images.*')
+                                                            <div class="text-danger">{{ $message }}</div>
+                                                        @enderror
                                                 </div>
                                             </div>
                                         </div>
@@ -384,8 +387,8 @@
                                             <i class="fa-solid fa-star star" data-value="4"></i>
                                             <i class="fa-solid fa-star star" data-value="5"></i>
                                             @error('rating')
-                        <span class="text-danger" style="font-size: 14px;">{{ $message }}</span>
-                    @enderror
+                                                <span class="text-danger" style="font-size: 14px;">{{ $message }}</span>
+                                            @enderror
                                         </div>
                                  
                                         <div class="btn-submit">
