@@ -28,7 +28,7 @@
                             <div class="row hotel-row">
                                 <div class="col-md-3 hotel-image">
                                     {{-- Lấy hình ảnh đầu tiên của khách sạn --}}
-                                    <img src="{{ asset('storage/images/' . $hotel->images->first()->image_url) }}"
+                                    <img src="{{ asset('images/' . $hotel->images->first()->image_url) }}"
                                         alt="Hình ảnh khách sạn">
                                 </div>
                                 <div class="col-md-9 hotel-details">

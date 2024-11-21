@@ -235,7 +235,7 @@
                                         navigation="true" space-between="30" loop="true">
                                         @forelse($room->room_images as $image)
                                             <swiper-slide>
-                                                <img src="{{ asset('images/' . $image->image_url) }}" alt="Room Image" />
+                                                <img src="{{ asset('storage/images/' . $image->image_url) }}" alt="Room Image" />
                                             </swiper-slide>
                                         @empty
                                             <p>Không có hình ảnh cho phòng này</p>
