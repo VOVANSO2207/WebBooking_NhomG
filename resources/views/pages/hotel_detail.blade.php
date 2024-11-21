@@ -172,50 +172,50 @@
                             </div>
                         </div>
                         <!--   <div class="col-md-3">
-                                <div class="people-summary-container border">
-                                    <div class="people-summary-display">
-                                        <span id="people-summary-counter">{{ session('adults', 1) }} người lớn, </span>
-                                        <span id="room-summary-counter">{{ session('rooms', 1) }} phòng, </span>
-                                        <span id="children-summary-counter">{{ session('children', 0) }} trẻ em</span>
-                                    </div>
-                                </div>
-                                <div class="people-counter-dropdown mt-1 bg-light">
-                                    <div class="people-counter-item">
-                                        <span>Người lớn</span>
-                                        <div class="counter-container">
-                                            <button type="button" class="btn-decrement-adult">-</button>
-                                            <input type="text" class="counter-value" id="adultsCounter"
-                                                name="adults" value="{{ session('adults', 1) }}" readonly>
-                                            <button type="button" class="btn-increment-adult">+</button>
+                                        <div class="people-summary-container border">
+                                            <div class="people-summary-display">
+                                                <span id="people-summary-counter">{{ session('adults', 1) }} người lớn, </span>
+                                                <span id="room-summary-counter">{{ session('rooms', 1) }} phòng, </span>
+                                                <span id="children-summary-counter">{{ session('children', 0) }} trẻ em</span>
+                                            </div>
                                         </div>
-                                    </div>
+                                        <div class="people-counter-dropdown mt-1 bg-light">
+                                            <div class="people-counter-item">
+                                                <span>Người lớn</span>
+                                                <div class="counter-container">
+                                                    <button type="button" class="btn-decrement-adult">-</button>
+                                                    <input type="text" class="counter-value" id="adultsCounter"
+                                                        name="adults" value="{{ session('adults', 1) }}" readonly>
+                                                    <button type="button" class="btn-increment-adult">+</button>
+                                                </div>
+                                            </div>
 
-                                    <div class="people-counter-item">
-                                        <span>Phòng</span>
-                                        <div class="counter-container">
-                                            <button type="button" class="btn-decrement-room">-</button>
-                                            <input type="text" class="counter-value" id="roomsCounter" name="rooms"
-                                                value="{{ session('rooms', 1) }}" readonly>
-                                            <button type="button" class="btn-increment-room">+</button>
-                                        </div>
-                                    </div>
+                                            <div class="people-counter-item">
+                                                <span>Phòng</span>
+                                                <div class="counter-container">
+                                                    <button type="button" class="btn-decrement-room">-</button>
+                                                    <input type="text" class="counter-value" id="roomsCounter" name="rooms"
+                                                        value="{{ session('rooms', 1) }}" readonly>
+                                                    <button type="button" class="btn-increment-room">+</button>
+                                                </div>
+                                            </div>
 
-                                    <div class="people-counter-item">
-                                        <span>Trẻ em</span>
-                                        <div class="counter-container">
-                                            <button type="button" class="btn-decrement-children">-</button>
-                                            <input type="text" class="counter-value" id="childrenCounter"
-                                                name="children" value="{{ session('children', 0) }}" readonly>
-                                            <button type="button" class="btn-increment-children">+</button>
+                                            <div class="people-counter-item">
+                                                <span>Trẻ em</span>
+                                                <div class="counter-container">
+                                                    <button type="button" class="btn-decrement-children">-</button>
+                                                    <input type="text" class="counter-value" id="childrenCounter"
+                                                        name="children" value="{{ session('children', 0) }}" readonly>
+                                                    <button type="button" class="btn-increment-children">+</button>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div> -->
+                                    </div> -->
                         <!-- <div class="col-md-2 search-header button-search-header">
-                                <button type="submit" class="btn btn-primary" style="width: 100%; padding:10px;">
-                                    Thay đổi tìm kiếm
-                                </button>
-                            </div> -->
+                                        <button type="submit" class="btn btn-primary" style="width: 100%; padding:10px;">
+                                            Thay đổi tìm kiếm
+                                        </button>
+                                    </div> -->
                     </form>
                 </div>
             @endif
@@ -327,45 +327,59 @@
 
             </div>
 
-            <!--NHẬP ĐÁNH GIÁ -->
             <div class="box-review">
-                <form class="group-input-review" id="reviewForm" @if (auth()->check())
-                    action="{{ route('reviews.store', $hotel->hotel_id) }}" method="POST" enctype="multipart/form-data"
-                @else action="javascript:void(0)" onclick="showLoginModal()" @endif>
-                    @csrf
-                    <div class="icon-profile">
-                        <i class="fa-solid fa-circle-user"></i>
-                    </div>
-                    <div class="group-text-review">
-                        <textarea name="comment" id="inputReview" placeholder="Mời bạn nhập đánh giá..."
-                            class="form-control" required></textarea>
-                        <!-- <input type="text" placeholder="Mời bạn nhập đánh giá..." class="form-control" id="inputReview"
-                            name="comment" required> -->
-                        <div class="upload-file-review d-flex">
-                            <div class="emoj-review">
-                                <button type="button" id="emojiButton" class="btn btn-light"></button>
-                            </div>
-                            <div class="upload-file">
-                                <label for="file-input">
-                                    <i class="fa-solid fa-circle-plus"></i>
-                                </label>
-                                <input type="file" id="file-input" name="images[]" style="display: none;"
-                                    accept="image/*" multiple>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="rating-stars">
-                        <input type="hidden" name="rating" id="ratingInput" value="0">
-                        <i class="fa-solid fa-star star" data-value="1"></i>
-                        <i class="fa-solid fa-star star" data-value="2"></i>
-                        <i class="fa-solid fa-star star" data-value="3"></i>
-                        <i class="fa-solid fa-star star" data-value="4"></i>
-                        <i class="fa-solid fa-star star" data-value="5"></i>
-                    </div>
-                    <div class="btn-submit">
-                        <button type="submit">ĐĂNG</button>
-                    </div>
-                </form>
+                @if(auth()->check())
+                                @php
+                                    $hasBooking = \App\Models\Booking::where('user_id', auth()->user()->user_id)
+                                        ->whereHas('room', function ($query) use ($hotel) {
+                                            $query->where('hotel_id', $hotel->hotel_id);
+                                        })
+                                        ->exists();
+                                @endphp
+
+                                @if($hasBooking)
+                                    <form class="group-input-review" id="reviewForm" action="{{ route('reviews.store', $hotel->hotel_id) }}"
+                                        method="POST" enctype="multipart/form-data">
+                                        @csrf
+                                        <div class="icon-profile">
+                                            <i class="fa-solid fa-circle-user"></i>
+                                        </div>
+                                        <div class="group-text-review">
+                                            <textarea name="comment" id="inputReview" placeholder="Mời bạn nhập đánh giá..."
+                                                class="form-control" required></textarea>
+                                            <!-- <input type="text" placeholder="Mời bạn nhập đánh giá..." class="form-control" id="inputReview"
+                                                                    name="comment" required> -->
+                                            <div class="upload-file-review d-flex">
+                                                <div class="emoj-review">
+                                                    <button type="button" id="emojiButton" class="btn btn-light"></button>
+                                                </div>
+                                                <div class="upload-file">
+                                                    <label for="file-input">
+                                                        <i class="fa-solid fa-circle-plus"></i>
+                                                    </label>
+                                                    <input type="file" id="file-input" name="images[]" style="display: none;"
+                                                        accept="image/*" multiple>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="rating-stars">
+                                            <input type="hidden" name="rating" id="ratingInput" value="0">
+                                            <i class="fa-solid fa-star star" data-value="1"></i>
+                                            <i class="fa-solid fa-star star" data-value="2"></i>
+                                            <i class="fa-solid fa-star star" data-value="3"></i>
+                                            <i class="fa-solid fa-star star" data-value="4"></i>
+                                            <i class="fa-solid fa-star star" data-value="5"></i>
+                                        </div>
+                                        <div class="btn-submit">
+                                            <button type="submit">ĐĂNG</button>
+                                        </div>
+                                    </form>
+                                @else
+                                    <p style="font-size: 25px;" class="text-warning">Bạn cần đặt phòng tại khách sạn này để viết đánh giá.</p>
+                                @endif
+                @else
+                    <p style="font-size: 25px;" class="text-warning">Vui lòng <a href="{{ route('login') }}">đăng nhập</a> để viết đánh giá.</p>
+                @endif
                 <div class="image-preview-review d-flex">
                     <img id="preview" src="" alt="Ảnh xem trước" multiple>
                 </div>
