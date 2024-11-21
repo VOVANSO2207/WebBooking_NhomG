@@ -172,50 +172,50 @@
                             </div>
                         </div>
                         <!--   <div class="col-md-3">
-                                            <div class="people-summary-container border">
-                                                <div class="people-summary-display">
-                                                    <span id="people-summary-counter">{{ session('adults', 1) }} người lớn, </span>
-                                                    <span id="room-summary-counter">{{ session('rooms', 1) }} phòng, </span>
-                                                    <span id="children-summary-counter">{{ session('children', 0) }} trẻ em</span>
-                                                </div>
-                                            </div>
-                                            <div class="people-counter-dropdown mt-1 bg-light">
-                                                <div class="people-counter-item">
-                                                    <span>Người lớn</span>
-                                                    <div class="counter-container">
-                                                        <button type="button" class="btn-decrement-adult">-</button>
-                                                        <input type="text" class="counter-value" id="adultsCounter"
-                                                            name="adults" value="{{ session('adults', 1) }}" readonly>
-                                                        <button type="button" class="btn-increment-adult">+</button>
+                                                <div class="people-summary-container border">
+                                                    <div class="people-summary-display">
+                                                        <span id="people-summary-counter">{{ session('adults', 1) }} người lớn, </span>
+                                                        <span id="room-summary-counter">{{ session('rooms', 1) }} phòng, </span>
+                                                        <span id="children-summary-counter">{{ session('children', 0) }} trẻ em</span>
                                                     </div>
                                                 </div>
+                                                <div class="people-counter-dropdown mt-1 bg-light">
+                                                    <div class="people-counter-item">
+                                                        <span>Người lớn</span>
+                                                        <div class="counter-container">
+                                                            <button type="button" class="btn-decrement-adult">-</button>
+                                                            <input type="text" class="counter-value" id="adultsCounter"
+                                                                name="adults" value="{{ session('adults', 1) }}" readonly>
+                                                            <button type="button" class="btn-increment-adult">+</button>
+                                                        </div>
+                                                    </div>
 
-                                                <div class="people-counter-item">
-                                                    <span>Phòng</span>
-                                                    <div class="counter-container">
-                                                        <button type="button" class="btn-decrement-room">-</button>
-                                                        <input type="text" class="counter-value" id="roomsCounter" name="rooms"
-                                                            value="{{ session('rooms', 1) }}" readonly>
-                                                        <button type="button" class="btn-increment-room">+</button>
+                                                    <div class="people-counter-item">
+                                                        <span>Phòng</span>
+                                                        <div class="counter-container">
+                                                            <button type="button" class="btn-decrement-room">-</button>
+                                                            <input type="text" class="counter-value" id="roomsCounter" name="rooms"
+                                                                value="{{ session('rooms', 1) }}" readonly>
+                                                            <button type="button" class="btn-increment-room">+</button>
+                                                        </div>
                                                     </div>
-                                                </div>
 
-                                                <div class="people-counter-item">
-                                                    <span>Trẻ em</span>
-                                                    <div class="counter-container">
-                                                        <button type="button" class="btn-decrement-children">-</button>
-                                                        <input type="text" class="counter-value" id="childrenCounter"
-                                                            name="children" value="{{ session('children', 0) }}" readonly>
-                                                        <button type="button" class="btn-increment-children">+</button>
+                                                    <div class="people-counter-item">
+                                                        <span>Trẻ em</span>
+                                                        <div class="counter-container">
+                                                            <button type="button" class="btn-decrement-children">-</button>
+                                                            <input type="text" class="counter-value" id="childrenCounter"
+                                                                name="children" value="{{ session('children', 0) }}" readonly>
+                                                            <button type="button" class="btn-increment-children">+</button>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div> -->
+                                            </div> -->
                         <!-- <div class="col-md-2 search-header button-search-header">
-                                            <button type="submit" class="btn btn-primary" style="width: 100%; padding:10px;">
-                                                Thay đổi tìm kiếm
-                                            </button>
-                                        </div> -->
+                                                <button type="submit" class="btn btn-primary" style="width: 100%; padding:10px;">
+                                                    Thay đổi tìm kiếm
+                                                </button>
+                                            </div> -->
                     </form>
                 </div>
             @endif
@@ -321,10 +321,20 @@
 
         <div class="group-review">
             <div class="review-title m-0">ĐÁNH GIÁ</div>
+            <span class="stars">
+                @for ($i = 1; $i <= 5; $i++)
+                    @if ($i <= floor($averageRating))
+                        <i class="fa-solid fa-star" style="color: #ff4500;"></i> <!-- Sao đầy -->
+                    @elseif ($i == ceil($averageRating) && $averageRating - floor($averageRating) >= 0.5)
+                        <i class="fa-solid fa-star-half-stroke" style="color: #ff4500;"></i> <!-- Nửa sao -->
+                    @else
+                        <i class="fa-regular fa-star" style="color: #ccc;"></i> <!-- Sao chưa được đánh giá -->
+                    @endif
+                @endfor
+            </span>
             <hr class="m-0">
             <div class="total-review m-0 mb-4">
                 Có {{ $reviews->count() }} Đánh giá từ người dùng
-
             </div>
 
             <div class="box-review">

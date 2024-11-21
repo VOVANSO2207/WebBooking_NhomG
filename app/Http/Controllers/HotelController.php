@@ -171,8 +171,8 @@ class HotelController extends Controller
         $hotel = Hotel::with(['rooms.room_images', 'images', 'city', 'reviews.user', 'reviews.likes'])->findOrFail($hotel_id);
         $rooms = $hotel->rooms()->paginate(4);
         $reviews = $hotel->reviews()->withCount('likes')->latest()->paginate(7);  // Đếm số lượt like
-
-        return view('pages.hotel_detail', compact('hotel', 'rooms', 'reviews'));
+        $averageRating = $reviews->avg('rating'); // Tính trung bình rating
+        return view('pages.hotel_detail', compact('hotel', 'rooms', 'reviews', 'averageRating'));
     }
 
     public function search(Request $request)
