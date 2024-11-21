@@ -172,50 +172,50 @@
                             </div>
                         </div>
                         <!--   <div class="col-md-3">
-                                                <div class="people-summary-container border">
-                                                    <div class="people-summary-display">
-                                                        <span id="people-summary-counter">{{ session('adults', 1) }} người lớn, </span>
-                                                        <span id="room-summary-counter">{{ session('rooms', 1) }} phòng, </span>
-                                                        <span id="children-summary-counter">{{ session('children', 0) }} trẻ em</span>
-                                                    </div>
-                                                </div>
-                                                <div class="people-counter-dropdown mt-1 bg-light">
-                                                    <div class="people-counter-item">
-                                                        <span>Người lớn</span>
-                                                        <div class="counter-container">
-                                                            <button type="button" class="btn-decrement-adult">-</button>
-                                                            <input type="text" class="counter-value" id="adultsCounter"
-                                                                name="adults" value="{{ session('adults', 1) }}" readonly>
-                                                            <button type="button" class="btn-increment-adult">+</button>
+                                                    <div class="people-summary-container border">
+                                                        <div class="people-summary-display">
+                                                            <span id="people-summary-counter">{{ session('adults', 1) }} người lớn, </span>
+                                                            <span id="room-summary-counter">{{ session('rooms', 1) }} phòng, </span>
+                                                            <span id="children-summary-counter">{{ session('children', 0) }} trẻ em</span>
                                                         </div>
                                                     </div>
+                                                    <div class="people-counter-dropdown mt-1 bg-light">
+                                                        <div class="people-counter-item">
+                                                            <span>Người lớn</span>
+                                                            <div class="counter-container">
+                                                                <button type="button" class="btn-decrement-adult">-</button>
+                                                                <input type="text" class="counter-value" id="adultsCounter"
+                                                                    name="adults" value="{{ session('adults', 1) }}" readonly>
+                                                                <button type="button" class="btn-increment-adult">+</button>
+                                                            </div>
+                                                        </div>
 
-                                                    <div class="people-counter-item">
-                                                        <span>Phòng</span>
-                                                        <div class="counter-container">
-                                                            <button type="button" class="btn-decrement-room">-</button>
-                                                            <input type="text" class="counter-value" id="roomsCounter" name="rooms"
-                                                                value="{{ session('rooms', 1) }}" readonly>
-                                                            <button type="button" class="btn-increment-room">+</button>
+                                                        <div class="people-counter-item">
+                                                            <span>Phòng</span>
+                                                            <div class="counter-container">
+                                                                <button type="button" class="btn-decrement-room">-</button>
+                                                                <input type="text" class="counter-value" id="roomsCounter" name="rooms"
+                                                                    value="{{ session('rooms', 1) }}" readonly>
+                                                                <button type="button" class="btn-increment-room">+</button>
+                                                            </div>
                                                         </div>
-                                                    </div>
 
-                                                    <div class="people-counter-item">
-                                                        <span>Trẻ em</span>
-                                                        <div class="counter-container">
-                                                            <button type="button" class="btn-decrement-children">-</button>
-                                                            <input type="text" class="counter-value" id="childrenCounter"
-                                                                name="children" value="{{ session('children', 0) }}" readonly>
-                                                            <button type="button" class="btn-increment-children">+</button>
+                                                        <div class="people-counter-item">
+                                                            <span>Trẻ em</span>
+                                                            <div class="counter-container">
+                                                                <button type="button" class="btn-decrement-children">-</button>
+                                                                <input type="text" class="counter-value" id="childrenCounter"
+                                                                    name="children" value="{{ session('children', 0) }}" readonly>
+                                                                <button type="button" class="btn-increment-children">+</button>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </div> -->
+                                                </div> -->
                         <!-- <div class="col-md-2 search-header button-search-header">
-                                                <button type="submit" class="btn btn-primary" style="width: 100%; padding:10px;">
-                                                    Thay đổi tìm kiếm
-                                                </button>
-                                            </div> -->
+                                                    <button type="submit" class="btn btn-primary" style="width: 100%; padding:10px;">
+                                                        Thay đổi tìm kiếm
+                                                    </button>
+                                                </div> -->
                     </form>
                 </div>
             @endif
@@ -235,12 +235,13 @@
                                         navigation="true" space-between="30" loop="true">
                                         @forelse($room->room_images as $image)
                                             <swiper-slide>
-                                                <img src="{{ asset('storage/images/' . $image->image_url) }}" alt="Room Image" />
+                                                <img src="{{ asset('storage/images/' . $image->image_url) }}"
+                                                    alt="Room Image" />
                                             </swiper-slide>
                                         @empty
                                             <p>Không có hình ảnh cho phòng này</p>
                                         @endforelse
-                                    </swiper-container>s
+                                    </swiper-container>
                                 </div>
 
                                 <!-- Thông tin room -->
@@ -360,9 +361,9 @@
                                         <div class="group-text-review">
                                             <textarea name="comment" id="inputReview" placeholder="Mời bạn nhập đánh giá..."
                                                 class="form-control"></textarea>
-                                                @error('comment')
-                                                    <span class="text-danger" style="font-size: 14px; margin-bottom: -25px">{{ $message }}</span>
-                                                @enderror
+                                            @error('comment')
+                                                <span class="text-danger" style="font-size: 14px; margin-bottom: -25px">{{ $message }}</span>
+                                            @enderror
                                             <div class="upload-file-review d-flex">
                                                 <div class="emoj-review">
                                                     <button type="button" id="emojiButton" class="btn btn-light"></button>
@@ -373,9 +374,9 @@
                                                     </label>
                                                     <input type="file" id="file-input" name="images[]" style="display: none;"
                                                         accept="image/*" multiple>
-                                                        @error('images.*')
-                                                            <div class="text-danger">{{ $message }}</div>
-                                                        @enderror
+                                                    @error('images.*')
+                                                        <div class="text-danger">{{ $message }}</div>
+                                                    @enderror
                                                 </div>
                                             </div>
                                         </div>
@@ -390,7 +391,7 @@
                                                 <span class="text-danger" style="font-size: 14px;">{{ $message }}</span>
                                             @enderror
                                         </div>
-                                 
+
                                         <div class="btn-submit">
                                             <button type="submit">ĐĂNG</button>
                                         </div>

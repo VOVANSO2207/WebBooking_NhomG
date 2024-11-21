@@ -172,5 +172,24 @@ class BookingController extends Controller
         return redirect()->route('admin.viewbooking')->with('success', 'Cập nhật đơn đặt phòng thành công.');
     }
 
+    public function cancel($id)
+    {
+        $hoaDon = Booking::findOrFail($id);
 
+        $hoaDon->status = 'cancelled';
+        $hoaDon->save();
+
+        return redirect()->route('pages.account')->with('success', 'Hóa đơn đã hủy thành công.');
+    }
+
+    // Chưa sử dụng, chưa có được logic code
+    public function xoaHoaDon($id)
+    {
+        $hoaDon = Booking::findOrFail($id);
+
+        $hoaDon->status = 'deleted';
+        $hoaDon->save();
+
+        return redirect()->route('pages.account')->with('success', 'Hóa đơn đã xóa thành công.');
+    }
 }
