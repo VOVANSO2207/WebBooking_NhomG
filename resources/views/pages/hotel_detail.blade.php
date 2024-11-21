@@ -240,7 +240,7 @@
                                         @empty
                                             <p>Không có hình ảnh cho phòng này</p>
                                         @endforelse
-                                    </swiper-container>
+                                    </swiper-container>s
                                 </div>
 
                                 <!-- Thông tin room -->
@@ -360,6 +360,9 @@
                                         <div class="group-text-review">
                                             <textarea name="comment" id="inputReview" placeholder="Mời bạn nhập đánh giá..."
                                                 class="form-control" required></textarea>
+                                                @error('comment')
+                        <span class="text-danger" style="font-size: 14px; margin-bottom: -25px">{{ $message }}</span>
+                    @enderror
                                             <div class="upload-file-review d-flex">
                                                 <div class="emoj-review">
                                                     <button type="button" id="emojiButton" class="btn btn-light"></button>
@@ -380,7 +383,11 @@
                                             <i class="fa-solid fa-star star" data-value="3"></i>
                                             <i class="fa-solid fa-star star" data-value="4"></i>
                                             <i class="fa-solid fa-star star" data-value="5"></i>
+                                            @error('rating')
+                        <span class="text-danger" style="font-size: 14px;">{{ $message }}</span>
+                    @enderror
                                         </div>
+                                 
                                         <div class="btn-submit">
                                             <button type="submit">ĐĂNG</button>
                                         </div>

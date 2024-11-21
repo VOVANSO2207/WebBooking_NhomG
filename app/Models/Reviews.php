@@ -5,6 +5,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class Reviews extends Model
 {
@@ -83,16 +84,23 @@ class Reviews extends Model
 
         // Validate dữ liệu
         $validator = Validator::make($data, [
-            'comment' => 'required|string|max:1000',
-            'rating' => 'nullable|integer|min:1|max:5',
+            'comment' => 'required|string|max:1000|regex:/^[A-Za-z0-9\s\p{L}.,!?]*$/u',
+            'rating' => 'nullable|integer|min:1|max:5|in:1,2,3,4,5',
             'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            ],[
+                'rating.min' => 'Rating không hợp lệ',
+                'rating.max' => 'Rating không hợp lệ',
+                'rating.in' => 'Rating không hợp lệ',
+                'rating.integer' => 'Rating không hợp lệ',
+                'comment.max' => 'Bình luận tối đa được 1000 kí tự',
+                'comment.required' => 'Bình luận không được để trống',
+                'comment.regex' => 'Bình luận không hợp lệ',
+                'images.*.mimes' => 'Chỉ chấp nhận ảnh có định dạng: jpeg, png, jpg, gif, svg.',
+                'images.*.max' => 'Kích thước ảnh tối đa là 2MB.',
         ]);
 
-        if ($validator->fails()) {
-            return [
-                'success' => false,
-                'message' => $validator->errors()->first(),
-            ];
+        if ($validator->fails()) {  
+            throw new ValidationException($validator);
         }
 
         // Lưu bình luận vào database

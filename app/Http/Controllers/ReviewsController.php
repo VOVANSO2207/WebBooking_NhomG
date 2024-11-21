@@ -18,15 +18,6 @@ class ReviewsController extends Controller
 
         // Gọi logic từ model Reviews
         $result = Reviews::createReview($user, $hotel_id, $request->all(), $request->file('images', []));
-
-        // Kiểm tra kết quả và trả về thông báo
-        if (!$result['success']) {
-            return response()->json([
-                'success' => false,
-                'message' => $result['message'],
-            ], 403); // 403: Forbidden
-        }
-
         return back()->with('success', $result['message']);
     }
 
@@ -59,23 +50,23 @@ class ReviewsController extends Controller
     //     return back()->with('success', 'Phản hồi của bạn đã được gửi.');
     // }
     public function destroy($review_id)
-{
-    // Lấy người dùng hiện tại
-    $user = auth()->user();
+    {
+        // Lấy người dùng hiện tại
+        $user = auth()->user();
 
-    // Gọi logic xóa từ model Reviews
-    $result = Reviews::deleteReview($review_id, $user);
+        // Gọi logic xóa từ model Reviews
+        $result = Reviews::deleteReview($review_id, $user);
 
-    // Kiểm tra kết quả và trả về thông báo
-    if (!$result['success']) {
-        return response()->json([
-            'success' => false,
-            'message' => $result['message']
-        ], 403); // 403: Forbidden
+        // Kiểm tra kết quả và trả về thông báo
+        if (!$result['success']) {
+            return response()->json([
+                'success' => false,
+                'message' => $result['message']
+            ], 403); // 403: Forbidden
+        }
+
+        return back()->with('success', $result['message']);
     }
-
-    return back()->with('success', $result['message']);
-}
 
 
 
@@ -98,21 +89,15 @@ class ReviewsController extends Controller
 
     //     return response()->json(['success' => true, 'message' => 'Bình luận đã được chỉnh sửa.', 'comment' => $review->comment]);
     // }
-    
+
     public function like($review_id)
-{
-    $user = auth()->user(); // Lấy người dùng hiện tại
+    {
+        $user = auth()->user(); // Lấy người dùng hiện tại
 
-    // Gọi phương thức từ model Reviews để xử lý like/unlike
-    $result = Reviews::toggleLike($review_id, $user);
+        // Gọi phương thức từ model Reviews để xử lý like/unlike
+        $result = Reviews::toggleLike($review_id, $user);
 
-    return response()->json($result);
-}
-
-
-
-
-
-
+        return response()->json($result);
+    }
 
 }
