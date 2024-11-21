@@ -92,20 +92,20 @@
 
                             <div class="mb-3">
                                 <label for="full-name" class="form-label m-0">Họ và tên</label>
-                                <input type="text" id="full-name" class="form-control"
-                                    value="{{ Auth::check() ? Auth::user()->username : 'Guest' }}">
+                                <input type="text" name="full_name" id="full-name" class="form-control"
+                                value="{{ Auth::check() ? Auth::user()->username : 'Guest' }}">
                             </div>
 
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="email" class="form-label m-0">Email</label>
-                                    <input type="email" id="email" class="form-control"
-                                        value="{{ Auth::check() ? Auth::user()->email : 'email@example.com' }}">
+                                    <input type="email" name="email" id="email" class="form-control"
+                                    value="{{ Auth::check() ? Auth::user()->email : 'email@example.com' }}">                                
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="phone" class="form-label m-0">Số điện thoại</label>
-                                    <input type="tel" id="phone" class="form-control"
-                                        value="{{ Auth::check() ? Auth::user()->phone_number : '0123456789' }}">
+                                    <input type="tel" name="phone" id="phone" class="form-control"
+                                    value="{{ Auth::check() ? Auth::user()->phone_number : '0123456789' }}">
                                 </div>
                             </div>
                         </div>

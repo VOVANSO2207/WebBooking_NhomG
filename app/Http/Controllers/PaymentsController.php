@@ -28,11 +28,24 @@ class PaymentsController extends Controller
         $checkInDay = \Carbon\Carbon::createFromFormat('d/m/Y', trim($checkIn));
         $checkOutDay = \Carbon\Carbon::createFromFormat('d/m/Y', trim($checkOut));
         $promotion = Promotions::where('promotion_id', $request->promotion_id)
-            ->where('start_date', '<=', Carbon::now())
-            ->where('end_date', '>=', Carbon::now())
+            // ->where('start_date', '<=', Carbon::now())
+            // ->where('end_date', '>=', Carbon::now())
             ->first();
         if (!$promotion && $request->promotion_id) {
             return back()->with('error', 'Mã giảm giá không hợp lệ');
+        }
+        if ($promotion->start_date > Carbon::now()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Mã giảm giá chưa tới ngày áp dụng.'
+            ]);
+        }
+          
+        if ($promotion->end_date < Carbon::now()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Mã giảm giá đã hết hạn.'
+            ]);
         }
         // không có mã voucher thì lưu vào 0
         $finalPromotionId = $promotion ? $request->promotion_id : 0;
@@ -162,12 +175,25 @@ class PaymentsController extends Controller
 
         // Check promotion validity
         $promotion = Promotions::where('promotion_id', $request->promotion_id)
-            ->where('start_date', '<=', Carbon::now())
-            ->where('end_date', '>=', Carbon::now())
+            // ->where('start_date', '<=', Carbon::now())
+            // ->where('end_date', '>=', Carbon::now())
             ->first();
 
         if (!$promotion && $request->promotion_id) {
             return back()->with('error', 'Mã giảm giá không hợp lệ');
+        }
+        if ($promotion->start_date > Carbon::now()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Mã giảm giá chưa tới ngày áp dụng.'
+            ]);
+        }
+          
+        if ($promotion->end_date < Carbon::now()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Mã giảm giá đã hết hạn.'
+            ]);
         }
         $finalPromotionId = $promotion ? $request->promotion_id : 0;
 
@@ -182,7 +208,7 @@ class PaymentsController extends Controller
             'status' => 'pending', 
             'payment_method' => 'check_in' 
         ]);
-
+        
         // Create a payment record with pending status
         $payment = Payments::create([
             'booking_id' => $booking->booking_id,

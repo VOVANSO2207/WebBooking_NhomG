@@ -233,15 +233,15 @@ class UsersController extends Controller
     {
         try {
             $rules = [
-                'username' => [
-                    'required',
-                    'string',
-                    'min:5',
-                    'max:100',
-                    'regex:/^[a-zA-ZÀ-ÿ\s]+$/', // Kiểm tra không có ký tự đặc biệt (cho phép chữ cái và khoảng trắng)
-                    'regex:/^(?!.*\s{2,}).*$/',
-                ],
-                'email' => 'required|email|max:255|no_spaces_in_email|valid_domain|valid_top_level_domain',
+                // 'username' => [
+                //     'required',
+                //     'string',
+                //     'min:5',
+                //     'max:100',
+                //     'regex:/^[a-zA-ZÀ-ÿ\s]+$/',
+                //     'regex:/^(?!.*\s{2,}).*$/',
+                // ],
+                // 'email' => 'required|email|max:255|no_spaces_in_email|valid_domain|valid_top_level_domain',
                 'phone_number' => [
                     'required',
                     'string',

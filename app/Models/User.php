@@ -171,19 +171,19 @@ use Illuminate\Auth\Authenticatable as AuthenticatableTrait;
         $user = self::findOrFail($userId);
         
         // Validate email unique nếu email thay đổi
-        if (isset($data['email']) && $data['email'] !== $user->email) {
-            $existingEmail = self::where('email', $data['email'])
-                                ->where('id', '!=', $userId)
-                                ->exists();
-            if ($existingEmail) {
-                throw new \Exception('Email đã tồn tại trong hệ thống.');
-            }
-        }
+        // if (isset($data['email']) && $data['email'] !== $user->email) {
+        //     $existingEmail = self::where('email', $data['email'])
+        //                         ->where('id', '!=', $userId)
+        //                         ->exists();
+        //     if ($existingEmail) {
+        //         throw new \Exception('Email đã tồn tại trong hệ thống.');
+        //     }
+        // }
 
         // Validate phone unique nếu phone thay đổi  
         if (isset($data['phone_number']) && $data['phone_number'] !== $user->phone_number) {
             $existingPhone = self::where('phone_number', $data['phone_number'])
-                                ->where('id', '!=', $userId)
+                                ->where('user_id', '!=', $userId)
                                 ->exists();
             if ($existingPhone) {
                 throw new \Exception('Số điện thoại đã tồn tại trong hệ thống.');
@@ -205,8 +205,8 @@ use Illuminate\Auth\Authenticatable as AuthenticatableTrait;
         }
         // Cập nhật thông tin user
         $user->update([
-            'username' => $data['username'] ?? $user->username,
-            'email' => $data['email'] ?? $user->email,
+            // 'username' => $data['username'] ?? $user->username,
+            // 'email' => $data['email'] ?? $user->email,
             'phone_number' => $data['phone_number'] ?? $user->phone_number,
             'avatar' => $data['avatar'] ?? $user->avatar,
         ]);

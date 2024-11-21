@@ -169,7 +169,7 @@ class PromotionsController extends Controller
         try {
             $promotion = Promotions::where('promotion_code', $request->promotion_code)
                 // ->where('start_date', '<=', Carbon::now())
-                ->where('end_date', '>=', Carbon::now())
+                // ->where('end_date', '>=', Carbon::now())
                 ->first();
 
             if (!$promotion) {
@@ -178,7 +178,19 @@ class PromotionsController extends Controller
                     'message' => 'Mã giảm giá không tồn tại hoặc đã hết hạn!'
                 ]);
             }
-
+            if ($promotion->start_date > Carbon::now()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Mã giảm giá chưa tới ngày áp dụng.'
+                ]);
+            }
+            
+            if ($promotion->end_date < Carbon::now()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Mã giảm giá đã hết hạn.'
+                ]);
+            }
             // Calculate discount amount based on percentage
             $discountPercentage = $promotion->discount_amount;
             $calculatedDiscount = round(($request->original_amount * $discountPercentage) / 100);
@@ -204,7 +216,6 @@ class PromotionsController extends Controller
             ]);
         }
     }
-
 }
 
 
