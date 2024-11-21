@@ -38,6 +38,18 @@ class ReviewsController extends Controller
             'message' => 'Bạn phải đặt phòng tại khách sạn này để có thể bình luận.'
         ], 403); // 403: Forbidden
     }
+     // Kiểm tra xem người dùng đã đánh giá khách sạn này chưa
+     $hasReviewed = Reviews::where('user_id', $user->user_id)
+     ->where('hotel_id', $hotel_id)
+     ->exists();
+
+ if ($hasReviewed) {
+     return response()->json([
+         'success' => false,
+         'message' => 'Bạn chỉ được đánh giá khách sạn này một lần.'
+     ], 403); // 403: Forbidden
+ }
+
 
     // Validate dữ liệu đầu vào
     $request->validate([

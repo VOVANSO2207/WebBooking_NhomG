@@ -172,50 +172,50 @@
                             </div>
                         </div>
                         <!--   <div class="col-md-3">
-                                        <div class="people-summary-container border">
-                                            <div class="people-summary-display">
-                                                <span id="people-summary-counter">{{ session('adults', 1) }} người lớn, </span>
-                                                <span id="room-summary-counter">{{ session('rooms', 1) }} phòng, </span>
-                                                <span id="children-summary-counter">{{ session('children', 0) }} trẻ em</span>
-                                            </div>
-                                        </div>
-                                        <div class="people-counter-dropdown mt-1 bg-light">
-                                            <div class="people-counter-item">
-                                                <span>Người lớn</span>
-                                                <div class="counter-container">
-                                                    <button type="button" class="btn-decrement-adult">-</button>
-                                                    <input type="text" class="counter-value" id="adultsCounter"
-                                                        name="adults" value="{{ session('adults', 1) }}" readonly>
-                                                    <button type="button" class="btn-increment-adult">+</button>
+                                            <div class="people-summary-container border">
+                                                <div class="people-summary-display">
+                                                    <span id="people-summary-counter">{{ session('adults', 1) }} người lớn, </span>
+                                                    <span id="room-summary-counter">{{ session('rooms', 1) }} phòng, </span>
+                                                    <span id="children-summary-counter">{{ session('children', 0) }} trẻ em</span>
                                                 </div>
                                             </div>
+                                            <div class="people-counter-dropdown mt-1 bg-light">
+                                                <div class="people-counter-item">
+                                                    <span>Người lớn</span>
+                                                    <div class="counter-container">
+                                                        <button type="button" class="btn-decrement-adult">-</button>
+                                                        <input type="text" class="counter-value" id="adultsCounter"
+                                                            name="adults" value="{{ session('adults', 1) }}" readonly>
+                                                        <button type="button" class="btn-increment-adult">+</button>
+                                                    </div>
+                                                </div>
 
-                                            <div class="people-counter-item">
-                                                <span>Phòng</span>
-                                                <div class="counter-container">
-                                                    <button type="button" class="btn-decrement-room">-</button>
-                                                    <input type="text" class="counter-value" id="roomsCounter" name="rooms"
-                                                        value="{{ session('rooms', 1) }}" readonly>
-                                                    <button type="button" class="btn-increment-room">+</button>
+                                                <div class="people-counter-item">
+                                                    <span>Phòng</span>
+                                                    <div class="counter-container">
+                                                        <button type="button" class="btn-decrement-room">-</button>
+                                                        <input type="text" class="counter-value" id="roomsCounter" name="rooms"
+                                                            value="{{ session('rooms', 1) }}" readonly>
+                                                        <button type="button" class="btn-increment-room">+</button>
+                                                    </div>
                                                 </div>
-                                            </div>
 
-                                            <div class="people-counter-item">
-                                                <span>Trẻ em</span>
-                                                <div class="counter-container">
-                                                    <button type="button" class="btn-decrement-children">-</button>
-                                                    <input type="text" class="counter-value" id="childrenCounter"
-                                                        name="children" value="{{ session('children', 0) }}" readonly>
-                                                    <button type="button" class="btn-increment-children">+</button>
+                                                <div class="people-counter-item">
+                                                    <span>Trẻ em</span>
+                                                    <div class="counter-container">
+                                                        <button type="button" class="btn-decrement-children">-</button>
+                                                        <input type="text" class="counter-value" id="childrenCounter"
+                                                            name="children" value="{{ session('children', 0) }}" readonly>
+                                                        <button type="button" class="btn-increment-children">+</button>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div> -->
+                                        </div> -->
                         <!-- <div class="col-md-2 search-header button-search-header">
-                                        <button type="submit" class="btn btn-primary" style="width: 100%; padding:10px;">
-                                            Thay đổi tìm kiếm
-                                        </button>
-                                    </div> -->
+                                            <button type="submit" class="btn btn-primary" style="width: 100%; padding:10px;">
+                                                Thay đổi tìm kiếm
+                                            </button>
+                                        </div> -->
                     </form>
                 </div>
             @endif
@@ -335,9 +335,12 @@
                                             $query->where('hotel_id', $hotel->hotel_id);
                                         })
                                         ->exists();
+                                    $hasReviewed = \App\Models\Reviews::where('user_id', auth()->user()->user_id)
+                                        ->where('hotel_id', $hotel->hotel_id)
+                                        ->exists();
                                 @endphp
 
-                                @if($hasBooking)
+                                @if($hasBooking && !$hasReviewed)
                                     <form class="group-input-review" id="reviewForm" action="{{ route('reviews.store', $hotel->hotel_id) }}"
                                         method="POST" enctype="multipart/form-data">
                                         @csrf
@@ -347,8 +350,6 @@
                                         <div class="group-text-review">
                                             <textarea name="comment" id="inputReview" placeholder="Mời bạn nhập đánh giá..."
                                                 class="form-control" required></textarea>
-                                            <!-- <input type="text" placeholder="Mời bạn nhập đánh giá..." class="form-control" id="inputReview"
-                                                                    name="comment" required> -->
                                             <div class="upload-file-review d-flex">
                                                 <div class="emoj-review">
                                                     <button type="button" id="emojiButton" class="btn btn-light"></button>
@@ -374,11 +375,18 @@
                                             <button type="submit">ĐĂNG</button>
                                         </div>
                                     </form>
+                                @elseif($hasReviewed)
+                                    <!-- Hiển thị thông báo nếu người dùng đã đánh giá -->
+                                    <p style="font-size: 25px;" class="text-success">Bạn đã đánh giá khách sạn này.</p>
                                 @else
-                                    <p style="font-size: 25px;" class="text-warning">Bạn cần đặt phòng tại khách sạn này để viết đánh giá.</p>
+                                    <!-- Hiển thị thông báo nếu người dùng chưa đặt phòng -->
+                                    <p style="font-size: 25px;" class="text-warning">Bạn cần đặt phòng tại khách sạn này để viết đánh giá.
+                                    </p>
                                 @endif
                 @else
-                    <p style="font-size: 25px;" class="text-warning">Vui lòng <a href="{{ route('login') }}">đăng nhập</a> để viết đánh giá.</p>
+                    <!-- Hiển thị thông báo nếu người dùng chưa đăng nhập -->
+                    <p style="font-size: 25px;" class="text-warning">Vui lòng <a href="{{ route('login') }}">đăng nhập</a>
+                        để viết đánh giá.</p>
                 @endif
                 <div class="image-preview-review d-flex">
                     <img id="preview" src="" alt="Ảnh xem trước" multiple>
