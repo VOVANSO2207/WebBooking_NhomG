@@ -266,11 +266,11 @@ class HotelController extends Controller
 
         // Lấy URL hình ảnh
         $images = $hotel->images->map(function ($image) {
-            $imagePath = public_path('storage/images/' . $image->image_url);
+            $imagePath = public_path('/storage/images/' . $image->image_url);
             if (file_exists($imagePath)) {
-                return asset('storage/images/' . $image->image_url);
+                return asset('/storage/images/' . $image->image_url);
             } else {
-                return asset('images/defaullt-image.png'); // Hình ảnh mặc định
+                return asset('/storage/images/default_image.jpg'); // Hình ảnh mặc định
             }
         });
         // Lấy amenities từ bảng hotel_amenity_hotel
