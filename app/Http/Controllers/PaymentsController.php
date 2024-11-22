@@ -28,8 +28,6 @@ class PaymentsController extends Controller
         $checkInDay = \Carbon\Carbon::createFromFormat('d/m/Y', trim($checkIn));
         $checkOutDay = \Carbon\Carbon::createFromFormat('d/m/Y', trim($checkOut));
         $promotion = Promotions::where('promotion_id', $request->promotion_id)
-            // ->where('start_date', '<=', Carbon::now())
-            // ->where('end_date', '>=', Carbon::now())
             ->first();
             $promotionId = $request->promotion_id ?? 0;
 
