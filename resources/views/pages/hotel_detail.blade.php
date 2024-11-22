@@ -19,7 +19,7 @@
                 <div class="col-md-6 large-img">
                     @foreach ($hotel->images as $index => $image)
                         @if ($index == 1)
-                            <img src="{{ asset('storage/images/' . $image->image_url) }}" alt="{{ $image->image_url }}" />
+                            <img src="{{ asset('images/' . $image->image_url) }}" alt="{{ $image->image_url }}" />
                         @endif
                     @endforeach
                 </div>
@@ -28,12 +28,12 @@
                         @foreach ($hotel->images as $index => $image)
                             @if ($index < 3)
                                 <div class="col-6 small-img">
-                                    <img src="{{ asset('storage/images/' . $image->image_url) }}"
+                                    <img src="{{ asset('images/' . $image->image_url) }}"
                                         alt="{{ $image->image_url }} Image_null" />
                                 </div>
                             @elseif ($index === 3)
                                 <div class="col-6 small-img overlay-container">
-                                    <img src="{{ asset('storage/images/' . $image->image_url) }}"
+                                    <img src="{{ asset('images/' . $image->image_url) }}"
                                         alt="{{ $image->image_url }} Image_null" />
                                     <div class="overlay" data-bs-toggle="modal" data-bs-target="#imageModal">
                                         <span>Xem tất cả ảnh</span>
@@ -60,7 +60,7 @@
                         <div class="row">
                             @foreach ($hotel->images as $image)
                                 <div class="col-md-4 mb-3 review-images-details">
-                                    <img src="{{ asset('storage/images/' . $image->image_url) }}" alt="{{ $image->image_url }}"
+                                    <img src="{{ asset('images/' . $image->image_url) }}" alt="{{ $image->image_url }}"
                                         class="img-fluid modal-image-alls">
                                 </div>
                             @endforeach
@@ -93,12 +93,13 @@
                         <h5 class="section-title">Giới thiệu</h5>
                         <p class="detail-description">
                             {!! \Illuminate\Support\Str::limit($hotel->description, 500) !!}
-                            @if (strlen($hotel->description) > 500)
+                            @if (str_word_count($hotel->description) > 100)
                                 <span id="more-text" style="display: none;">
                                     {!! substr($hotel->description, 500) !!}
                                 </span>
                                 <span>
-                                    <a href="#" class="detail-btn-load-more" onclick="toggleMoreText(event)">Xem thêm</a>
+                                    <a href="#" class="detail-btn-load-more" onclick="toggleMoreText(event)">Xem
+                                        thêm</a>
                                 </span>
                             @endif
                         </p>
@@ -154,7 +155,7 @@
                 </div>
             </div>
         </div>
-        <div class="group-detail-book-room" id="bookingSectionRoom">
+        <div class="group-detail-book-room" id="bookingSection">
             @if ($rooms->IsEmpty())
                 <p> </p>
             @else
@@ -171,50 +172,50 @@
                             </div>
                         </div>
                         <!--   <div class="col-md-3">
-                                                                                    <div class="people-summary-container border">
-                                                                                        <div class="people-summary-display">
-                                                                                            <span id="people-summary-counter">{{ session('adults', 1) }} người lớn, </span>
-                                                                                            <span id="room-summary-counter">{{ session('rooms', 1) }} phòng, </span>
-                                                                                            <span id="children-summary-counter">{{ session('children', 0) }} trẻ em</span>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="people-counter-dropdown mt-1 bg-light">
-                                                                                        <div class="people-counter-item">
-                                                                                            <span>Người lớn</span>
-                                                                                            <div class="counter-container">
-                                                                                                <button type="button" class="btn-decrement-adult">-</button>
-                                                                                                <input type="text" class="counter-value" id="adultsCounter"
-                                                                                                    name="adults" value="{{ session('adults', 1) }}" readonly>
-                                                                                                <button type="button" class="btn-increment-adult">+</button>
-                                                                                            </div>
-                                                                                        </div>
+                                                    <div class="people-summary-container border">
+                                                        <div class="people-summary-display">
+                                                            <span id="people-summary-counter">{{ session('adults', 1) }} người lớn, </span>
+                                                            <span id="room-summary-counter">{{ session('rooms', 1) }} phòng, </span>
+                                                            <span id="children-summary-counter">{{ session('children', 0) }} trẻ em</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="people-counter-dropdown mt-1 bg-light">
+                                                        <div class="people-counter-item">
+                                                            <span>Người lớn</span>
+                                                            <div class="counter-container">
+                                                                <button type="button" class="btn-decrement-adult">-</button>
+                                                                <input type="text" class="counter-value" id="adultsCounter"
+                                                                    name="adults" value="{{ session('adults', 1) }}" readonly>
+                                                                <button type="button" class="btn-increment-adult">+</button>
+                                                            </div>
+                                                        </div>
 
-                                                                                        <div class="people-counter-item">
-                                                                                            <span>Phòng</span>
-                                                                                            <div class="counter-container">
-                                                                                                <button type="button" class="btn-decrement-room">-</button>
-                                                                                                <input type="text" class="counter-value" id="roomsCounter" name="rooms"
-                                                                                                    value="{{ session('rooms', 1) }}" readonly>
-                                                                                                <button type="button" class="btn-increment-room">+</button>
-                                                                                            </div>
-                                                                                        </div>
+                                                        <div class="people-counter-item">
+                                                            <span>Phòng</span>
+                                                            <div class="counter-container">
+                                                                <button type="button" class="btn-decrement-room">-</button>
+                                                                <input type="text" class="counter-value" id="roomsCounter" name="rooms"
+                                                                    value="{{ session('rooms', 1) }}" readonly>
+                                                                <button type="button" class="btn-increment-room">+</button>
+                                                            </div>
+                                                        </div>
 
-                                                                                        <div class="people-counter-item">
-                                                                                            <span>Trẻ em</span>
-                                                                                            <div class="counter-container">
-                                                                                                <button type="button" class="btn-decrement-children">-</button>
-                                                                                                <input type="text" class="counter-value" id="childrenCounter"
-                                                                                                    name="children" value="{{ session('children', 0) }}" readonly>
-                                                                                                <button type="button" class="btn-increment-children">+</button>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div> -->
+                                                        <div class="people-counter-item">
+                                                            <span>Trẻ em</span>
+                                                            <div class="counter-container">
+                                                                <button type="button" class="btn-decrement-children">-</button>
+                                                                <input type="text" class="counter-value" id="childrenCounter"
+                                                                    name="children" value="{{ session('children', 0) }}" readonly>
+                                                                <button type="button" class="btn-increment-children">+</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div> -->
                         <!-- <div class="col-md-2 search-header button-search-header">
-                                                                                    <button type="submit" class="btn btn-primary" style="width: 100%; padding:10px;">
-                                                                                        Thay đổi tìm kiếm
-                                                                                    </button>
-                                                                                </div> -->
+                                                    <button type="submit" class="btn btn-primary" style="width: 100%; padding:10px;">
+                                                        Thay đổi tìm kiếm
+                                                    </button>
+                                                </div> -->
                     </form>
                 </div>
             @endif
@@ -452,7 +453,6 @@
                                         Thích
                                     </a>
                                     @if (auth()->check() && (auth()->user()->user_id === $review->user_id || auth()->user()->is_admin))
-                                        <a href="#" class="edit-review"><i class="fa-solid fa-pen-to-square"></i> Chỉnh sửa</a>
                                         <button type="button" class="delete-review-btn me-4 btn btn-link"
                                             data-review-id="{{ $review->review_id }}" data-bs-toggle="modal"
                                             data-bs-target="#deleteReviewModal">
@@ -562,25 +562,6 @@
                     });
             });
         });
-
-        // Scroll xuống đặt phòng
-        const bookNowBtn = document.getElementById('bookNowBtn');
-        if (bookNowBtn) {
-            bookNowBtn.addEventListener('click', function (e) {
-                console.log("Button clicked!");
-                e.preventDefault();
-                const bookingSection = document.getElementById('bookingSectionRoom');
-                if (bookingSection) {
-                    bookingSection.scrollIntoView({
-                        behavior: 'smooth' // Cuộn mượt mà
-                    });
-                } else {
-                    console.error("Element with ID 'bookingSectionRoom' not found!");
-                }
-            });
-        } else {
-            console.error("Button with ID 'bookNowBtn' not found!");
-        }
     });
     document.addEventListener('DOMContentLoaded', function () {
         const stars = document.querySelectorAll('.rating-stars .star');
@@ -844,7 +825,12 @@
         }
     }
     // 
-
+    document.getElementById('bookNowBtn').addEventListener('click', function (e) {
+        e.preventDefault();
+        document.getElementById('bookingSection').scrollIntoView({
+            behavior: 'smooth' // Cuộn mượt mà
+        });
+    });
     // 
     document.addEventListener('DOMContentLoaded', function () {
         const searchForm = document.getElementById('searchForm');
