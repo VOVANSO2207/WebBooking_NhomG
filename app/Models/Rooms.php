@@ -110,9 +110,9 @@ class Rooms extends Model
             'discount_percent' => 'required|numeric|min:0|max:100',
             'description' => 'required|string',
             'amenities' => 'required|array',
-            'images.*' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'images.*' => 'required|image|mimes:jpeg,png,jpg|max:5120',
         ]);
-
+        
         return $validator;
     }
     /**

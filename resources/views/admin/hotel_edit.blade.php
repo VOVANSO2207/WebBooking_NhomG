@@ -112,7 +112,7 @@
                                         <!-- Hiển thị ảnh hiện tại nếu có -->
                                         @foreach($hotel->images as $image)
                                             <div class="position-relative me-2">
-                                                <img src="{{ asset('images/' . $image->image_url) }}" class="img-thumbnail me-2" style="width: 100px; height: auto;">
+                                                <img src="{{ asset('storage/images/' . $image->image_url) }}" class="img-thumbnail me-2" style="width: 100px; height: auto;">
                                             </div>
                                         @endforeach
                                     </div>
@@ -209,7 +209,7 @@ function addSelectedRoom() {
     const roomsSelect = document.getElementById('roomSelect');
     const selectedOption = roomsSelect.options[roomsSelect.selectedIndex];
     const roomId = selectedOption.value;
-    const roomImageUrl = selectedOption.getAttribute('data-image') || "{{ asset('images/default_image.jpg') }}";
+    const roomImageUrl = selectedOption.getAttribute('data-image') || "{{ asset('storage/images/default_image.jpg') }}";
     const roomName = selectedOption.getAttribute('data-name');
     const roomPrice = selectedOption.getAttribute('data-price');
 

@@ -111,7 +111,7 @@
                     <div class="col-md-4 detail-right-info">
                         <span class="detail-price-main">
                             @if ($hotel->rooms->isNotEmpty())
-                                <p class="price">{{ number_format($hotel->rooms->min('price'), 0, ',', '.') }}/ đêm
+                                <p class="price">{{ number_format($hotel->rooms->min('price'), 0, ',', '.') }} VND/ đêm
                                 </p>
                             @else
                                 <p>N/A</p>
