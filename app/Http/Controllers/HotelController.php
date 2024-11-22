@@ -71,12 +71,8 @@ class HotelController extends Controller
     {
         try {
             $filters = $request->input('filters', []);
-            // $minPrice = $request->input('min_price');
-            // $maxPrice = $request->input('max_price');
             $hotels = Hotel::query();
-            // $hotels = Hotel::whereHas('rooms', function($query) use ($minPrice, $maxPrice) {
-            //     $query->whereBetween('price', [$minPrice, $maxPrice]);
-            // })->with('rooms')->get();
+        
 
             // Lọc theo số hạng sao
             if (in_array('two_start', $filters)) {
@@ -197,7 +193,7 @@ class HotelController extends Controller
         list($checkInDate, $checkOutDate) = explode(' - ', $daterange);
         $daterange = session('daterange'); // Lấy dữ liệu từ session
 
-
+        
         // Gọi phương thức tìm kiếm từ model Hotel
         $hotels = Hotel::searchHotels($location, $checkInDate, $checkOutDate, $rooms, $adults, $children);
         // dd($daterange);

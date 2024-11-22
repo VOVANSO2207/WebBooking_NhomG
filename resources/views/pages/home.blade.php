@@ -231,7 +231,7 @@
                         <div class="card the-top-khach-san">
                             @foreach ($hotel->images as $index => $image)
                                 @if ($index === 0)
-                                    <img class="image-hotel-1" src="{{ asset('images/' . $image->image_url) }}"
+                                    <img class="image-hotel-1" src="{{ asset('storage/images/' . $image->image_url) }}"
                                         alt="{{ $image->image_url }}" />
                                 @endif
                             @endforeach
@@ -396,7 +396,7 @@
                         <a href="{{ route('pages.hotel_detail', ['hotel_id' => $hotel->hotel_id]) }}" class="group-offers">
                             <div class="shape-in">
                                 @if ($hotel->images->isNotEmpty())
-                                    <img class="image-hotel-2" src="{{ asset('images/' . $hotel->images->first()->image_url) }}"
+                                    <img class="image-hotel-2" src="{{ asset('storage/images/' . $hotel->images->first()->image_url) }}"
                                         alt="">
                                 @else
                                     <img class="image-hotel-2" src="{{ asset('images/defaullt-image.png') }}" alt="">
