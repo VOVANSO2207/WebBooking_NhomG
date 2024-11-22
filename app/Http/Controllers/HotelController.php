@@ -252,8 +252,8 @@ class HotelController extends Controller
         // Lấy tất cả các tiện nghi từ bảng hotel_amenities
         $hotelAmenities = HotelAmenities::all(); // Giả sử bạn đã khai báo model HotelAmenities
 
-        // Lấy tất cả các phòng từ bảng hotel_rooms
-        $hotelRooms = Rooms::all(); // Giả sử bạn đã khai báo model HotelRoom
+        // Lấy các phòng chưa được liên kết với bất kỳ khách sạn nào (hotel_id = 0)
+        $hotelRooms = Rooms::where('hotel_id', 0)->get(); // Giả sử bạn đã khai báo model Rooms
 
         // Truyền cả $cities, $hotelAmenities và $hotelRooms vào view
         return view('admin.hotel_add', compact('cities', 'hotelAmenities', 'hotelRooms'));
