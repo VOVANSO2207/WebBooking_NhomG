@@ -26,29 +26,19 @@ class RoomTypeController extends Controller
     }
     public function AddRoomType(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255|regex:/^[\p{L}\s]+$/u',
-        ], [
-            'name.required' => 'Vui lòng nhập tên loại phòng.',
-            'name.regex' => 'Tên chỉ được chứa chữ cái và khoảng trắng.',
-            'name.max' => 'Tên không được vượt quá 255 ký tự.',
-        ]);
+        // Lấy dữ liệu từ request
+        $data = $request->only(['name']);
 
-        // Kiểm tra xem loại phòng tồn tại trong cơ sở dữ liệu 
-        if (RoomType::where('name', $request->name)->exists()) {
-            return redirect()->route('roomType_add')->withErrors([
-                'name' => 'Dữ liệu này đã tồn tại.'
-            ]);
+        // Gọi phương thức createRoomType từ Model
+        $result = RoomType::createRoomType($data);
+
+        // Kiểm tra kết quả trả về
+        if (isset($result['errors'])) {
+            return redirect()->route('roomType_add')->withErrors($result['errors']);
         }
 
-        try {
-            $data = $request->only(['name']);
-            RoomType::createRoomType($data);
-
-            return redirect()->route('roomType_add')->with('success', 'Room Type added successfully');
-        } catch (\Exception $e) {
-            return redirect()->route('roomType_add')->with('error', 'Failed to add Room Type');
-        }
+        // Nếu không có lỗi, thông báo thành công
+        return redirect()->route('roomType_add')->with('success', 'Đã xóa loại phòng thành công');
     }
 
 
@@ -66,7 +56,7 @@ class RoomTypeController extends Controller
         
         // Kiểm tra nếu tên phòng không thay đổi
         if ($roomType->name === $request->name) {
-            return redirect()->route('admin.roomtype.edit', $roomType_id)->with('info', 'No changes were made.'); // Thông báo không có thay đổi
+            return redirect()->route('admin.roomtype.edit', $roomType_id)->with('info', 'Thông báo không có thay đổi.'); // Thông báo không có thay đổi
         }
     
         $data = $request->only(['name']);

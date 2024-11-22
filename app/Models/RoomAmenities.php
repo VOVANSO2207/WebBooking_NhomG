@@ -96,5 +96,18 @@ class RoomAmenities extends Model
         
         return $query->paginate($perPage);  
     }
-    
+    public static function validateRoomAmenities($request)
+    {
+        return $request->validate([
+            'amenity_name' => 'required|string|max:255|regex:/^[\p{L}\s]+$/u', // Chỉ cho phép chữ cái và khoảng trắng
+            'description' => 'nullable|string|max:1000|regex:/^[\p{L}\s]*$/u', // Chỉ cho phép chữ cái và khoảng trắng
+        ], [
+            'amenity_name.required' => 'Vui lòng nhập tên tiện nghi phòng.',
+            'amenity_name.regex' => 'Tên tiện nghi chỉ được chứa chữ cái và khoảng trắng.',
+            'amenity_name.max' => 'Tên tiện nghi không được vượt quá 255 ký tự.',
+            'description.string' => 'Mô tả phải là một chuỗi.',
+            'description.regex' => 'Mô tả chỉ được chứa chữ cái và khoảng trắng.',
+            'description.max' => 'Mô tả không được vượt quá 1000 ký tự.',
+        ]);
+    }
 }

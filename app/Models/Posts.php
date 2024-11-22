@@ -84,7 +84,7 @@ class Posts extends Model
         $post->url_seo = $data['url_seo'] ?? null;
         $post->status = $data['status'] === '1' ? 1 : 0;
         $post->img = $img;
-
+        
         $post->save();
 
         return $post;

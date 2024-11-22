@@ -30,18 +30,7 @@ class RoomAmenitiesController extends Controller
     }
     public function AddRoomAmenities(Request $request)
     {
-        $request->validate([
-            'amenity_name' => 'required|string|max:255|regex:/^[\p{L}\s]+$/u', // Chỉ cho phép chữ cái và khoảng trắng
-            'description' => 'nullable|string|max:1000|regex:/^[\p{L}\s]*$/u', // Chỉ cho phép chữ cái và khoảng trắng
-        ], [
-            'amenity_name.required' => 'Vui lòng nhập tên loại phòng.',
-            'amenity_name.regex' => 'Tên chỉ được chứa chữ cái và khoảng trắng.',
-            'amenity_name.max' => 'Tên không được vượt quá 255 ký tự.',
-            'description.string' => 'Mô tả phải là một chuỗi.',
-            'description.regex' => 'Mô tả chỉ được chứa chữ cái và khoảng trắng.', 
-            'description.max' => 'Mô tả không được vượt quá 1000 ký tự.',
-        ]);
-        
+         RoomAmenities::validateRoomAmenities($request);
         
           // Kiểm tra xem loại phòng tồn tại trong cơ sở dữ liệu 
           if (RoomAmenities::where('amenity_name', $request->amenity_name)->exists()) {

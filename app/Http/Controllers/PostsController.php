@@ -56,7 +56,7 @@ class PostsController extends Controller
     {
         $data = $request->all();
         $post = Posts::createPost($data);
-
+        
         if ($post instanceof \Illuminate\Support\MessageBag) {
             return response()->json(['errors' => $post], 422);  
         }

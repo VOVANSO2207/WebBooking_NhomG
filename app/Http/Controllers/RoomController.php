@@ -11,7 +11,7 @@ use App\Models\RoomType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Facades\File;
 class RoomController extends Controller
 {
     public function index()
@@ -35,72 +35,39 @@ class RoomController extends Controller
     }
     public function destroy($room_id)
     {
-        // Tìm phòng dựa trên ID
-        $room = Rooms::find($room_id);
+        $result = Rooms::deleteRoom($room_id);
 
-        if (!$room) {
-            return redirect()->route('admin.viewroom')->with('error', 'Phòng không tồn tại!');
+        // Kiểm tra kết quả và chuyển hướng phù hợp
+        if (!$result['success']) {
+            return redirect()->route('admin.viewroom')->with('error', $result['message']);
         }
 
-        // Xóa hình ảnh liên quan (nếu có)
-        foreach ($room->room_images as $image) {
-            // Xóa ảnh từ thư mục
-            if (file_exists(public_path('storage/images/' . $image->image_url))) {
-                unlink(public_path('storage/images/' . $image->image_url));
-            }
-            // Xóa ảnh từ cơ sở dữ liệu
-            $image->delete();
-        }
-
-        // Xóa các tiện nghi liên quan từ bảng trung gian
-        RoomAmenityRoom::where('room_id', $room_id)->delete();
-
-        // Xóa phòng
-        $room->delete();
-
-        // Chuyển hướng về danh sách phòng với thông báo thành công
-        return redirect()->route('admin.viewroom')->with('success', 'Phòng đã được xóa thành công!');
+        return redirect()->route('admin.viewroom')->with('success', $result['message']);
     }
-
     public function store(Request $request)
     {
-        // Xác thực dữ liệu đầu vào
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'room_type_id' => 'required|exists:room_types,room_type_id',
-            'price' => 'required|numeric',
-            'capacity' => 'required|integer',
-            'discount_percent' => 'required|numeric|min:0|max:100',
-            'description' => 'required|string',
-            'amenities' => 'required|array',
-            'images.*' => 'required|image|mimes:jpeg,png,jpg|max:2048'
-        ]);
+        // Gọi hàm validate từ Model
+        $validator = Rooms::validateRoom($request->all());
 
-        // DB::beginTransaction();
+        if ($validator->fails()) {
+            // Nếu lỗi, trả về cùng thông báo
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
         try {
-            // Tạo dữ liệu phòng
+            // Lấy dữ liệu hợp lệ
             $data = $request->only(['name', 'room_type_id', 'price', 'capacity', 'discount_percent', 'description']);
-            $data['hotel_id'] = 0; // Thay đổi nếu cần
-            $room = Rooms::create($data);
+            $data['hotel_id'] = 0; 
 
-            // Thêm tiện nghi vào bảng trung gian room_amenity_room
-            if ($request->has('amenities')) {
-                foreach ($request->amenities as $amenityId) {
-                    RoomAmenityRoom::create([
-                        'room_id' => $room->room_id,
-                        'amenity_id' => $amenityId
-                    ]);
-                }
-            }
-
-            // Upload hình ảnh
-            if ($request->hasFile('images')) {
-                RoomImages::uploadImages($room->room_id, $request->file('images'));
-            }
+            // Thêm dữ liệu vào phòng
+            $room = Rooms::createRoomWithDetails(
+                $data,
+                $request->input('amenities'),
+                $request->file('images')
+            );
 
             return redirect()->route('admin.viewroom')->with('success', 'Phòng đã được thêm thành công!');
         } catch (\Exception $e) {
-
             return redirect()->back()->with('error', 'Thêm phòng thất bại: ' . $e->getMessage());
         }
     }
@@ -108,12 +75,9 @@ class RoomController extends Controller
 
     public function edit($room_id)
     {
-        // dd($room_id);
-        // $decodedId = IdEncoder::decodeId($room_id);
-        // dd($decodedId);
+       
         // Lấy thông tin phòng dựa trên ID
         $room = Rooms::with(['roomType', 'amenities', 'room_images'])->findOrFail($room_id);
-        // dd($room);
         // Lấy danh sách loại phòng và tiện nghi để hiển thị trong form
         $roomTypes = RoomType::all();
         $amenities = RoomAmenities::all();
@@ -126,134 +90,39 @@ class RoomController extends Controller
     }
     public function update(Request $request, $room_id)
     {
-        // Xác thực dữ liệu đầu vào
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'room_type_id' => 'required|exists:room_types,room_type_id',
-            'price' => 'required|numeric',
-            'discount_percent' => 'required|numeric|min:0|max:100',
-            'capacity' => 'required|integer',
-            'description' => 'required|string',
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Kích thước tối đa 2MB
-            'amenities' => 'required|array',
-            'amenities.*' => 'exists:room_amenities,amenity_id' // Đảm bảo ID tiện nghi tồn tại
-        ]);
-
-        // Lấy phòng cần sửa
+        // Lấy phòng cần cập nhật
         $room = Rooms::findOrFail($room_id);
 
-        // Cập nhật thông tin phòng
-        $room->update([
-            'name' => $request->name,
-            'room_type_id' => $request->room_type_id,
-            'price' => $request->price,
-            'discount_percent' => $request->discount_percent,
-            'capacity' => $request->capacity,
-            'description' => $request->description,
-        ]);
+        // Sử dụng validation từ Model
+        $validator = Rooms::validateRoom($request->all(), true);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
 
-        // Cập nhật hình ảnh (nếu có hình ảnh mới được tải lên)
-        // Cập nhật hình ảnh
-        if ($request->hasFile('images')) {
-            // Xóa hình ảnh cũ khi có ảnh mới được tải lên
-            foreach ($room->room_images as $image) {
-                // Xóa ảnh từ thư mục
-                if (file_exists(public_path('storage/images/' . $image->image_url))) {
-                    unlink(public_path('storage/images/' . $image->image_url));
-                }
-                // Xóa ảnh từ cơ sở dữ liệu
-                $image->delete();
-            }
-
-            // Upload và thêm hình ảnh mới
-            RoomImages::uploadImages($room->room_id, $request->file('images'));
-        } else {
-            // Nếu không tải ảnh mới, giữ nguyên ảnh cũ
+        try {
+            // Chuẩn bị dữ liệu
+            $data = $request->only(['name', 'room_type_id', 'price', 'discount_percent', 'capacity', 'description']);
+            $amenities = $request->input('amenities', []);
+            $images = $request->file('images');
             $existingImages = $request->input('existing_images', []);
-            $room->room_images()->whereNotIn('image_id', $existingImages)->delete();
-        }
-        
-        // Cập nhật tiện nghi
-        RoomAmenityRoom::where('room_id', $room->room_id)->delete();
 
-        // Thêm tiện nghi mới vào bảng trung gian
-        if ($request->has('amenities')) {
-            foreach ($request->amenities as $amenityId) {
-                RoomAmenityRoom::create([
-                    'room_id' => $room->room_id,
-                    'amenity_id' => $amenityId
-                ]);
-            }
+            // Gọi hàm xử lý trong Model
+            $room->updateRoom($data, $amenities, $images, $existingImages);
+
+            return redirect()->route('admin.viewroom')->with('success', 'Cập nhật phòng thành công.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Update failed: ' . $e->getMessage());
         }
-        return redirect()->route('admin.viewroom')->with('success', 'Room updated successfully.');
     }
-    // public function keywordSearch(Request $request)
-    // {
-    //     // Validate search input
-    //     $request->validate([
-    //         'search_term' => 'required|string|max:255',
-    //     ]);
-
-    //     $searchTerm = $request->input('search_term');
-
-    //     // Search rooms by name or description
-    //     $rooms = Rooms::where('name', 'LIKE', '%' . $searchTerm . '%')
-    //         ->orWhere('description', 'LIKE', '%' . $searchTerm . '%')
-    //         ->with('room_images', 'roomType', 'amenities')
-    //         ->get();
-
-    //     return view('admin.search_result_room', ['rooms' => $rooms, 'searchTerm' => $searchTerm]);
-    // }
     public function deleteImage($id)
     {
-        try {
-            $image = RoomImages::find($id);
-            if ($image) {
-                // Xóa file từ storage
-                if (Storage::exists('public/images/' . $image->image_url)) {
-                    Storage::delete('public/images/' . $image->image_url);
-                }
-                
-                // Xóa record từ database
-                $image->delete();
-                
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Xóa ảnh thành công'
-                ]);
-            }
-            
-            return response()->json([
-                'success' => false,
-                'message' => 'Không tìm thấy ảnh'
-            ], 404);
-            
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Lỗi khi xóa ảnh: ' . $e->getMessage()
-            ], 500);
-        }
-
+        return RoomImages::deleteImage($id);
     }
+    // Search phòng theo đệ quy
     public function keywordSearch(Request $request)
     {
-        $searchQuery = $request->input('query'); // Nhận từ khóa tìm kiếm từ người dùng
-        $keywords = explode(' ', trim($searchQuery)); // Phân tách từ khóa thành mảng
-
-        $rooms = Rooms::query();
-
-        foreach ($keywords as $keyword) {
-            $rooms->orWhere(function ($query) use ($keyword) {
-                $query->where('name', 'LIKE', '%' . $keyword . '%')
-                    ->orWhere('description', 'LIKE', '%' . $keyword . '%');
-            });
-        }
-        
-        $results = $rooms->with('room_images', 'roomType')->get(); // Lấy kết quả tìm kiếm
-        
-        // Trả về view với kết quả tìm kiếm
-        return view('admin.search_results_room', ['results' => $results])->render(); // Render view và trả về
+        $results = Rooms::searchRooms($request->input('query'));
+        return view('admin.search_results_room', ['results' => $results])->render();
     }
     public function encodeId($id)
     {

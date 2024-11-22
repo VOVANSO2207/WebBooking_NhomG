@@ -201,4 +201,5 @@ class Hotel extends Model
         }
         return false;
     }
+    
 }

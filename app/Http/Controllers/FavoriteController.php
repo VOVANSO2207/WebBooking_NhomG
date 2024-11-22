@@ -12,8 +12,8 @@ class FavoriteController extends Controller
 {
     public function addFavorite(Request $request)
     {
-        $userId = auth()->id(); // Lấy ID của người dùng hiện tại
-        $hotelId = $request->hotel_id; // Lấy ID khách sạn từ request
+        $userId = auth()->id(); 
+        $hotelId = $request->hotel_id; 
 
         // Gọi phương thức trong model để thêm vào yêu thích
         $result = FavoriteHotel::addFavorite($userId, $hotelId);
@@ -23,8 +23,8 @@ class FavoriteController extends Controller
 
     public function removeFavorite(Request $request)
     {
-        $userId = auth()->id(); // Lấy ID của người dùng hiện tại
-        $hotelId = $request->hotel_id; // Lấy ID khách sạn từ request
+        $userId = auth()->id(); 
+        $hotelId = $request->hotel_id;
 
         // Gọi phương thức trong model để xóa khỏi yêu thích
         $result = FavoriteHotel::removeFavorite($userId, $hotelId);
