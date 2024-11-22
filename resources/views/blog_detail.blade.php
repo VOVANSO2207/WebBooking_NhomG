@@ -52,7 +52,7 @@
                         @foreach($relatedPosts as $relatedPost)
                             <li class="related-post">
                                 <a href="{{ url('blog/' . $relatedPost->url_seo) }}">
-                                    <img src="{{ asset('images/' . $relatedPost->img) }}" alt="{{ $relatedPost->title }}" class="img-fluid" style="width:100%; height: 200px;">
+                                    <img src="{{ asset('storage/images/' . $relatedPost->img) }}" alt="{{ $relatedPost->title }}" class="img-fluid" style="width:100%; height: 200px;">
                                     <h4>{{ Str::limit($relatedPost->title, 20) }}</h4>
                                     <p class="text-muted">Ngày đăng: {{ $relatedPost->created_at ?? 'N/A' }}</p> <!-- Ngày đăng -->
                                 </a>

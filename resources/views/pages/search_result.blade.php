@@ -143,7 +143,7 @@
                                         navigation="true" space-between="30" loop="true" style="height: auto">
                                         @foreach ($hotel->images as $image)
                                             <swiper-slide>
-                                                <img src="{{ asset('images/' . $image->image_url) }}"
+                                                <img src="{{ asset('storage/images/' . $image->image_url) }}"
                                                     alt="{{ $image->image_url }}" />
                                             </swiper-slide>
                                         @endforeach
@@ -297,14 +297,14 @@
     function generateHotelCard(hotel) {
         const hotelDetailUrl = `{{ route('pages.hotel_detail', ['hotel_id' => ':id']) }}`;
         const url = hotelDetailUrl.replace(':id', hotel.hotel_id);
-
+        const baseUrl = "{{ asset('storage/images') }}";
         let imagesHtml = '';
         if (hotel.images && hotel.images.length > 0) {
             imagesHtml = `
             <swiper-container class="mySwiper" pagination="true" navigation="true" space-between="30" loop="true" style="height: auto;">
                 ${hotel.images.map(image => `
                     <swiper-slide>
-                        <img class="image-hotel-1" src="/images/${image.image_url}" alt="${image.image_url}" />
+                        <img class="image-hotel-1" src="${baseUrl}/${image.image_url}" alt="${image.image_url}" />
                     </swiper-slide>
                 `).join('')}
             </swiper-container>`;
@@ -453,7 +453,7 @@ function filterHotelsByPrice(minPrice, maxPrice) {
     const selectedAmenityIds = Array.from(document.querySelectorAll(
             '.check_filter[data-filter="hotel_amenities"]:checked'))
         .map(cb => cb.getAttribute('data-amenity-id'));
-
+    const baseUrl = "{{ asset('storage/images') }}";
     fetch('/filter-hotels', {
         method: 'POST',
         headers: {
@@ -472,7 +472,7 @@ function filterHotelsByPrice(minPrice, maxPrice) {
         console.log("Phản hồi AJAX:", data);
         const hotelsContainer = document.getElementById('low-to-high');
         hotelsContainer.innerHTML = ''; // Clear current content
-
+        
         if (data.hotels.length === 0) {
             hotelsContainer.innerHTML = '<p>Không tìm thấy khách sạn nào.</p>';
         } else {
@@ -483,7 +483,7 @@ function filterHotelsByPrice(minPrice, maxPrice) {
                     <swiper-container class="mySwiper" pagination="true" navigation="true" space-between="30" loop="true" style="height: auto;">
                         ${hotel.images.map(image => `
                             <swiper-slide>
-                                <img class="image-hotel-1" src="/images/${image.image_url}" alt="${image.image_url}" />
+                                <img class="image-hotel-1" src="${baseUrl}/${image.image_url}" alt="${image.image_url}" />
                             </swiper-slide>
                         `).join('')}
                     </swiper-container>`;
