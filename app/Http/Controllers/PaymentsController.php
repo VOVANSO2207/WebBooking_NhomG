@@ -64,8 +64,8 @@ class PaymentsController extends Controller
 
         $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
         $vnp_Returnurl = route('booking.return');
-        $vnp_TmnCode = "YY5IYYIV";
-        $vnp_HashSecret = "2UEZR23L1UAY6JMGEA7H1SS96JW6NV0S";
+        $vnp_TmnCode = "ILUA2M7T";
+        $vnp_HashSecret = "JMCFDKLIECIUW02PETZH7U4OJN66EZ2P";
         $vnp_TxnRef = $booking->booking_id . '_' . time();
         $vnp_OrderInfo = "Thanh Toán Đặt Phòng #" . $booking->booking_id;
         $vnp_OrderType = "billpayment";

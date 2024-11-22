@@ -193,7 +193,7 @@ class HotelController extends Controller
         list($checkInDate, $checkOutDate) = explode(' - ', $daterange);
         $daterange = session('daterange'); // Lấy dữ liệu từ session
 
-        
+
         // Gọi phương thức tìm kiếm từ model Hotel
         $hotels = Hotel::searchHotels($location, $checkInDate, $checkOutDate, $rooms, $adults, $children);
         // dd($daterange);
@@ -266,11 +266,11 @@ class HotelController extends Controller
 
         // Lấy URL hình ảnh
         $images = $hotel->images->map(function ($image) {
-            $imagePath = public_path('images/' . $image->image_url);
+            $imagePath = public_path('storage/images/' . $image->image_url);
             if (file_exists($imagePath)) {
-                return asset('images/' . $image->image_url);
+                return asset('storage/images/' . $image->image_url);
             } else {
-                return asset('images/img-upload.jpg'); // Hình ảnh mặc định
+                return asset('images/defaullt-image.png'); // Hình ảnh mặc định
             }
         });
         // Lấy amenities từ bảng hotel_amenity_hotel
@@ -353,7 +353,7 @@ class HotelController extends Controller
             foreach ($request->file('images') as $image) {
                 $imageName = time() . '_' . $image->getClientOriginalName();
                 $image->move(public_path('images'), $imageName);
-
+                
                 // Lưu hình ảnh vào bảng hotel_images với hotel_id
                 HotelImages::create([
                     'image_url' => $imageName,
@@ -552,7 +552,7 @@ class HotelController extends Controller
                     $imageToDelete = HotelImages::where('image_id', $imageId)->first();
                     if ($imageToDelete) {
                         // Xóa tệp hình ảnh trong thư mục
-                        $imagePath = public_path('images/' . $imageToDelete->image_url);
+                        $imagePath = public_path('storage/images/' . $imageToDelete->image_url);
                         if (file_exists($imagePath)) {
                             unlink($imagePath);
                         }
@@ -566,7 +566,7 @@ class HotelController extends Controller
             // Lưu hình ảnh mới
             foreach ($request->file('images') as $image) {
                 $imageName = time() . '_' . $image->getClientOriginalName();
-                $image->move(public_path('images'), $imageName);
+                $image->move(public_path('storage/images'), $imageName);
 
                 HotelImages::create([
                     'hotel_id' => $hotel->hotel_id,
