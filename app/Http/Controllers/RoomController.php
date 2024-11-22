@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
+
 class RoomController extends Controller
 {
     public function index()
@@ -46,18 +47,18 @@ class RoomController extends Controller
     }
     public function store(Request $request)
     {
-        // Gọi hàm validate từ Model
-        $validator = Rooms::validateRoom($request->all());
-
-        if ($validator->fails()) {
-            // Nếu lỗi, trả về cùng thông báo
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
 
         try {
+            // Gọi hàm validate từ Model
+            $validator = Rooms::validateRoom($request->all());
+
+            if ($validator->fails()) {
+                // Nếu lỗi, trả về cùng thông báo
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
             // Lấy dữ liệu hợp lệ
             $data = $request->only(['name', 'room_type_id', 'price', 'capacity', 'discount_percent', 'description']);
-            $data['hotel_id'] = 0; 
+            $data['hotel_id'] = 0;
 
             // Thêm dữ liệu vào phòng
             $room = Rooms::createRoomWithDetails(
@@ -75,7 +76,7 @@ class RoomController extends Controller
 
     public function edit($room_id)
     {
-       
+
         // Lấy thông tin phòng dựa trên ID
         $room = Rooms::with(['roomType', 'amenities', 'room_images'])->findOrFail($room_id);
         // Lấy danh sách loại phòng và tiện nghi để hiển thị trong form
@@ -135,5 +136,4 @@ class RoomController extends Controller
         $decodedId = IdEncoder::decodeId($encodedId);
         return response()->json(['decoded_id' => $decodedId]);
     }
-    
 }

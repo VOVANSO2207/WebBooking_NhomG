@@ -113,7 +113,7 @@
                         resultItem.classList.add('news-item');
                         resultItem.innerHTML = `
                          <a href="/blog/${post.url_seo}" class="news-link">
-                        <img src="{{ asset('images/${post.img}') }}" alt="Ảnh đại diện bài viết">
+                        <img src="{{ asset('storage/images/${post.img}') }}" alt="Ảnh đại diện bài viết">
                             <div class="news-content">
                                 <h5>${post.title}</h5>
                                 <p>${post.description}</p>
