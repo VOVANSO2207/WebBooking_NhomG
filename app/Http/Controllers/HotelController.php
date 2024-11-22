@@ -270,7 +270,7 @@ class HotelController extends Controller
             if (file_exists($imagePath)) {
                 return asset('images/' . $image->image_url);
             } else {
-                return asset('/storage/images/default_image.jpg' . $image->image_url); // Hình ảnh mặc định
+                return asset('/storage/images/' . $image->image_url); // Hình ảnh mặc định
             }
         });
         // Lấy amenities từ bảng hotel_amenity_hotel
@@ -348,26 +348,40 @@ class HotelController extends Controller
         // Lấy hotel_id vừa được tạo
         $hotelId = $hotel->hotel_id;
 
-        // Kiểm tra xem có hình ảnh nào được upload không
-        if ($request->hasFile('images') && count($request->file('images')) > 0) {
-            foreach ($request->file('images') as $image) {
-                $imageName = time() . '_' . $image->getClientOriginalName();
-                $image->move(public_path('images'), $imageName);
-                
-                // Lưu hình ảnh vào bảng hotel_images với hotel_id
-                HotelImages::create([
-                    'image_url' => $imageName,
-                    'hotel_id' => $hotelId,
-                ]);
-            }
-        } else {
-            // Nếu không có hình ảnh nào được chọn, lưu hình ảnh mặc định
-            $defaultImage = 'img-upload.jpg'; // Tên file hình ảnh mặc định
-            HotelImages::create([
-                'image_url' => $defaultImage,
-                'hotel_id' => $hotelId,
-            ]);
-        }
+                // Kiểm tra và lưu hình ảnh
+                if ($request->hasFile('images')) {
+                    // Lấy danh sách hình ảnh hiện tại
+                    $existingImages = $hotel->images()->pluck('image_id')->toArray();
+        
+                    // Xóa hình ảnh không còn được chọn
+                    foreach ($existingImages as $imageId) {
+                        // Nếu hình ảnh không có trong danh sách mới, xóa
+                        if (!in_array($imageId, $request->input('existing_image_ids', []))) {
+                            $imageToDelete = HotelImages::where('image_id', $imageId)->first();
+                            if ($imageToDelete) {
+                                // Xóa tệp hình ảnh trong thư mục
+                                $imagePath = public_path('storage/images/' . $imageToDelete->image_url);
+                                if (file_exists($imagePath)) {
+                                    unlink($imagePath);
+                                }
+        
+                                // Xóa hình ảnh khỏi cơ sở dữ liệu
+                                $imageToDelete->delete();
+                            }
+                        }
+                    }
+        
+                    // Lưu hình ảnh mới
+                    foreach ($request->file('images') as $image) {
+                        $imageName = time() . '_' . $image->getClientOriginalName();
+                        $image->move(public_path('storage/images'), $imageName);
+        
+                        HotelImages::create([
+                            'hotel_id' => $hotel->hotel_id,
+                            'image_url' => $imageName,
+                        ]);
+                    }
+                }
 
         // Lưu tiện nghi khách sạn
         if ($request->has('amenities')) {
