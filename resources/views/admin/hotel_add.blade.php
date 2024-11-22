@@ -87,7 +87,7 @@
                                 @endphp
                                 @foreach ($hotelRooms as $room)
                                     @if (!in_array($room->name, $roomNames)) // Kiểm tra nếu tên chưa được thêm vào
-                                        <option value="{{ $room->room_id }}" data-name="{{ $room->name }}" data-price="{{ $room->price }}" data-image="{{ $room->room_images->isNotEmpty() ? asset('images/' . $room->room_images[0]->image_url) : asset('images/default_image.jpg') }}" @if (!$firstRoomSelected) selected @endif> <!-- Chọn phòng đầu tiên -->
+                                        <option value="{{ $room->room_id }}" data-name="{{ $room->name }}" data-price="{{ $room->price }}" data-image="{{ $room->room_images->isNotEmpty() ? asset('storage/images/' . $room->room_images[0]->image_url) : asset('/storage/images/default_image.jpg') }}" @if (!$firstRoomSelected) selected @endif> <!-- Chọn phòng đầu tiên -->
                                             {{ $room->name }} - Giá: {{ $room->price }} - Số người tối đa: {{ $room->capacity }}
                                         </option>
                                         @php
@@ -232,7 +232,7 @@ function addSelectedRooms() {
     // Duyệt qua các phòng được chọn
     for (let option of selectedOptions) {
         const roomId = option.value;
-        const roomImageUrl = option.getAttribute('data-image') || "{{ asset('images/default_image.jpg') }}";
+        const roomImageUrl = option.getAttribute('data-image') || "{{ asset('storage/images/default_image.jpg') }}";
         const roomName = option.getAttribute('data-name');
         const roomPrice = option.getAttribute('data-price');
         
