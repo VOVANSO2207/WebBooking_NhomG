@@ -7,124 +7,34 @@ use App\Models\Booking;
 use App\Models\Hotel;
 use App\Models\Payments;
 use App\Models\Promotions;
+use App\Services\PaymentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
 
 class PaymentsController extends Controller
 {
-    public function payment_vnpay(Request $request)
+    protected $paymentService;
+
+    public function __construct(PaymentService $paymentService)
     {
-        $totalAmount = $request->total_amount;
-        $daterange = $request->input('daterange') ?? session('daterange');
+        $this->paymentService = $paymentService;
+    }
+    public function paymentVnpay(Request $request)
+    {
+        $response = $this->paymentService->handleVnpayPayment($request->all());
 
-        // Validate daterange exists
-        if (!$daterange) {
-            return back()->with('error', 'Invalid date range');
-        }
-        // Split the date range
-        list($checkIn, $checkOut) = explode(' - ', $daterange);
-        // Convert dates to Carbon instances
-        $checkInDay = \Carbon\Carbon::createFromFormat('d/m/Y', trim($checkIn));
-        $checkOutDay = \Carbon\Carbon::createFromFormat('d/m/Y', trim($checkOut));
-        $promotion = Promotions::where('promotion_id', $request->promotion_id)
-            // ->where('start_date', '<=', Carbon::now())
-            // ->where('end_date', '>=', Carbon::now())
-            ->first();
-            $promotionId = $request->promotion_id ?? 0;
-
-            $promotion = null;
-            // Chỉ truy vấn mã giảm giá nếu promotion_id khác 0
-            if ($promotionId > 0) {
-                $promotion = Promotions::where('promotion_id', $promotionId)->first();
-    
-                if (!$promotion) {
-                    return back()->with('error', 'Mã giảm giá không hợp lệ');
-                }
-    
-                if ($promotion->start_date > Carbon::now()) {
-                    return back()->with('error', 'Mã giảm giá chưa tới ngày áp dụng.');
-                }
-                
-                if ($promotion->end_date < Carbon::now()) {
-                    return back()->with('error', 'Mã giảm giá đã hết hạn.');
-                }
-            }
-            $finalPromotionId = $promotion ? $promotionId : 0;
-        // First create the booking record
-        $booking = Booking::create([
-            'user_id' => auth()->id(), // Assuming user is logged in
-            'room_id' => $request->room_id,
-            'promotion_id' => $finalPromotionId,
-            'check_in' => $checkInDay->format('Y-m-d'),
-            'check_out' => $checkOutDay->format('Y-m-d'),
-            'total_price' => $totalAmount,
-            'status' => 'pending'
-        ]);
-
-        $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-        $vnp_Returnurl = route('booking.return');
-        $vnp_TmnCode = "ILUA2M7T";
-        $vnp_HashSecret = "JMCFDKLIECIUW02PETZH7U4OJN66EZ2P";
-        $vnp_TxnRef = $booking->booking_id . '_' . time();
-        $vnp_OrderInfo = "Thanh Toán Đặt Phòng #" . $booking->booking_id;
-        $vnp_OrderType = "billpayment";
-        $vnp_Amount = $request->total_amount * 100;
-        $vnp_Locale = "VN";
-        $vnp_BankCode = "NCB";
-        $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
-
-        $payment = Payments::create([
-            'booking_id' => $booking->booking_id,
-            'payment_status' => 'pending',
-            'payment_method' => 'vnpay',
-            'amount' => $request->total_amount,
-            'payment_date' => now()
-        ]);
-
-        $inputData = array(
-            "vnp_Version" => "2.1.0",
-            "vnp_TmnCode" => $vnp_TmnCode,
-            "vnp_Amount" => $vnp_Amount,
-            "vnp_Command" => "pay",
-            "vnp_CreateDate" => date('YmdHis'),
-            "vnp_CurrCode" => "VND",
-            "vnp_IpAddr" => $vnp_IpAddr,
-            "vnp_Locale" => $vnp_Locale,
-            "vnp_OrderInfo" => $vnp_OrderInfo,
-            "vnp_OrderType" => $vnp_OrderType,
-            "vnp_ReturnUrl" => $vnp_Returnurl,
-            "vnp_TxnRef" => $vnp_TxnRef,
-        );
-
-        if (isset($vnp_BankCode) && $vnp_BankCode != "") {
-            $inputData['vnp_BankCode'] = $vnp_BankCode;
+        if (!$response['booking']) {
+            return back()->with('error', $response['message']);
         }
 
-        ksort($inputData);
-        $query = "";
-        $i = 0;
-        $hashdata = "";
-        foreach ($inputData as $key => $value) {
-            if ($i == 1) {
-                $hashdata .= '&' . urlencode($key) . "=" . urlencode($value);
-            } else {
-                $hashdata .= urlencode($key) . "=" . urlencode($value);
-                $i = 1;
-            }
-            $query .= urlencode($key) . "=" . urlencode($value) . '&';
-        }
+        $vnpayUrl = $this->paymentService->generateVnpayUrl($response['booking'], $response['payment'], $request->total_amount);
 
-        $vnp_Url = $vnp_Url . "?" . $query;
-        if (isset($vnp_HashSecret)) {
-            $vnpSecureHash = hash_hmac('sha512', $hashdata, $vnp_HashSecret);
-            $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
-        }
-        // Store the VNPay URL and transaction reference in session for verification
-        session(['vnpay_booking_id' => $booking->booking_id]);
-        session(['vnpay_payment_id' => $payment->payment_id]);
+        // Lưu thông tin vào session
+        session(['vnpay_booking_id' => $response['booking']->booking_id]);
+        session(['vnpay_payment_id' => $response['payment']->payment_id]);
 
-        return redirect($vnp_Url);
+        return redirect($vnpayUrl);
     }
     public function processPayment(Request $request)
     {
@@ -140,7 +50,7 @@ class PaymentsController extends Controller
             // Determine payment method and route accordingly
             switch ($request->payment_method) {
                 case 'vnpay':
-                    return $this->payment_vnpay($request);
+                    return $this->paymentVnpay($request);
 
                     // case 'momo':
                     //     return $this->payment_momo($request);
@@ -263,69 +173,13 @@ class PaymentsController extends Controller
     }
     public function paymentReturn(Request $request)
     {
-        $inputData = $request->all();
-        // Retrieve booking and payment IDs from session
-        $booking_id = session('vnpay_booking_id');
-        $payment_id = session('vnpay_payment_id');
-        // Clear the session data
+        $bookingId = session('vnpay_booking_id');
+        $paymentId = session('vnpay_payment_id');
         session()->forget(['vnpay_booking_id', 'vnpay_payment_id']);
-        // Verify the payment response
-        if ($inputData['vnp_ResponseCode'] == '00') {
-            // Payment successful
-            // Update booking status
-            $booking = Booking::find($booking_id);
-            if ($booking) {
-                $booking->update([
-                    'status' => 'confirmed'
-                ]);
-                // Get related user data
-                $user = $booking->user;
-                // Update payment status
-                $payment = Payments::find($payment_id);
-                if ($payment) {
-                    $payment->update([
-                        'payment_status' => 'completed',
-                        'payment_date' => now()
-                    ]);
-                    // Send confirmation email
-                    try {
-                        Mail::to($user->email)->send(new BookingConfirmationMail($booking, $payment, $user));
-                        $emailSent = true; // Set to true if email is sent successfully
-                    } catch (\Exception $e) {
-                        // Log email sending error but don't interrupt the process
-                        // \Log::error('Failed to send confirmation email: ' . $e->getMessage());
-                        $emailSent = false;
-                    }
-                }
-            }
-            return view('booking.return', [
-                'success' => true,
-                'message' => 'Thanh toán thành công',
-                'inputData' => $inputData,
-                'emailSent' => $emailSent,
-            ]);
-        } else {
-            // Payment failed logic remains the same
-            $booking = Booking::find($booking_id);
-            if ($booking) {
-                $booking->update([
-                    'status' => 'cancelled'
-                ]);
-            }
-            $payment = Payments::find($payment_id);
-            if ($payment) {
-                $payment->update([
-                    'payment_status' => 'failed',
-                    'payment_date' => now()
-                ]);
-            }
 
-            return view('booking.return', [
-                'success' => false,
-                'message' => 'Thanh toán thất bại',
-                'inputData' => $inputData
-            ]);
-        }
+        $response = $this->paymentService->handlePaymentReturn($request->all(), $bookingId, $paymentId);
+
+        return view('booking.return', $response);
     }
 
     public function viewPay()
