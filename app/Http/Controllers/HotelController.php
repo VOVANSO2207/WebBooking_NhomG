@@ -469,7 +469,7 @@ class HotelController extends Controller
 
         // Lấy các phòng hiện tại của khách sạn
         $currentRooms = $hotel->rooms()->pluck('room_id')->toArray();
-
+        $selectedRooms = $hotel->rooms->pluck('room_id')->toArray(); // Lấy tất cả room_id
         // Trả về view với dữ liệu cần thiết
         return view('admin.hotel_edit', compact(
             'hotel',
@@ -477,7 +477,7 @@ class HotelController extends Controller
             'hotelAmenities',
             'currentAmenities',
             'rooms',
-            'currentRooms'
+            'currentRooms', 'selectedRooms'
         ));
     }
 

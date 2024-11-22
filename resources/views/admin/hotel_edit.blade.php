@@ -79,14 +79,14 @@
 
                             <div class="mb-3 col-md-5">
                             <label class="form-label">Hotel Rooms</label>
-                            <select name="room_select" class="form-select" id="roomSelect" onchange="addSelectedRoom()">
+                            <select name="room_select[]" class="form-select" id="roomSelect" onchange="addSelectedRoom()">
                                 <option value="">Chọn phòng</option>
-                                @foreach ($rooms as $index => $room)
+                                @foreach ($rooms as $room)
                                     <option value="{{ $room->room_id }}" 
                                             data-name="{{ $room->name }}" 
                                             data-price="{{ $room->price }}" 
                                             data-image="{{ $room->room_images->isNotEmpty() ? asset('images/' . $room->room_images[0]->image_url) : asset('images/default_image.jpg') }}"
-                                            {{ $index === 0 ? 'selected' : '' }}>
+                                            @if (in_array($room->room_id, $selectedRooms)) selected @endif>
                                         {{ $room->name }} - Giá: {{ $room->price }} - Số người tối đa: {{ $room->capacity }}
                                     </option>
                                 @endforeach
@@ -246,8 +246,16 @@ function removeSelectedRoom(roomId) {
 
 // Gọi hàm addSelectedRoom() khi trang tải xong để cập nhật phòng mặc định (phòng đầu tiên)
 document.addEventListener("DOMContentLoaded", function() {
-    addSelectedRoom(); // Gọi hàm để thêm phòng đầu tiên vào danh sách đã chọn
+    const selectedRooms = JSON.parse(document.getElementById('selectedRoomsInput').value || "[]");
+    selectedRooms.forEach(roomId => {
+        const roomOption = document.querySelector(`#roomSelect option[value='${roomId}']`);
+        if (roomOption) {
+            roomOption.selected = true; // Đánh dấu trong danh sách
+            addSelectedRoom(); // Thêm vào khu vực hiển thị
+        }
+    });
 });
+
 </script>
 
 @endsection
