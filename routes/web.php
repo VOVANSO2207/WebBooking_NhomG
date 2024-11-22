@@ -131,10 +131,11 @@ Route::middleware('staff')->group(function () {
     Route::delete('/posts/{post_id}/delete', [PostsController::class, 'deletePost'])->name('post.delete');
     Route::get('/posts/{post_id}/edit', action: [PostsController::class, 'editPost'])->name('post.edit');
     Route::put('/admin/posts/{id}', [PostsController::class, 'update'])->name('admin.post.update');
-    // User-Blog
-    Route::get('/search1', action: [PostsController::class, 'searchViewBlog'])->name('searchBlog');
-    Route::get('/blog', [PostsController::class, 'getViewBlog'])->name('blog');
-    Route::get('/blog/{url_seo}', [PostsController::class, 'getBlogDetail'])->name('blog.detail');
+
+
+
+
+
 
     // Admin-Booking Detail
     Route::get('/bookings/{booking_id}/detail', action: [BookingController::class, 'getBookingDetail'])->name('booking.detail');
@@ -242,3 +243,7 @@ Route::post('/api/apply-promotion', [PromotionsController::class, 'applyPromotio
 // Route::get('/booking/error', [BookingController::class, 'error'])->name('booking.error');
 
 Route::patch('/hoa-don/{id}/cancel', [BookingController::class, 'cancel'])->name('pages.cancel');
+// User-Blog
+Route::get('/search1', action: [PostsController::class, 'searchViewBlog'])->name('searchBlog');
+Route::get('/blog', [PostsController::class, 'getViewBlog'])->name('blog');
+Route::get('/blog/{url_seo}', [PostsController::class, 'getBlogDetail'])->name('blog.detail');
