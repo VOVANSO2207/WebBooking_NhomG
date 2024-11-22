@@ -323,18 +323,11 @@
                 <div class="price-summary">
                     <div class="price-row">
                         <span>Giá phòng</span>
-                        <span>{{ number_format($booking->room_price) }} VNĐ</span>
+                        <span> {{ number_format($booking->room->price) }} VNĐ</span>
                     </div>
-                    {{-- {{dd($booking)}} --}}
-                    @if($booking->promotion_id)
-                    <div class="price-row">
-                        <span>Giảm giá</span>
-                        <span>-{{ number_format($booking->discount) }} VNĐ</span>
-                    </div>
-                    @endif
                     <div class="price-row">
                         <span>Tổng thanh toán : </span>
-                        <span>{{ number_format($booking->total_price) }} VNĐ</span>
+                        <span> {{ number_format($booking->total_price) }} VNĐ</span>
                     </div>
                 </div>
 
