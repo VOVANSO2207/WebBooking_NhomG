@@ -73,7 +73,7 @@ class Posts extends Model
         if (isset($data['fileUpload'])) {
             $file = $data['fileUpload'];
             $img = time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('images'), $img);
+            $file->move(public_path('storage/images'), $img);
         }
 
         $post = new self();
@@ -84,7 +84,7 @@ class Posts extends Model
         $post->url_seo = $data['url_seo'] ?? null;
         $post->status = $data['status'] === '1' ? 1 : 0;
         $post->img = $img;
-        
+
         $post->save();
 
         return $post;
@@ -170,10 +170,10 @@ class Posts extends Model
         if (isset($data['fileUpload'])) {
             $file = $data['fileUpload'];
             $filename = time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('images'), $filename);
+            $file->move(public_path('storage/images'), $filename);
 
-            if ($post->img && file_exists(public_path('images/' . $post->img))) {
-                unlink(public_path('images/' . $post->img));
+            if ($post->img && file_exists(public_path('storage/images/' . $post->img))) {
+                unlink(public_path('storage/images/' . $post->img));
             }
 
             $post->img = $filename;

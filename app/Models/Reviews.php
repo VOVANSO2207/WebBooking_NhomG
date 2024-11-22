@@ -113,7 +113,7 @@ class Reviews extends Model
         foreach ($images as $image) {
             $imageName = Str::random(10) . '_' . time() . '.' . $image->getClientOriginalExtension();
             $image->move(public_path('review_images'), $imageName);
-
+            
             $reviewImage = new ReviewImages();
             $reviewImage->review_id = $review->review_id;
             $reviewImage->image_url = 'review_images/' . $imageName;

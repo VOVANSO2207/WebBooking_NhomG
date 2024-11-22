@@ -40,7 +40,7 @@
                             <div class="col-md-6">
                                 <div class="news-item">
                                 <a style="text-decoration: none" href="{{ url('blog/' . $post->url_seo) }}">
-                                    <img src="{{ asset('images/' . $post->img) }}" alt="Ảnh đại diện bài viết"></a>
+                                    <img src="{{ asset('storage/images/' . $post->img) }}" alt="Ảnh đại diện bài viết"></a>
                                     <div class="news-content">
                                         <h5><a
                                                 href="{{ url('blog/' . $post->url_seo) }}">{{ Str::limit($post->title, 25) }}</a>
