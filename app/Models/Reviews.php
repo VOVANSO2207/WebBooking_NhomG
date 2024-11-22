@@ -84,9 +84,9 @@ class Reviews extends Model
 
         // Validate dữ liệu
         $validator = Validator::make($data, [
-            'comment' => 'required|string|max:1000|regex:/^[A-Za-z0-9\s\p{L}.,!?]*$/u',
+            'comment' => 'required|string|max:1000',
             'rating' => 'nullable|integer|min:1|max:5|in:1,2,3,4,5',
-            'images.*' => 'nullable|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'images.*' => 'nullable|mimes:jpeg,png,jpg|max:5120',
             ],[
                 'rating.min' => 'Rating không hợp lệ',
                 'rating.max' => 'Rating không hợp lệ',
@@ -94,7 +94,9 @@ class Reviews extends Model
                 'rating.integer' => 'Rating không hợp lệ',
                 'comment.max' => 'Bình luận tối đa được 1000 kí tự',
                 'comment.required' => 'Bình luận không được để trống',
-                'comment.regex' => 'Bình luận không hợp lệ',
+                'images.*.max' => 'Kích thước ảnh tối đa là 5MB.',
+                'images.*.mimes' => 'Hình ảnh bắt buộc định dạng là jpeg,png,jpg',
+
         ]);
 
         if ($validator->fails()) {  
