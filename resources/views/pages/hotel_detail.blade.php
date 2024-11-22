@@ -19,7 +19,7 @@
                 <div class="col-md-6 large-img">
                     @foreach ($hotel->images as $index => $image)
                         @if ($index == 1)
-                            <img src="{{ asset('images/' . $image->image_url) }}" alt="{{ $image->image_url }}" />
+                            <img src="{{ asset('storage/images/' . $image->image_url) }}" alt="{{ $image->image_url }}" />
                         @endif
                     @endforeach
                 </div>
@@ -28,12 +28,12 @@
                         @foreach ($hotel->images as $index => $image)
                             @if ($index < 3)
                                 <div class="col-6 small-img">
-                                    <img src="{{ asset('images/' . $image->image_url) }}"
+                                    <img src="{{ asset('storage/images/' . $image->image_url) }}"
                                         alt="{{ $image->image_url }} Image_null" />
                                 </div>
                             @elseif ($index === 3)
                                 <div class="col-6 small-img overlay-container">
-                                    <img src="{{ asset('images/' . $image->image_url) }}"
+                                    <img src="{{ asset('storage/images/' . $image->image_url) }}"
                                         alt="{{ $image->image_url }} Image_null" />
                                     <div class="overlay" data-bs-toggle="modal" data-bs-target="#imageModal">
                                         <span>Xem tất cả ảnh</span>
@@ -60,7 +60,7 @@
                         <div class="row">
                             @foreach ($hotel->images as $image)
                                 <div class="col-md-4 mb-3 review-images-details">
-                                    <img src="{{ asset('images/' . $image->image_url) }}" alt="{{ $image->image_url }}"
+                                    <img src="{{ asset('storage/images/' . $image->image_url) }}" alt="{{ $image->image_url }}"
                                         class="img-fluid modal-image-alls">
                                 </div>
                             @endforeach
@@ -111,7 +111,7 @@
                     <div class="col-md-4 detail-right-info">
                         <span class="detail-price-main">
                             @if ($hotel->rooms->isNotEmpty())
-                                <p class="price">{{ number_format($hotel->rooms->min('price'), 0, ',', '.') }}/ đêm
+                                <p class="price">{{ number_format($hotel->rooms->min('price'), 0, ',', '.') }} VND/ đêm
                                 </p>
                             @else
                                 <p>N/A</p>
