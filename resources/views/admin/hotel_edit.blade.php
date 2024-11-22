@@ -85,7 +85,7 @@
                                     <option value="{{ $room->room_id }}" 
                                             data-name="{{ $room->name }}" 
                                             data-price="{{ $room->price }}" 
-                                            data-image="{{ $room->room_images->isNotEmpty() ? asset('images/' . $room->room_images[0]->image_url) : asset('images/default_image.jpg') }}"
+                                            data-image="{{ $room->room_images->isNotEmpty() ? asset('storage/images/' . $room->room_images[0]->image_url) : asset('storage/images/default_image.jpg') }}"
                                             @if (in_array($room->room_id, $selectedRooms)) selected @endif>
                                         {{ $room->name }} - Giá: {{ $room->price }} - Số người tối đa: {{ $room->capacity }}
                                     </option>
