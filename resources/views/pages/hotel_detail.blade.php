@@ -453,7 +453,6 @@
                                         Thích
                                     </a>
                                     @if (auth()->check() && (auth()->user()->user_id === $review->user_id || auth()->user()->is_admin))
-                                        <a href="#" class="edit-review"><i class="fa-solid fa-pen-to-square"></i> Chỉnh sửa</a>
                                         <button type="button" class="delete-review-btn me-4 btn btn-link"
                                             data-review-id="{{ $review->review_id }}" data-bs-toggle="modal"
                                             data-bs-target="#deleteReviewModal">
