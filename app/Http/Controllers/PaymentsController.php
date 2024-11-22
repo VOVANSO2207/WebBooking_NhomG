@@ -269,7 +269,6 @@ class PaymentsController extends Controller
         $payment_id = session('vnpay_payment_id');
         // Clear the session data
         session()->forget(['vnpay_booking_id', 'vnpay_payment_id']);
-        // Verify the payment response
         if ($inputData['vnp_ResponseCode'] == '00') {
             // Payment successful
             // Update booking status
@@ -290,9 +289,9 @@ class PaymentsController extends Controller
                     // Send confirmation email
                     try {
                         Mail::to($user->email)->send(new BookingConfirmationMail($booking, $payment, $user));
-                        $emailSent = true; // Set to true if email is sent successfully
+                        $emailSent = true; 
                     } catch (\Exception $e) {
-                        // Log email sending error but don't interrupt the process
+                      
                         // \Log::error('Failed to send confirmation email: ' . $e->getMessage());
                         $emailSent = false;
                     }

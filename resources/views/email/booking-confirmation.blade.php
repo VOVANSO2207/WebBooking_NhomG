@@ -322,26 +322,16 @@
 
                 <div class="price-summary">
                     <div class="price-row">
-                        <span>Giá phòng</span>
+                        <span>Giá phòng : </span>
                         <span> {{ number_format($booking->room->price) }} VNĐ</span>
                     </div>
-                    <div class="price-row">
+                    <div class="price-row" style="color: #fff; font-size: 18px;">
                         <span>Tổng thanh toán : </span>
                         <span> {{ number_format($booking->total_price) }} VNĐ</span>
                     </div>
                 </div>
-
-                <div class="important-notes">
-                    <h4>Lưu ý quan trọng</h4>
-                    <ul>
-                        <li>Vui lòng mang theo CMND/CCCD khi nhận phòng</li>
-                        <li>Thời gian nhận phòng: sau 14:00</li>
-                        <li>Thời gian trả phòng: trước 12:00</li>
-                        <li>Vui lòng xuất trình email xác nhận này khi check-in</li>
-                    </ul>
-                </div>
             </div>
-
+            {{-- {{dd($booking->room)}} --}}
             <div class="section">
                 <h2 class="section-title">Tiện Nghi Phòng</h2>
                 <ul class="amenities-list">
@@ -351,6 +341,15 @@
                     <li class="amenity-item">Mini bar</li>
                     <li class="amenity-item">Phòng tắm riêng</li>
                     <li class="amenity-item">Két sắt cá nhân</li>
+                </ul>
+            </div>
+            <div class="important-notes">
+                <h4>Lưu ý quan trọng</h4>
+                <ul>
+                    <li>Vui lòng mang theo CMND/CCCD khi nhận phòng</li>
+                    <li>Thời gian nhận phòng: sau 14:00</li>
+                    <li>Thời gian trả phòng: trước 12:00</li>
+                    <li>Vui lòng xuất trình email xác nhận này khi check-in</li>
                 </ul>
             </div>
         </div>
