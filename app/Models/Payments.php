@@ -22,4 +22,5 @@ class Payments extends Model
     {
         return $this->belongsTo(Booking::class, 'booking_id', 'booking_id');
     }
+    
 }

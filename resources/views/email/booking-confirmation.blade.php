@@ -323,7 +323,7 @@
                 <div class="price-summary">
                     <div class="price-row">
                         <span>Giá phòng</span>
-                        <span>{{ number_format($booking->room_price) }} VNĐ</span>
+                        <span>{{ number_format($booking->room->price) }} VNĐ</span>
                     </div>
                     {{-- {{dd($booking)}} --}}
                     @if($booking->promotion_id)

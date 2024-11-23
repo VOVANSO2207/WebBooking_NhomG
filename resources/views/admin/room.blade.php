@@ -62,7 +62,7 @@
                                                                 <img src="{{ asset('storage/images/' . $image->image_url) }}"
                                                                     alt="Room Image">
                                                             @else
-                                                                <img src="{{ asset('images/defaullt-image.png') }}"
+                                                                <img src="{{ asset('images/img-hotel.jpg') }}"
                                                                     alt="Default Image">
                                                             @endif
                                                         </div>

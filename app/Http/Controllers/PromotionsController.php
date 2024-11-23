@@ -169,7 +169,7 @@ class PromotionsController extends Controller
         try {
             $promotion = Promotions::where('promotion_code', $request->promotion_code)
                 // ->where('start_date', '<=', Carbon::now())
-                // ->where('end_date', '>=', Carbon::now())
+                ->where('end_date', '>=', Carbon::now())    
                 ->first();
 
             if (!$promotion) {
