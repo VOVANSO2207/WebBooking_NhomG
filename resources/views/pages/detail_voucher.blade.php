@@ -503,7 +503,7 @@
                         <div class="voucher-card">
                             <div class="voucher-header" style="background: linear-gradient(45deg, #4834d4, #686de0);">
                                 <p class="voucher-amount">Giảm {{ number_format($voucher->discount_amount, 0, ',', '.') }}
-                                    VND</p>
+                                    %</p>
                                 <span class="voucher-type">Áp dụng cho đơn từ 1.000.000đ</span>
                                 <span class="voucher-status status-warning">Voucher sắp hết hạn</span>
                             </div>
@@ -527,7 +527,7 @@
                         <div class="voucher-card">
                             <div class="voucher-header">
                                 <p class="voucher-amount">Giảm {{ number_format($voucher->discount_amount, 0, ',', '.') }}
-                                    VND</p>
+                                    %</p>
                                 <span class="voucher-type">Áp dụng cho đơn từ 1.000.000đ</span>
                                 <span class="voucher-status status-active">Đang hoạt động</span>
                             </div>
