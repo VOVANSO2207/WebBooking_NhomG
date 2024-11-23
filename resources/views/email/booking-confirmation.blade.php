@@ -375,7 +375,7 @@
                     📍 {{ config('hotel.address', '123 Hotel Street') }}
                 </div>
             </div>
-
+            
             <div class="social-links">
                 <a href="#" class="social-link">f</a>
                 <a href="#" class="social-link">in</a>
