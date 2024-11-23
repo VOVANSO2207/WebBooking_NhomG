@@ -143,7 +143,7 @@
                                         navigation="true" space-between="30" loop="true" style="height: auto">
                                         @foreach ($hotel->images as $image)
                                             <swiper-slide>
-                                                <img src="{{ asset('images/' . $image->image_url) }}"
+                                                <img src="{{ asset('storage/images/' . $image->image_url) }}"
                                                     alt="{{ $image->image_url }}" />
                                             </swiper-slide>
                                         @endforeach
@@ -304,7 +304,7 @@
             <swiper-container class="mySwiper" pagination="true" navigation="true" space-between="30" loop="true" style="height: auto;">
                 ${hotel.images.map(image => `
                     <swiper-slide>
-                        <img class="image-hotel-1" src="/images/${image.image_url}" alt="${image.image_url}" />
+                        <img class="image-hotel-1" src="/storage/images/${image.image_url}" alt="${image.image_url}" />
                     </swiper-slide>
                 `).join('')}
             </swiper-container>`;
@@ -483,7 +483,7 @@ function filterHotelsByPrice(minPrice, maxPrice) {
                     <swiper-container class="mySwiper" pagination="true" navigation="true" space-between="30" loop="true" style="height: auto;">
                         ${hotel.images.map(image => `
                             <swiper-slide>
-                                <img class="image-hotel-1" src="/images/${image.image_url}" alt="${image.image_url}" />
+                                <img class="image-hotel-1" src="/storage/images/${image.image_url}" alt="${image.image_url}" />
                             </swiper-slide>
                         `).join('')}
                     </swiper-container>`;
