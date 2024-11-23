@@ -10,6 +10,7 @@ use App\Models\Hotel;
 use App\Models\RoomImages;
 use App\Models\HotelImages;
 use App\Models\HotelAmenities;
+use App\Services\VNPayService;
 use Illuminate\Support\Facades\Validator;
 
 class AppServiceProvider extends ServiceProvider
@@ -20,6 +21,9 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         //
+        $this->app->singleton(VNPayService::class, function ($app) {
+            return new VNPayService();
+        });
     }
 
     /**

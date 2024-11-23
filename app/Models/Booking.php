@@ -88,4 +88,5 @@ class Booking extends Model
     {
         return $this->belongsTo(Promotions::class, 'promotion_id', 'promotion_id');
     }
+    
 }

@@ -626,7 +626,7 @@
             hotelCard.innerHTML = `
                 <a href="${hotel.detail_url}" class="group-offers">
                     <div class="shape-in">
-                        <img class="image-hotel-2" src="${baseUrl}/${hotel.image_url}" alt="">
+                        <img class="image-hotel-2" src="${hotel.image_url}" alt="">
                         <div class="group-info-hotel">
                             <p class="info-hotel-name m-0">${hotel.hotel_name}</p>
                             <p class="info-hotel-location m-0">${hotel.location}, ${hotel.city}</p>
