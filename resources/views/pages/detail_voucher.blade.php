@@ -479,7 +479,7 @@
                         <div class="voucher-card expired-voucher">
                             <div class="voucher-header" style="background: linear-gradient(45deg, #636e72, #b2bec3);">
                                 <p class="voucher-amount">Giảm {{ number_format($voucher->discount_amount, 0, ',', '.') }}
-                                    VND</p>
+                                    %</p>
                                 <span class="voucher-type">Đã hết hạn</span>
                                 <span class="voucher-status status-expired">Đã hết hạn</span>
                             </div>
