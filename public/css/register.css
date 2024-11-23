@@ -49,19 +49,25 @@ body {
     color: #333;
     margin-bottom: 15px;
 }
-h4, label {
+
+h4,
+label {
     font-weight: 600;
     color: #333;
 }
+
 .position-relative {
     position: relative;
 }
-.text-danger.password{
+
+.text-danger.password {
     margin-bottom: 16px;
 }
-.text-danger.confirmpass{
+
+.text-danger.confirmpass {
     margin-bottom: 16px;
 }
+
 .password-toggle-icon {
     position: absolute;
     top: 50%;
@@ -78,8 +84,8 @@ h4, label {
 }
 
 .form-control {
-    padding-right: 40px; /* Để tránh bị icon đè lên văn bản */
-    line-height: 1.5; /* Điều chỉnh để nội dung trong ô input hiển thị đẹp */
+    padding-right: 40px;
+    line-height: 1.5;
 }
 
 .text-danger {
@@ -88,5 +94,3 @@ h4, label {
     font-size: 12px;
     font-weight: 500;
 }
-
-

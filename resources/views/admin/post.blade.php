@@ -50,7 +50,7 @@
                             <tr class="post-detail" data-id="{{ IdEncoder::encodeId($post->post_id) }}">
                                 <td>{{ $index + 1 }}</td>
                                 <td>
-                                <img src="{{ asset($post->img ? 'images/' . $post->img : 'images/img-blog.jpg') }}"
+                                <img src="{{ asset($post->img ? 'storage/images/' . $post->img : 'images/img-blog.jpg') }}"
                                 alt="{{ $post->title }}" style="width: 100px; height: auto;">
                                 </td>
                                 <td>{{ Str::limit($post->title, 60) }}</td>
@@ -210,7 +210,7 @@
                     document.getElementById('modalMetaDesc').innerText = limitText(post.meta_desc);
                     document.getElementById('modalUrlSeo').innerText = limitText(post.url_seo);
                     document.getElementById('modalStatus').innerText = post.status ? 'Show' : 'Hidden';
-                    const imageUrl = post.img ? `/images/${post.img}` : '/path/to/default/image.jpg';
+                    const imageUrl = post.img ? `storage/images/${post.img}` : '/path/to/default/image.jpg';
                     document.getElementById('modalImage').src = imageUrl;
 
                     const editRoute = "{{ route('post.edit', ['post_id' => ':id']) }}".replace(':id', currentPostId);

@@ -20,11 +20,11 @@ class HotelAmenities extends Model
     public $timestamps = false; // Không sử dụng cột created_at và updated_at
 
     // Lấy danh sách tất cả các tiện ích
-    public static function getAllAmenities($perPage = 5)
+    public static function getAllAmenities($perPage = 8)
     {
         return self::orderBy('amenity_id', 'DESC')->paginate($perPage); // Sử dụng amenity_id để sắp xếp
     }
-
+    
     // Tìm tiện ích theo ID
     public static function findAmenityById($amenity_id)
     {
@@ -41,9 +41,11 @@ class HotelAmenities extends Model
     public static function searchAmenity($keyword)
     {
         if (empty($keyword)) {
-            return static::query(); // Trả về tất cả tiện ích nếu không có từ khóa
+            // Trả về tất cả các tiện ích nếu từ khóa tìm kiếm rỗng
+            return static::query();
         }
 
+        // Thực hiện tìm kiếm theo từ khóa trong các trường amenity_name và description
         return static::where(function ($query) use ($keyword) {
             $query->where('amenity_name', 'LIKE', "%{$keyword}%")
                 ->orWhere('description', 'LIKE', "%{$keyword}%");

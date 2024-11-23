@@ -34,5 +34,11 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+    'momo' => [
+    'endpoint' => env('MOMO_ENDPOINT', 'https://test-payment.momo.vn/v2/gateway'),
+    'partner_code' => env('MOMO_PARTNER_CODE'),
+    'access_key' => env('MOMO_ACCESS_KEY'),
+    'secret_key' => env('MOMO_SECRET_KEY'),
+],
 
 ];

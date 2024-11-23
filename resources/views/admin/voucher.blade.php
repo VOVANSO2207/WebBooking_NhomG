@@ -42,8 +42,10 @@
                     <thead>
                         <tr class="color_tr">
                             <th>STT</th>
+                            <th>Promotion Title</th>
                             <th>Promotion Code</th>
                             <th>Discount Amount</th>
+                            <th>Promotion Description</th>
                             <th>Start Date</th>
                             <th>End Date</th>
                         </tr>
@@ -54,28 +56,31 @@
                                 <td colspan="5" class="text-center">Không có voucher nào hiển thị</td>
                             </tr>
                         @else
-                        @php
-                            $today = Carbon::today();
-                        @endphp
+                                                @php
+                                                    $today = Carbon::today();
+                                                @endphp
 
-                        @foreach($vouchers as $key => $voucher)
-                        @php
-                            $textClass = '';
-                            $endDate = Carbon::createFromFormat('d/m/Y', $voucher->end_date);
-                            if ($endDate->isPast()) {
-                                $textClass = 'text-danger'; 
-                            }
-                        @endphp
-                            <tr class="voucher-detail" 
-                                data-id="{{ IdEncoder::encodeId($voucher->promotion_id) }}" 
-                                data-updated-at="{{ $voucher->updated_at }}">
-                                <td class="{{ $textClass }}">{{ $key + 1 }}</td>
-                                <td class="{{ $textClass }}">{{ $voucher->promotion_code }}</td>
-                                <td class="{{ $textClass }}">{{ number_format($voucher->discount_amount, 0, ',', '.') }} VND</td>
-                                <td class="{{ $textClass }}">{{ $voucher->start_date }}</td>
-                                <td class="{{ $textClass }}">{{ $voucher->end_date }}</td>
-                            </tr>
-                        @endforeach
+                                                @foreach($vouchers as $key => $voucher)
+                                                                    @php
+                                                                        $textClass = '';
+                                                                        $endDate = Carbon::createFromFormat('d/m/Y', $voucher->end_date);
+                                                                        if ($endDate->isPast()) {
+                                                                            $textClass = 'text-danger';
+                                                                        }
+                                                                    @endphp
+                                                                    <tr class="voucher-detail" data-id="{{ IdEncoder::encodeId($voucher->promotion_id) }}"
+                                                                        data-updated-at="{{ $voucher->updated_at }}">
+                                                                        <td class="{{ $textClass }}">{{ $key + 1 }}</td>
+                                                                        <td class="{{ $textClass }}">{{ Str::limit( $voucher->pro_title, 30)}}</td>
+                                                                        <td class="{{ $textClass }}">{{ $voucher->promotion_code }}</td>
+                                                                        <td class="{{ $textClass }}">{{ $voucher->discount_amount }}%
+                                                                        </td>
+                                                                        <td class="{{ $textClass }}">{{ \Str::limit($voucher->pro_description, 10) }}</td>
+                                                                        <td class="{{ $textClass }}">{{ $voucher->start_date }}</td>
+                                                                        <td class="{{ $textClass }}">{{ $voucher->end_date }}</td>
+                                                                    </tr>
+                                                                   
+                                                @endforeach
                         @endif
                     </tbody>
                     <tbody id="Content" class="searchdata">
@@ -101,6 +106,10 @@
             <div class="modal-body">
                 <div class="voucher-detail">
                     <div class="voucher-detail-item detail-item">
+                        <strong>Promotion Title:</strong>
+                        <span id="modalPromotionTitle"></span>
+                    </div>
+                    <div class="voucher-detail-item detail-item">
                         <strong>Promotion Code:</strong>
                         <span id="modalPromotionCode"></span>
                     </div>
@@ -108,6 +117,11 @@
                         <strong>Discount Amount:</strong>
                         <span id="modalDiscountAmount"></span>
                     </div>
+                    <div class="voucher-detail-item detail-item">
+                        <strong>Promotion Description:</strong>
+                        <span id="modalProDescription"></span>
+                    </div>
+
                     <div class="voucher-detail-item detail-item">
                         <strong>Start Date:</strong>
                         <span id="modalStartDate"></span>
@@ -162,8 +176,8 @@
                 <!-- Nội dung thông báo sẽ được chèn vào đây -->
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" style="#3B79C9 !important"
-                    data-bs-dismiss="modal" onclick="location.reload()">Đóng</button>
+                <button type="button" class="btn btn-secondary" style="#3B79C9 !important" data-bs-dismiss="modal"
+                    onclick="location.reload()">Đóng</button>
             </div>
         </div>
     </div>
@@ -190,12 +204,16 @@
                         return response.json();
                     })
                     .then(voucher => {
+                        document.getElementById('modalPromotionTitle').innerText = voucher.pro_title;
                         document.getElementById('modalPromotionCode').innerText = voucher.promotion_code;
                         let discountAmount = voucher.discount_amount;
-                        let formattedAmount = Number(discountAmount).toLocaleString('vi-VN') + ' VND';
+                        let formattedAmount = Number(discountAmount).toLocaleString('vi-VN') + '%';
                         document.getElementById('modalDiscountAmount').innerText = formattedAmount;
+                        document.getElementById('modalProDescription').innerText = voucher.pro_description ? voucher.pro_description.substring(0, 10) : 'Không có mô tả';
+
                         document.getElementById('modalStartDate').innerText = voucher.start_date;
                         document.getElementById('modalEndDate').innerText = voucher.end_date;
+
                         // Thiết lập đường dẫn cho nút Edit
                         const editRoute = "{{ route('voucher.edit', ['promotion_id' => ':id']) }}".replace(':id', currentVoucherId);
 

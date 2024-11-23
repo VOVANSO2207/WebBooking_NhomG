@@ -7,15 +7,16 @@
 </div>
 
 <main class="container login-container">
-    <div class="row justify-content-center">
+    <div class="login-card row">
         <div class="col-md-6 col-lg-5">
-            <div class="card ">
+            <div class="card">
                 <div class="card-body p-4">
                     <form method="POST" action="{{ route('auth.login') }}">
-                        @csrf <!-- Bảo vệ CSRF -->
-
-                        <h4 class="typing-effect"></h4>
-
+                        @csrf
+                        <div class="terminal-loader mb-2">
+                            <h2 class="text">Đăng nhập hoặc tạo một tài khoản</h2>
+                        </div>
+                        <!-- <h4 class="typing-effect"></h4> -->
                         <label for="floatingInput">Email hoặc Username</label>
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control" id="floatingInput" name="login"
@@ -54,21 +55,8 @@
                         </div>
                     </div>
 
-                    <div class="card-footer text-center text-muted">
+                    <div class="card-footer text-center text-muted mt-2">
                         Website by team © Group G
-                        <div class="d-flex align-items-center justify-content-between mt-3">
-                            <span class="flex-grow-1">
-                                <hr>
-                            </span>
-                            <p class="mx-2 mb-0">Hoặc</p>
-                            <span class="flex-grow-1">
-                                <hr>
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="card-footer text-center text-muted">
-                        Website by team © Staynest™
                     </div>
                 </div>
             </div>
@@ -98,21 +86,21 @@
     });
 
     // Hiệu ứng typing
-    const text = "Đăng nhập hoặc tạo một tài khoản"; // Your text here
-    let index = 0;
-    const typingSpeed = 100; // Speed in milliseconds
-    const element = document.querySelector(".typing-effect");
+    // const text = "Đăng nhập hoặc tạo một tài khoản"; // Your text here
+    // let index = 0;
+    // const typingSpeed = 100; // Speed in milliseconds
+    // const element = document.querySelector(".typing-effect");
 
-    function typeWriter() {
-        if (index < text.length) {
-            element.textContent += text.charAt(index);
-            index++;
-            setTimeout(typeWriter, typingSpeed);
-        }
-    }
+    // function typeWriter() {
+    //     if (index < text.length) {
+    //         element.textContent += text.charAt(index);
+    //         index++;
+    //         setTimeout(typeWriter, typingSpeed);
+    //     }
+    // }
 
-    window.onload = () => {
-        typeWriter();
-    };
+    // window.onload = () => {
+    //     typeWriter();
+    // };
 </script>
 @endsection

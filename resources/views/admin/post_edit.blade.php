@@ -14,7 +14,7 @@
                         @method('PUT')
                         <div class="card-body">
                             <div class="d-flex align-items-start align-items-sm-center gap-4">
-                                <img src="{{ asset('images/' . $post->img) }}" alt="user-avatar" class="d-block rounded"
+                                <img src="{{ asset('storage/images/' . $post->img) }}" alt="user-avatar" class="d-block rounded"
                                     height="100" width="100" id="fileUpload" />
                                 <div class="button-wrapper">
                                     <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
@@ -191,7 +191,7 @@
                 .replace(/\s+/g, "-");
             $("#url_seo").val(formattedValue);
         });
-
+        
         function checkForChanges() {
             var title = $('#title').val();
             var description = CKEDITOR.instances.description.getData();

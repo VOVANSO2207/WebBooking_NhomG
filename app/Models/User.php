@@ -10,19 +10,19 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Auth\Authenticatable as AuthenticatableTrait;
 
-class User extends Model implements Authenticatable // Thêm giao diện
-{
-    use HasFactory, AuthenticatableTrait; // Thêm trait
+    class User extends Model implements Authenticatable // Thêm giao diện
+    {
+        use HasFactory, AuthenticatableTrait; // Thêm trait
 
-    protected $fillable = [
-        'username',
-        'email',
-        'password',
-        'phone_number',
-        'role_id',
-        'status',
-        'avatar',
-    ];
+        protected $fillable = [
+            'username',
+            'email',
+            'password',
+            'phone_number',
+            'role_id',
+            'status',
+            'avatar',
+        ];
 
     protected $primaryKey = 'user_id';
 
@@ -76,8 +76,34 @@ class User extends Model implements Authenticatable // Thêm giao diện
         $this->attributes['password'] = Hash::make($value);
     }
 
-    public static function register($data)
+    public static function registerUser($data)
     {
+        // Xác thực dữ liệu
+        $validatedData = Validator::make($data, [
+            'username' => 'required|string|max:25|unique:users,username',
+            'email' => 'required|string|email|max:255|min:5|regex:/^[^@.]+@[A-Za-z0-9-]+\.[A-Za-z0-9-]+$/|unique:users,email',
+            'phone_number' => 'required|string|regex:/^0[0-9]{9}$/',
+            'password' => 'required|string|min:8|confirmed',
+        ], [
+            'username.required' => 'Vui lòng nhập tên đăng nhập.',
+            'username.max' => 'Tên đăng nhập không được vượt quá 25 ký tự.',
+            'username.unique' => 'Tên đăng nhập đã tồn tại, vui lòng chọn tên khác.',
+            'email.required' => 'Vui lòng nhập địa chỉ email.',
+            'email.email' => 'Địa chỉ email không hợp lệ.',
+            'email.max' => 'Địa chỉ email không được dài quá 255 ký tự.',
+            'email.min' => 'Địa chỉ email phải từ 5 ký tự trở lên.',
+            'email.regex' => 'Địa chỉ email không đúng định dạng.',
+            'email.unique' => 'Địa chỉ email này đã được sử dụng, vui lòng chọn email khác.',
+            'phone_number.required' => 'Vui lòng nhập số điện thoại.',
+            'phone_number.regex' => 'Số điện thoại hợp lệ là ký tự số bắt đầu bằng 0 và có 10 chữ số.',
+            'password.required' => 'Vui lòng nhập mật khẩu.',
+            'password.confirmed' => 'Vui lòng xác nhận lại mật khẩu.',
+        ]);
+
+        if ($validatedData->fails()) {
+            throw new \Exception('Dữ liệu không hợp lệ');
+        }
+        
         // Tạo người dùng mới
         return self::create([
             'username' => $data['username'],
@@ -86,7 +112,7 @@ class User extends Model implements Authenticatable // Thêm giao diện
             'phone_number' => $data['phone_number'],
             'role_id' => $data['role_id'] ?? 2, // Mặc định role là 2
             'status' => $data['status'] ?? 1,  // Mặc định trạng thái là hoạt động
-            'avatar' => $data['avatar'] ?? 'default-avatar.png',
+            'avatar' => $data['avatar'] ?? 'user-profile.png',
         ]);
     }
 
@@ -159,5 +185,63 @@ class User extends Model implements Authenticatable // Thêm giao diện
     {
         return $this->belongsToMany(Hotel::class, 'favorite_hotels');
     }
-    
+
+
+    public function updateProfileUser($data, $userId = null)
+    {
+    try {
+        // Nếu không truyền userId thì lấy id của user hiện tại
+        $userId = $userId ?? auth()->id();
+        
+        $user = self::findOrFail($userId);
+        
+        // Validate email unique nếu email thay đổi
+        // if (isset($data['email']) && $data['email'] !== $user->email) {
+        //     $existingEmail = self::where('email', $data['email'])
+        //                         ->where('id', '!=', $userId)
+        //                         ->exists();
+        //     if ($existingEmail) {
+        //         throw new \Exception('Email đã tồn tại trong hệ thống.');
+        //     }
+        // }
+
+        // Validate phone unique nếu phone thay đổi  
+        if (isset($data['phone_number']) && $data['phone_number'] !== $user->phone_number) {
+            $existingPhone = self::where('phone_number', $data['phone_number'])
+                                ->where('user_id', '!=', $userId)
+                                ->exists();
+            if ($existingPhone) {
+                throw new \Exception('Số điện thoại đã tồn tại trong hệ thống.');
+            }
+        }
+
+        // Xử lý upload avatar nếu có
+        if (isset($data['avatar']) && $data['avatar'] instanceof \Illuminate\Http\UploadedFile) {
+            // Xóa avatar cũ nếu có
+            if ($user->avatar && file_exists(public_path('storage/images/' . $user->avatar))) {
+                unlink(public_path('storage/images/' . $user->avatar));
+            }
+
+            // Upload avatar mới
+            $avatar = $data['avatar'];
+            $filename = time() . '_' . $avatar->getClientOriginalName();
+            $avatar->move(public_path('storage/images'), $filename);
+            $data['avatar'] = $filename;
+        }
+        // Cập nhật thông tin user
+        $user->update([
+            // 'username' => $data['username'] ?? $user->username,
+            // 'email' => $data['email'] ?? $user->email,
+            'phone_number' => $data['phone_number'] ?? $user->phone_number,
+            'avatar' => $data['avatar'] ?? $user->avatar,
+        ]);
+
+        return true;
+
+    } catch (\Exception $e) {
+        // Log lỗi nếu cần
+        // \Log::error('Error updating user profile: ' . $e->getMessage());
+        throw $e;
+    }
+}
 }

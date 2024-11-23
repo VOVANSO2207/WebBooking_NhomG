@@ -78,6 +78,21 @@ body {
     box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
 }
 
+/* .review-images-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin: 15px;
+}
+
+.review-images-details img {
+    max-width: 150px;
+    max-height: 150px;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    object-fit: cover;
+} */
+
 .modal-image-alls {
     transition: scale 300ms ease;
 }
@@ -204,6 +219,8 @@ body {
     }
 
     .info-amenities {
+        white-space: nowrap;
+
         .amenity-item i {
             margin: 10px;
             color: #12C84F;
@@ -240,9 +257,23 @@ body {
 
         .group-info-room-card {
             box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-            border-radius: 20px;
             scale: 0.95;
             background: #fff;
+            border-radius: 20px;
+
+            .detail-infor-room-left {
+
+                .mySwiper {
+                    img {
+                        border-radius: 35px;
+                        height: 250px;
+                        width: 100%;
+                        object-fit: cover;
+                        padding: 20px 10px;
+                    }
+                }
+
+            }
         }
 
         .card-room-load-more #loadMore {
@@ -258,15 +289,6 @@ body {
             }
         }
     }
-
-    .mySwiper img {
-        width: 100%;
-        height: 200px;
-        object-fit: cover;
-        padding: 10px;
-        border-radius: 20px;
-    }
-
 
     .detail-infor-right {
         position: relative;
@@ -305,8 +327,10 @@ body {
         }
 
         .card-room-rating span {
-            font-size: 35px;
+            font-size: 25px;
             color: #ffdd00;
+            padding: 0;
+            margin: 0;
         }
 
         .group-room-price {
@@ -334,14 +358,10 @@ body {
         right: 20px;
         display: flex;
 
-        .don {
-            background: #12C84F;
-            color: #fff;
-
-        }
-
         .don,
         .doi {
+            background: #12C84F;
+            color: #fff;
             margin-left: 5px;
             padding: 3px 10px;
             border: 1px solid;
@@ -360,6 +380,11 @@ body {
         padding: 5px 10px;
         border-radius: 10px;
         background: #3B79C9;
+
+        &:hover {
+            background: #043a81;
+            transition: background 300ms ease;
+        }
 
         .btn-book-now {
             color: #fff;
@@ -384,8 +409,52 @@ body {
     }
 
     .box-review {
+        .image-preview-review {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .image-preview-review img {
+            max-width: 100px;
+            max-height: 100px;
+            border-radius: 5px;
+            box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+            object-fit: cover;
+        }
+
+        .preview-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .preview-image {
+            max-width: 100px;
+            max-height: 100px;
+            border-radius: 5px;
+        }
+
+        .close-button {
+            position: absolute;
+            top: -8px;
+            right: -5px;
+            background-color: #4598ff;
+            color: white;
+            border-radius: 50%;
+            padding: 0px 8px;
+            cursor: pointer;
+            font-weight: bold;
+
+            &:hover {
+                background-color: #ff0000;
+                transition: background-color 300ms ease;
+            }
+        }
+
         .group-input-review {
             display: flex;
+            position: relative;
 
             .icon-profile {
                 font-size: 45px;
@@ -414,13 +483,53 @@ body {
                     top: calc(100% - 37px);
                     right: 10px;
 
-                    label i {
-                        font-size: 30px;
-                        color: #3B79C9;
-                        cursor: pointer;
+                    .emoj-review {
+                        float: inline-start;
+
+                        button {
+                            margin-top: -5px;
+                            margin-right: 5px;
+
+                            &::after {
+                                content: '😊';
+
+                            }
+                        }
+                    }
+
+                    .upload-file {
+                        label i {
+                            font-size: 30px;
+                            color: #3B79C9;
+                            cursor: pointer;
+                        }
                     }
                 }
             }
+
+            .rating-stars {
+                display: flex;
+                gap: 5px;
+                position: absolute;
+                left: 60px;
+                bottom: 7px;
+
+                .star {
+                    font-size: 24px;
+                    color: #ccc;
+                    cursor: pointer;
+                    transition: color 0.3s ease;
+                }
+            }
+
+            .rating-stars .star.selected {
+                color: #ff4500;
+            }
+
+            .rating-stars .star.hover {
+                color: #ff4500;
+            }
+
         }
 
         .btn-submit button {
@@ -455,9 +564,16 @@ body {
                 padding: 15px;
                 border-radius: 10px;
 
-                .image-review img {
-                    width: 200px;
-                    border-radius: 10px;
+                .image-review {
+                    display: grid;
+                    grid-template-columns: 100px 100px 100px 100px;
+                    padding: 10px;
+                    gap: 10px;
+
+                    img {
+                        width: 100px;
+                        border-radius: 10px;
+                    }
                 }
 
                 .group-info-review {
@@ -477,6 +593,7 @@ body {
 
                     .action-review {
                         display: flex;
+                        align-items: center;
 
                         .edit-review {
                             text-align: center;
@@ -492,6 +609,15 @@ body {
                                 transition: all 300ms ease;
                             }
                         }
+
+                        .delete-review-btn {
+                            color: #000;
+                            text-decoration: none;
+
+                            &:hover {
+                                color: red;
+                            }
+                        }
                     }
                 }
             }
@@ -503,4 +629,83 @@ body {
             justify-content: end;
         }
     }
+}
+
+.people-summary-container {
+    border-radius: 10px;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid black;
+    background: #fff;
+    position: relative;
+    cursor: pointer;
+}
+
+.people-counter-dropdown {
+    z-index: 10;
+    position: absolute;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+    display: none;
+}
+
+.people-counter-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.counter-container {
+    display: flex;
+    align-items: center;
+}
+
+.counter-container button {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    font-size: 20px;
+    line-height: 0;
+    text-align: center;
+    cursor: pointer;
+}
+
+.counter-container button:hover {
+    background-color: #ddd;
+}
+
+.counter-container .counter-value {
+    width: 30px;
+    text-align: center;
+    border: none;
+    background-color: transparent;
+    font-size: 16px;
+    pointer-events: none;
+}
+
+.like-review.liked {
+    color: red !important;
+}
+
+.stars i,
+.review-rating i {
+    font-size: 20px;
+}
+
+.review-summary p {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.review-rating i {
+    margin-right: 3px;
+}
+
+.review-comment p {
+    font-size: 14px;
+    color: #333;
 }

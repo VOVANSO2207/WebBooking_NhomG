@@ -8,12 +8,21 @@ use App\Models\Rooms;
 use App\Models\Promotions;
 use Illuminate\Http\Request;
 use App\Helpers\IdEncoder;
+use App\Models\Payments;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 class BookingController extends Controller
 {
     public function viewBooking()
     {
         $bookings = Booking::getAllBookings();
         return view('admin.booking', compact('bookings'));
+    }
+    public function showBookingBill()
+    {
+        $bookings = Booking::where('user_id', auth()->id())->paginate(2);
+
+        return view('pages.account', compact('bookings'));
     }
 
     public function bookingAdd()
@@ -72,7 +81,7 @@ class BookingController extends Controller
         $booking->status = $request->status;
 
         Booking::createBooking($booking->toArray());
-        return redirect()->route('admin.viewbooking')->with('success', 'Thêm đặt phòng thành công.');
+        return redirect()->route('admin.viewbooking')->with('success', 'Thêm đơn đặt phòng thành công.');
     }
 
     public function deleteBooking($id)
@@ -82,39 +91,27 @@ class BookingController extends Controller
         $booking = Booking::find($bookingId);
 
         if ($booking) {
+            // Xóa Đặt phòng
             $booking->delete();
-            return response()->json(['success' => true, 'message' => 'Đặt phòng đã được xóa.']);
+
+            // Gửi thông báo thành công vào session
+            return redirect()->route('admin.viewbooking')->with('success', 'Đơn đặt phòng đã được xóa thành công.');
         }
 
-        return response()->json(['success' => false, 'message' => 'Đặt phòng không tồn tại.'], 404);
+        // Nếu không tìm thấy Đặt phòng, gửi thông báo lỗi vào session
+        return redirect()->route('admin.viewbooking')->with('error', 'Đơn đặt phòng không tồn tại.');
     }
 
     public function search(Request $request)
     {
         $keyword = $request->input('search');
-        $bookings = Booking::query()
-            ->when($keyword, function ($query, $keyword) {
-                $query->where(function ($q) use ($keyword) {
-                    // Tìm kiếm trên trường 'username' từ bảng 'users' với LIKE
-                    $q->whereHas('user', function ($queryUser) use ($keyword) {
-                        $queryUser->where('username', 'LIKE', "%{$keyword}%")
-                                ->orWhere('email', 'LIKE', "%{$keyword}%"); // Thêm tìm kiếm email
-                    })
-                    // Tìm kiếm trên trường 'name' từ bảng 'rooms'
-                    ->orWhereHas('room', function ($queryRoom) use ($keyword) {
-                        $queryRoom->where('name', 'LIKE', "%{$keyword}%");
-                    })
-                    // Tìm kiếm trên trường 'promotion_code' từ bảng 'promotions'
-                    ->orWhereHas('promotion', function ($queryPromo) use ($keyword) {
-                        $queryPromo->where('promotion_code', 'LIKE', "%{$keyword}%");
-                    });
-                });
-            })
-            ->paginate(7);
+
+        // Gọi phương thức searchBooking trong Model Booking
+        $bookings = Booking::searchBooking($keyword)->paginate(7);
 
         return view('admin.search_results_booking', compact('bookings'));
-    } 
-    
+    }
+
     public function editBooking($booking_id)
     {
         // Tìm booking theo ID
@@ -124,7 +121,7 @@ class BookingController extends Controller
 
         // Kiểm tra nếu booking không tồn tại
         if (!$booking) {
-            return redirect()->route('admin.viewbookings')->with('error', 'Đặt phòng không tồn tại.');
+            return redirect()->route('admin.viewbookings')->with('error', 'Đơn đặt phòng không tồn tại.');
         }
 
         // Lấy danh sách người dùng, phòng, và khuyến mãi
@@ -159,7 +156,7 @@ class BookingController extends Controller
 
         $booking = Booking::findBookingById($booking_id);
         if (!$booking) {
-            return redirect()->route('admin.viewbooking')->with('error', 'Đặt phòng không tồn tại.');
+            return redirect()->route('admin.viewbooking')->with('error', 'Đơn đặt phòng không tồn tại.');
         }
 
         $booking->user_id = $request->user_id;
@@ -172,6 +169,27 @@ class BookingController extends Controller
 
         $booking->save();
 
-        return redirect()->route('admin.viewbooking')->with('success', 'Cập nhật đặt phòng thành công.');
+        return redirect()->route('admin.viewbooking')->with('success', 'Cập nhật đơn đặt phòng thành công.');
+    }
+
+    public function cancel($id)
+    {
+        $hoaDon = Booking::findOrFail($id);
+
+        $hoaDon->status = 'cancelled';
+        $hoaDon->save();
+
+        return redirect()->route('pages.account')->with('success', 'Hóa đơn đã hủy thành công.');
+    }
+
+    // Chưa sử dụng, chưa có được logic code
+    public function xoaHoaDon($id)
+    {
+        $hoaDon = Booking::findOrFail($id);
+
+        $hoaDon->status = 'deleted';
+        $hoaDon->save();
+
+        return redirect()->route('pages.account')->with('success', 'Hóa đơn đã xóa thành công.');
     }
 }

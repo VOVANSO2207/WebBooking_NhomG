@@ -255,3 +255,22 @@ body {
         flex-direction: column;
     }
 }
+.share-buttons {
+    margin-top: 20px;
+}
+
+.share-buttons a {
+    margin-right: 10px;
+    color: white;
+    text-decoration: none;
+}
+
+.share-buttons .btn-primary {
+    background-color: #3b5998; /* Màu Facebook */
+    border: none;
+}
+
+.share-buttons .btn-danger {
+    background-color: #d9534f; /* Màu Gmail */
+    border: none;
+}

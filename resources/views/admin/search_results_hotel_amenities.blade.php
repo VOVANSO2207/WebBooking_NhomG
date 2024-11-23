@@ -22,6 +22,17 @@
 
 <div class="content-wrapper">
     <div class="container-xxl flex-grow-1 container-p-y">
+        <!-- Success/Failure Messages -->
+        @if (session('success'))
+            <div class="alert alert-success" role="alert">
+                {{ session('success') }}
+            </div>
+        @elseif(session('error'))
+            <div class="alert alert-danger" role="alert">
+                {{ session('error') }}
+            </div>
+        @endif
+        
         <div class="card">
             <h5 class="card-header" style="background-color: #696cff; border-color: #696cff; color:#fff">HOTEL AMENITIES</h5>
             <div class="add">
@@ -58,7 +69,6 @@
     </div>
 </div>
 
-<!-- Amenity Detail Modal -->
 <!-- Amenity Detail Modal -->
 <div class="modal fade" id="amenityDetailModal" tabindex="-1" aria-labelledby="amenityDetailModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -125,36 +135,19 @@ document.addEventListener('DOMContentLoaded', function () {
     // Xử lý sự kiện nhấn nút Delete trong modal chi tiết
     document.getElementById('deleteAmenityButton').addEventListener('click', function () {
         if (currentAmenityId) {
+            // Thực hiện xóa tiện ích mà không có thông báo xác nhận
             fetch(`/admin/hotel_amenities/${currentAmenityId}/delete`, {
                 method: 'DELETE',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}', // Thêm CSRF token
                 },
             })
-            .then(response => {
-                if (response.ok) {
-                    // Xóa tiện ích khỏi bảng
-                    const rowToDelete = document.querySelector(`.amenity-detail[data-id="${currentAmenityId}"]`);
-                    if (rowToDelete) {
-                        rowToDelete.remove();
-                    } else {
-                        console.error('Row not found for deletion');
-                    }
-                    // Đóng modal và tải lại trang
-                    new bootstrap.Modal(document.getElementById('amenityDetailModal')).hide();
-                    alert('Amenity deleted successfully.');
-                    location.reload(); // Tải lại trang
-                } else {
-                    throw new Error('Failed to delete Amenity.');
-                }
-            })
-            .catch(error => {
-                console.error('Error deleting Amenity:', error);
-                alert('An error occurred while deleting the amenity.');
-            });
+
+            if (!confirm('Bạn có chắc chắn muốn xóa tiện ích này?')) return;
+            window.location.reload();
         }
     });
-    // Lắng nghe sự kiện đóng modal
+
     document.getElementById('amenityDetailModal').addEventListener('hidden.bs.modal', function () {
         // Tự động reload lại trang khi modal đóng
         location.reload();
@@ -162,4 +155,3 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 @endsection
-

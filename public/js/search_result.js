@@ -56,19 +56,3 @@ rangeInput.forEach((input) => {
 //         document.getElementById(targetTab).classList.add('active');
 //     });
 // });
-
-
-const starButtons = document.querySelectorAll('.star-button');
-
-starButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        starButtons.forEach(btn => btn.classList.remove('active'));
-        button.classList.add('active');
-    });
-});
-
-// Initialize slider
-// setHandlePosition(minHandle, currentMin);
-// setHandlePosition(maxHandle, currentMax);
-// updateSliderRange();
-// updatePriceValues();

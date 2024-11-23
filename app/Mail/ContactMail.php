@@ -26,7 +26,7 @@ class ContactMail extends Mailable
         $this->email= $email;
         $this->body = $body;
     }
-
+    
     public function build()
     {
         return $this->subject('Liên hệ mới từ ' . $this->name)

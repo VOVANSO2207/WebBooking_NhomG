@@ -62,7 +62,7 @@
                                                                 <img src="{{ asset('storage/images/' . $image->image_url) }}"
                                                                     alt="Room Image">
                                                             @else
-                                                                <img src="{{ asset('images/defaullt-image.png') }}"
+                                                                <img src="{{ asset('images/img-hotel.jpg') }}"
                                                                     alt="Default Image">
                                                             @endif
                                                         </div>
@@ -176,9 +176,55 @@
             </div>
         </div>
 
-
+        <!-- Hiện thông báo khi update thành công -->
+        @if (session('success'))
+            <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 999999;">
+                <div id="successToast" class="toast align-items-center text-bg-success border-0" role="alert"
+                    aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            <i class="bi bi-check-circle-fill me-2" style="color: #28a745;"></i>
+                            <span style="color: #000">{{ session('success') }} </span>
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                            aria-label="Close"></button>
+                    </div>
+                </div>
+            </div>
+        @endif
+        @if (session('info'))
+            <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 99999;">
+                <div id="infoToast" class="toast align-items-center text-bg-info border-0" role="alert"
+                    aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            <i class="bi bi-info-circle-fill me-2" style="color: #0dcaf0;"></i>
+                            {{ session('info') }}
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                            aria-label="Close"></button>
+                    </div>
+                </div>
+            </div>
+        @endif
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css">
         <!-- JavaScript -->
         <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                if ({{ session('success') ? 'true' : 'false' }}) {
+                    var successToast = new bootstrap.Toast(document.getElementById('successToast'), {
+                        delay: 1500
+                    });
+                    successToast.show();
+                }
+                if ({{ session('info') ? 'true' : 'false' }}) {
+                    var infoToast = new bootstrap.Toast(document.getElementById('infoToast'), {
+                        delay: 1500
+                    });
+                    infoToast.show();
+                }
+            });
             document.querySelectorAll('.table tbody tr').forEach(function(row) {
                 row.addEventListener('click', function(e) {
                     if (e.target.tagName === 'IMG' || e.target.closest('.swiper-button-next') || e.target
@@ -203,11 +249,11 @@
 
                 // Edit Room Button Event
                 document.getElementById('editRoomButton').onclick = function() {
-                    
+
                     window.location.href = `{{ url('admin/room/edit') }}/${room.room_id}`;
-                
+
                 };
-                
+
 
                 // Update amenities
                 const amenitiesContainer = document.getElementById('modalAmenities');

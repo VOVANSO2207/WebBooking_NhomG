@@ -26,6 +26,17 @@
 
 <div class="content-wrapper">
     <div class="container-xxl flex-grow-1 container-p-y">
+        <!-- Success/Failure Messages -->
+        @if (session('success'))
+            <div class="alert alert-success" role="alert">
+                {{ session('success') }}
+            </div>
+        @elseif(session('error'))
+            <div class="alert alert-danger" role="alert">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <div class="card">
             <h5 class="card-header" style="background-color: #696cff; color: #fff;">HOTELS</h5>
             <div class="add">
@@ -75,7 +86,7 @@
 
                                 <td>{{ $hotel->hotel_name }}</td>
                                 <td>{{ $hotel->location }}</td>
-                                <td>{{ Str::limit($hotel->description, 50, '...') }}</td>
+                                <td>{!! Str::limit(strip_tags($hotel->description), 50, '...') !!}</td>
                                 <td>{{ $hotel->city->city_name ?? 'N/A' }}</td>
                                 <td>{{ $hotel->rating }}</td>
                             </tr>
@@ -87,7 +98,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="d-flex justify-content-center mt-3">
+            <div class="d-flex justify-content-end mt-3">
                 {{ $hotels->links('pagination::bootstrap-4') }}
             </div>
         </div>
@@ -176,7 +187,7 @@
                         document.getElementById('modalHotelName').innerText = hotel.hotel_name;
                         document.getElementById('modalHotelLocation').innerText = hotel.location;
                         document.getElementById('modalHotelCity').innerText = hotel.city;
-                        document.getElementById('modalHotelDescription').innerText = hotel.description;
+                        document.getElementById('modalHotelDescription').innerHTML = hotel.description.length > 50 ? hotel.description.substring(0, 50) + '...' : hotel.description;
                         document.getElementById('modalHotelRating').innerText = hotel.rating;
 
                         const editRoute = "{{ route('hotel.edit', ['hotel_id' => ':hotel_id']) }}";
@@ -227,16 +238,8 @@
                 'Content-Type': 'application/json',
             },
         })
-        .then(response => {
-            if (response.ok) {
-                location.reload();
-            } else {
-                alert('Có lỗi xảy ra. Vui lòng thử lại sau.');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+        if (!confirm('Bạn có chắc chắn muốn khách sạn này?')) return;
+        location.reload();
     });
     const hotelDetailModal = document.getElementById('hotelDetailModal');
 

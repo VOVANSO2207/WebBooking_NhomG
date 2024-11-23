@@ -229,14 +229,17 @@ body {
     color: white;
     border-color: #4285f4;
 }
+
 .star-button.active {
     background-color: #3B79C9;
     color: white;
     border-color: #4285f4;
 }
+
 .amenities_hotel {
     padding: 10px 0;
 }
+
 .amenities_hotel p {
     color: #666;
 
@@ -600,11 +603,10 @@ input[type="range"]::-moz-range-thumb {
     border-top-right-radius: 20px;
 }
 
-.filter-hotel {
-    scale: 0.9;
-}
 .filter {
     height: 100%;
-  
-   
+}
+.custom-checkbox:hover {
+    background: #3A77C5;
+    color: #fff;
 }

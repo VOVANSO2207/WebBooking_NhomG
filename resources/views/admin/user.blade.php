@@ -26,6 +26,17 @@
 
 <div class="content-wrapper">
     <div class="container-xxl flex-grow-1 container-p-y">
+        <!-- Success/Failure Messages -->
+        @if (session('success'))
+            <div class="alert alert-success" role="alert">
+                {{ session('success') }}
+            </div>
+        @elseif(session('error'))
+            <div class="alert alert-danger" role="alert">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <div class="card">
             <h5 class="card-header" style="background-color: #696cff; border-color: #696cff; color:#fff">USER</h5>
             <div class="add">
@@ -49,15 +60,16 @@
                             <tr class="user-detail" data-id="{{ IdEncoder::encodeId($user->user_id) }}">
                                 <td>{{ $index + 1 }}</td>
                                 <td>
-                                    <img src="{{ asset('images/' . $user->avatar) }}" alt="{{ $user->username }}" 
-                                    style="width: 100px; height: auto;">
+                                    <img src="{{ asset('storage/images/' . $user->avatar) }}" alt="{{ $user->username }}"
+                                        style="width: 100%; height: 100px; width: 100px; object-fit:cover; border-radius:50%;">
                                 </td>
                                 <td>{{ $user->username }}</td>
                                 <td>{{ $user->email }}</td>
                                 <td>{{ $user->phone_number }}</td>
                                 <td>{{ $user->role->role_name ?? 'N/A' }}</td>
                                 <td>
-                                    <span class="badge d-inline" style="{{ $user->status ? 'background-color: green; color: white; padding: 5px;' : 'background-color: red; color: white; padding: 5px;' }}">
+                                    <span class="badge d-inline"
+                                        style="{{ $user->status ? 'background-color: green; color: white; padding: 5px;' : 'background-color: red; color: white; padding: 5px;' }}">
                                         {{ $user->status ? 'Active' : 'Inactive' }}
                                     </span>
                                 </td>
@@ -87,8 +99,10 @@
             </div>
             <div class="modal-body">
                 <div class="gallery-section">
-                    <strong>Avatar:</strong>
-                    <img id="modalAvatar" style="width: 100%; height: auto; max-width: 200px;" alt="">
+                    <img id="modalAvatar"
+                        style="width: 100%; height: 200px; width: 200px; object-fit:cover; border-radius:50%;" alt=""
+                        src="">
+
                 </div>
 
                 <div class="room-info-grid mt-3">
@@ -132,7 +146,7 @@
         userDetailRows.forEach(row => {
             row.addEventListener('click', function () {
                 currentUserId = this.getAttribute('data-id');
-                
+
                 // Gọi AJAX để lấy chi tiết người dùng
                 fetch(`/users/${currentUserId}/detail`)
                     .then(response => {
@@ -148,9 +162,9 @@
                         document.getElementById('modalPhoneNumber').innerText = user.phone_number;
                         document.getElementById('modalRoleId').innerText = user.role_id;
                         document.getElementById('modalStatus').innerText = user.status ? 'Active' : 'Inactive';
-                        const avatarUrl = user.avatar ? `/images/${user.avatar}` : 'default-avatar.png';
+                        const avatarUrl = user.avatar ? `/storage/images/${user.avatar}` : '/storage/images/default-avatar.png';
+                        console.log(avatarUrl);
                         document.getElementById('modalAvatar').src = avatarUrl;
-
                         // Đặt link Edit
                         const editRoute = "{{ route('user.edit', ['user_id' => ':id']) }}".replace(':id', currentUserId);
                         document.getElementById('editUserButton').setAttribute('href', editRoute);
@@ -164,49 +178,22 @@
             });
         });
 
-        // Xử lý xóa người dùng khi nhấn nút "Delete"
-        document.getElementById('deleteUserButton').addEventListener('click', function () {
-            fetch(`/users/${currentUserId}/delete`, {
-                method: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                },
-            })
-            .then(response => {
-                if (response.ok) {
-                    alert('User deleted successfully.');
+        // Xử lý xóa người dùng
+        deleteUserButton.addEventListener('click', async function () {
+            if (!confirm('Bạn có chắc chắn muốn xóa người dùng này?')) return;
 
-                    // Đóng modal chi tiết và tải lại trang
-                    const userDetailModal = bootstrap.Modal.getInstance(document.getElementById('userDetailModal'));
-                    if (userDetailModal) {
-                        userDetailModal.hide();
-                    }
-                    location.reload();
-                } else {
-                    throw new Error('Failed to delete user.');
-                }
-            })
-            .catch(error => {
+            try {
+                const response = await fetch(`/users/${currentUserId}/delete`, {
+                    method: 'DELETE',
+                    headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                });
+                // Ẩn dòng dữ liệu ngay lập tức
+                document.querySelector(`tr[data-id="${currentUserId}"]`).remove();
+                window.location.reload();
+
+            } catch (error) {
                 console.error('Error deleting user:', error);
-                alert('An error occurred while deleting the user.');
-            });
-        });
-
-        // Đóng modal chi tiết và reload trang khi nhấn nút "Close"
-        document.querySelector('#userDetailModal .btn-close, #userDetailModal .btn-secondary').addEventListener('click', function () {
-            const userDetailModal = bootstrap.Modal.getInstance(document.getElementById('userDetailModal'));
-            if (userDetailModal) {
-                userDetailModal.hide();
             }
-            location.reload();
-        });
-
-        // Lắng nghe sự kiện đóng modal
-        const userDetailModal = document.getElementById('userDetailModal');
-        
-        userDetailModal.addEventListener('hidden.bs.modal', function () {
-            // Tự động reload lại trang khi modal đóng
-            location.reload();
         });
     });
 </script>

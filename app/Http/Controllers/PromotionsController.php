@@ -25,8 +25,10 @@ class PromotionsController extends Controller
         }
 
         return response()->json([
+            'pro_title' => $promotion->pro_title,
             'promotion_code' => $promotion->promotion_code,
             'discount_amount' => $promotion->discount_amount,
+            'pro_description' => $promotion->pro_description,
             'start_date' => $promotion->start_date,
             'end_date' => $promotion->end_date,
 
@@ -40,25 +42,26 @@ class PromotionsController extends Controller
         return view('admin.search_results_voucher', compact('vouchers'));
     }
 
-
     public function destroy(Request $request, $promotion_id)
     {
         // Validate request
-        Validator::make($request->all(), [
+        $validated = $request->validate([
             'updated_at' => 'required|date',
-        ])->validate();
+        ]);
 
-        // Giải mã ID (nếu sử dụng mã hóa ID)
         $decodedId = IdEncoder::decodeId($promotion_id);
 
-        // Gọi hàm xóa từ model Promotions
-        $isDeleted = Promotions::deleteVoucher($decodedId, $request->updated_at);
+        if (!$decodedId) {
+            return response()->json(['error' => 'Voucher không tồn tại'], 404);
+        }
+
+        $isDeleted = Promotions::deleteVoucher($decodedId, $validated['updated_at']);
 
         if (!$isDeleted) {
             return response()->json(['error' => 'Voucher có thể bị xoá vui lòng cập nhật lại'], 409);
         }
 
-        return response()->json(['success' => 'XOÁ VOUCHER THÀNH CÔNG']);
+        return response()->json(['success' => 'Xóa voucher thành công']);
     }
 
     public function voucherAdd()
@@ -67,61 +70,41 @@ class PromotionsController extends Controller
     }
     public function storeVoucher(Request $request)
     {
-        $maxStartDate = Carbon::today()->addYear()->format('Y-m-d');
+        $result = Promotions::createVoucher($request->all());
 
-        // Validate dữ liệu
-        $validator = Validator::make($request->all(), [
-            'promotion_code' => 'required|max:15|min:10|alpha_num|unique:promotions,promotion_code|regex:/^(?=.*[a-zA-Z])(?=.*[0-9]).+$/',
-            'discount_amount' => 'required|numeric|min:0|max:99999999|not_regex:/^0\d+$/|regex:/^\d+$/',
-            'start_date' => "required|date|date_format:Y-m-d|after_or_equal:today|before_or_equal:$maxStartDate",
-            'end_date' => "required|date|date_format:Y-m-d|after:start_date|after_or_equal:today|before_or_equal:$maxStartDate",
-        ], [
-            'end_date.after' => 'Ngày kết thúc phải lớn hơn ngày bắt đầu.',
-            'end_date.required' => 'Vui lòng chọn ngày kết thúc',
-            'end_date.after_or_equal' => 'Ngày kết thúc không được là ngày trong quá khứ.',
-            'end_date.before_or_equal' => 'Ngày kết thúc không được chọn quá xa.', 
-            'start_date.required' => 'Vui lòng chọn ngày bắt đầu',
-            'start_date.after_or_equal' => 'Ngày bắt đầu không được là ngày trong quá khứ.',
-            'start_date.before_or_equal' => 'Ngày bắt đầu không được chọn quá xa.',
-            'promotion_code.required' => 'Vui lòng nhập tên voucher.',
-            'promotion_code.unique' => 'Tên voucher đã tồn tại',
-            'discount_amount.required' => 'Vui lòng nhập số tiền giảm giá.',
-            'discount_amount.regex' => 'Vui lòng không nhập ký tự đặc biệt.',
-            'discount_amount.min' => 'Số tiền giảm giá không được là số âm.',
-            'discount_amount.max' => 'Số tiền giảm giá không hợp lệ.',
-            'discount_amount.not_regex' => 'Số tiền giảm giá không được bắt đầu bằng 0.',
-
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+        if (!$result['success']) {
+            return response()->json(['errors' => $result['errors'] ?? $result['error']], 422);
         }
+        
+         // Lấy thông tin từ $result
+        $promotionCode = $request['promotion_code'];
+        $discountAmount = $request['discount_amount'];
+        $description = $request['pro_description'];
+        $startDate = $request['start_date'];
+        $endDate = $request['end_date'];
+        $formattedAmount = number_format($discountAmount, 0, ',', '.') . ' VND';
 
-        // Gọi phương thức createVoucher từ model Promotions
-        try {
-            Promotions::createVoucher([
-                'promotion_code' => $request->promotion_code,
-                'discount_amount' => $request->discount_amount,
-                'start_date' => $request->start_date,
-                'end_date' => $request->end_date,
-            ]);
+        // Thêm thông báo vào session cho tất cả người dùng
+        $notifications = session('notifications', []);
+        $notifications[] = [
+            'content' => "Mã khuyến mãi mới '{$promotionCode}' đã có! Giảm giá {$formattedAmount} . {$description}. Áp dụng từ ngày {$startDate} đến hết ngày {$endDate}.",
+        ];
+        session(['notifications' => $notifications]);
 
-            return response()->json(['success' => 'Voucher được tạo thành công'], 200);
-        } catch (\Exception $e) {
-            // \Log::error('Error creating voucher: ' . $e->getMessage());
-            return response()->json(['error' => 'Đã có lỗi xảy ra trong quá trình lưu.'], 500);
-        }
+        return response()->json(['success' => $result['message']], 200);
     }
     public function editVoucher($promotion_id)
     {
         $decodedId = IdEncoder::decodeId($promotion_id);
-        $voucher = Promotions::findVouchersById($decodedId);
 
+        if (!$decodedId) {
+            return response()->view('errors.404', [], 404);
+        }
+        $voucher = Promotions::findVouchersById($decodedId);
         if (!$voucher) {
-            return redirect()->route('admin.viewVoucher')->with('error', 'Voucher không tồn tại.');
+            return response()->view('errors.404', [], 404);
         }
 
-        // Chuyển đổi ngày tháng từ định dạng dd/mm/yyyy sang Y-m-d
         $start_date = $voucher->start_date ? \Carbon\Carbon::createFromFormat('d/m/Y', $voucher->start_date)->format('Y-m-d') : null;
         $end_date = $voucher->end_date ? \Carbon\Carbon::createFromFormat('d/m/Y', $voucher->end_date)->format('Y-m-d') : null;
 
@@ -130,77 +113,109 @@ class PromotionsController extends Controller
 
     public function updateVoucher(Request $request, $id)
     {
-        $maxStartDate = Carbon::today()->addYear()->format('Y-m-d');
+        $data = $request->all();
 
-        // Validate dữ liệu với các ràng buộc chi tiết
-        $validator = Validator::make($request->all(), [
-            'promotion_code' => [
-                'required',
-                'max:15',
-                'min:10',
-                'alpha_num',
-                'regex:/^(?=.*[a-zA-Z])(?=.*[0-9]).+$/',
-
-            ],
-            'discount_amount' => [
-                'required',
-                'numeric',
-                'min:0.01',
-                'max:99999999',
-                'not_regex:/^0\d+$/',
-                'regex:/^\d+$/',
-            ],
-            'start_date' => "required|date|date_format:Y-m-d|after_or_equal:today|before_or_equal:$maxStartDate",
-            'end_date' => "required|date|date_format:Y-m-d|after:start_date|after_or_equal:today|before_or_equal:$maxStartDate",
-        ], [
-            'end_date.after' => 'Ngày kết thúc phải lớn hơn ngày bắt đầu.',
-            'end_date.required' => 'Vui lòng chọn ngày kết thúc.',
-            'end_date.date_format' => 'Ngày kết thúc phải ở định dạng yyyy-mm-dd.',
-            'end_date.after_or_equal' => 'Ngày kết thúc không được là ngày trong quá khứ.',
-            'end_date.before_or_equal' => 'Ngày kết thúc không được chọn quá xa.', 
-            'start_date.required' => 'Vui lòng chọn ngày bắt đầu.',
-            'start_date.date_format' => 'Ngày bắt đầu phải ở định dạng yyyy-mm-dd.',
-            'start_date.after_or_equal' => 'Ngày bắt đầu không được là ngày trong quá khứ.',
-            'start_date.before_or_equal' => 'Ngày bắt đầu không được chọn quá xa.',
-            'promotion_code.required' => 'Vui lòng nhập tên voucher.',
-            'promotion_code.alpha_num' => 'Tên voucher chỉ bao gồm chữ và số.',
-            'promotion_code.regex' => 'Tên voucher phải bao gồm cả chữ và số.',
-            'promotion_code.max' => 'Tên voucher không được vượt quá 15 ký tự.',
-            'promotion_code.min' => 'Tên voucher phải có ít nhất 10 ký tự.',
-            'discount_amount.required' => 'Vui lòng nhập số tiền giảm giá.',
-            'discount_amount.regex' => 'Số tiền giảm giá không được chứa ký tự đặc biệt.',
-            'discount_amount.min' => 'Số tiền giảm giá không được là số âm.',
-            'discount_amount.max' => 'Số tiền giảm giá không hợp lệ.',
-            'discount_amount.not_regex' => 'Số tiền giảm giá không được bắt đầu bằng 0.',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
-
-        // Tìm voucher theo ID
         $voucher = Promotions::findOrFail($id);
-        if ($voucher->updated_at != $request->updated_at) {
-            return response()->json(['error' => 'Voucher đã được cập nhật bởi một người dùng khác. Vui lòng tải lại và thử lại.'], 409);
-        } else {
-            // Cập nhật các giá trị cho voucher
-            $voucher->promotion_code = $request->promotion_code;
-            $voucher->discount_amount = $request->discount_amount;
 
-            // Cập nhật ngày
-            $voucher->start_date = $request->start_date;
-            $voucher->end_date = $request->end_date;
+        $result = $voucher->updateVoucherWithValidation($data);
 
-            // Lưu lại dữ liệu
-            $voucher->save();
-
-            // Trả về phản hồi JSON
-            return response()->json(['success' => true]);
+        if (isset($result['errors'])) {
+            return response()->json(['errors' => $result['errors']], 422);
         }
 
+        if (isset($result['error'])) {
+            return response()->json(['error' => $result['error']], 409);
+        }
+
+        return response()->json(['success' => true]);
+        
+    }
+    public function viewVoucherUser()
+    {
+        $vouchers = Promotions::getAllVouchers(7);
+
+        foreach ($vouchers as $voucher) {
+            try {
+                // Chuyển đổi end_date sang Carbon và đặt thời gian bắt đầu của ngày
+                $endDate = Carbon::createFromFormat('d/m/Y', $voucher->end_date, 'Asia/Ho_Chi_Minh')->startOfDay();
+                $currentDate = Carbon::now('Asia/Ho_Chi_Minh')->startOfDay();
+
+                // Kiểm tra ngày hết hạn
+                if ($endDate->isBefore($currentDate)) {
+                    $voucher->status = 'expired'; // Đã hết hạn
+                } elseif ($currentDate->diffInDays($endDate) <= 3) {
+                    $voucher->status = 'expiring_soon'; // Sắp hết hạn trong 2-3 ngày
+                } else {
+                    $voucher->status = 'active'; // Vẫn còn hiệu lực
+                }
+            } catch (\Exception $e) {
+                // Nếu có lỗi khi xử lý ngày
+                $voucher->status = 'unknown';
+            }
+        }
+
+        return view('pages.detail_voucher', compact('vouchers'));
     }
 
+
+    public function applyPromotion(Request $request)
+    {
+        
+        $request->validate([
+            'promotion_code' => 'required|string',
+            'original_amount' => 'required|numeric|min:0'
+        ]);
+        
+        try {
+            $promotion = Promotions::where('promotion_code', $request->promotion_code)
+            
+                ->where('end_date', '>=', Carbon::now())    
+                ->first();
+
+            if (!$promotion) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Mã giảm giá không tồn tại hoặc đã hết hạn!'
+                ]);
+            }
+            if ($promotion->start_date > Carbon::now()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Mã giảm giá chưa tới ngày áp dụng.'
+                ]);
+            }
+            
+            if ($promotion->end_date < Carbon::now()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Mã giảm giá đã hết hạn.'
+                ]);
+            }
+            // Calculate discount amount based on percentage
+            $discountPercentage = $promotion->discount_amount;
+            $calculatedDiscount = round(($request->original_amount * $discountPercentage) / 100);
+            
+            // Calculate new total after discount
+            $newTotal = $request->original_amount - $calculatedDiscount;
+            // session(['applied_promotion_id' => $promotion->promotion_id]);
+            return response()->json([
+                'success' => true,
+                'promotion_code' => $promotion->promotion_code,
+                'discount_percentage' => $discountPercentage,
+                'calculated_discount' => $calculatedDiscount,
+                'new_total' => $newTotal,
+                'message' => $promotion->pro_title,
+                'description' => $promotion->pro_description,
+                'promotion_id' => $promotion->promotion_id,
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Đã có lỗi xảy ra khi áp dụng mã giảm giá.'
+            ]);
+        }
+    }
 }
 
 
