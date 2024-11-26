@@ -56,9 +56,142 @@ body {
     }
 }
 
-.login-card {
+.stay-nest-login-form {
     display: flex;
     justify-content: center;
-    height: 80vh;
+    height: 100vh;
     align-items: center;
+
+    .stay-nest-container {
+
+        .stay-nest-box-login {
+            border-radius: 10px;
+            background: #ffff;
+            box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+
+            .stay-nest-text-head-login {
+                p {
+                    font-size: 13px;
+                }
+
+                .text-head-login {
+                    padding-top: 20px;
+                }
+            }
+
+            .stay-nest-group-function-login {
+                display: flex;
+                align-items: center;
+
+                .function-login-2 {
+                    text-align: end;
+                }
+            }
+
+            .stay-nest-group-login-banner {
+                position: relative;
+
+                .stay-nest-banner-image {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    border-top-left-radius: 10px;
+                    border-bottom-left-radius: 10px;
+                    z-index: 1;
+                }
+
+                .overlay-banner {
+                    position: absolute;
+                    top: 0;
+                    left: 11px;
+                    width: 97%;
+                    height: 100%;
+                    background-color: rgba(0, 0, 0, .4);
+                    z-index: 2;
+                    pointer-events: none;
+                    border-top-left-radius: 10px;
+                    border-bottom-left-radius: 10px;
+                }
+
+                .stay-nest-btn-back-home {
+                    position: absolute;
+                    top: 93%;
+                    left: 35px;
+                    z-index: 3;
+
+                    a {
+                        transition: all 300ms linear;
+                        color: #fff;
+                        text-decoration: none;
+                        font-size: 18px;
+
+                        &:hover {
+                            text-decoration: underline;
+                        }
+                    }
+                }
+
+                .stay-nest-text-banner {
+                    position: absolute;
+                    top: 30%;
+                    padding: 0 0 0 25px;
+                    color: #fff;
+                    z-index: 3;
+
+                    h1 {
+                        font-size: 50px;
+                    }
+
+                    .text-banner {
+                        font-size: 22px;
+                        color: #fff;
+                        font-weight: 300;
+                        text-align: left;
+                    }
+                }
+            }
+
+            .stay-nest-group-form-login {
+                padding: 30px;
+            }
+
+        }
+    }
 }
+
+/* Hiệu ứng animborder*/
+.animate-border {
+    position: relative;
+    display: block;
+    width: 150px;
+    height: 2px;
+    overflow: hidden;
+    background: #365899;
+    opacity: .7;
+
+    &::after {
+        position: absolute;
+        content: "";
+        width: 35px;
+        height: 3px;
+        left: 15px;
+        bottom: 0;
+        border-left: 10px solid #fff;
+        border-right: 10px solid #fff;
+        -webkit-animation: animborder 2s linear infinite;
+        animation: animborder 2s linear infinite;
+    }
+}
+
+@keyframes animborder {
+    0% {
+        -webkit-transform: translateX(-25px);
+        transform: translateX(-25px);
+    }
+
+    100% {
+        -webkit-transform: translateX(150px);
+        transform: translateX(150px);
+    }
+}
+/* Kết thúc hiệu ứng animborder */
