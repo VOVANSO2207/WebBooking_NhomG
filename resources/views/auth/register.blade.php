@@ -88,9 +88,8 @@
                         </div>
 
                     </div>
-
                     <span>
-                        Website by team © Staynest™
+                        &copy; <span id="currentYear"></span> Staynest™. All rights reserved.
                     </span>
                 </div>
             </div>
@@ -99,6 +98,7 @@
 </section>
 
 <script>
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
     // Hàm kiểm tra tính hợp lệ của form
     function validateForm() {
         let isValid = true;
