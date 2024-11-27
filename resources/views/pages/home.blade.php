@@ -396,8 +396,8 @@
                         <a href="{{ route('pages.hotel_detail', ['hotel_id' => $hotel->hotel_id]) }}" class="group-offers">
                             <div class="shape-in">
                                 @if ($hotel->images->isNotEmpty())
-                                    <img class="image-hotel-2" src="{{ asset('storage/images/' . $hotel->images->first()->image_url) }}"
-                                        alt="">
+                                    <img class="image-hotel-2"
+                                        src="{{ asset('storage/images/' . $hotel->images->first()->image_url) }}" alt="">
                                 @else
                                     <img class="image-hotel-2" src="{{ asset('images/defaullt-image.png') }}" alt="">
                                 @endif
@@ -440,7 +440,6 @@
             <button class="prev-btn"><i class="fa-solid fa-arrow-right"></i></button>
             <button class="next-btn"><i class="fa-solid fa-arrow-right"></i></button>
         </div>
-    </div>
 </section>
 
 <script>

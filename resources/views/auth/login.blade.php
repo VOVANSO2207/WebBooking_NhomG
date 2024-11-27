@@ -95,7 +95,7 @@
                         </div>
                     </div>
                     <span>
-                        Website by team © Staynest™
+                        &copy; <span id="currentYear"></span> Staynest™. All rights reserved.
                     </span>
                 </div>
             </div>
@@ -103,6 +103,7 @@
     </div>
 </section>
 <script>
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
     // Hàm chuyển đổi hiện/ẩn mật khẩu
     function togglePasswordVisibility(fieldId, iconId) {
         const passwordField = document.getElementById(fieldId);
