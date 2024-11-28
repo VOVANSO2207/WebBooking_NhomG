@@ -131,7 +131,7 @@
         )
     });
 });
- 
+
 $(document).ready(function () {
     $('#search_voucher').on('keyup', function () {
         $value = $(this).val();
