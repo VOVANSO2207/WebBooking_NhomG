@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Cookie;
 use Exception;
 class AuthController extends Controller
 {
@@ -30,25 +31,31 @@ class AuthController extends Controller
     {
         // Validate dữ liệu
         $credentials = $request->only('login', 'password');
-    
+        $remember = $request->has('remember'); // Kiểm tra checkbox "Ghi nhớ đăng nhập"
+
         try {
             // Gọi hàm authenticate từ model để tìm và xác thực người dùng
             $user = User::authenticate($credentials);
-    
-            // Đăng nhập người dùng
-            Auth::login($user);
+
+            // Đăng nhập người dùng với tùy chọn "Ghi nhớ đăng nhập"
+            Auth::login($user, $remember); // Thêm $remember để kích hoạt chức năng nhớ
+
+            // Tạo session token mới
             $request->session()->regenerate();
-    
-            // Tạo một session token mới
-            $sessionToken = bin2hex(random_bytes(32));
-            
-            // Lưu session token vào Laravel session
-            $request->session()->put('session_token', $sessionToken);
-    
+
+            // Lưu thông tin đăng nhập vào cookie nếu chọn "Ghi nhớ đăng nhập"
+            if ($remember) {
+                Cookie::queue('remember_login', $credentials['login'], 43200); // Lưu trong 30 ngày
+            } else {
+                Cookie::queue(Cookie::forget('remember_login')); // Xóa cookie nếu không chọn
+            }
+
             // Thiết lập thông báo vào session
-            session(['notifications' => [
-                ['content' => 'Stay Nest xin chào bạn!'],
-            ]]);
+            session([
+                'notifications' => [
+                    ['content' => 'Stay Nest xin chào bạn!'],
+                ]
+            ]);
 
             // Điều hướng người dùng dựa trên vai trò
             return match ($user->role_id) {
@@ -60,7 +67,8 @@ class AuthController extends Controller
             return back()->withErrors($e->validator->errors())->withInput(); // Trả về lỗi nếu có
         }
     }
-    
+
+
     public function logout(Request $request)
     {
         $request->session()->forget('session_token');
@@ -68,9 +76,10 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/')->with('success', 'Đăng xuất thành công');
+        // Xóa cookie ghi nhớ đăng nhập
+        // Cookie::queue(Cookie::forget('remember_login'));
+
+        return redirect('/login')->with('success', 'Đăng xuất thành công');
     }
 
-    
-    
 }
