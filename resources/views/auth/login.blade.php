@@ -47,16 +47,13 @@
                         <!-- <label for="floatingInput">Email hoặc Username</label> -->
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control" id="floatingInput" name="login"
-                                placeholder="Email hoặc Username" value="{{ old('login') }}" required>
+                                placeholder="Email hoặc Username"
+                                value="{{ old('login', Cookie::get('remember_login')) }}" required>
                             <label for="floatingInput">Email hoặc Username</label>
                             @error('login')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
-                            @error('status')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
                         </div>
-
                         <!-- <label for="floatingPassword">Mật khẩu</label> -->
                         <div class="form-floating mb-3 position-relative">
                             <input type="password" class="form-control" id="floatingPassword" name="password"
@@ -71,11 +68,12 @@
                         </div>
                         <div class="stay-nest-group-function-login row">
                             <div class="col-md-6 function-login-1">
-                                <div class="stay-nest-remember-login mb-2">
-                                    <input type="checkbox" id="rememberLogin" value=""
-                                        class="form-check-input stay-nest-check-box-remember p-2">
-                                    <span>Ghi nhớ đăng nhập</span>
-                                </div>
+                            <div class="stay-nest-remember-login mb-2">
+                                <input type="checkbox" id="rememberLogin" name="remember"
+                                class="form-check-input stay-nest-check-box-remember p-2"
+                                {{ Cookie::has('remember_login') ? 'checked' : '' }}>
+                                <span>Ghi nhớ đăng nhập</span>
+                            </div>
                             </div>
                             <div class="col-md-6 function-login-2">
                                 <div>
@@ -86,7 +84,6 @@
                         <button class="w-100 btn btn-lg btn-primary" type="submit">Tiếp tục đăng nhập với mật
                             khẩu</button>
                     </form>
-
 
                     <div class="d-flex justify-content-between mt-3 mb-5">
                         <div>
