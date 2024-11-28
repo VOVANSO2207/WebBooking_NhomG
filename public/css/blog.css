@@ -2,12 +2,6 @@ body .blog {
     margin-top: -50px;
 }
 
-
-.container {
-    margin-top: 50px;
-    font-weight: 900;
-}
-
 .search-bar {
     position: relative;
 }
@@ -110,14 +104,6 @@ body {
     margin-bottom: 15px;
 }
 
-
-.content {
-    background-color: #ffffff;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
-    margin-bottom: 15px;
-}
 /* .content img{
     max-width: 100%;
     height: auto;
