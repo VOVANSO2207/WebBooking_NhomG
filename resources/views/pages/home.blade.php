@@ -496,8 +496,6 @@
                     <p>Không có khách sạn nào vừa xem.</p>
                 @endif
             </div>
-            <button class="prev-btn"><i class="fa-solid fa-arrow-left"></i></button>
-            <button class="next-btn"><i class="fa-solid fa-arrow-right"></i></button>
         </div>
     </div>
 </section>
