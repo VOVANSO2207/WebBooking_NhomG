@@ -367,6 +367,7 @@
     </div>
 </section>
 
+
 <section class="our-offers pb-5">
     <div class="container">
         <div class="title mb-2">Ưu đãi của chúng tôi</div>
@@ -440,6 +441,65 @@
             <button class="prev-btn"><i class="fa-solid fa-arrow-right"></i></button>
             <button class="next-btn"><i class="fa-solid fa-arrow-right"></i></button>
         </div>
+</section>
+
+<section class="famous-hotel">
+    <div class="container">
+        <div class="title mt-5 mb-2">Khách sạn vừa xem</div>
+        <div class="carousel-container">
+            <div class="carousel-wrapper">
+                @if($recentHotels->isNotEmpty())
+                    @foreach($recentHotels as $recentHotel)
+                        <div class="card the-top-khach-san">
+                            @foreach ($recentHotel->images as $index => $image)
+                                @if ($index === 0)
+                                    <img class="image-hotel-1" src="{{ asset('storage/images/' . $image->image_url) }}"
+                                        alt="{{ $image->image_url }}" />
+                                @endif
+                            @endforeach
+
+                            <div class="shape">
+                                <p class="country m-0">VIET NAM</p>
+                                <p class="location m-0">{{ $recentHotel->city->city_name }} - <span
+                                        class="name-hotel">{{ $recentHotel->hotel_name }}</span></p>
+                                <p class="price-old m-0">
+                                    {{ number_format($recentHotel->average_price, 0, ',', '.') }} VNĐ
+                                </p>
+                                <div class="row price-top">
+                                    <div class="col-md-7">
+                                        <span class="price-new">
+                                            {{ number_format($recentHotel->average_price_sale, 0, ',', '.') }} VNĐ
+                                            <span>/ Khách</span>
+                                        </span>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <a href="{{ route('pages.hotel_detail', ['hotel_id' => $recentHotel->hotel_id]) }}"
+                                            class="btn-book-now">ĐẶT NGAY</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="rating-top">
+                                @for ($i = 1; $i <= 5; $i++)
+                                    @if ($i <= $recentHotel->rating)
+                                        <span>★</span>
+                                    @else
+                                        <span>☆</span>
+                                    @endif
+                                @endfor
+                            </div>
+                            <div class="sale">
+                                - {{ number_format($recentHotel->average_discount_percent) }} %
+                            </div>
+                        </div>
+                    @endforeach
+                @else
+                    <p>Không có khách sạn nào vừa xem.</p>
+                @endif
+            </div>
+            <button class="prev-btn"><i class="fa-solid fa-arrow-left"></i></button>
+            <button class="next-btn"><i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+    </div>
 </section>
 
 <script>
