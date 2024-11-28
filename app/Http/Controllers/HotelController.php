@@ -13,6 +13,8 @@ use App\Models\Reviews;
 use App\Models\Promotions;
 use App\Models\HotelAmenityHotel;
 use App\Models\Rooms;
+use App\Models\Posts;
+
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
 
@@ -33,6 +35,8 @@ class HotelController extends Controller
         $hotels = Hotel::with('rooms', 'city', 'reviews', 'images')->get();
         $userId = auth()->id();
         // Lấy danh sách khách sạn mà người dùng đã yêu thích
+        $blogs = Posts::latest()->take(4)->get();
+
         $favoriteHotelIds = FavoriteHotel::where('user_id', $userId)->pluck('hotel_id')->toArray();
         foreach ($hotels as $hotel) {
             // Kiểm tra nếu khách sạn là yêu thích
@@ -69,7 +73,7 @@ class HotelController extends Controller
 
         // dd($hotels);
         // Truyền dữ liệu qua view
-        return view('pages.home', compact('hotels', 'vouchers','recentHotels'));
+        return view('pages.home', compact('hotels', 'vouchers','recentHotels'  , 'blogs'));
     }
     // Filter Hotels 
     public function filterHotels(Request $request)

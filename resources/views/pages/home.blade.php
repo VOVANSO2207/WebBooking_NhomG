@@ -499,7 +499,25 @@
         </div>
     </div>
 </section>
-
+<section class="latest-blogs">
+    <div class="container">
+        <div class="title mt-5 mb-2">Bài Viết Mới Nhất</div>
+        <div class="row mt-3">
+            @foreach($blogs as $blog)
+                <div class="col-md-3">
+                    <div class="blog-card">
+                        <img src="{{ asset('storage/images/' . $blog->img) }}" alt="{{ $blog->title }}" class="blog-image">
+                        <div class="blog-content">
+                            <h3 class="blog-title">{{ $blog->title }}</h3>
+                            <p class="blog-excerpt">{{ Str::limit(html_entity_decode(strip_tags($blog->description)), 100) }}</p>
+                            <a href="{{ url('blog/' . $blog->url_seo) }}" class="btn-read-more">Đọc thêm</a>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
+</section>
 <script>
     // Carousel functionality
     document.querySelectorAll('.carousel-wrapper').forEach((carousel) => {
