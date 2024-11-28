@@ -64,7 +64,7 @@
                     <ul class="menu-attribute d-flex justify-content-around me-5">
                         <li><a href="#">TRANG CHỦ</a></li>
                         <li><a href="{{ route('introduce') }}">GIỚI THIỆU</a></li>
-                        <li><a href="#">PHÒNG KHÁCH SẠN</a></li>
+                        <li><a href="{{route(name: 'hotels.index')}}">PHÒNG KHÁCH SẠN</a></li>
                         <li><a href="{{ route('blog') }}">TIN TỨC</a></li>
                         <li><a href="{{ route(name: 'contact') }}">LIÊN HỆ</a></li>
                     </ul>

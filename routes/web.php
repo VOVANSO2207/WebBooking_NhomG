@@ -227,6 +227,7 @@ Route::post('/store-rooms', [RoomController::class, 'storeSelectedRooms']);
 
 
 
+Route::get('/page_hotels', [HotelController::class, 'showAllHotels'])->name('hotels.index');
 
 Route::post('/hotel/{hotel_id}/reviews', [ReviewsController::class, 'store'])->name('reviews.store');
 // Thêm phản hồi vào một bình luận

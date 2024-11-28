@@ -14,6 +14,7 @@ use App\Models\Promotions;
 use App\Models\HotelAmenityHotel;
 use App\Models\Rooms;
 use App\Models\Posts;
+use Illuminate\Support\Facades\DB;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
@@ -809,4 +810,71 @@ class HotelController extends Controller
             'hotels' => $hotels
         ]);
     }
+    public function showAllHotels(Request $request)
+    {
+        // Khởi tạo query với tất cả các khách sạn
+        $query = Hotel::with('rooms', 'city', 'reviews', 'images');
+    
+        // Sắp xếp
+        if ($request->has('sort_by') && $request->input('sort_by') !== '') {
+            switch ($request->input('sort_by')) {
+                case 'price_asc':
+                    // Sắp xếp giá trung bình tăng dần
+                    $query->with('rooms')->orderBy(
+                        DB::raw('(SELECT AVG(price) FROM rooms WHERE rooms.hotel_id = hotels.hotel_id)'),
+                        'asc'
+                    );
+                    break;
+    
+                case 'price_desc':
+                    // Sắp xếp giá trung bình giảm dần
+                    $query->with('rooms')->orderBy(
+                        DB::raw('(SELECT AVG(price) FROM rooms WHERE rooms.hotel_id = hotels.hotel_id)'),
+                        'desc'
+                    );
+                    break;
+    
+                case 'stars_desc':
+                    // Sắp xếp hạng sao giảm dần
+                    $query->orderBy('rating', 'desc');
+                    break;
+    
+                case 'reviews_count':
+                    // Sắp xếp theo số lượt đánh giá giảm dần
+                    $query->withCount('reviews')->orderBy('reviews_count', 'desc');
+                    break;
+    
+                default:
+                    // Không sắp xếp
+                    break;
+            }
+        }
+    
+        // Phân trang
+        $hotels = $query->paginate(12); // Hiển thị 12 khách sạn mỗi trang
+    
+        $userId = auth()->id();
+    
+        // Lấy danh sách khách sạn mà người dùng đã yêu thích
+        $favoriteHotelIds = FavoriteHotel::where('user_id', $userId)->pluck('hotel_id')->toArray();
+    
+        // Tính toán thông tin bổ sung cho mỗi khách sạn
+        foreach ($hotels as $hotel) {
+            // Kiểm tra nếu khách sạn là yêu thích
+            $hotel->is_favorite = in_array($hotel->hotel_id, $favoriteHotelIds);
+    
+            // Tính giá gốc trung bình
+            $hotel->average_price = $hotel->rooms->avg('price');
+    
+            // Tính phần trăm giảm giá trung bình
+            $hotel->average_discount_percent = $hotel->rooms->avg('discount_percent');
+    
+            // Tính giá sale
+            $hotel->average_price_sale = $hotel->average_price * (1 - $hotel->average_discount_percent / 100);
+        }
+    
+        // Truyền danh sách khách sạn qua view
+        return view('pages.page_hotel', compact('hotels'));
+    }
+    
 }
