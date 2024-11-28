@@ -14,6 +14,7 @@ use App\Models\Promotions;
 use App\Models\HotelAmenityHotel;
 use App\Models\Rooms;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Session;
 
 class HotelController extends Controller
 {
@@ -62,9 +63,13 @@ class HotelController extends Controller
             }
         }
 
+    // Lấy danh sách khách sạn vừa xem từ session
+    $recentHotelIds = Session::get('recent_hotels', []);  // Lấy ID các khách sạn vừa xem từ session
+    $recentHotels = Hotel::whereIn('hotel_id', $recentHotelIds)->get();  // Lấy thông tin chi tiết các khách sạn vừa xem
+
         // dd($hotels);
         // Truyền dữ liệu qua view
-        return view('pages.home', compact('hotels', 'vouchers'));
+        return view('pages.home', compact('hotels', 'vouchers','recentHotels'));
     }
     // Filter Hotels 
     public function filterHotels(Request $request)
@@ -168,6 +173,20 @@ class HotelController extends Controller
         $rooms = $hotel->rooms()->paginate(4);
         $reviews = $hotel->reviews()->withCount('likes')->latest()->paginate(7);  // Đếm số lượt like
         $averageRating = $reviews->avg('rating'); // Tính trung bình rating
+        $recentHotels = Session::get('recent_hotels', []);
+        
+        // Kiểm tra nếu khách sạn chưa tồn tại trong danh sách
+        if (!in_array($hotel->hotel_id, $recentHotels)) {
+            $recentHotels[] = $hotel->hotel_id;
+    
+            // Giới hạn số lượng khách sạn lưu trữ (ví dụ: 5 khách sạn)
+            if (count($recentHotels) > 5) {
+                array_shift($recentHotels); // Xóa phần tử đầu tiên nếu vượt quá giới hạn
+            }
+    
+            // Lưu lại vào session
+            Session::put('recent_hotels', $recentHotels);
+        }
         return view('pages.hotel_detail', compact('hotel', 'rooms', 'reviews', 'averageRating'));
     }
 
