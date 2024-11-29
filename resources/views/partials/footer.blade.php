@@ -42,10 +42,18 @@
                 <h5 class="text-muted mt-3">MẠNG XÃ HỘI</h5>
                 <div class="social-links">
                     <a href="#" class="me-2"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="me-2"><i class="fab fa-x"></i></a>
+                    <a href="#" class="me-2"><i class="fab fa-x-twitter"></i></a>
                     <a href="#"><i class="fab fa-youtube"></i></a>
                 </div>
             </div>
         </div>
+        <p class="mt-3 mb-0">
+            &copy; <span id="currentYear"></span> Staynest™. All rights reserved. <br>
+            Developed by @songitcode, @VOVANSO2207, @CaoTranMinhTam0811, @tlich07.
+            Website UI design by @songitcode @VOVANSO2207 @tlich07
+        </p>
     </div>
 </footer>
+<script>
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
+</script>

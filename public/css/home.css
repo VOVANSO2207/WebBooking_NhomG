@@ -1362,3 +1362,119 @@ outline: none;
      border-color: #0056b3;
      /* Màu viền khi button được chọn */
  }
+ /* Blog section styles */
+.latest-blogs {
+    padding: 50px 0;
+}
+
+.latest-blogs .title {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.blog-card {
+    position: relative;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+}
+
+.blog-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.blog-card img.blog-image {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-bottom: 1px solid #eee;
+    transition: transform 0.3s;
+}
+
+.blog-card:hover img.blog-image {
+    transform: scale(1.05);
+}
+
+.blog-card .blog-content {
+    padding: 20px;
+    text-align: center;
+}
+
+.blog-card .blog-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+    transition: color 0.3s;
+}
+
+.blog-card:hover .blog-title {
+    color: #007bff;
+}
+
+.blog-card .blog-excerpt {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 20px;
+    line-height: 1.4;
+}
+
+.blog-card .btn-read-more {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    color: #fff;
+    background-color: #007bff;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.blog-card .btn-read-more:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+/* Responsive grid */
+@media (max-width: 768px) {
+    .blog-card {
+        margin-bottom: 20px;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.blog-card {
+    animation: fadeInUp 0.6s ease forwards;
+    opacity: 0; /* Hidden by default until animation */
+}
+
+/* Delay animation for a cascading effect */
+.blog-card:nth-child(1) {
+    animation-delay: 0.1s;
+}
+.blog-card:nth-child(2) {
+    animation-delay: 0.2s;
+}
+.blog-card:nth-child(3) {
+    animation-delay: 0.3s;
+}
+.blog-card:nth-child(4) {
+    animation-delay: 0.4s;
+}

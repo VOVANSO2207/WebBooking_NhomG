@@ -30,7 +30,6 @@ class UsersController extends Controller
         return view('admin.user_add', compact('roles', 'user')); // Truyền cả $roles và $user vào view
     }
 
-
     public function getUserDetail($user_id)
     {
         // Giải mã ID nếu cần

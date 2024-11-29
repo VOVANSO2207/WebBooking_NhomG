@@ -1,72 +1,64 @@
 @extends('layouts.app')
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
 <link rel="stylesheet" href="{{asset('css/blog.css')}}">
 <!--  -->
 @section('header')
 @include('partials.header') 
 @endsection
 <!--  -->
-
 @section('content')
-</head>
-
-<body>
-    <section class="blog">
-        <div class="title-blog">
-            <div class="container mt-5">
-                Tin Tức
-            </div>
+<section class="blog mt-5">
+    <div class="title-blog">
+        <div class="container mt-5">
+            Tin Tức
         </div>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="search-bar">
-                        <h4>Tìm kiếm bài viết</h4>
-                        <form id="search-form">
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="search-bar">
+                    <h4>Tìm kiếm bài viết</h4>
+                    <form id="search-form">
                         @csrf
-                            <input type="text" id="search-input" placeholder="Nhập tiêu đề hoặc mô tả...">
-                            <button type="submit"><i class="fas fa-search"></i></button>
-                        </form>
-                        <div class="error-message" id="error-message"></div>
-                    </div>
-                    <div class="search-results" id="search-results"></div>
+                        <input type="text" id="search-input" placeholder="Nhập tiêu đề hoặc mô tả...">
+                        <button type="submit"><i class="fas fa-search"></i></button>
+                    </form>
                 </div>
-                <div class="col-md-8">
-                    <h3>Danh sách bài viết</h3>
-                    <div class="row">
-                        @foreach ($posts as $post)
-                            <div class="col-md-6">
-                                <div class="news-item">
+                <div class="error-message" id="error-message"></div>
+                <div class="search-results" id="search-results"></div>
+            </div>
+            <div class="col-md-8">
+                <h3>Danh sách bài viết</h3>
+                <div class="row">
+                    @foreach ($posts as $post)
+                        <div class="col-md-6">
+                            <div class="news-item">
                                 <a style="text-decoration: none" href="{{ url('blog/' . $post->url_seo) }}">
                                     <img src="{{ asset('storage/images/' . $post->img) }}" alt="Ảnh đại diện bài viết"></a>
-                                    <div class="news-content">
-                                        <h5><a
-                                                href="{{ url('blog/' . $post->url_seo) }}">{{ Str::limit($post->title, 30) }}</a>
-                                        </h5>
-                                        <p>{{ Str::limit($post->description, 30) }}</p>
-                                        <span class="news-date">{{ $post->formattedCreatedAt }}</span>
-                                        <a href="{{ url('blog/' . $post->url_seo) }}" class="btn-read-more">Xem thêm</a>
-                                    </div>
+                                <div class="news-content">
+                                    <h5><a href="{{ url('blog/' . $post->url_seo) }}">{{ Str::limit($post->title, 30) }}</a>
+                                    </h5>
+                                    <p>{{ Str::limit($post->description, 30) }}</p>
+                                    <span class="news-date">{{ $post->formattedCreatedAt }}</span>
+                                    <a href="{{ url('blog/' . $post->url_seo) }}" class="btn-read-more">Xem thêm</a>
                                 </div>
                             </div>
-                        @endforeach
-                    </div>
-                    <div class="d-flex justify-content-center mt-3 pagination-post">
-                        {{ $posts->appends(['csrf_token' => csrf_token()])->links('pagination::bootstrap-4') }}
-                    </div>
+                        </div>
+                    @endforeach
                 </div>
-
+                <div class="d-flex justify-content-center mt-3 pagination-post">
+                    {{ $posts->appends(['csrf_token' => csrf_token()])->links('pagination::bootstrap-4') }}
+                </div>
             </div>
+
         </div>
-    </section>
+    </div>
+</section>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-    <script>
+<script>
     document.getElementById('search-form').addEventListener('submit', function (event) {
         event.preventDefault(); // Ngăn không cho gửi form
 
@@ -132,7 +124,6 @@
     });
 </script>
 
-</body>
 
 </html>
 @endsection
