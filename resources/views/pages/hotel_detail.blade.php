@@ -10,7 +10,101 @@
 @include('partials.search_layout')
 @endsection
 <!--  -->
+<style>
+    <style>
+       .star {
+    font-size: 24px;
+    color: #ccc;  /* Màu mặc định */
+    cursor: pointer;
+}
 
+/* Màu vàng cho sao khi được chọn */
+.star.selected {
+    color: #ffcc00;
+}
+
+/* Màu vàng khi hover */
+.star:hover {
+    color: #ffcc00;
+}
+  /* Container cho layout */
+.container {
+    width: 100%;
+    padding: 20px;
+}
+
+/* Cột cho tổng điểm (col-3) */
+.overall-score {
+    text-align: center;
+}
+
+.circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background-color: #0071c2;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.circle .score {
+    font-size: 36px;
+    font-weight: bold;
+}
+
+.circle .description {
+    font-size: 14px;
+}
+
+.total-reviews {
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+
+/* Cột phân loại đánh giá (col-5) */
+.rating-distribution {
+    display: flex;
+    flex-direction: column;
+}
+
+.rating-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.rating-label {
+    width: 100px;
+    font-size: 14px;
+}
+
+.progress-bar {
+    flex: 1;
+    height: 10px;
+    background-color: #ddd;
+    margin: 0 10px;
+    position: relative;
+    border-radius: 5px;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: #0071c2;
+    border-radius: 5px;
+}
+
+.rating-count {
+    width: 50px;
+    text-align: right;
+    font-size: 14px;
+}
+</style>
+    </style>
 @section('content')
 <section class="hotel_detail">
     <div class="container thu-nho">
@@ -319,6 +413,28 @@
                 {{ $rooms->links('pagination::bootstrap-4') }}
             </div>
         </div>
+        <div class="modal fade" id="deleteReviewModal" tabindex="-1" aria-labelledby="deleteReviewModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteReviewModalLabel">Xác nhận xóa</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Bạn có chắc chắn muốn xóa bình luận này không?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <form id="deleteReviewForm" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">Xóa</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
         <div class="group-review">
             <div class="review-title m-0">ĐÁNH GIÁ</div>
@@ -333,10 +449,47 @@
                     @endif
                 @endfor
             </span>
-            <hr class="m-0">
-            <div class="total-review m-0 mb-4">
-                Có {{ $reviews->count() }} Đánh giá từ người dùng
+            <div class="container">
+    <div class="row">
+        <!-- Tổng điểm -->
+            <div class="col-4 overall-score">
+                <div class="circle">
+                    <span class="score">{{ number_format($averageRating, 1) }}</span>
+                    <span class="description">
+                    @if (is_null($averageRating))
+                        Chưa có đánh giá
+                    @elseif ($averageRating >= 8) Ấn tượng
+                    @else ($averageRating >= 6) Tốt
+                    @endif
+               
+                    </span>
+                    
+                </div>
+                <p class="total-reviews" style="font-size: 20px; font-weight: 500;">Từ {{ $reviews->count() }} đánh giá của khách đã ở</p>
             </div>
+        <!-- Phân loại đánh giá -->
+        <div class="col-5 rating-distribution">
+            @foreach ($ratingDistribution as $label => $count)
+                @php
+                    $percentage = ($reviews->count() > 0) ? ($count / $reviews->count() * 100) : 0;
+                    $labelText = match($label) {
+                        'tuyetvoi' => 'Tuyệt vời',
+                        'ratot' => 'Rất tốt',
+                        'hailong' => 'Hài lòng',
+                        'trungbinh' => 'Trung bình',
+                        'kem' => 'Kém',
+                    };
+                @endphp
+                <div class="rating-row">
+                    <span class="rating-label">{{ $labelText }}</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: {{ $percentage }}%;"></div>
+                    </div>
+                    <span class="rating-count">{{ $count }}</span>
+                </div>
+            @endforeach
+        </div>
+            <hr class="m-0">
 
             <div class="box-review">
                 @if(auth()->check())
@@ -474,28 +627,7 @@
         </div>
     </div>
     <!-- Modal Xác Nhận Xóa -->
-    <div class="modal fade" id="deleteReviewModal" tabindex="-1" aria-labelledby="deleteReviewModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteReviewModalLabel">Xác nhận xóa</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Bạn có chắc chắn muốn xóa bình luận này không?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                    <form id="deleteReviewForm" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger">Xóa</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+   
     <div class="modal fade" id="loginRequiredModal" tabindex="-1" aria-labelledby="loginRequiredModalLabel"
         aria-hidden="true">
         <div class="modal-dialog">

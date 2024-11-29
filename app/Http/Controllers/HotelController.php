@@ -174,25 +174,51 @@ class HotelController extends Controller
     // Chi tiết khách sạn
     public function show($hotel_id)
     {
+        // Lấy thông tin khách sạn
         $hotel = Hotel::with(['rooms.room_images', 'images', 'city', 'reviews.user', 'reviews.likes'])->findOrFail($hotel_id);
-        $rooms = $hotel->rooms()->paginate(4);
-        $reviews = $hotel->reviews()->withCount('likes')->latest()->paginate(7);  // Đếm số lượt like
-        $averageRating = $reviews->avg('rating'); // Tính trung bình rating
-        $recentHotels = Session::get('recent_hotels', []);
-        
-        // Kiểm tra nếu khách sạn chưa tồn tại trong danh sách
-        if (!in_array($hotel->hotel_id, $recentHotels)) {
-            $recentHotels[] = $hotel->hotel_id;
     
-            // Giới hạn số lượng khách sạn lưu trữ (ví dụ: 5 khách sạn)
+        // Phân trang danh sách phòng
+        $rooms = $hotel->rooms()->paginate(4);
+    
+        // Lấy và phân trang danh sách bình luận
+        $reviews = $hotel->reviews()->with(['images', 'user'])->withCount('likes')->latest()->paginate(7); // Bao gồm ảnh, chi tiết, và đếm số lượt thích
+        
+        // Tính điểm trung bình đánh giá
+        $averageRating = $reviews->avg('rating');
+    
+        // Tính toán phân phối đánh giá
+        $ratingDistribution = [
+            'tuyetvoi' => $reviews->where('rating', 5)->count(),
+            'ratot' => $reviews->where('rating', 4)->count(),
+            'hailong' => $reviews->where('rating', 3)->count(),
+            'trungbinh' => $reviews->where('rating', 2)->count(),
+            'kem' => $reviews->where('rating', 1)->count(),
+        ];
+    
+        // Lấy danh sách các khách sạn đã xem gần đây từ session
+        $recentHotels = Session::get('recent_hotels', []);
+    
+        // Kiểm tra và thêm khách sạn hiện tại vào danh sách "gần đây"
+        if (!in_array($hotel->hotel_id, $recentHotels)) {
+            $recentHotels[] = $hotel->hotel_id; 
+    
+            // Giới hạn số lượng khách sạn được lưu trữ (ví dụ: tối đa 5 khách sạn)
             if (count($recentHotels) > 5) {
                 array_shift($recentHotels); // Xóa phần tử đầu tiên nếu vượt quá giới hạn
             }
     
-            // Lưu lại vào session
+            // Cập nhật session
             Session::put('recent_hotels', $recentHotels);
         }
-        return view('pages.hotel_detail', compact('hotel', 'rooms', 'reviews', 'averageRating'));
+    
+        // Trả về view kèm các dữ liệu cần thiết
+        return view('pages.hotel_detail', compact(
+            'hotel',
+            'rooms',
+            'reviews',
+            'averageRating',
+            'ratingDistribution'
+        ));
     }
 
     public function search(Request $request)
