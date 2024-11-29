@@ -11,100 +11,101 @@
 @endsection
 <!--  -->
 <style>
-    <style>
-       .star {
-    font-size: 24px;
-    color: #ccc;  /* Màu mặc định */
-    cursor: pointer;
-}
+    .star {
+        font-size: 24px;
+        color: #ccc;
+        /* Màu mặc định */
+        cursor: pointer;
+    }
 
-/* Màu vàng cho sao khi được chọn */
-.star.selected {
-    color: #ffcc00;
-}
+    /* Màu vàng cho sao khi được chọn */
+    .star.selected {
+        color: #ffcc00;
+    }
 
-/* Màu vàng khi hover */
-.star:hover {
-    color: #ffcc00;
-}
-  /* Container cho layout */
-.container {
-    width: 100%;
-    padding: 20px;
-}
+    /* Màu vàng khi hover */
+    .star:hover {
+        color: #ffcc00;
+    }
 
-/* Cột cho tổng điểm (col-3) */
-.overall-score {
-    text-align: center;
-}
+    /* Container cho layout */
+    .container {
+        width: 100%;
+        padding: 20px;
+    }
 
-.circle {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    background-color: #0071c2;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: 0 auto;
-}
+    /* Cột cho tổng điểm (col-3) */
+    .overall-score {
+        text-align: center;
+    }
 
-.circle .score {
-    font-size: 36px;
-    font-weight: bold;
-}
+    .circle {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background-color: #0071c2;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: 0 auto;
+    }
 
-.circle .description {
-    font-size: 14px;
-}
+    .circle .score {
+        font-size: 36px;
+        font-weight: bold;
+    }
 
-.total-reviews {
-    font-size: 14px;
-    margin-top: 10px;
-}
+    .circle .description {
+        font-size: 14px;
+    }
+
+    .total-reviews {
+        font-size: 14px;
+        margin-top: 10px;
+    }
 
 
-/* Cột phân loại đánh giá (col-5) */
-.rating-distribution {
-    display: flex;
-    flex-direction: column;
-}
+    /* Cột phân loại đánh giá (col-5) */
+    .rating-distribution {
+        display: flex;
+        flex-direction: column;
+    }
 
-.rating-row {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-}
+    .rating-row {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
 
-.rating-label {
-    width: 100px;
-    font-size: 14px;
-}
+    .rating-label {
+        width: 100px;
+        font-size: 14px;
+    }
 
-.progress-bar {
-    flex: 1;
-    height: 10px;
-    background-color: #ddd;
-    margin: 0 10px;
-    position: relative;
-    border-radius: 5px;
-}
+    .progress-bar {
+        flex: 1;
+        height: 10px;
+        background-color: #ddd;
+        margin: 0 10px;
+        position: relative;
+        border-radius: 5px;
+    }
 
-.progress-fill {
-    height: 100%;
-    background-color: #0071c2;
-    border-radius: 5px;
-}
+    .progress-fill {
+        height: 100%;
+        background-color: #0071c2;
+        border-radius: 5px;
+    }
 
-.rating-count {
-    width: 50px;
-    text-align: right;
-    font-size: 14px;
-}
+    .rating-count {
+        width: 50px;
+        text-align: right;
+        font-size: 14px;
+    }
 </style>
-    </style>
+</style>
 @section('content')
 <section class="hotel_detail">
     <div class="container thu-nho">
@@ -153,7 +154,7 @@
                     <div class="modal-body p-5">
                         <div class="row">
                             @foreach ($hotel->images as $image)
-                                <div class="col-md-4 mb-3 review-images-details">
+                            <div class="col-md-4 mb-3 review-images-details">
                                     <img src="{{ asset('storage/images/' . $image->image_url) }}" alt="{{ $image->image_url }}"
                                         class="img-fluid modal-image-alls">
                                 </div>
@@ -266,50 +267,50 @@
                             </div>
                         </div>
                         <!--   <div class="col-md-3">
-                                                    <div class="people-summary-container border">
-                                                        <div class="people-summary-display">
-                                                            <span id="people-summary-counter">{{ session('adults', 1) }} người lớn, </span>
-                                                            <span id="room-summary-counter">{{ session('rooms', 1) }} phòng, </span>
-                                                            <span id="children-summary-counter">{{ session('children', 0) }} trẻ em</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="people-counter-dropdown mt-1 bg-light">
-                                                        <div class="people-counter-item">
-                                                            <span>Người lớn</span>
-                                                            <div class="counter-container">
-                                                                <button type="button" class="btn-decrement-adult">-</button>
-                                                                <input type="text" class="counter-value" id="adultsCounter"
-                                                                    name="adults" value="{{ session('adults', 1) }}" readonly>
-                                                                <button type="button" class="btn-increment-adult">+</button>
-                                                            </div>
-                                                        </div>
+                                                                    <div class="people-summary-container border">
+                                                                        <div class="people-summary-display">
+                                                                            <span id="people-summary-counter">{{ session('adults', 1) }} người lớn, </span>
+                                                                            <span id="room-summary-counter">{{ session('rooms', 1) }} phòng, </span>
+                                                                            <span id="children-summary-counter">{{ session('children', 0) }} trẻ em</span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="people-counter-dropdown mt-1 bg-light">
+                                                                        <div class="people-counter-item">
+                                                                            <span>Người lớn</span>
+                                                                            <div class="counter-container">
+                                                                                <button type="button" class="btn-decrement-adult">-</button>
+                                                                                <input type="text" class="counter-value" id="adultsCounter"
+                                                                                    name="adults" value="{{ session('adults', 1) }}" readonly>
+                                                                                <button type="button" class="btn-increment-adult">+</button>
+                                                                            </div>
+                                                                        </div>
 
-                                                        <div class="people-counter-item">
-                                                            <span>Phòng</span>
-                                                            <div class="counter-container">
-                                                                <button type="button" class="btn-decrement-room">-</button>
-                                                                <input type="text" class="counter-value" id="roomsCounter" name="rooms"
-                                                                    value="{{ session('rooms', 1) }}" readonly>
-                                                                <button type="button" class="btn-increment-room">+</button>
-                                                            </div>
-                                                        </div>
+                                                                        <div class="people-counter-item">
+                                                                            <span>Phòng</span>
+                                                                            <div class="counter-container">
+                                                                                <button type="button" class="btn-decrement-room">-</button>
+                                                                                <input type="text" class="counter-value" id="roomsCounter" name="rooms"
+                                                                                    value="{{ session('rooms', 1) }}" readonly>
+                                                                                <button type="button" class="btn-increment-room">+</button>
+                                                                            </div>
+                                                                        </div>
 
-                                                        <div class="people-counter-item">
-                                                            <span>Trẻ em</span>
-                                                            <div class="counter-container">
-                                                                <button type="button" class="btn-decrement-children">-</button>
-                                                                <input type="text" class="counter-value" id="childrenCounter"
-                                                                    name="children" value="{{ session('children', 0) }}" readonly>
-                                                                <button type="button" class="btn-increment-children">+</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div> -->
+                                                                        <div class="people-counter-item">
+                                                                            <span>Trẻ em</span>
+                                                                            <div class="counter-container">
+                                                                                <button type="button" class="btn-decrement-children">-</button>
+                                                                                <input type="text" class="counter-value" id="childrenCounter"
+                                                                                    name="children" value="{{ session('children', 0) }}" readonly>
+                                                                                <button type="button" class="btn-increment-children">+</button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div> -->
                         <!-- <div class="col-md-2 search-header button-search-header">
-                                                    <button type="submit" class="btn btn-primary" style="width: 100%; padding:10px;">
-                                                        Thay đổi tìm kiếm
-                                                    </button>
-                                                </div> -->
+                                                                    <button type="submit" class="btn btn-primary" style="width: 100%; padding:10px;">
+                                                                        Thay đổi tìm kiếm
+                                                                    </button>
+                                                                </div> -->
                     </form>
                 </div>
             @endif
@@ -414,239 +415,308 @@
             </div>
         </div>
         <div class="modal fade" id="deleteReviewModal" tabindex="-1" aria-labelledby="deleteReviewModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteReviewModalLabel">Xác nhận xóa</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Bạn có chắc chắn muốn xóa bình luận này không?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                    <form id="deleteReviewForm" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger">Xóa</button>
-                    </form>
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteReviewModalLabel">Xác nhận xóa</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Bạn có chắc chắn muốn xóa bình luận này không?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                        <form id="deleteReviewForm" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger">Xóa</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
         <div class="group-review">
             <div class="review-title m-0">ĐÁNH GIÁ</div>
             <span class="stars">
                 @for ($i = 1; $i <= 5; $i++)
                     @if ($i <= floor($averageRating))
-                        <i class="fa-solid fa-star" style="color: #ff4500;"></i> <!-- Sao đầy -->
+                        <i class="fa-solid fa-star" style="color: #3B79C9;"></i> <!-- Sao đầy -->
                     @elseif ($i == ceil($averageRating) && $averageRating - floor($averageRating) >= 0.5)
-                        <i class="fa-solid fa-star-half-stroke" style="color: #ff4500;"></i> <!-- Nửa sao -->
+                        <i class="fa-solid fa-star-half-stroke" style="color: #3B79C9;"></i> <!-- Nửa sao -->
                     @else
                         <i class="fa-regular fa-star" style="color: #ccc;"></i> <!-- Sao chưa được đánh giá -->
                     @endif
                 @endfor
             </span>
             <div class="container">
-    <div class="row">
-        <!-- Tổng điểm -->
-            <div class="col-4 overall-score">
-                <div class="circle">
-                    <span class="score">{{ number_format($averageRating, 1) }}</span>
-                    <span class="description">
-                    @if (is_null($averageRating))
-                        Chưa có đánh giá
-                    @elseif ($averageRating >= 8) Ấn tượng
-                    @else ($averageRating >= 6) Tốt
-                    @endif
-               
-                    </span>
-                    
-                </div>
-                <p class="total-reviews" style="font-size: 20px; font-weight: 500;">Từ {{ $reviews->count() }} đánh giá của khách đã ở</p>
-            </div>
-        <!-- Phân loại đánh giá -->
-        <div class="col-5 rating-distribution">
-            @foreach ($ratingDistribution as $label => $count)
-                @php
-                    $percentage = ($reviews->count() > 0) ? ($count / $reviews->count() * 100) : 0;
-                    $labelText = match($label) {
-                        'tuyetvoi' => 'Tuyệt vời',
-                        'ratot' => 'Rất tốt',
-                        'hailong' => 'Hài lòng',
-                        'trungbinh' => 'Trung bình',
-                        'kem' => 'Kém',
-                    };
-                @endphp
-                <div class="rating-row">
-                    <span class="rating-label">{{ $labelText }}</span>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: {{ $percentage }}%;"></div>
-                    </div>
-                    <span class="rating-count">{{ $count }}</span>
-                </div>
-            @endforeach
-        </div>
-            <hr class="m-0">
-
-            <div class="box-review">
-                @if(auth()->check())
-                                @php
-                                    $hasBooking = \App\Models\Booking::where('user_id', auth()->user()->user_id)
-                                        ->whereHas('room', function ($query) use ($hotel) {
-                                            $query->where('hotel_id', $hotel->hotel_id);
-                                        })
-                                        ->exists();
-                                    $hasReviewed = \App\Models\Reviews::where('user_id', auth()->user()->user_id)
-                                        ->where('hotel_id', $hotel->hotel_id)
-                                        ->exists();
-                                @endphp
-
-                                @if($hasBooking && !$hasReviewed)
-                                    <form class="group-input-review" id="reviewForm" action="{{ route('reviews.store', $hotel->hotel_id) }}"
-                                        method="POST" enctype="multipart/form-data">
-                                        @csrf
-                                        <div class="icon-profile">
-                                            <i class="fa-solid fa-circle-user"></i>
-                                        </div>
-                                        <div class="group-text-review">
-                                            <textarea name="comment" id="inputReview" placeholder="Mời bạn nhập đánh giá..."
-                                                class="form-control"></textarea>
-                                            @error('comment')
-                                                <span class="text-danger" style="font-size: 14px; margin-bottom: -25px">{{ $message }}</span>
-                                            @enderror
-                                            <div class="upload-file-review d-flex">
-                                                <div class="emoj-review">
-                                                    <button type="button" id="emojiButton" class="btn btn-light"></button>
-                                                </div>
-                                                <div class="upload-file">
-                                                    <label for="file-input">
-                                                        <i class="fa-solid fa-circle-plus"></i>
-                                                    </label>
-                                                    <input type="file" id="file-input" name="images[]" style="display: none;"
-                                                        accept="image/*" multiple>
-                                                    @error('images.*')
-                                                        <div class="text-danger">{{ $message }}</div>
-                                                    @enderror
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="rating-stars">
-                                            <input type="hidden" name="rating" id="ratingInput" value="0">
-                                            <i class="fa-solid fa-star star" data-value="1"></i>
-                                            <i class="fa-solid fa-star star" data-value="2"></i>
-                                            <i class="fa-solid fa-star star" data-value="3"></i>
-                                            <i class="fa-solid fa-star star" data-value="4"></i>
-                                            <i class="fa-solid fa-star star" data-value="5"></i>
-                                            @error('rating')
-                                                <span class="text-danger" style="font-size: 14px;">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-
-                                        <div class="btn-submit">
-                                            <button type="submit">ĐĂNG</button>
-                                        </div>
-                                    </form>
-                                @elseif($hasReviewed)
-                                    <!-- Hiển thị thông báo nếu người dùng đã đánh giá -->
-                                    <p style="font-size: 25px;" class="text-success">Bạn đã đánh giá khách sạn này.</p>
-                                @else
-                                    <!-- Hiển thị thông báo nếu người dùng chưa đặt phòng -->
-                                    <p style="font-size: 25px;" class="text-warning">Bạn cần đặt phòng tại khách sạn này để viết đánh giá.
-                                    </p>
+                <div class="row">
+                    <!-- Tổng điểm -->
+                    <div class="col-4 overall-score">
+                        <div class="circle">
+                            <span class="score">{{ number_format($averageRating, 1) }}</span>
+                            <span class="description">
+                                @if (is_null($averageRating))
+                                    Chưa có đánh giá
+                                @elseif ($averageRating >= 8) Ấn tượng
+                                @else ($averageRating >= 6) Tốt
                                 @endif
-                @else
-                    <!-- Hiển thị thông báo nếu người dùng chưa đăng nhập -->
-                    <p style="font-size: 25px;" class="text-warning">Vui lòng <a href="{{ route('login') }}">đăng nhập</a>
-                        để viết đánh giá.</p>
-                @endif
-                <div class="image-preview-review d-flex">
-                    <img id="preview" src="" alt="Ảnh xem trước" multiple>
-                </div>
 
-                <!-- HIỂN THỊ ĐÁNH GIÁ -->
-                @foreach ($reviews as $review)
-                    <div class="box-comment-review mt-3 d-flex">
-                        <div class="icon-profile ms-5">
-                            <i class="fa-solid fa-circle-user"></i>
+                            </span>
+
                         </div>
-                        <div class="view-review ms-2">
-                            <div class="group-info-review">
-                                <div class="review-user-name">{{ $review->user->username }}</div>
-                                <div class="created_at">{{ $review->created_at }}</div>
-                                <!-- Hiển thị số sao đánh giá -->
-                                <div class="review-rating">
-                                    @for ($i = 1; $i <= 5; $i++)
-                                        @if ($i <= $review->rating)
-                                            <i class="fa-solid fa-star" style="color: #ff4500;"></i>
-                                            <!-- Sao được đánh giá -->
-                                        @else
-                                            <i class="fa-regular fa-star" style="color: #ccc;"></i>
-                                            <!-- Sao chưa được đánh giá -->
-                                        @endif
-                                    @endfor
-                                </div>
-                                <div class="comment-text">
-                                    {!! $review->comment !!}
-                                </div>
-                                <!-- Hiển thị hình ảnh đánh giá nếu có -->
-                                <div class="image-review">
-                                    @foreach ($review->images as $image)
-                                        <img src="{{ asset($image->image_url) }}" width="20%" alt="Review Image">
-                                    @endforeach
-                                </div>
+                        <p class="total-reviews" style="font-size: 20px; font-weight: 500;">Từ {{ $totalReviews }}
+                            đánh giá của khách đã ở</p>
+                    </div>
+                    <!-- Phân loại đánh giá -->
+                    <div class="col-5 rating-distribution">
+                        @foreach ($ratingDistribution as $label => $count)
+                                                @php
+                                                    $percentage = ($totalReviews > 0) ? ($count / $totalReviews * 100) : 0;
+                                                    $labelText = match ($label) {
+                                                        'tuyetvoi' => 'Tuyệt vời',
+                                                        'ratot' => 'Rất tốt',
+                                                        'hailong' => 'Hài lòng',
+                                                        'trungbinh' => 'Trung bình',
+                                                        'kem' => 'Kém',
+                                                    };
+                                                @endphp
+                                                <div class="rating-row">
+                                                    <span class="rating-label">{{ $labelText }}</span>
+                                                    <div class="progress-bar">
+                                                        <div class="progress-fill" style="width: {{ $percentage }}%;"></div>
+                                                    </div>
+                                                    <span class="rating-count">{{ $count }}</span>
+                                                </div>
+                        @endforeach
+                    </div>
+                    <hr class="m-0">
 
-                                <div class="action-review mt-2">
-                                    <a href="javascript:void(0)" class="like-review me-4"
-                                        id="like-review-{{ $review->review_id }}" data-review-id="{{ $review->review_id }}">
-                                        <i class="fa-solid fa-thumbs-up"></i> <span class="like-count"
-                                            id="like-count-{{ $review->review_id }}">{{ $review->likes_count }}</span>
-                                        Thích
-                                    </a>
-                                    @if (auth()->check() && (auth()->user()->user_id === $review->user_id || auth()->user()->is_admin))
-                                        <button type="button" class="delete-review-btn me-4 btn btn-link"
-                                            data-review-id="{{ $review->review_id }}" data-bs-toggle="modal"
-                                            data-bs-target="#deleteReviewModal">
-                                            <i class="fa-solid fa-trash"></i> Xóa Đánh Giá
-                                        </button>
-                                    @endif
+                    <div class="box-review">
+                        @if(auth()->check())
+                                                @php
+                                                    $hasBooking = \App\Models\Booking::where('user_id', auth()->user()->user_id)
+                                                        ->whereHas('room', function ($query) use ($hotel) {
+                                                            $query->where('hotel_id', $hotel->hotel_id);
+                                                        })
+                                                        ->exists();
+                                                    $hasReviewed = \App\Models\Reviews::where('user_id', auth()->user()->user_id)
+                                                        ->where('hotel_id', $hotel->hotel_id)
+                                                        ->exists();
+                                                @endphp
+
+                                                @if($hasBooking && !$hasReviewed)
+                                                    <form class="group-input-review mt-5" id="reviewForm"
+                                                        action="{{ route('reviews.store', $hotel->hotel_id) }}" method="POST"
+                                                        enctype="multipart/form-data">
+                                                        @csrf
+                                                        <!-- <div class="icon-profile">
+                                                                                                                                                <i class="fa-solid fa-circle-user"></i>
+                                                                                                                                            </div> -->
+                                                        <div class="group-text-review">
+                                                            <textarea name="comment" id="inputReview" placeholder="Mời bạn nhập đánh giá..."
+                                                                class="form-control"></textarea>
+                                                            @error('comment')
+                                                                <span class="text-danger"
+                                                                    style="font-size: 14px; margin-bottom: -25px">{{ $message }}</span>
+                                                            @enderror
+                                                            <div class="upload-file-review d-flex">
+                                                                <div class="emoj-review">
+                                                                    <button type="button" id="emojiButton" class="btn btn-light"></button>
+                                                                </div>
+                                                                <div class="upload-file">
+                                                                    <label for="file-input">
+                                                                        <i class="fa-solid fa-circle-plus"></i>
+                                                                    </label>
+                                                                    <input type="file" id="file-input" name="images[]" style="display: none;"
+                                                                        accept="image/*" multiple>
+                                                                    @error('images.*')
+                                                                        <div class="text-danger">{{ $message }}</div>
+                                                                    @enderror
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="rating-stars">
+                                                            <input type="hidden" name="rating" id="ratingInput" value="0">
+                                                            <i class="fa-solid fa-star star" data-value="1"></i>
+                                                            <i class="fa-solid fa-star star" data-value="2"></i>
+                                                            <i class="fa-solid fa-star star" data-value="3"></i>
+                                                            <i class="fa-solid fa-star star" data-value="4"></i>
+                                                            <i class="fa-solid fa-star star" data-value="5"></i>
+                                                            @error('rating')
+                                                                <span class="text-danger" style="font-size: 14px;">{{ $message }}</span>
+                                                            @enderror
+                                                        </div>
+
+                                                        <div class="btn-submit">
+                                                            <button type="submit">ĐĂNG</button>
+                                                        </div>
+                                                    </form>
+                                                @elseif($hasReviewed)
+                                                    <!-- Hiển thị thông báo nếu người dùng đã đánh giá -->
+                                                    <p style="font-size: 25px;" class="text-success">Bạn đã đánh giá khách sạn này.</p>
+                                                @else
+                                                    <!-- Hiển thị thông báo nếu người dùng chưa đặt phòng -->
+                                                    <p style="font-size: 25px;" class="text-warning">Bạn cần đặt phòng tại khách sạn này để viết
+                                                        đánh giá.
+                                                    </p>
+                                                @endif
+                        @else
+                            <!-- Hiển thị thông báo nếu người dùng chưa đăng nhập -->
+                            <p style="font-size: 25px;" class="text-warning">Vui lòng <a href="{{ route('login') }}">đăng
+                                    nhập</a>
+                                để viết đánh giá.</p>
+                        @endif
+                        <div class="image-preview-review d-flex">
+                            <img id="preview" src="" alt="Ảnh xem trước" multiple>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- Modal Xác Nhận Xóa -->
+
+            <div class="modal fade" id="loginRequiredModal" tabindex="-1" aria-labelledby="loginRequiredModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="loginRequiredModalLabel">Thông báo</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Vui lòng <a href="{{ route('login') }}">đăng nhập</a> để bình luận.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+</section>
+
+<div class="stay-nest-review">
+    <div class="container  p-5">
+        @foreach ($reviews as $review)
+                <div class="row p-3 rounded align-items-start">
+                    <!-- Avatar và thông tin người dùng -->
+                    <div class="col-md-2 d-flex align-items-center">
+                        <div class="avatar bg-light rounded-circle d-flex justify-content-center align-items-center me-3 border"
+                            style="width: 64px; height: 64px;">
+                            <span class="text-uppercase fw-bold" style="font-size: 24px;">
+                                {{ substr($review->user->username ?? 'A', 0, 1) }}
+                            </span>
+                        </div>
+                        <div>
+                            <div class="stay-nest-review-name-group">
+                                <h5 class="mb-0">
+                                    {{ $review->user->username ?? 'Anonymous' }}
+                                </h5>
+                                <span class="ms-2">{{ $review->user->role->role_name }}</span>
+                            </div>
+                            <p class="text-muted mb-0">
+                                <i class="fa-solid fa-pen fa-xs"></i>
+                                {{ \Carbon\Carbon::parse($review->created_at)->format('d/m/Y') }}
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Nội dung đánh giá -->
+                    <div class="col-md-10 review-content">
+                        <h5 class="m-0 d-flex">
+                            {{$review->hotel->hotel_name}}
+                            <span class="badge ms-2">
+                                {{round($review->rating, 2)}}
+                            </span>
+                        </h5>
+                        @php
+                            $rating = round($review->rating, 2);
+                            $labelTextRating = match ($rating) {
+                                5.00 => 'Tuyệt vời',
+                                4.00 => 'Rất tốt',
+                                3.00 => 'Hài lòng',
+                                2.00 => 'Trung bình',
+                                1.00 => 'Kém',
+                                default => 'Chưa đánh giá',
+                            };
+                         @endphp
+                        <p class="text-muted m-0 mb-1">{{ $labelTextRating  }}</p>
+                        <div class="review-rating m-0">
+                            @for ($i = 1; $i <= 5; $i++)
+                                @if ($i <= $review->rating)
+                                    <i class="fa-solid fa-star" style="color: #3B79C9;"></i>
+                                @else
+                                    <i class="fa-regular fa-star" style="color: #ccc;"></i>
+                                @endif
+                            @endfor
+                        </div>
+                        <p class="mb-0">{{ $review->comment }}</p>
+                        <!-- Hiển thị ảnh -->
+                        <div class="d-flex mt-2">
+                            @foreach ($review->images->take(2) as $image)
+                                <img src="{{ asset($image->image_url) }}" alt="Review Image" class="img-fluid rounded me-2 border"
+                                    style="width: 100px; height: 100px; object-fit: cover;">
+                            @endforeach
+                            @if ($review->images->count() > 2)
+                                <!-- Hiển thị nút "+x" -->
+                                <div class="position-relative ms-2">
+                                    <div class="extra-images d-flex align-items-center justify-content-center bg-secondary text-white rounded"
+                                        style="width: 100px; height: 100px; cursor: pointer;" data-bs-toggle="modal"
+                                        data-bs-target="#imageModalReview-{{ $review->id }}">
+                                        +{{ $review->images->count() - 2 }}
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                        <div class="mt-2 review-function align-items-end">
+                            <a href="javascript:void(0)" class="like-review me-4 btn btn-outline-primary"
+                                id="like-review-{{ $review->review_id }}" data-review-id="{{ $review->review_id }}">
+                                <i class="fa-solid fa-thumbs-up"></i>
+                                <span class="like-count" id="like-count-{{ $review->review_id }}">
+                                    {{ $review->likes_count }}
+                                </span>
+                                Hữu ích
+                            </a>
+                            </button>
+                            @if (auth()->check() && (auth()->user()->user_id === $review->user_id || auth()->user()->is_admin))
+                                <button type="button" class="delete-review-btn me-4 btn" data-review-id="{{ $review->review_id }}"
+                                    data-bs-toggle="modal" data-bs-target="#deleteReviewModal">
+                                    <i class="fa-solid fa-trash"></i> Xóa Đánh Giá
+                                </button>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal hiển thị tất cả ảnh -->
+                <div class="modal fade" id="imageModalReview-{{ $review->id }}" tabindex="-1"
+                    aria-labelledby="imageModalLabel-{{ $review->id }}" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="imageModalLabel-{{ $review->id }}">Hình ảnh đánh giá</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    @foreach ($review->images as $image)
+                                        <div class="col-6 mb-3">
+                                            <img src="{{ asset($image->image_url) }}" alt="Full Image"
+                                                class="img-fluid rounded border image_review_full">
+                                        </div>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
                     </div>
-                @endforeach
-
-
-                <!-- PHÂN TRANG -->
-                <div class="d-flex justify-content-center mt-3 pagination-voucher">
-                    {{ $reviews->appends(['csrf_token' => csrf_token()])->links('pagination::bootstrap-4') }}
                 </div>
-            </div>
-        </div>
+        @endforeach
     </div>
-    <!-- Modal Xác Nhận Xóa -->
-   
-    <div class="modal fade" id="loginRequiredModal" tabindex="-1" aria-labelledby="loginRequiredModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="loginRequiredModalLabel">Thông báo</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Vui lòng <a href="{{ route('login') }}">đăng nhập</a> để bình luận.
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                </div>
-            </div>
-        </div>
+    <!-- PHÂN TRANG -->
+    <div class="d-flex justify-content-center mt-3 pagination-voucher">
+        {{ $reviews->appends(['csrf_token' => csrf_token()])->links('pagination::bootstrap-4') }}
     </div>
+</div>
 
-</section>
 <script>
     function showLoginModal() {
         const loginModal = new bootstrap.Modal(document.getElementById('loginRequiredModal'));
