@@ -5,11 +5,11 @@
     <tr class="post-detail1" data-id="{{ IdEncoder::encodeId($post->post_id) }}" data-updated-at="{{ $post->updated_at }}">
         <td>{{ $index + 1 }}</td>
         <td>
-            <img src="{{ asset('images/' . $post->img) }}" alt="{{ $post->title }}" style="width: 100px; height: auto;">
+            <img src="{{ asset('storage/images/' . $post->img) }}" alt="{{ $post->title }}" style="width: 100px; height: auto;">
         </td>
         <td>{{ Str::limit($post->title, 60) }}</td>
-        <td>{{ Str::limit($post->description, 60) }}</td>
-        <td>{{ Str::limit($post->content, 60) }}</td>
+        <td>{{ Str::limit(html_entity_decode(strip_tags($post->description)), 60) }}</td>
+        <td>{{ Str::limit(html_entity_decode(strip_tags($post->content)), 60) }}</td>
         <td>{{ Str::limit($post->meta_desc, 60) }}</td>
         <td>{{ $post->url_seo }}</td>
         <td>{{ $post->status ? 'Show' : 'Hidden' }}</td>

@@ -578,7 +578,6 @@
                         .catch(error => console.error('Error:', error));
                     return;
                 }
-
                 document.querySelectorAll('.city-btn').forEach(function (btn) {
                     btn.classList.remove('selected');
                 });
@@ -643,7 +642,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="sale-hotel">-${hotel.discount_percent}%</div>
+                        
                     </div>
                 </a>
             `;
