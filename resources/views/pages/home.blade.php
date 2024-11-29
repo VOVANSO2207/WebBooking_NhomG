@@ -323,7 +323,7 @@
         <div class="title mb-2">Điểm đến thịnh hành</div>
         <div class="row">
             <div class="col-md-6">
-                <a href="#" class="link-popular-destination">
+                <a href="{{ route('pages.hotel_by_city', ['cityName' => 'Hồ Chí Minh']) }}" class="link-popular-destination">
                     <img class="image-destitation-1"
                         src="https://image.vietnamnews.vn/uploadvnnews/Article/2023/9/28/308010_4651436783396218_vna_potal_thanh_pho_ho_chi_minh_la_1_trong_10_diem_den_tuyet_voi_nhat_o_chau_a_6666855.jpg"
                         alt="image">
@@ -331,32 +331,32 @@
                 </a>
             </div>
             <div class="col-md-6">
-                <a href="#" class="link-popular-destination">
+                <a href="{{ route('pages.hotel_by_city', ['cityName' => 'Nha Trang']) }}" class="link-popular-destination">
                     <img class="image-destitation-1"
                         src="https://letsflytravel.vn/assets/source/2_5_2024_Up/nha-trang-city-tour/nha-trang-letsflytravel.jpg"
                         alt="image">
-                    <p class="name-location-1">Nha Trang</p>
+                    <p class="name-location-1">NHA TRANG</p>
             </div>
             </a>
         </div>
         <div class="row mt-4">
             <div class="col-md-4">
-                <a href="#" class="link-popular-destination">
+                <a href="{{ route('pages.hotel_by_city', ['cityName' => 'Đà Lạt']) }}" class="link-popular-destination">
                     <img class="image-destitation-1"
                         src="https://static.vinwonders.com/production/gioi-thieu-ve-da-lat-1.jpg" alt="image">
                     <p class="name-location-1">ĐÀ LẠT</p>
                 </a>
             </div>
             <div class="col-md-4">
-                <a href="#" class="link-popular-destination">
+                <a href="{{ route('pages.hotel_by_city', ['cityName' => 'Huế']) }}"class="link-popular-destination">
                     <img class="image-destitation-1"
-                        src="https://th.bing.com/th/id/R.05b072e1b9b939addf7c3f25637efa5e?rik=3F5fed7sbYHisQ&pid=ImgRaw&r=0"
+                        src="https://kinhtevadubao.vn/stores/news_dataimages/kinhtevadubaovn/092018/18/14/5-ve-dep-co-do-hue-tao-ne-su-hap-dan-dac-biet-khi-ghe-tham-07-.7434.jpg"
                         alt="image">
-                    <p class="name-location-1">CÀ MAU</p>
+                    <p class="name-location-1">HUẾ</p>
                 </a>
             </div>
             <div class="col-md-4">
-                <a href="#" class="link-popular-destination">
+                <a href="{{ route('pages.hotel_by_city', ['cityName' => 'Đà Nẵng']) }}" class="link-popular-destination">
                     <img class="image-destitation-1"
                         src="https://vcdn1-dulich.vnecdn.net/2022/06/03/cauvang-1654247842-9403-1654247849.jpg?w=1200&h=0&q=100&dpr=1&fit=crop&s=Swd6JjpStebEzT6WARcoOA"
                         alt="image">

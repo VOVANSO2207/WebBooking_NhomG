@@ -248,3 +248,6 @@ Route::patch('/hoa-don/{id}/cancel', [BookingController::class, 'cancel'])->name
 Route::get('/search1', action: [PostsController::class, 'searchViewBlog'])->name('searchBlog');
 Route::get('/blog', [PostsController::class, 'getViewBlog'])->name('blog');
 Route::get('/blog/{url_seo}', [PostsController::class, 'getBlogDetail'])->name('blog.detail');
+
+// Route::get('/city/{cityId}', action: [HotelController::class, 'showHotelsByCity'])->name('hotels.byCity');
+Route::get('/city/{cityName}', [HotelController::class, 'showHotelsByCity'])->name('pages.hotel_by_city');

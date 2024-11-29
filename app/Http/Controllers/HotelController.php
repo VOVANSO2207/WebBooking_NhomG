@@ -902,5 +902,41 @@ class HotelController extends Controller
         // Truyền danh sách khách sạn qua view
         return view('pages.page_hotel', compact('hotels'));
     }
+    public function showHotelsByCity($cityName)
+{
+    // Tìm thành phố theo tên
+    $city = Cities::where('city_name', $cityName)->first();
+
+    if (!$city) {
+        abort(404, 'Thành phố không tồn tại.');
+    }
+
+    // Lấy danh sách khách sạn thuộc thành phố
+    $hotels = Hotel::with('rooms', 'reviews', 'images')
+        ->where('city_id', $city->city_id) // Lọc theo city_id từ bảng cities
+        ->paginate(12); // Hiển thị 12 khách sạn mỗi trang
+
+    $userId = auth()->id();
+
+    // Lấy danh sách khách sạn mà người dùng yêu thích
+    $favoriteHotelIds = FavoriteHotel::where('user_id', $userId)->pluck('hotel_id')->toArray();
+
+    // Gắn thêm thông tin yêu thích và tính toán giá
+    foreach ($hotels as $hotel) {
+        $hotel->is_favorite = in_array($hotel->hotel_id, $favoriteHotelIds);
+        $hotel->average_price = $hotel->rooms->avg('price');
+        $hotel->average_discount_percent = $hotel->rooms->avg('discount_percent');
+        $hotel->average_price_sale = $hotel->average_price * (1 - $hotel->average_discount_percent / 100);
+    }
+
+    // Truyền dữ liệu qua view
+    return view('pages.page_hotel_by_city', compact('hotels', 'city'));
+}
+
+    
+    
+    
+
+
     
 }
