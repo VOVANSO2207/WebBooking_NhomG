@@ -194,7 +194,7 @@ class HotelController extends Controller
             'trungbinh' => $reviews->where('rating', 2)->count(),
             'kem' => $reviews->where('rating', 1)->count(),
         ];
-    
+        $totalReviews = $hotel->reviews()->count();
         // Lấy danh sách các khách sạn đã xem gần đây từ session
         $recentHotels = Session::get('recent_hotels', []);
     
@@ -217,7 +217,8 @@ class HotelController extends Controller
             'rooms',
             'reviews',
             'averageRating',
-            'ratingDistribution'
+            'ratingDistribution',
+            'totalReviews'
         ));
     }
 
