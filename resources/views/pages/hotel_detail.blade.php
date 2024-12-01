@@ -63,7 +63,8 @@
                                     @foreach ($hotel->images as $image)
                                         <swiper-slide>
                                             <img src="{{ asset('storage/images/' . $image->image_url) }}"
-                                                alt="{{ $image->image_url }}" style="object-fit: cover;" />
+                                                alt="{{ $image->image_url }}"
+                                                style="object-fit: cover; width: 100%; height: 500px;" />
                                         </swiper-slide>
                                     @endforeach
                                 </swiper-container>
@@ -81,11 +82,13 @@
             </div>
         </div>
 
-        <div class="detail-location-shape m-0"><span>
+        <div class="detail-location-shape m-0">
+            <span>
                 {{ $hotel->city->city_name }}
-            </span></div>
+            </span>
+        </div>
         <div class="detail-info-top">
-            <div class="detail-hotel-card">
+            <div class="detail-hotel-card m-0">
                 <span class="hotel-name">{{ $hotel->hotel_name }}</span>
                 <div class="rating">
                     @for ($i = 1; $i <= 5; $i++)
@@ -103,21 +106,10 @@
                     <div class="col-md-8 detail-left-info">
                         <h5 class="section-title">Giới thiệu</h5>
                         <p class="detail-description">
-                            {!! \Illuminate\Support\Str::limit($hotel->description, 500) !!}
-                            @if (str_word_count($hotel->description) > 100)
-                                <span id="more-text" style="display: none;">
-                                    {!! substr($hotel->description, 500) !!}
-                                </span>
-                                <span>
-                                    <a href="#" class="detail-btn-load-more" onclick="toggleMoreText(event)">Xem
-                                        thêm</a>
-                                </span>
-                            @endif
+                            <span id="more-text" style="display: none;">
+                                {!! $hotel->description !!}
+                            </span>
                         </p>
-                        <div class="detail-address">
-                            <i class="fa-solid fa-location-dot fa-xl me-2"></i>
-                            <span>{{ $hotel->location }}</span>
-                        </div>
                     </div>
                     <div class="col-md-4 detail-right-info">
                         <span class="detail-price-main">
@@ -128,11 +120,15 @@
                                 <p>N/A</p>
                             @endif
                         </span>
-                        <div class="detail-map ratio ratio-16x9">
+                        <div class="detail-map ratio ratio-16x9 mb-2">
                             <iframe
                                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.4976450036565!2d106.69522897480486!3d10.773145589375437!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f38cdaf80a5%3A0x18fb7c58d919b591!2zMTY0IMSQLiBMw6ogVGjDoW5oIFTDtG4sIFBoxrDhu51uZyBC4bq_biBUaMOgbmgsIFF14bqtbiAxLCBI4buTIENow60gTWluaCwgVmnhu4d0IE5hbQ!5e0!3m2!1svi!2s!4v1730039298467!5m2!1svi!2s"
                                 width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
                                 referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        </div>
+                        <div class="detail-address mt-2">
+                            <i class="fa-solid fa-location-dot fa-xl me-2"></i>
+                            <span>{{ $hotel->location }}, {{ $hotel->city->city_name }}</span>
                         </div>
                         <div class="detail-button">
                             <a href="#" class="detail-btn-book-room" id="bookNowBtn">Đặt Phòng Ngay</a>
@@ -143,7 +139,7 @@
                 <div class="hotel-amenities">
                     <div class="row">
                         <div class="col-md-6 detail-title-amenities">Tiện nghi khách sạn </div>
-                        @if ($hotel->amenities->IsEmpty())
+                        @if (count($hotel->amenities) < 12)
                             <div class="col-md-6"><a href="#" class="xem-tat-ca"></a></div>
                         @else
                             <div class="col-md-6"><a href="#" class="xem-tat-ca">Xem tất cả ></a></div>
@@ -217,7 +213,7 @@
                                         <div class="col-md-8">
                                             <div class="card-room-location m-0">
                                                 <i class="fa-solid fa-location-dot"></i>
-                                                <span>{{ $hotel->location }}</span>
+                                                <span>{{ $hotel->city->city_name  }}</span>
                                             </div>
                                             <div class="card-room-hotel-name m-0">
                                                 <i class="fa-solid fa-bed"></i>
@@ -508,7 +504,9 @@
                                 <h5 class="mb-0">
                                     {{ $review->user->username ?? 'Anonymous' }}
                                 </h5>
-                                <span class="ms-2">{{ $review->user->role->role_name }}</span>
+                                @if ($review->user?->role == 'admin')
+                                    <span class="ms-2">{{ $review->user->role->role_name }}</span>
+                                @endif
                             </div>
                             <p class="text-muted mb-0">
                                 <i class="fa-solid fa-pen fa-xs"></i>
@@ -733,6 +731,13 @@
                 }
             });
         })
+        document.getElementById('bookNowBtn').addEventListener('click', function (e) {
+            // console.log("CLICK DUOC");
+            e.preventDefault();
+            document.getElementById('bookingSection').scrollIntoView({
+                behavior: 'smooth' // Cuộn mượt mà
+            });
+        });
     });
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -941,13 +946,6 @@
         }
     }
     // 
-    document.getElementById('bookNowBtn').addEventListener('click', function (e) {
-        // console.log("CLICK DUOC");
-        e.preventDefault();
-        document.getElementById('bookingSection').scrollIntoView({
-            behavior: 'smooth' // Cuộn mượt mà
-        });
-    });
 
     function setupCharacterCounter() {
         const textarea = document.getElementById('inputReview');
