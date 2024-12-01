@@ -9,103 +9,7 @@
 @section('search')
 @include('partials.search_layout')
 @endsection
-<!--  -->
-<style>
-    .star {
-        font-size: 24px;
-        color: #ccc;
-        /* Màu mặc định */
-        cursor: pointer;
-    }
 
-    /* Màu vàng cho sao khi được chọn */
-    .star.selected {
-        color: #ffcc00;
-    }
-
-    /* Màu vàng khi hover */
-    .star:hover {
-        color: #ffcc00;
-    }
-
-    /* Container cho layout */
-    .container {
-        width: 100%;
-        padding: 20px;
-    }
-
-    /* Cột cho tổng điểm (col-3) */
-    .overall-score {
-        text-align: center;
-    }
-
-    .circle {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        background-color: #0071c2;
-        color: white;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        margin: 0 auto;
-    }
-
-    .circle .score {
-        font-size: 36px;
-        font-weight: bold;
-    }
-
-    .circle .description {
-        font-size: 14px;
-    }
-
-    .total-reviews {
-        font-size: 14px;
-        margin-top: 10px;
-    }
-
-
-    /* Cột phân loại đánh giá (col-5) */
-    .rating-distribution {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .rating-row {
-        display: flex;
-        align-items: center;
-        margin-bottom: 10px;
-    }
-
-    .rating-label {
-        width: 100px;
-        font-size: 14px;
-    }
-
-    .progress-bar {
-        flex: 1;
-        height: 10px;
-        background-color: #ddd;
-        margin: 0 10px;
-        position: relative;
-        border-radius: 5px;
-    }
-
-    .progress-fill {
-        height: 100%;
-        background-color: #0071c2;
-        border-radius: 5px;
-    }
-
-    .rating-count {
-        width: 50px;
-        text-align: right;
-        font-size: 14px;
-    }
-</style>
-</style>
 @section('content')
 <section class="hotel_detail">
     <div class="container thu-nho">
@@ -145,7 +49,7 @@
         <!-- Modal -->
         <div class="modal fade" id="imageModal" data-bs-backdrop="static" tabindex="-1"
             aria-labelledby="imageModalLabel" aria-hidden="true">
-            <div class="modal-dialog ">
+            <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="imageModalLabel">Tất cả hình ảnh</h5>
@@ -153,10 +57,22 @@
                     </div>
                     <div class="modal-body p-5">
                         <div class="row">
+                            <div class="staynest-image-swiper mb-3">
+                                <swiper-container class="mySwiper" pagination="true" pagination-clickable="true"
+                                    navigation="true" space-between="30" loop="true">
+                                    @foreach ($hotel->images as $image)
+                                        <swiper-slide>
+                                            <img src="{{ asset('storage/images/' . $image->image_url) }}"
+                                                alt="{{ $image->image_url }}" style="object-fit: cover;" />
+                                        </swiper-slide>
+                                    @endforeach
+                                </swiper-container>
+                            </div>
                             @foreach ($hotel->images as $image)
-                            <div class="col-md-4 mb-3 review-images-details">
-                                    <img src="{{ asset('storage/images/' . $image->image_url) }}" alt="{{ $image->image_url }}"
-                                        class="img-fluid modal-image-alls">
+                                <div class="col-md-4 mb-3 review-images-details">
+                                    <img src="{{ asset('storage/images/' . $image->image_url) }}"
+                                        alt="{{ $image->image_url }}" style="object-fit: cover;"
+                                        class="img-fluid modal-image-alls" />
                                 </div>
                             @endforeach
                         </div>
@@ -174,7 +90,7 @@
                 <div class="rating">
                     @for ($i = 1; $i <= 5; $i++)
                         @if ($i <= $hotel->rating)
-                            <span class="star">★</span>
+                            <span class="star-1">★</span>
                         @else
                             <span class="star emty">☆</span>
                         @endif
@@ -266,51 +182,6 @@
                                     value="{{ session('daterange', '') }}" readonly />
                             </div>
                         </div>
-                        <!--   <div class="col-md-3">
-                                                                    <div class="people-summary-container border">
-                                                                        <div class="people-summary-display">
-                                                                            <span id="people-summary-counter">{{ session('adults', 1) }} người lớn, </span>
-                                                                            <span id="room-summary-counter">{{ session('rooms', 1) }} phòng, </span>
-                                                                            <span id="children-summary-counter">{{ session('children', 0) }} trẻ em</span>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="people-counter-dropdown mt-1 bg-light">
-                                                                        <div class="people-counter-item">
-                                                                            <span>Người lớn</span>
-                                                                            <div class="counter-container">
-                                                                                <button type="button" class="btn-decrement-adult">-</button>
-                                                                                <input type="text" class="counter-value" id="adultsCounter"
-                                                                                    name="adults" value="{{ session('adults', 1) }}" readonly>
-                                                                                <button type="button" class="btn-increment-adult">+</button>
-                                                                            </div>
-                                                                        </div>
-
-                                                                        <div class="people-counter-item">
-                                                                            <span>Phòng</span>
-                                                                            <div class="counter-container">
-                                                                                <button type="button" class="btn-decrement-room">-</button>
-                                                                                <input type="text" class="counter-value" id="roomsCounter" name="rooms"
-                                                                                    value="{{ session('rooms', 1) }}" readonly>
-                                                                                <button type="button" class="btn-increment-room">+</button>
-                                                                            </div>
-                                                                        </div>
-
-                                                                        <div class="people-counter-item">
-                                                                            <span>Trẻ em</span>
-                                                                            <div class="counter-container">
-                                                                                <button type="button" class="btn-decrement-children">-</button>
-                                                                                <input type="text" class="counter-value" id="childrenCounter"
-                                                                                    name="children" value="{{ session('children', 0) }}" readonly>
-                                                                                <button type="button" class="btn-increment-children">+</button>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div> -->
-                        <!-- <div class="col-md-2 search-header button-search-header">
-                                                                    <button type="submit" class="btn btn-primary" style="width: 100%; padding:10px;">
-                                                                        Thay đổi tìm kiếm
-                                                                    </button>
-                                                                </div> -->
                     </form>
                 </div>
             @endif
@@ -451,7 +322,7 @@
                 @endfor
             </span>
             <div class="container">
-                <div class="row">
+                <div class="row d-flex justify-content-center">
                     <!-- Tổng điểm -->
                     <div class="col-4 overall-score">
                         <div class="circle">
@@ -466,8 +337,9 @@
                             </span>
 
                         </div>
-                        <p class="total-reviews" style="font-size: 20px; font-weight: 500;">Từ {{ $totalReviews }}
-                            đánh giá của khách đã ở</p>
+                        <p class="total-reviews" style="font-size: 20px; font-weight: 500;">
+                            Từ {{ $totalReviews }} đánh giá của khách hàng đã đặt
+                        </p>
                     </div>
                     <!-- Phân loại đánh giá -->
                     <div class="col-5 rating-distribution">
@@ -491,87 +363,110 @@
                                                 </div>
                         @endforeach
                     </div>
-                    <hr class="m-0">
+                </div>
 
-                    <div class="box-review">
-                        @if(auth()->check())
-                                                @php
-                                                    $hasBooking = \App\Models\Booking::where('user_id', auth()->user()->user_id)
-                                                        ->whereHas('room', function ($query) use ($hotel) {
-                                                            $query->where('hotel_id', $hotel->hotel_id);
-                                                        })
-                                                        ->exists();
-                                                    $hasReviewed = \App\Models\Reviews::where('user_id', auth()->user()->user_id)
-                                                        ->where('hotel_id', $hotel->hotel_id)
-                                                        ->exists();
-                                                @endphp
+                <hr class="m-0">
 
-                                                @if($hasBooking && !$hasReviewed)
-                                                    <form class="group-input-review mt-5" id="reviewForm"
-                                                        action="{{ route('reviews.store', $hotel->hotel_id) }}" method="POST"
-                                                        enctype="multipart/form-data">
-                                                        @csrf
-                                                        <!-- <div class="icon-profile">
-                                                                                                                                                <i class="fa-solid fa-circle-user"></i>
-                                                                                                                                            </div> -->
-                                                        <div class="group-text-review">
-                                                            <textarea name="comment" id="inputReview" placeholder="Mời bạn nhập đánh giá..."
-                                                                class="form-control"></textarea>
-                                                            @error('comment')
-                                                                <span class="text-danger"
-                                                                    style="font-size: 14px; margin-bottom: -25px">{{ $message }}</span>
-                                                            @enderror
-                                                            <div class="upload-file-review d-flex">
-                                                                <div class="emoj-review">
-                                                                    <button type="button" id="emojiButton" class="btn btn-light"></button>
-                                                                </div>
-                                                                <div class="upload-file">
-                                                                    <label for="file-input">
-                                                                        <i class="fa-solid fa-circle-plus"></i>
-                                                                    </label>
-                                                                    <input type="file" id="file-input" name="images[]" style="display: none;"
-                                                                        accept="image/*" multiple>
-                                                                    @error('images.*')
-                                                                        <div class="text-danger">{{ $message }}</div>
-                                                                    @enderror
-                                                                </div>
+                <div class="box-review">
+                    @if(auth()->check())
+                                        @php
+                                            $hasBooking = \App\Models\Booking::where('user_id', auth()->user()->user_id)
+                                                ->whereHas('room', function ($query) use ($hotel) {
+                                                    $query->where('hotel_id', $hotel->hotel_id);
+                                                })
+                                                ->exists();
+                                            $hasReviewed = \App\Models\Reviews::where('user_id', auth()->user()->user_id)
+                                                ->where('hotel_id', $hotel->hotel_id)
+                                                ->exists();
+                                        @endphp
+
+                                        @if($hasBooking && !$hasReviewed)
+                                            <form class="mt-5 comment-box mx-auto" id="reviewForm"
+                                                action="{{ route('reviews.store', $hotel->hotel_id) }}" method="POST"
+                                                enctype="multipart/form-data">
+                                                @csrf
+                                                <!-- Header với avatar và tên người dùng -->
+                                                <div class="d-flex align-items-center mb-3">
+                                                    <img class="rounded-circle me-2"
+                                                        src="{{ Auth::check() && Auth::user()->avatar ? asset('storage/images/' . Auth::user()->avatar) : asset('images/user-profile.png') }}"
+                                                        alt="Avatar" style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;">
+                                                    <h4 class="mb-0">{{ Auth::user()->username }}</h4>
+                                                </div>
+                                                <!-- Input nhận xét -->
+                                                <div class="stay-nest-input-review">
+                                                    <div class="input-review">
+                                                        <textarea name="comment" id="inputReview"
+                                                            class="comment-body form-control orther-input m-0" maxlength="1000"
+                                                            placeholder="Nhập nhận xét của bạn tại đây..."></textarea>
+                                                        @error('comment')
+                                                            <span class="text-danger"
+                                                                style="font-size: 14px; margin-bottom: -25px">{{ $message }}</span>
+                                                        @enderror
+                                                    </div>
+
+                                                    <div class="row mt-2">
+                                                        <div class="col-md-6">
+                                                            <div class="rating-stars">
+                                                                <input type="hidden" name="rating" id="ratingInput" value="0">
+                                                                <i class="fa-solid fa-star star" data-value="1"></i>
+                                                                <i class="fa-solid fa-star star" data-value="2"></i>
+                                                                <i class="fa-solid fa-star star" data-value="3"></i>
+                                                                <i class="fa-solid fa-star star" data-value="4"></i>
+                                                                <i class="fa-solid fa-star star" data-value="5"></i>
+                                                                @error('rating')
+                                                                    <span class="text-danger" style="font-size: 14px;">{{ $message }}</span>
+                                                                @enderror
                                                             </div>
                                                         </div>
-                                                        <div class="rating-stars">
-                                                            <input type="hidden" name="rating" id="ratingInput" value="0">
-                                                            <i class="fa-solid fa-star star" data-value="1"></i>
-                                                            <i class="fa-solid fa-star star" data-value="2"></i>
-                                                            <i class="fa-solid fa-star star" data-value="3"></i>
-                                                            <i class="fa-solid fa-star star" data-value="4"></i>
-                                                            <i class="fa-solid fa-star star" data-value="5"></i>
-                                                            @error('rating')
-                                                                <span class="text-danger" style="font-size: 14px;">{{ $message }}</span>
+                                                        <div class="col-md-6">
+                                                            <div class="char-limit">0/1000</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Action Buttons -->
+                                                <div class="d-flex justify-content-between align-items-center row mt-2 mb-0">
+                                                    <div class="action-buttons col-md-6">
+                                                        <span id="boldButton"><i class="fas fa-bold"></i></span>
+                                                        <span id="italicButton"><i class="fas fa-italic"></i></span>
+                                                        <span id="stayNestUploadFile">
+                                                            <label for="file-input">
+                                                                <i class="fa-solid fa-camera-retro"></i>
+                                                            </label>
+                                                            <input type="file" id="file-input" name="images[]" style="display: none;"
+                                                                accept="image/*" multiple>
+                                                            @error('images.*')
+                                                                <div class="text-danger">{{ $message }}</div>
                                                             @enderror
-                                                        </div>
+                                                        </span>
+                                                        <span> <button type="button" id="emojiButton">😂</button></span>
+                                                    </div>
 
-                                                        <div class="btn-submit">
-                                                            <button type="submit">ĐĂNG</button>
-                                                        </div>
-                                                    </form>
-                                                @elseif($hasReviewed)
-                                                    <!-- Hiển thị thông báo nếu người dùng đã đánh giá -->
-                                                    <p style="font-size: 25px;" class="text-success">Bạn đã đánh giá khách sạn này.</p>
-                                                @else
-                                                    <!-- Hiển thị thông báo nếu người dùng chưa đặt phòng -->
-                                                    <p style="font-size: 25px;" class="text-warning">Bạn cần đặt phòng tại khách sạn này để viết
-                                                        đánh giá.
-                                                    </p>
-                                                @endif
-                        @else
-                            <!-- Hiển thị thông báo nếu người dùng chưa đăng nhập -->
-                            <p style="font-size: 25px;" class="text-warning">Vui lòng <a href="{{ route('login') }}">đăng
-                                    nhập</a>
-                                để viết đánh giá.</p>
-                        @endif
-                        <div class="image-preview-review d-flex">
-                            <img id="preview" src="" alt="Ảnh xem trước" multiple>
-                        </div>
-
+                                                    <div class="btn-submit col-md-2">
+                                                        <button type="submit" class="btn btn-primary w-100">ĐĂNG</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        @elseif($hasReviewed)
+                                            <!-- Hiển thị thông báo nếu người dùng đã đánh giá -->
+                                            <p style="font-size: 25px;" class="text-success">Bạn đã đánh giá khách sạn này.</p>
+                                        @else
+                                            <!-- Hiển thị thông báo nếu người dùng chưa đặt phòng -->
+                                            <p style="font-size: 25px;" class="text-warning">Bạn cần đặt phòng tại khách sạn này để viết
+                                                đánh giá.
+                                            </p>
+                                        @endif
+                    @else
+                        <!-- Hiển thị thông báo nếu người dùng chưa đăng nhập -->
+                        <p style="font-size: 25px;" class="text-warning">
+                            Vui lòng
+                            <a href="{{ route('login') }}">
+                                đăng nhập
+                            </a>
+                            để viết đánh giá.
+                        </p>
+                    @endif
+                    <div class="image-preview-review d-flex">
+                        <img id="preview" src="" alt="Ảnh xem trước" multiple>
                     </div>
                 </div>
             </div>
@@ -597,7 +492,7 @@
 </section>
 
 <div class="stay-nest-review">
-    <div class="container  p-5">
+    <div class="container stay-nest-review-container">
         @foreach ($reviews as $review)
                 <div class="row p-3 rounded align-items-start">
                     <!-- Avatar và thông tin người dùng -->
@@ -650,7 +545,7 @@
                                 @endif
                             @endfor
                         </div>
-                        <p class="mb-0">{{ $review->comment }}</p>
+                        <p class="mb-0">{!! $review->comment !!}</p>
                         <!-- Hiển thị ảnh -->
                         <div class="d-flex mt-2">
                             @foreach ($review->images->take(2) as $image)
@@ -803,9 +698,42 @@
                 stars.forEach(s => s.classList.remove('hover'));
             });
         });
+
+        (function () {
+            const images = document.querySelectorAll('.modal-image-alls');
+            let activeImage = null;
+
+            images.forEach(function (img) {
+                img.addEventListener('click', function (event) {
+                    console.log("CLICK DUOC ");
+                    event.stopPropagation(); // Prevent modal from closing
+
+                    if (activeImage && activeImage !== img) {
+                        activeImage.classList.remove('enlarged');
+                    }
+
+                    img.classList.toggle('enlarged');
+                    activeImage = img.classList.contains('enlarged') ? img : null;
+                });
+            });
+
+            // Đóng ảnh đồng nghĩa trả về mặc định khi click ra bên ngoài modal
+            document.querySelector('#imageModal .modal-body').addEventListener('click', function () {
+                if (activeImage) {
+                    activeImage.classList.remove('enlarged');
+                    activeImage = null;
+                }
+            });
+
+            // Trả về mặc định khi modal hidden
+            document.querySelector('#imageModal').addEventListener('hidden.bs.modal', function () {
+                if (activeImage) {
+                    activeImage.classList.remove('enlarged');
+                    activeImage = null;
+                }
+            });
+        })
     });
-
-
 
     document.addEventListener('DOMContentLoaded', function () {
         const deleteButtons = document.querySelectorAll('.delete-review-btn');
@@ -977,40 +905,26 @@
             });
         }, 3000);
     })();
-    // Khi click ảnh sẽ được gọi class enlarged và phóng to lên
-    document.addEventListener('DOMContentLoaded', function () {
-        const images = document.querySelectorAll('.modal-image-alls');
-        let activeImage = null;
+    (function () {
+        // Đảm bảo code nằm trong phạm vi cục bộ
+        const inputReview = document.getElementById("inputReview");
+        const boldButton = document.getElementById("boldButton");
+        const italicButton = document.getElementById("italicButton");
+        const linkButton = document.getElementById("linkButton");
 
-        images.forEach(function (img) {
-            img.addEventListener('click', function (event) {
-                event.stopPropagation(); // Prevent modal from closing
-
-                if (activeImage && activeImage !== img) {
-                    activeImage.classList.remove('enlarged');
-                }
-
-                img.classList.toggle('enlarged');
-                activeImage = img.classList.contains('enlarged') ? img : null;
-            });
+        // Thêm chức năng in đậm
+        boldButton.addEventListener("click", () => {
+            inputReview.style.fontWeight =
+                inputReview.style.fontWeight === "bold" ? "normal" : "bold";
         });
 
-        // Đóng ảnh đồng nghĩa trả về mặc định khi click ra bên ngoài modal
-        document.querySelector('#imageModal .modal-body').addEventListener('click', function () {
-            if (activeImage) {
-                activeImage.classList.remove('enlarged');
-                activeImage = null;
-            }
+        // Thêm chức năng in nghiêng
+        italicButton.addEventListener("click", () => {
+            inputReview.style.fontStyle =
+                inputReview.style.fontStyle === "italic" ? "normal" : "italic";
         });
+    })();
 
-        // Trả về mặc định khi modal hidden
-        document.querySelector('#imageModal').addEventListener('hidden.bs.modal', function () {
-            if (activeImage) {
-                activeImage.classList.remove('enlarged');
-                activeImage = null;
-            }
-        });
-    });
     // load more cho giới thiệu description
     function toggleMoreText(event) {
         event.preventDefault(); // Prevent the default anchor behavior
@@ -1028,10 +942,23 @@
     }
     // 
     document.getElementById('bookNowBtn').addEventListener('click', function (e) {
+        // console.log("CLICK DUOC");
         e.preventDefault();
         document.getElementById('bookingSection').scrollIntoView({
             behavior: 'smooth' // Cuộn mượt mà
         });
+    });
+
+    function setupCharacterCounter() {
+        const textarea = document.getElementById('inputReview');
+        const charLimit = document.querySelector('.char-limit');
+        textarea.addEventListener('input', () => {
+            charLimit.textContent = `${textarea.value.length}/1000`;
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        setupCharacterCounter();
     });
     // 
     document.addEventListener('DOMContentLoaded', function () {
@@ -1065,136 +992,6 @@
         });
 
     });
-
-    // 
-    (function () {
-        document.addEventListener("DOMContentLoaded", function () {
-            const peopleSummaryContainer = document.querySelector('.people-summary-container');
-            const peopleCounterDropdown = document.querySelector('.people-counter-dropdown');
-
-            peopleSummaryContainer.addEventListener('click', function () {
-                // Toggle giữa hiển thị và ẩn phần .people-counter-dropdown
-                if (peopleCounterDropdown.style.display === "none" || peopleCounterDropdown.style
-                    .display === "") {
-                    peopleCounterDropdown.style.display = "block";
-                } else {
-                    peopleCounterDropdown.style.display = "none";
-                }
-            });
-
-            // Ẩn dropdown khi nhấn ra ngoài
-            document.addEventListener('click', function (e) {
-                if (!peopleSummaryContainer.contains(e.target) && !peopleCounterDropdown.contains(e
-                    .target)) {
-                    peopleCounterDropdown.style.display = "none";
-                }
-            });
-        });
-    })();
-
-    //
-    document.addEventListener("DOMContentLoaded", function () {
-        const roomsInput = document.getElementById("roomsCounter");
-        const adultsInput = document.getElementById("adultsCounter");
-        const childrenInput = document.getElementById("childrenCounter");
-        const roomSummary = document.getElementById("room-summary-counter");
-        const peopleSummary = document.getElementById("people-summary-counter");
-        const childrenSummary = document.getElementById("children-summary-counter");
-
-        // Cập nhật hiển thị số lượng
-        function updateSummary() {
-            roomSummary.innerHTML = `${roomsInput.value} phòng, `;
-            peopleSummary.innerHTML = `${adultsInput.value} người lớn, `;
-            childrenSummary.innerHTML = `${childrenInput.value} trẻ em`;
-        }
-
-        // Tính toán số người tối đa
-        function maxPeople() {
-            return roomsInput.value * 4; // Mỗi phòng tối đa 4 người
-        }
-
-        // Kiểm tra và điều chỉnh số lượng người lớn
-        function checkAdults() {
-            const totalPeople = parseInt(adultsInput.value) + parseInt(childrenInput.value);
-            const max = maxPeople();
-            if (totalPeople > max) {
-                alert(`Tối đa ${max} người cho ${roomsInput.value} phòng.`);
-                adultsInput.value = max - parseInt(childrenInput.value);
-            }
-            updateSummary();
-        }
-
-        // Kiểm tra và điều chỉnh số trẻ em
-        function checkChildren() {
-            const maxChildren = roomsInput.value * 4; // Tối đa 4 trẻ em cho mỗi phòng
-            if (parseInt(childrenInput.value) > maxChildren) {
-                alert(`Tối đa ${maxChildren} trẻ em cho ${roomsInput.value} phòng.`);
-                childrenInput.value = maxChildren; // Điều chỉnh trẻ em nếu vượt quá
-            }
-            updateSummary();
-        }
-
-        // Tăng giảm số lượng
-        document.querySelector(".btn-increment-room").onclick = function () {
-            roomsInput.value = parseInt(roomsInput.value) + 1;
-            updateButtons();
-            updateSummary();
-        };
-
-        document.querySelector(".btn-decrement-room").onclick = function () {
-            if (roomsInput.value > 1) {
-                roomsInput.value = parseInt(roomsInput.value) - 1;
-                updateButtons();
-                updateSummary();
-            }
-        };
-
-        document.querySelector(".btn-increment-adult").onclick = function () {
-            adultsInput.value = parseInt(adultsInput.value) + 1;
-            checkAdults();
-            updateButtons();
-            updateSummary();
-        };
-
-        document.querySelector(".btn-decrement-adult").onclick = function () {
-            if (adultsInput.value > 1) {
-                adultsInput.value = parseInt(adultsInput.value) - 1;
-                updateButtons();
-                updateSummary();
-            }
-        };
-
-        document.querySelector(".btn-increment-children").onclick = function () {
-            const maxChildren = roomsInput.value * 4; // Tối đa 4 trẻ em cho mỗi phòng
-            if (parseInt(childrenInput.value) < maxChildren) {
-                childrenInput.value = parseInt(childrenInput.value) + 1;
-            }
-            checkChildren();
-            updateButtons();
-            updateSummary();
-        };
-
-        document.querySelector(".btn-decrement-children").onclick = function () {
-            if (childrenInput.value > 0) {
-                childrenInput.value = parseInt(childrenInput.value) - 1;
-            }
-            updateButtons();
-            updateSummary();
-        };
-
-        // Cập nhật trạng thái nút
-        function updateButtons() {
-            document.querySelector(".btn-decrement-room").disabled = roomsInput.value <= 1;
-            document.querySelector(".btn-decrement-adult").disabled = adultsInput.value <= 1;
-            document.querySelector(".btn-decrement-children").disabled = childrenInput.value <= 0;
-        }
-
-        // Khởi tạo hiển thị ban đầu
-        updateSummary();
-        updateButtons();
-    });
-
-    // 
 </script>
 
 @endsection
