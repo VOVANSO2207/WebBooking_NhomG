@@ -579,7 +579,7 @@
                             <p>Khám phá thành phố mộng mơ với khí hậu mát mẻ, những đồi thông xanh và các khu vườn hoa tuyệt
                                 đẹp.</p>
                             <p class="price">Từ 1.200.000đ/đêm</p>
-                            <a href="/dalat" class="explore-btn">Khám phá ngay</a>
+                            <a href="{{ route('pages.hotel_by_city', ['cityName' => 'Đà Lạt']) }}" class="explore-btn">Khám phá ngay</a>
                         </div>
                     </div>
                 </div>
@@ -591,16 +591,16 @@
                             <img src="https://vcdn1-dulich.vnecdn.net/2022/06/03/cauvang-1654247842-9403-1654247849.jpg?w=1200&h=0&q=100&dpr=1&fit=crop&s=Swd6JjpStebEzT6WARcoOA"
                                 alt="Phú Quốc" class="destination-image" />
                             <div class="destination-overlay">
-                                <h3>Phú Quốc</h3>
-                                <p>Đảo Ngọc</p>
+                                <h3>Đà Nẵng</h3>
+                                <p>Cầu Vàng</p>
                             </div>
                         </div>
                         <div class="destination-back">
-                            <h3>Phú Quốc</h3>
+                            <h3>Đà Nẵng</h3>
                             <p>Thiên đường biển đảo với bãi cát trắng mịn, nước biển trong xanh và ẩm thực hải sản phong
                                 phú.</p>
                             <p class="price">Từ 1.500.000đ/đêm</p>
-                            <a href="/phuquoc" class="explore-btn">Khám phá ngay</a>
+                            <a href="{{ route('pages.hotel_by_city', ['cityName' => 'Đà Nẵng']) }}" class="explore-btn">Khám phá ngay</a>
                         </div>
                     </div>
                 </div>
