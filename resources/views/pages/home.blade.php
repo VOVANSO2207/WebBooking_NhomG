@@ -238,8 +238,9 @@
 
                             <div class="shape">
                                 <p class="country m-0">VIET NAM</p>
-                                <p class="location m-0">{{ $hotel->city->city_name }} - <span
-                                        class="name-hotel">{{ $hotel->hotel_name }}</span></p>
+                                <p class="location m-0">{{ $hotel->city->city_name }} -
+                                    <span class="name-hotel">{{ mb_strimwidth($hotel->hotel_name, 0, 25, '...') }}</span>
+                                </p>
                                 <p class="price-old m-0">
                                     {{ number_format($hotel->average_price, 0, ',', '.') }} VNĐ
                                 </p>
@@ -323,7 +324,8 @@
         <div class="title mb-2">Điểm đến thịnh hành</div>
         <div class="row">
             <div class="col-md-6">
-                <a href="{{ route('pages.hotel_by_city', ['cityName' => 'Hồ Chí Minh']) }}" class="link-popular-destination">
+                <a href="{{ route('pages.hotel_by_city', ['cityName' => 'Hồ Chí Minh']) }}"
+                    class="link-popular-destination">
                     <img class="image-destitation-1"
                         src="https://image.vietnamnews.vn/uploadvnnews/Article/2023/9/28/308010_4651436783396218_vna_potal_thanh_pho_ho_chi_minh_la_1_trong_10_diem_den_tuyet_voi_nhat_o_chau_a_6666855.jpg"
                         alt="image">
@@ -331,7 +333,8 @@
                 </a>
             </div>
             <div class="col-md-6">
-                <a href="{{ route('pages.hotel_by_city', ['cityName' => 'Nha Trang']) }}" class="link-popular-destination">
+                <a href="{{ route('pages.hotel_by_city', ['cityName' => 'Nha Trang']) }}"
+                    class="link-popular-destination">
                     <img class="image-destitation-1"
                         src="https://letsflytravel.vn/assets/source/2_5_2024_Up/nha-trang-city-tour/nha-trang-letsflytravel.jpg"
                         alt="image">
@@ -348,7 +351,7 @@
                 </a>
             </div>
             <div class="col-md-4">
-                <a href="{{ route('pages.hotel_by_city', ['cityName' => 'Huế']) }}"class="link-popular-destination">
+                <a href="{{ route('pages.hotel_by_city', ['cityName' => 'Huế']) }}" class="link-popular-destination">
                     <img class="image-destitation-1"
                         src="https://kinhtevadubao.vn/stores/news_dataimages/kinhtevadubaovn/092018/18/14/5-ve-dep-co-do-hue-tao-ne-su-hap-dan-dac-biet-khi-ghe-tham-07-.7434.jpg"
                         alt="image">
@@ -356,7 +359,8 @@
                 </a>
             </div>
             <div class="col-md-4">
-                <a href="{{ route('pages.hotel_by_city', ['cityName' => 'Đà Nẵng']) }}" class="link-popular-destination">
+                <a href="{{ route('pages.hotel_by_city', ['cityName' => 'Đà Nẵng']) }}"
+                    class="link-popular-destination">
                     <img class="image-destitation-1"
                         src="https://vcdn1-dulich.vnecdn.net/2022/06/03/cauvang-1654247842-9403-1654247849.jpg?w=1200&h=0&q=100&dpr=1&fit=crop&s=Swd6JjpStebEzT6WARcoOA"
                         alt="image">
@@ -406,7 +410,9 @@
                                 <div class="group-info-hotel">
                                     <p class="info-hotel-name m-0">{{ $hotel->hotel_name }}</p>
 
-                                    <p class="info-hotel-location m-0">{{ $hotel->location }},
+                                    <p class="info-hotel-location m-0">
+                                        <i class="fa-solid fa-location-dot fa-xl"></i>
+                                        {{ $hotel->location }},
                                         {{ $hotel->city->city_name }}
                                     </p>
                                     <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i>
@@ -460,8 +466,9 @@
 
                             <div class="shape">
                                 <p class="country m-0">VIET NAM</p>
-                                <p class="location m-0">{{ $recentHotel->city->city_name }} - <span
-                                        class="name-hotel">{{ $recentHotel->hotel_name }}</span></p>
+                                <p class="location m-0">{{ $recentHotel->city->city_name }} -
+                                    <span class="name-hotel">{{ mb_strimwidth($recentHotel->hotel_name, 0, 25, '...')  }}</span>
+                                </p>
                                 <p class="price-old m-0">
                                     {{ number_format($recentHotel->average_price, 0, ',', '.') }} VNĐ
                                 </p>
@@ -509,7 +516,9 @@
                         <img src="{{ asset('storage/images/' . $blog->img) }}" alt="{{ $blog->title }}" class="blog-image">
                         <div class="blog-content">
                             <h3 class="blog-title">{{ $blog->title }}</h3>
-                            <p class="blog-excerpt">{{ Str::limit(html_entity_decode(strip_tags($blog->description)), 100) }}</p>
+                            <p class="blog-excerpt">
+                                {{ Str::limit(html_entity_decode(strip_tags($blog->description)), 100) }}
+                            </p>
                             <a href="{{ url('blog/' . $blog->url_seo) }}" class="btn-read-more">Đọc thêm</a>
                         </div>
                     </div>
