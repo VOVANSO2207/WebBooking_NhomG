@@ -192,7 +192,7 @@
                         <div class="col-md-6">
                             <div class="row group-info-room-card">
                                 <!-- Hình ảnh -->
-                                <div class="col-md-5 detail-infor-room-left">
+                                <div class="col-lg-5 detail-infor-room-left">
                                     <swiper-container class="mySwiper" pagination="true" pagination-clickable="true"
                                         navigation="true" space-between="30" loop="true">
                                         @forelse($room->room_images as $image)
@@ -207,7 +207,7 @@
                                 </div>
 
                                 <!-- Thông tin room -->
-                                <div class="col-md-7 detail-infor-right">
+                                <div class="col-lg-7 detail-infor-right">
                                     <div class="detail-room-sale">-{{ $room->discount_percent }}%</div>
                                     <div class="row">
                                         <div class="col-md-8">
