@@ -119,7 +119,8 @@
                                 href="{{ route('pages.account') }}?tab=nav-contact">Yêu Thích</a>
                             <a class="dropdown-item dropdown-item-staynest"
                                 href="{{ route('pages.account') }}?tab=nav-profile">Hóa Đơn</a>
-                            <a class="dropdown-item dropdown-item-staynest" href="#">Voucher</a>
+                            <a class="dropdown-item dropdown-item-staynest"
+                                href="{{route('viewVoucherUser')}}">Voucher</a>
                             @if (Auth::check())
                                 <a href="#" class="dropdown-item dropdown-item-staynest text-danger"
                                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

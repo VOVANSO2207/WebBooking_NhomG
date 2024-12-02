@@ -79,7 +79,7 @@
                                     href="{{ route('pages.account') }}?tab=nav-profile">
                                     Hóa Đơn
                                 </a>
-                                <a class="dropdown-item dropdown-item-staynest" href="#">
+                                <a class="dropdown-item dropdown-item-staynest" href="{{route('viewVoucherUser')}}">
                                     Voucher
                                 </a>
                                 <a href="#" class="dropdown-item dropdown-item-staynest text-danger"
