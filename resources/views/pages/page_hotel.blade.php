@@ -246,6 +246,10 @@
                                 <span class="price-old">{{ number_format($hotel->rooms->avg('price'), 0, ',', '.') }} VNĐ</span>
                                 <span class="price-new">{{ number_format($hotel->rooms->avg('price') * (1 - $hotel->rooms->avg('discount_percent') / 100), 0, ',', '.') }} VNĐ</span>
                             </p>
+                            <p style="font-weight: 500;
+    font-size: 15px;" class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i>
+                                        {{ $hotel->reviews->count() }} Đánh giá
+                                    </p>
                             <p class="hotel-rating">
                                 @for ($i = 1; $i <= 5; $i++)
                                     <span style="color: {{ $i <= $hotel->rating ? 'gold' : '#ccc' }}">★</span>
