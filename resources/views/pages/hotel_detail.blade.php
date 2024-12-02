@@ -117,7 +117,7 @@
                                 <p class="price">{{ number_format($hotel->rooms->min('price'), 0, ',', '.') }} VND/ đêm
                                 </p>
                             @else
-                                <p>N/A</p>
+                                <p class="price">Chưa có giá  </p>
                             @endif
                         </span>
                         <div class="detail-map ratio ratio-16x9 mb-2">
