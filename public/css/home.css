@@ -1356,6 +1356,7 @@ outline: none;
  /* Blog section styles */
  .latest-blogs {
      padding: 50px 0;
+     scale: 0.9;
  }
 
  .latest-blogs .title {
