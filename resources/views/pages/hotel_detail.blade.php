@@ -326,8 +326,9 @@
                             <span class="description">
                                 @if (is_null($averageRating))
                                     Chưa có đánh giá
-                                @elseif ($averageRating >= 8) Ấn tượng
-                                @else ($averageRating >= 6) Tốt
+                                @elseif ($averageRating >= 5) Ấn tượng
+                                @elseif ($averageRating >= 4) Tốt
+                                @elseif ($averageRating >= 3) Kém
                                 @endif
 
                             </span>
