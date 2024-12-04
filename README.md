@@ -1,3 +1,40 @@
+
+# | Login Page
+
+| ![Login Page](https://media.discordapp.net/attachments/1313875577966432337/1313888914620289035/2024-12-04_22-24-20.gif?ex=6751c5e8&is=67507468&hm=170a52195cc4287335d45fdeb4552822b3aab33eee51a04c4a7e28c98ec7e367&=) |
+|---|
+
+### Describe
+Login page UI ...
+
+# | Register Page
+
+| ![Register Page](https://media.discordapp.net/attachments/1313875577966432337/1313888274103668858/2024-12-04_22-21-47.gif?ex=6751c54f&is=675073cf&hm=51f33a7aeca4918c51afe692758bc34d61b434fad5f38ce38726ffe2dadbe585&=) |
+|---|
+
+### Describe
+Register page UI ...
+
+# | Home Page
+
+| ![Home Page](https://media.discordapp.net/attachments/1313875577966432337/1313879102188683327/screencapture-127-0-0-1-8000-2024-12-04-21_45_44.png?ex=6751bcc4&is=67506b44&hm=8a69a5cf63d0e10fc285bc97f1dc405261f8d31edc50e4bb4f538706c6ae4cc1&=&format=webp&quality=lossless&width=600&height=1600) |
+|---|
+
+### Describe
+Home page UI ...
+
+
+
+# | 👨🏻‍💻 Technology
+
+|                    | Version   | Description                       |
+| :----------------- | :-------- | :-------------------------------- |
+| ![](https://media.discordapp.net/attachments/1313875577966432337/1313883036491976715/laravel-icon-1990x2048-xawylrh0.png?ex=6751c06e&is=67506eee&hm=b2cc8f24fa5666748a1b2e3cb73cb9c1986d3dfccfc6c3d24e7b72c450374664&=&format=webp&quality=lossless&width=25&height=25)`Laravel`| `11.29.0` |  |
+| ![](https://media.discordapp.net/attachments/1313875577966432337/1313884848343093349/xampp_94513.png?ex=6751c21e&is=6750709e&hm=78f4e5f6c2fcad82b98c15fe52def7583679b8b5f6e99387f55f1c10e78a3a81&=&format=webp&quality=lossless&width=25&height=25)`Xampp`            | `v3.3.0`  |                                   |
+| ![](https://media.discordapp.net/attachments/1313875577966432337/1313884848565518406/Mysql-Logo-PNG-Background.png?ex=6751c21e&is=6750709e&hm=9064809d4223b53c6bf4f68bb64f94d21ad4e2f7ef7a059f964796a2f39b23db&=&format=webp&quality=lossless&width=40&height=28)`MySQL`            | `8.2.12`  |                                   |
+
+
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
