@@ -411,12 +411,12 @@
                                 <div class="group-info-hotel">
                                     <p class="info-hotel-name m-0">{{ $hotel->hotel_name }}</p>
 
-                                    <p class="info-hotel-location m-0">
+                                    <p style="color: #2e75d3" class="info-hotel-location m-0">
                                         <i class="fa-solid fa-location-dot fa-xl"></i>
                                         {{ $hotel->location }},
                                         {{ $hotel->city->city_name }}
                                     </p>
-                                    <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i>
+                                    <p style="color: #FF3366" class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i>
                                         {{ $hotel->reviews->count() }} Đánh giá
                                     </p>
 
