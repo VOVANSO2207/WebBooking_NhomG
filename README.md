@@ -1,7 +1,7 @@
 
 # | Login Page
 
-| ![Login Page](https://media.discordapp.net/attachments/1313875577966432337/1313888914620289035/2024-12-04_22-24-20.gif?ex=6751c5e8&is=67507468&hm=170a52195cc4287335d45fdeb4552822b3aab33eee51a04c4a7e28c98ec7e367&=) |
+| ![Login Page](https://media.discordapp.net/attachments/1313875577966432337/1313886169859227761/2FC5C789-DE5D-44A6-B7E0-93EEB60CCE2B.png?ex=675a5519&is=67590399&hm=be8d83bc455f84fa28b91993629f6edfc6657a3f30353bbe136a3d6704c68065&=&format=webp&quality=lossless&width=1397&height=662) |
 |---|
 
 ### Describe
@@ -17,7 +17,7 @@ Register page UI ...
 
 # | Home Page
 
-| ![Home Page](https://media.discordapp.net/attachments/1313875577966432337/1313879102188683327/screencapture-127-0-0-1-8000-2024-12-04-21_45_44.png?ex=6751bcc4&is=67506b44&hm=8a69a5cf63d0e10fc285bc97f1dc405261f8d31edc50e4bb4f538706c6ae4cc1&=&format=webp&quality=lossless&width=600&height=1600) |
+| ![Home Page](https://media.discordapp.net/attachments/1313875577966432337/1313888274103668858/2024-12-04_22-21-47.gif?ex=675a570f&is=6759058f&hm=9f93021542d2fb12d399cc0a3d3ef8688b1ceccb161903f94b6435e6f2527417&=&width=865&height=485) |
 |---|
 
 ### Describe
