@@ -17,7 +17,7 @@ Register page UI ...
 
 # | Home Page
 
-| ![Home Page](https://media.discordapp.net/attachments/1313875577966432337/1313888274103668858/2024-12-04_22-21-47.gif?ex=675a570f&is=6759058f&hm=9f93021542d2fb12d399cc0a3d3ef8688b1ceccb161903f94b6435e6f2527417&=&width=865&height=485) |
+| ![Home Page](https://media.discordapp.net/attachments/1313875577966432337/1313879102188683327/screencapture-127-0-0-1-8000-2024-12-04-21_45_44.png?ex=675af744&is=6759a5c4&hm=a232482c02862b599f730fc8b24b55cb52d7cbefd1639626e2396c5947305b8a&=&format=webp&quality=lossless&width=248&height=662) |
 |---|
 
 ### Describe
