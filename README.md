@@ -9,7 +9,7 @@ Login page UI ...
 
 # | Register Page
 
-| ![Register Page](https://media.discordapp.net/attachments/1313875577966432337/1313888274103668858/2024-12-04_22-21-47.gif?ex=6751c54f&is=675073cf&hm=51f33a7aeca4918c51afe692758bc34d61b434fad5f38ce38726ffe2dadbe585&=) |
+| ![Register Page](https://media.discordapp.net/attachments/1313875577966432337/1313888274103668858/2024-12-04_22-21-47.gif?ex=675a570f&is=6759058f&hm=9f93021542d2fb12d399cc0a3d3ef8688b1ceccb161903f94b6435e6f2527417&=&width=865&height=485) |
 |---|
 
 ### Describe
