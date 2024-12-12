@@ -151,7 +151,7 @@
  .menu-attribute li a:hover {
      color: #0057c9;
      background: rgba(255, 255, 255, 0.5);
-     padding: 15px;
+     padding: 8px;
      border-radius: 50px;
  }
 
@@ -1580,4 +1580,29 @@ outline: none;
 
  .tab--3:checked~.indicator {
      left: calc(130px * 2 + 2px);
+ }
+
+ /*  */
+ @media only screen and (max-width: 992px) {
+     .social-header li a i {
+         display: none;
+     }
+ }
+
+ @media only screen and (max-width: 768px) {
+     .title-search-label {
+         display: none;
+     }
+ }
+
+ @media only screen and (max-width: 1400px) {
+     .menu-attribute li {
+         font-size: 13px;
+     }
+ }
+
+ @media only screen and (max-width: 1024px) {
+     .menu-attribute li {
+         font-size: 10px;
+     }
  }

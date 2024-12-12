@@ -4,27 +4,45 @@
 @section('header')
 <link rel="stylesheet" href="{{ asset('css/header.css') }}">
 <section class="header-staynest m-0">
-    <div class="top-header">
-        <a href="{{asset('/')}}" class="logo-staynest p-3">
-            <img src="{{ asset('/images/logo_staynest_white_color.png') }}" alt="" width="50px">
-            <h1 class="name-logo ms-2">StayNest</h1>
-        </a>
-        <div class="menu-header d-flex justify-content-center text-light m-3">
-            <div class="container row align-items-center">
-                <div class="social-header col-md-2 text-center">
-                    <a href="#" class="link-social"><i class="fa-brands fa-facebook fa-2xl"></i></a>
-                    <a href="#" class="link-social"><i class="fa-brands fa-x-twitter fa-2xl"></i></a>
-                    <a href="#" class="link-social"><i class="fa-brands fa-youtube fa-2xl"></i></a>
-                </div>
-                <div class="menu-header col-md-8">
-                    <ul class="menu-attribute d-flex justify-content-around me-5">
-                        <li><a href="{{asset('/')}}">TRANG CHỦ</a></li>
-                        <li><a href="{{asset('introduce')}}">GIỚI THIỆU</a></li>
-                        <li><a href="{{route(name: 'hotels.index')}}">PHÒNG KHÁCH SẠN</a></li>
-                        <li><a href="{{route('blog')}}">TIN TỨC</a></li>
-                        <li><a href="{{route(name: 'contact')}}">LIÊN HỆ</a></li>
-                    </ul>
-                </div>
+    <a href="{{asset('/')}}" class="d-flex align-items-center justify-content-center logo-staynest">
+        <img src="{{ asset('/images/logo_staynest_white_color.png') }}" alt="Logo" width="50px">
+        <h2 class="ms-2 mb-0 text-light">StayNest</h2>
+    </a>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <!-- Toggler Button -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+                aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Collapsible Content -->
+            <div class="collapse navbar-collapse justify-content-between" id="navbarContent">
+                <!-- Social Links -->
+                <ul class="navbar-nav mb-2 mt-2 mb-lg-0 social-header">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fa-brands fa-facebook fa-lg"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fa-brands fa-x-twitter fa-lg"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fa-brands fa-youtube fa-lg"></i></a>
+                    </li>
+                </ul>
+
+                <!-- Navigation Links -->
+                <ul class="navbar-nav mb-2 mb-lg-0 menu-attribute">
+                    <li class="nav-item"><a class="nav-link" href="{{asset('/')}}">TRANG CHỦ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{asset('introduce')}}">GIỚI THIỆU</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{route('hotels.index')}}">PHÒNG KHÁCH SẠN</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{route('blog')}}">TIN TỨC</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{route('contact')}}">LIÊN HỆ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{route('contact')}}">Ý TƯỞNG</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{route('contact')}}">SÁNG TẠO</a></li>
+                </ul>
+
+                <!-- Profile Section -->
                 <div class="profile-header col-md-2">
                     @if (auth()->check())
                         <div class="loged">
@@ -101,7 +119,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </nav>
 </section>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
