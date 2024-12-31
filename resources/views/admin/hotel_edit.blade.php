@@ -29,7 +29,7 @@
                                 @enderror
                             </div>
                             <div class="mb-3 col-md-6">
-                                <label class="form-label">City ID</label>
+                                <label class="form-label">City Name</label>
                                 <select class="form-control" name="city_id" id="city_id">
                                     <option value="">Chọn thành phố</option>
                                     @foreach($cities as $city)

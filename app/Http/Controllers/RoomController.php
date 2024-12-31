@@ -49,11 +49,9 @@ class RoomController extends Controller
     {
 
         try {
-            // Gọi hàm validate từ Model
-            $validator = Rooms::validateRoom($request->all());
 
+            $validator = Rooms::validateRoom($request->all());
             if ($validator->fails()) {
-                // Nếu lỗi, trả về cùng thông báo
                 return redirect()->back()->withErrors($validator)->withInput();
             }
             // Lấy dữ liệu hợp lệ
@@ -76,13 +74,9 @@ class RoomController extends Controller
 
     public function edit($room_id)
     {
-
-        // Lấy thông tin phòng dựa trên ID
         $room = Rooms::with(['roomType', 'amenities', 'room_images'])->findOrFail($room_id);
-        // Lấy danh sách loại phòng và tiện nghi để hiển thị trong form
         $roomTypes = RoomType::all();
         $amenities = RoomAmenities::all();
-        // dd($room);
         return view('admin.room_edit', [
             'room' => $room,
             'roomTypes' => $roomTypes,
@@ -91,15 +85,11 @@ class RoomController extends Controller
     }
     public function update(Request $request, $room_id)
     {
-        // Lấy phòng cần cập nhật
         $room = Rooms::findOrFail($room_id);
-
-        // Sử dụng validation từ Model
         $validator = Rooms::validateRoom($request->all(), true);
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
-
         try {
             // Chuẩn bị dữ liệu
             $data = $request->only(['name', 'room_type_id', 'price', 'discount_percent', 'capacity', 'description']);
@@ -107,9 +97,7 @@ class RoomController extends Controller
             $images = $request->file('images');
             $existingImages = $request->input('existing_images', []);
 
-            // Gọi hàm xử lý trong Model
             $room->updateRoom($data, $amenities, $images, $existingImages);
-
             return redirect()->route('admin.viewroom')->with('success', 'Cập nhật phòng thành công.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Update failed: ' . $e->getMessage());

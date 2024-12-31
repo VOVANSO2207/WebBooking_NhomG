@@ -99,8 +99,8 @@ class RoomAmenities extends Model
     public static function validateRoomAmenities($request)
     {
         return $request->validate([
-            'amenity_name' => 'required|string|max:255|regex:/^[\p{L}\s]+$/u', // Chỉ cho phép chữ cái và khoảng trắng
-            'description' => 'nullable|string|max:1000|regex:/^[\p{L}\s]*$/u', // Chỉ cho phép chữ cái và khoảng trắng
+            'amenity_name' => 'required|string|max:255|regex:/^[\p{L}\s]+$/u', 
+            'description' => 'nullable|string|max:1000|regex:/^[\p{L}\s]*$/u', 
         ], [
             'amenity_name.required' => 'Vui lòng nhập tên tiện nghi phòng.',
             'amenity_name.regex' => 'Tên tiện nghi chỉ được chứa chữ cái và khoảng trắng.',

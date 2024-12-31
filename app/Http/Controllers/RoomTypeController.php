@@ -38,7 +38,7 @@ class RoomTypeController extends Controller
         }
 
         // Nếu không có lỗi, thông báo thành công
-        return redirect()->route('roomType_add')->with('success', 'Đã xóa loại phòng thành công');
+        return redirect()->route('roomType_add')->with('success', 'Đã thêm loại phòng thành công');
     }
 
 
@@ -86,7 +86,7 @@ class RoomTypeController extends Controller
         $deleted = RoomType::deleteRoomType($decodeId);
         
         if ($deleted) {
-            return redirect()->route('admin.viewroomtype')->with('success', 'Room Type deleted successfully');
+            return redirect()->route('admin.viewroomtype')->with('success', 'Xóa loại phòng thành công');
         }
 
         return redirect()->route('admin.viewroomtype')->with('error', 'Room Type not found');

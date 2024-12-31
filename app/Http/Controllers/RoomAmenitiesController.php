@@ -19,7 +19,7 @@ class RoomAmenitiesController extends Controller
         $deleted = RoomAmenities::deleteRoomAmenities($decodeId);
 
         if ($deleted) {
-            return redirect()->route('admin.viewroomamenities')->with('success', 'Room Amenities deleted successfully');
+            return redirect()->route('admin.viewroomamenities')->with('success', 'Xóa loại phòng thành công');
         }
 
         return redirect()->route('admin.viewroomamenities')->with('error', 'Room Amenities not found');
@@ -43,7 +43,7 @@ class RoomAmenitiesController extends Controller
             $data = $request->only(['amenity_name', 'description']);
             RoomAmenities::createRoomAmenities($data);
 
-            return redirect()->route('admin.viewroomamenities')->with('success', 'Room Amenities added successfully');
+            return redirect()->route('admin.viewroomamenities')->with('success', 'Thêm tiện nghi phòng thành công');
         } catch (\Exception $e) {
             return redirect()->route('admin.viewroomamenities')->with('error', 'Failed to add Room Amenities');
         }
