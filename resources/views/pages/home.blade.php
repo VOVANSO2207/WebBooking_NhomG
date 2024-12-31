@@ -48,97 +48,127 @@
 @section('content')
 <div class="banner-home"></div>
 <section class="header-staynest-home">
-    <div class="top-header">
-        <a href="#" class="logo-staynest p-3">
-            <img src="{{ asset('/images/logo_staynest_white_color.png') }}" alt="" width="50px">
-            <h1 class="name-logo ms-2">StayNest</h1>
+    <section class="top-header header-staynest m-0">
+        <a href="{{asset('/')}}" class="d-flex align-items-center justify-content-center logo-staynest">
+            <img src="{{ asset('/images/logo_staynest_white_color.png') }}" alt="Logo" width="50px">
+            <h2 class="ms-2 mb-0 text-light">StayNest</h2>
         </a>
-        <div class="menu-header d-flex justify-content-center text-light m-3">
-            <div class="container row align-items-center">
-                <div class="social-header col-md-2 text-center">
-                    <a href="#" class="link-social"><i class="fa-brands fa-facebook fa-2xl"></i></a>
-                    <a href="#" class="link-social"><i class="fa-brands fa-x-twitter fa-2xl"></i></a>
-                    <a href="#" class="link-social"><i class="fa-brands fa-youtube fa-2xl"></i></a>
-                </div>
-                <div class="menu-header col-md-8">
-                    <ul class="menu-attribute d-flex justify-content-around me-5">
-                        <li><a href="#">TRANG CHỦ</a></li>
-                        <li><a href="{{ route('introduce') }}">GIỚI THIỆU</a></li>
-                        <li><a href="{{route(name: 'hotels.index')}}">PHÒNG KHÁCH SẠN</a></li>
-                        <li><a href="{{ route('blog') }}">TIN TỨC</a></li>
-                        <li><a href="{{ route(name: 'contact') }}">LIÊN HỆ</a></li>
-                    </ul>
-                </div>
-                <div class="profile-header col-md-2">
-                    <div class="loged">
-                        <div class="group-left-header d-flex align-items-center justify-content-center">
-                            <div class="col-md-2 text-center">
-                                <button class="button-notifi" id="notificationBell">
-                                    <i class="fa-solid fa-bell fa-xl"></i>
-                                </button>
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+                <!-- Toggler Button -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+                    aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-                                <!-- Notification Dropdown -->
-                                <div class="notification-dropdown mt-4" id="notificationDropdown"
-                                    style="display: none;">
-                                    <h5 class="dropdown-header p-3">Thông báo</h5>
-                                    @foreach(session('notifications', []) as $key => $notification)
-                                        <div class="notification-item d-flex justify-content-between align-items-center">
-                                            <span>{{ $notification['content'] }}</span>
-                                            <button class="btn-danger btn-delete-notification"
-                                                data-key="{{ $key }}">&#10005;</button>
+                <!-- Collapsible Content -->
+                <div class="collapse navbar-collapse justify-content-between" id="navbarContent">
+                    <!-- Social Links -->
+                    <ul class="navbar-nav mb-2 mt-2 mb-lg-0 social-header">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"><i class="fa-brands fa-facebook fa-lg"></i></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"><i class="fa-brands fa-x-twitter fa-lg"></i></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"><i class="fa-brands fa-youtube fa-lg"></i></a>
+                        </li>
+                    </ul>
+
+                    <!-- Navigation Links -->
+                    <ul class="navbar-nav mb-2 mb-lg-0 menu-attribute">
+                        <li class="nav-item"><a class="nav-link" href="{{asset('/')}}">TRANG CHỦ</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{asset('introduce')}}">GIỚI THIỆU</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{route('hotels.index')}}">PHÒNG KHÁCH SẠN</a>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="{{route('blog')}}">TIN TỨC</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{route('contact')}}">LIÊN HỆ</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{route('contact')}}">Ý TƯỞNG</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{route('contact')}}">SÁNG TẠO</a></li>
+                    </ul>
+
+                    <!-- Profile Section -->
+                    <div class="profile-header col-md-2">
+                        @if (auth()->check())
+                            <div class="loged">
+                                <div class="group-left-header d-flex align-items-center justify-content-center">
+                                    <div class="col-md-2 text-center">
+                                        <button class="button-notifi" id="notificationBell-header">
+                                            <i class="fa-solid fa-bell fa-xl"></i>
+                                        </button>
+
+                                        <!-- Notification Dropdown -->
+                                        <div class="notification-dropdown mt-4" id="notificationDropdown-header"
+                                            style="display: none;">
+                                            <h5 class="dropdown-header p-3">Thông báo</h5>
+                                            @foreach(session('notifications', []) as $key => $notification)
+                                                <div
+                                                    class="notification-item d-flex justify-content-between align-items-center">
+                                                    <span>{{ $notification['content'] }}</span>
+                                                    <button class="btn-danger btn-delete-notification"
+                                                        data-key="{{ $key }}">&#10005;</button>
+                                                </div>
+                                            @endforeach
                                         </div>
-                                    @endforeach
+                                    </div>
+
+                                    <div class="col-md-8 text-center ms-3 me-2">
+                                        <p class="name-user m-0 p-0" id="userIcon">
+                                            <span style="display: inline-block; transform: rotate(90deg);">&gt;</span>
+                                            <abbr title="{{ Auth::check() ? Auth::user()->username : 'Guest' }}"
+                                                style="text-decoration: none;">
+                                                {{ Auth::check() ? Auth::user()->username : 'Guest' }}
+                                            </abbr>
+                                        </p>
+                                    </div>
+
+                                    <div class="col-md-2 text-center" style="width: 100%; height:100%;">
+                                        <a href="{{ route('pages.account') }}">
+                                            <img class="image-user"
+                                                src="{{ Auth::check() && Auth::user()->avatar ? asset('storage/images/' . Auth::user()->avatar) : asset('images/user-profile.png') }}"
+                                                alt="Avatar" class="img-fluid rounded-circle"
+                                                style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;">
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="dropdown-menu" id="userDropdown" style="display: none;">
+                                    <a class="dropdown-item dropdown-item-staynest" href="{{ route('pages.account') }}">
+                                        Tài Khoản
+                                    </a>
+                                    <a class="dropdown-item dropdown-item-staynest"
+                                        href="{{ route('pages.account') }}?tab=nav-contact">
+                                        Yêu Thích
+                                    </a>
+                                    <a class="dropdown-item dropdown-item-staynest"
+                                        href="{{ route('pages.account') }}?tab=nav-profile">
+                                        Hóa Đơn
+                                    </a>
+                                    <a class="dropdown-item dropdown-item-staynest" href="{{route('viewVoucherUser')}}">
+                                        Voucher
+                                    </a>
+                                    <a href="#" class="dropdown-item dropdown-item-staynest text-danger"
+                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        Đăng Xuất
+                                    </a>
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                        style="display: none;">
+                                        @csrf
+                                    </form>
                                 </div>
                             </div>
-
-                            <div class="col-md-8 text-center ms-3 me-2">
-                                <p class="name-user m-0 p-0" id="userIcon">
-                                    <span class="muoi-ten">&gt;</span>
-                                    <abbr title="{{ Auth::check() ? Auth::user()->username : 'Guest' }}"
-                                        style="text-decoration: none;">
-                                        {{ Auth::check() ? Auth::user()->username : 'Guest' }}
-                                    </abbr>
-                                </p>
+                        @else
+                            <!-- Nếu chưa đăng nhập -->
+                            <div class="group-left-header">
+                                <a href="{{ route('login') }}" class="login">Đăng nhập/</a>
+                                <a href="{{ url('register') }}" class="register ms-2">Đăng ký</a>
                             </div>
-
-                            <div class="col-md-2 text-center" style="width: 100%;height:100%;">
-                                <a href="{{ route('pages.account') }}">
-                                    <img class="image-user"
-                                        src="{{ Auth::check() && Auth::user()->avatar ? asset('storage/images/' . Auth::user()->avatar) : asset('storage/images/default-avatar.png') }}"
-                                        alt="Avatar" class="img-fluid rounded-circle"
-                                        style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;">
-                                </a>
-                            </div>
-
-
-                        </div>
-                        <div class="dropdown-menu" id="userDropdown" style="display: none;">
-                            <a class="dropdown-item dropdown-item-staynest" href="{{ route('pages.account') }}">Tài
-                                Khoản</a>
-                            <a class="dropdown-item dropdown-item-staynest"
-                                href="{{ route('pages.account') }}?tab=nav-contact">Yêu Thích</a>
-                            <a class="dropdown-item dropdown-item-staynest"
-                                href="{{ route('pages.account') }}?tab=nav-profile">Hóa Đơn</a>
-                            <a class="dropdown-item dropdown-item-staynest" href="#">Voucher</a>
-                            @if (Auth::check())
-                                <a href="#" class="dropdown-item dropdown-item-staynest text-danger"
-                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                    Đăng Xuất
-                                </a>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                    @csrf
-                                </form>
-                            @else
-                                <a href="{{ route('login') }}" class="dropdown-item dropdown-item-staynest">
-                                    Đăng Nhập
-                                </a>
-                            @endif
-                        </div>
+                        @endif
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </nav>
+    </section>
     <div class="middle-staynest-home mt-5">
         <div class="search-bar-staynest-home color-light container">
             <form action="{{ route('hotels.search') }}" method="GET" class="row d-flex justify-content-center">
@@ -238,8 +268,9 @@
 
                             <div class="shape">
                                 <p class="country m-0">VIET NAM</p>
-                                <p class="location m-0">{{ $hotel->city->city_name }} - <span
-                                        class="name-hotel">{{ $hotel->hotel_name }}</span></p>
+                                <p class="location m-0">{{ $hotel->city->city_name }} -
+                                    <span class="name-hotel">{{ mb_strimwidth($hotel->hotel_name, 0, 25, '...') }}</span>
+                                </p>
                                 <p class="price-old m-0">
                                     {{ number_format($hotel->average_price, 0, ',', '.') }} VNĐ
                                 </p>
@@ -323,7 +354,8 @@
         <div class="title mb-2">Điểm đến thịnh hành</div>
         <div class="row">
             <div class="col-md-6">
-                <a href="{{ route('pages.hotel_by_city', ['cityName' => 'Hồ Chí Minh']) }}" class="link-popular-destination">
+                <a href="{{ route('pages.hotel_by_city', ['cityName' => 'Hồ Chí Minh']) }}"
+                    class="link-popular-destination">
                     <img class="image-destitation-1"
                         src="https://image.vietnamnews.vn/uploadvnnews/Article/2023/9/28/308010_4651436783396218_vna_potal_thanh_pho_ho_chi_minh_la_1_trong_10_diem_den_tuyet_voi_nhat_o_chau_a_6666855.jpg"
                         alt="image">
@@ -331,7 +363,8 @@
                 </a>
             </div>
             <div class="col-md-6">
-                <a href="{{ route('pages.hotel_by_city', ['cityName' => 'Nha Trang']) }}" class="link-popular-destination">
+                <a href="{{ route('pages.hotel_by_city', ['cityName' => 'Nha Trang']) }}"
+                    class="link-popular-destination">
                     <img class="image-destitation-1"
                         src="https://letsflytravel.vn/assets/source/2_5_2024_Up/nha-trang-city-tour/nha-trang-letsflytravel.jpg"
                         alt="image">
@@ -348,7 +381,7 @@
                 </a>
             </div>
             <div class="col-md-4">
-                <a href="{{ route('pages.hotel_by_city', ['cityName' => 'Huế']) }}"class="link-popular-destination">
+                <a href="{{ route('pages.hotel_by_city', ['cityName' => 'Huế']) }}" class="link-popular-destination">
                     <img class="image-destitation-1"
                         src="https://kinhtevadubao.vn/stores/news_dataimages/kinhtevadubaovn/092018/18/14/5-ve-dep-co-do-hue-tao-ne-su-hap-dan-dac-biet-khi-ghe-tham-07-.7434.jpg"
                         alt="image">
@@ -356,7 +389,8 @@
                 </a>
             </div>
             <div class="col-md-4">
-                <a href="{{ route('pages.hotel_by_city', ['cityName' => 'Đà Nẵng']) }}" class="link-popular-destination">
+                <a href="{{ route('pages.hotel_by_city', ['cityName' => 'Đà Nẵng']) }}"
+                    class="link-popular-destination">
                     <img class="image-destitation-1"
                         src="https://vcdn1-dulich.vnecdn.net/2022/06/03/cauvang-1654247842-9403-1654247849.jpg?w=1200&h=0&q=100&dpr=1&fit=crop&s=Swd6JjpStebEzT6WARcoOA"
                         alt="image">
@@ -406,10 +440,13 @@
                                 <div class="group-info-hotel">
                                     <p class="info-hotel-name m-0">{{ $hotel->hotel_name }}</p>
 
-                                    <p class="info-hotel-location m-0">{{ $hotel->location }},
+                                    <p style="color: #2e75d3" class="info-hotel-location m-0">
+                                        <i class="fa-solid fa-location-dot fa-xl"></i>
+                                        {{ $hotel->location }},
                                         {{ $hotel->city->city_name }}
                                     </p>
-                                    <p class="info-hotel-reviews m-0"><i class="fa-regular fa-comment"></i>
+                                    <p style="color: #FF3366" class="info-hotel-reviews m-0"><i
+                                            class="fa-regular fa-comment"></i>
                                         {{ $hotel->reviews->count() }} Đánh giá
                                     </p>
 
@@ -445,59 +482,60 @@
 
 <section class="famous-hotel">
     <div class="container">
-        <div class="title mt-5 mb-2">Khách sạn vừa xem</div>
-        <div class="carousel-container">
-            <div class="carousel-wrapper">
-                @if($recentHotels->isNotEmpty())
-                    @foreach($recentHotels as $recentHotel)
-                        <div class="card the-top-khach-san">
-                            @foreach ($recentHotel->images as $index => $image)
-                                @if ($index === 0)
-                                    <img class="image-hotel-1" src="{{ asset('storage/images/' . $image->image_url) }}"
-                                        alt="{{ $image->image_url }}" />
-                                @endif
-                            @endforeach
+        @if($recentHotels->isNotEmpty())
+                <div class="title mt-5 mb-2">Khách sạn vừa xem</div>
+                <div class="carousel-container">
+                    <div class="carousel-wrapper">
+                        @foreach($recentHotels as $recentHotel)
+                            <div class="card the-top-khach-san">
+                                @foreach ($recentHotel->images as $index => $image)
+                                    @if ($index === 0)
+                                        <img class="image-hotel-1" src="{{ asset('storage/images/' . $image->image_url) }}"
+                                            alt="{{ $image->image_url }}" />
+                                    @endif
+                                @endforeach
 
-                            <div class="shape">
-                                <p class="country m-0">VIET NAM</p>
-                                <p class="location m-0">{{ $recentHotel->city->city_name }} - <span
-                                        class="name-hotel">{{ $recentHotel->hotel_name }}</span></p>
-                                <p class="price-old m-0">
-                                    {{ number_format($recentHotel->average_price, 0, ',', '.') }} VNĐ
-                                </p>
-                                <div class="row price-top">
-                                    <div class="col-md-7">
-                                        <span class="price-new">
-                                            {{ number_format($recentHotel->average_price_sale, 0, ',', '.') }} VNĐ
-                                            <span>/ Khách</span>
-                                        </span>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <a href="{{ route('pages.hotel_detail', ['hotel_id' => $recentHotel->hotel_id]) }}"
-                                            class="btn-book-now">ĐẶT NGAY</a>
+                                <div class="shape">
+                                    <p class="country m-0">VIET NAM</p>
+                                    <p class="location m-0">{{ $recentHotel->city->city_name }} -
+                                        <span class="name-hotel">{{ mb_strimwidth($recentHotel->hotel_name, 0, 25, '...')  }}</span>
+                                    </p>
+                                    <p class="price-old m-0">
+                                        {{ number_format($recentHotel->average_price, 0, ',', '.') }} VNĐ
+                                    </p>
+                                    <div class="row price-top">
+                                        <div class="col-md-7">
+                                            <span class="price-new">
+                                                {{ number_format($recentHotel->average_price_sale, 0, ',', '.') }} VNĐ
+                                                <span>/ Khách</span>
+                                            </span>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <a href="{{ route('pages.hotel_detail', ['hotel_id' => $recentHotel->hotel_id]) }}"
+                                                class="btn-book-now">ĐẶT NGAY</a>
+                                        </div>
                                     </div>
                                 </div>
+                                <div class="rating-top">
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        @if ($i <= $recentHotel->rating)
+                                            <span>★</span>
+                                        @else
+                                            <span>☆</span>
+                                        @endif
+                                    @endfor
+                                </div>
+                                <div class="sale">
+                                    - {{ number_format($recentHotel->average_discount_percent) }} %
+                                </div>
                             </div>
-                            <div class="rating-top">
-                                @for ($i = 1; $i <= 5; $i++)
-                                    @if ($i <= $recentHotel->rating)
-                                        <span>★</span>
-                                    @else
-                                        <span>☆</span>
-                                    @endif
-                                @endfor
-                            </div>
-                            <div class="sale">
-                                - {{ number_format($recentHotel->average_discount_percent) }} %
-                            </div>
-                        </div>
-                    @endforeach
-                @else
-                    <p>Không có khách sạn nào vừa xem.</p>
-                @endif
+                        @endforeach
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
+        @else
+            <!-- <p>Không có khách sạn nào vừa xem.</p> -->
+        @endif
 </section>
 <section class="latest-blogs">
     <div class="container">
@@ -509,7 +547,9 @@
                         <img src="{{ asset('storage/images/' . $blog->img) }}" alt="{{ $blog->title }}" class="blog-image">
                         <div class="blog-content">
                             <h3 class="blog-title">{{ $blog->title }}</h3>
-                            <p class="blog-excerpt">{{ Str::limit(html_entity_decode(strip_tags($blog->description)), 100) }}</p>
+                            <p class="blog-excerpt">
+                                {{ Str::limit(html_entity_decode(strip_tags($blog->description)), 100) }}
+                            </p>
                             <a href="{{ url('blog/' . $blog->url_seo) }}" class="btn-read-more">Đọc thêm</a>
                         </div>
                     </div>
@@ -560,17 +600,30 @@
         updateCarousel(); // Initial call
     });
 
-    document.getElementById('notificationBell').addEventListener('click', function () {
-        const dropdown = document.getElementById('notificationDropdown');
+    document.addEventListener('DOMContentLoaded', function () {
+        const bell = document.getElementById('notificationBell-header');
+        const dropdown = document.getElementById('notificationDropdown-header');
 
-        if (dropdown.classList.contains('show')) {
-            dropdown.classList.remove('show');
-            dropdown.style.display = 'none';
-        } else {
-            dropdown.style.display = 'block';
-            dropdown.classList.add('show');
+        if (bell && dropdown) {
+            bell.addEventListener('click', function () {
+                if (dropdown.classList.contains('show')) {
+                    dropdown.classList.remove('show');
+                    dropdown.style.display = 'none';
+                } else {
+                    dropdown.style.display = 'block';
+                    dropdown.classList.add('show');
+                }
+            });
+
+            document.addEventListener('click', function (event) {
+                if (!bell.contains(event.target) && !dropdown.contains(event.target)) {
+                    dropdown.classList.remove('show');
+                    dropdown.style.display = 'none';
+                }
+            });
         }
     });
+
 
     // Đóng dropdown khi nhấn bên ngoài
     document.addEventListener('click', function (event) {

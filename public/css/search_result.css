@@ -27,7 +27,7 @@ body {
 .tab_control {
     border-radius: 15px;
     background: #ffffff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 1px;
     padding: 5px;
     padding-left: 10px;
 }
@@ -605,7 +605,9 @@ input[type="range"]::-moz-range-thumb {
 
 .filter {
     height: 100%;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 4px 1px;
 }
+
 .custom-checkbox:hover {
     background: #3A77C5;
     color: #fff;

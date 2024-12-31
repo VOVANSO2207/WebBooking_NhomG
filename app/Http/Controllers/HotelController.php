@@ -361,7 +361,7 @@ class HotelController extends Controller
             'hotel_name' => 'required|string|max:255|regex:/^[\pL\s]+$/u|unique:hotels,hotel_name',
             'location' => 'required|string|max:255',
             'city_id' => 'required|integer',
-            'description' => 'required|string',
+            'description' => 'required',
             'rating' => 'required|nullable|between:1,5',
             'images' => 'nullable|array',
             'images.*' => 'image|mimes:jpeg,png,jpg|max:2048',

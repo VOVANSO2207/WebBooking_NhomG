@@ -304,13 +304,6 @@
                         <div class="room-info-description">
                             <h5 class="section-title">Giới thiệu</h5>
                             <p class="room-description">{!! $room->description !!}
-                                tầm nhìn ra đại dương đẹp nhất tại thành phố Vũng Tàu. Khách sạn cung cấp 250 phòng độc đáo
-                                với khái niệm giường ngủ ibis mới và WIFI <span><a href="#"
-                                        class="detail-btn-load-more">Xem
-                                        thêm</a></span>
-                                miễn phí, phục vụ cả khách du lịch giải trí và công tác.ibis Styles Vung Tau là khách sạn
-                                quốc tế tiết kiệm với thiết kế
-
                             </p>
                         </div>
                     </div>

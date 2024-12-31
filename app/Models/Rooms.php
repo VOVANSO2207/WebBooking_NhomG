@@ -108,7 +108,7 @@ class Rooms extends Model
             'price' => 'required|numeric',
             'capacity' => 'required|integer',
             'discount_percent' => 'required|numeric|min:0|max:100',
-            'description' => 'required|string',
+            'description' => 'required',
             'amenities' => 'required|array',
             'images.*' => 'required|image|mimes:jpeg,png,jpg|max:5120',
         ]);
