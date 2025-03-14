@@ -62,3 +62,21 @@ section {
     color: #003366;
     margin-bottom: 20px;
 }
+.stay-nest-introduce{
+    .container{
+        h2{
+            font-size: 2rem;
+        }
+    }
+}
+@media only screen and (max-width: 768px) {
+    .features {
+        margin-top: 2rem !important;
+    }
+    .container{
+        .stay-nest-col{
+            margin-bottom: 10px;
+        }
+    }
+  
+}

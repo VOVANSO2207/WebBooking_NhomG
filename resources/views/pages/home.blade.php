@@ -44,9 +44,8 @@
         initializeDateRangePicker(); // Gọi hàm khởi tạo
     });
 </script> -->
-
+{{-- https://images.unsplash.com/photo-1564501049412-61c2a3083791?q=80&w=2000 --}}
 @section('content')
-<div class="banner-home"></div>
 <section class="header-staynest-home">
     <section class="top-header header-staynest m-0">
         <a href="{{asset('/')}}" class="d-flex align-items-center justify-content-center logo-staynest">
@@ -55,33 +54,135 @@
         </a>
         <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container">
-                <!-- Toggler Button -->
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
-                    aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <!-- Toggler Button -->     
+            <div class="d-flex align-items-center">
+                <button class="navbar-toggler" type="button" id="sidebarToggler" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+              
+            </div>
+                <!-- Sidebar Overlay -->
+                <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-                <!-- Collapsible Content -->
-                <div class="collapse navbar-collapse justify-content-between" id="navbarContent">
+                <!-- Sidebar Menu -->
+                <div class="sidebar-menu" id="sidebarMenu">
+                    <div class="sidebar-header">
+                        <h4 class="text-light">StayNest Menu</h4>
+                        <button type="button" class="btn-close btn-close-white" id="sidebarClose" aria-label="Close"></button>
+                    </div>
+                    
                     <!-- Social Links -->
-                    <ul class="navbar-nav mb-2 mt-2 mb-lg-0 social-header">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fa-brands fa-facebook fa-lg"></i></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fa-brands fa-x-twitter fa-lg"></i></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fa-brands fa-youtube fa-lg"></i></a>
-                        </li>
-                    </ul>
+                    <div class="sidebar-section">
+                        <h6 class="sidebar-title">Kết nối</h6>
+                        <ul class="navbar-nav social-header">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#"><i class="fa-brands fa-facebook fa-lg"></i> Facebook</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#"><i class="fa-brands fa-x-twitter fa-lg"></i> Twitter</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#"><i class="fa-brands fa-youtube fa-lg"></i> YouTube</a>
+                            </li>
+                        </ul>
+                    </div>
 
+                    <!-- Navigation Links -->
+                    <div class="sidebar-section">
+                        <h6 class="sidebar-title">Điều hướng</h6>
+                        <ul class="navbar-nav mb-2 mb-lg-0 menu-attribute">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{asset('/')}}">
+                                    <i class="fa-solid fa-house me-1"></i> TRANG CHỦ
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{asset('introduce')}}">
+                                    <i class="fa-solid fa-info-circle me-1"></i> GIỚI THIỆU
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{route('hotels.index')}}">
+                                    <i class="fa-solid fa-hotel me-1"></i> PHÒNG KHÁCH SẠN
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{route('blog')}}">
+                                    <i class="fa-solid fa-newspaper me-1"></i> TIN TỨC
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{route('contact')}}">
+                                    <i class="fa-solid fa-envelope me-1"></i> LIÊN HỆ
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{route('contact')}}">
+                                    <i class="fa-solid fa-lightbulb me-1"></i> Ý TƯỞNG
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{route('contact')}}">
+                                    <i class="fa-solid fa-paint-brush me-1"></i> SÁNG TẠO
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Profile Section for Mobile -->
+                    <div class="sidebar-section">
+                        <h6 class="sidebar-title">Tài khoản</h6>
+                        @if (auth()->check())
+                            <div class="sidebar-user-info">
+                                <div class="d-flex align-items-center mb-3">
+                                    <img src="{{ Auth::check() && Auth::user()->avatar ? asset('storage/images/' . Auth::user()->avatar) : asset('images/user-profile.png') }}"
+                                        alt="Avatar" class="img-fluid rounded-circle me-2"
+                                        style="width: 40px; height: 40px; object-fit: cover;">
+                                    <div>
+                                        <p class="m-0 fw-bold">{{ Auth::user()->username }}</p>
+                                    </div>
+                                </div>
+                                <div class="sidebar-user-links">
+                                    <a href="{{ route('pages.account') }}" class="sidebar-link">
+                                        <i class="fa-solid fa-user me-2"></i> Tài Khoản
+                                    </a>
+                                    <a href="{{ route('pages.account') }}?tab=nav-contact" class="sidebar-link">
+                                        <i class="fa-solid fa-heart me-2"></i> Yêu Thích
+                                    </a>
+                                    <a href="{{ route('pages.account') }}?tab=nav-profile" class="sidebar-link">
+                                        <i class="fa-solid fa-file-invoice me-2"></i> Hóa Đơn
+                                    </a>
+                                    <a href="{{route('viewVoucherUser')}}" class="sidebar-link">
+                                        <i class="fa-solid fa-ticket me-2"></i> Voucher
+                                    </a>
+                                    <a href="#" class="sidebar-link text-danger" onclick="event.preventDefault(); document.getElementById('sidebar-logout-form').submit();">
+                                        <i class="fa-solid fa-sign-out-alt me-2"></i> Đăng Xuất
+                                    </a>
+                                    <form id="sidebar-logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        @csrf
+                                    </form>
+                                </div>
+                            </div>
+                        @else
+                            <div class="sidebar-auth-links">
+                                <a href="{{ route('login') }}" class="btn btn-outline-light w-100 mb-2">
+                                    <i class="fa-solid fa-sign-in-alt me-2"></i> Đăng nhập
+                                </a>
+                                <a href="{{ url('register') }}" class="btn btn-light w-100">
+                                    <i class="fa-solid fa-user-plus me-2"></i> Đăng ký
+                                </a>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <div class="collapse navbar-collapse justify-content-between" id="navbarContent">
                     <!-- Navigation Links -->
                     <ul class="navbar-nav mb-2 mb-lg-0 menu-attribute">
                         <li class="nav-item"><a class="nav-link" href="{{asset('/')}}">TRANG CHỦ</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{asset('introduce')}}">GIỚI THIỆU</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{route('hotels.index')}}">PHÒNG KHÁCH SẠN</a>
-                        </li>
+                        <li class="nav-item"><a class="nav-link" href="{{route('hotels.index')}}">PHÒNG KHÁCH SẠN</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{route('blog')}}">TIN TỨC</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{route('contact')}}">LIÊN HỆ</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{route('contact')}}">Ý TƯỞNG</a></li>
@@ -352,50 +453,97 @@
 <section class="popular-destination pb-5">
     <div class="container">
         <div class="title mb-2">Điểm đến thịnh hành</div>
-        <div class="row">
-            <div class="col-md-6">
-                <a href="{{ route('pages.hotel_by_city', ['cityName' => 'Hồ Chí Minh']) }}"
-                    class="link-popular-destination">
-                    <img class="image-destitation-1"
-                        src="https://image.vietnamnews.vn/uploadvnnews/Article/2023/9/28/308010_4651436783396218_vna_potal_thanh_pho_ho_chi_minh_la_1_trong_10_diem_den_tuyet_voi_nhat_o_chau_a_6666855.jpg"
-                        alt="image">
-                    <p class="name-location-1">HỒ CHÍ MINH</p>
-                </a>
+        
+        <!-- Desktop view - original grid layout -->
+        <div class="desktop-view d-none d-lg-block">
+            <div class="row">
+                <div class="col-md-6">
+                    <a href="{{ route('pages.hotel_by_city', ['cityName' => 'Hồ Chí Minh']) }}" class="link-popular-destination">
+                        <img class="image-destitation-1 w-100" src="https://image.vietnamnews.vn/uploadvnnews/Article/2023/9/28/308010_4651436783396218_vna_potal_thanh_pho_ho_chi_minh_la_1_trong_10_diem_den_tuyet_voi_nhat_o_chau_a_6666855.jpg" alt="Hồ Chí Minh">
+                        <p class="name-location-1">HỒ CHÍ MINH</p>
+                    </a>
+                </div>
+                <div class="col-md-6">
+                    <a href="{{ route('pages.hotel_by_city', ['cityName' => 'Nha Trang']) }}" class="link-popular-destination">
+                        <img class="image-destitation-1 w-100" src="https://letsflytravel.vn/assets/source/2_5_2024_Up/nha-trang-city-tour/nha-trang-letsflytravel.jpg" alt="Nha Trang">
+                        <p class="name-location-1">NHA TRANG</p>
+                    </a>
+                </div>
             </div>
-            <div class="col-md-6">
-                <a href="{{ route('pages.hotel_by_city', ['cityName' => 'Nha Trang']) }}"
-                    class="link-popular-destination">
-                    <img class="image-destitation-1"
-                        src="https://letsflytravel.vn/assets/source/2_5_2024_Up/nha-trang-city-tour/nha-trang-letsflytravel.jpg"
-                        alt="image">
-                    <p class="name-location-1">NHA TRANG</p>
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <a href="{{ route('pages.hotel_by_city', ['cityName' => 'Đà Lạt']) }}" class="link-popular-destination">
+                        <img class="image-destitation-1 w-100" src="https://static.vinwonders.com/production/gioi-thieu-ve-da-lat-1.jpg" alt="Đà Lạt">
+                        <p class="name-location-1">ĐÀ LẠT</p>
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a href="{{ route('pages.hotel_by_city', ['cityName' => 'Huế']) }}" class="link-popular-destination">
+                        <img class="image-destitation-1 w-100" src="https://kinhtevadubao.vn/stores/news_dataimages/kinhtevadubaovn/092018/18/14/5-ve-dep-co-do-hue-tao-ne-su-hap-dan-dac-biet-khi-ghe-tham-07-.7434.jpg" alt="Huế">
+                        <p class="name-location-1">HUẾ</p>
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a href="{{ route('pages.hotel_by_city', ['cityName' => 'Đà Nẵng']) }}" class="link-popular-destination">
+                        <img class="image-destitation-1 w-100" src="https://vcdn1-dulich.vnecdn.net/2022/06/03/cauvang-1654247842-9403-1654247849.jpg?w=1200&h=0&q=100&dpr=1&fit=crop&s=Swd6JjpStebEzT6WARcoOA" alt="Đà Nẵng">
+                        <p class="name-location-1">ĐÀ NẴNG</p>
+                    </a>
+                </div>
             </div>
-            </a>
         </div>
-        <div class="row mt-4">
-            <div class="col-md-4">
-                <a href="{{ route('pages.hotel_by_city', ['cityName' => 'Đà Lạt']) }}" class="link-popular-destination">
-                    <img class="image-destitation-1"
-                        src="https://static.vinwonders.com/production/gioi-thieu-ve-da-lat-1.jpg" alt="image">
-                    <p class="name-location-1">ĐÀ LẠT</p>
-                </a>
-            </div>
-            <div class="col-md-4">
-                <a href="{{ route('pages.hotel_by_city', ['cityName' => 'Huế']) }}" class="link-popular-destination">
-                    <img class="image-destitation-1"
-                        src="https://kinhtevadubao.vn/stores/news_dataimages/kinhtevadubaovn/092018/18/14/5-ve-dep-co-do-hue-tao-ne-su-hap-dan-dac-biet-khi-ghe-tham-07-.7434.jpg"
-                        alt="image">
-                    <p class="name-location-1">HUẾ</p>
-                </a>
-            </div>
-            <div class="col-md-4">
-                <a href="{{ route('pages.hotel_by_city', ['cityName' => 'Đà Nẵng']) }}"
-                    class="link-popular-destination">
-                    <img class="image-destitation-1"
-                        src="https://vcdn1-dulich.vnecdn.net/2022/06/03/cauvang-1654247842-9403-1654247849.jpg?w=1200&h=0&q=100&dpr=1&fit=crop&s=Swd6JjpStebEzT6WARcoOA"
-                        alt="image">
-                    <p class="name-location-1">ĐÀ NẴNG</p>
-                </a>
+        
+        <!-- Mobile and Tablet view - slider -->
+        <div class="mobile-tablet-view d-block d-lg-none">
+            <div class="destination-slider">
+                <!-- Add navigation arrows -->
+                <div class="slider-nav">
+                    <button class="prev-slide" onclick="moveSlide(-1)">&#10094;</button>
+                    <button class="next-slide" onclick="moveSlide(1)">&#10095;</button>
+                </div>
+                
+                <div class="slider-container">
+                    <div class="slider-track">
+                        <div class="slide">
+                            <a href="{{ route('pages.hotel_by_city', ['cityName' => 'Hồ Chí Minh']) }}" class="link-popular-destination">
+                                <img class="image-destitation-1" src="https://image.vietnamnews.vn/uploadvnnews/Article/2023/9/28/308010_4651436783396218_vna_potal_thanh_pho_ho_chi_minh_la_1_trong_10_diem_den_tuyet_voi_nhat_o_chau_a_6666855.jpg" alt="Hồ Chí Minh">
+                                <p class="name-location-1">HỒ CHÍ MINH</p>
+                            </a>
+                        </div>
+                        <div class="slide">
+                            <a href="{{ route('pages.hotel_by_city', ['cityName' => 'Nha Trang']) }}" class="link-popular-destination">
+                                <img class="image-destitation-1" src="https://letsflytravel.vn/assets/source/2_5_2024_Up/nha-trang-city-tour/nha-trang-letsflytravel.jpg" alt="Nha Trang">
+                                <p class="name-location-1">NHA TRANG</p>
+                            </a>
+                        </div>
+                        <div class="slide">
+                            <a href="{{ route('pages.hotel_by_city', ['cityName' => 'Đà Lạt']) }}" class="link-popular-destination">
+                                <img class="image-destitation-1" src="https://static.vinwonders.com/production/gioi-thieu-ve-da-lat-1.jpg" alt="Đà Lạt">
+                                <p class="name-location-1">ĐÀ LẠT</p>
+                            </a>
+                        </div>
+                        <div class="slide">
+                            <a href="{{ route('pages.hotel_by_city', ['cityName' => 'Huế']) }}" class="link-popular-destination">
+                                <img class="image-destitation-1" src="https://kinhtevadubao.vn/stores/news_dataimages/kinhtevadubaovn/092018/18/14/5-ve-dep-co-do-hue-tao-ne-su-hap-dan-dac-biet-khi-ghe-tham-07-.7434.jpg" alt="Huế">
+                                <p class="name-location-1">HUẾ</p>
+                            </a>
+                        </div>
+                        <div class="slide">
+                            <a href="{{ route('pages.hotel_by_city', ['cityName' => 'Đà Nẵng']) }}" class="link-popular-destination">
+                                <img class="image-destitation-1" src="https://vcdn1-dulich.vnecdn.net/2022/06/03/cauvang-1654247842-9403-1654247849.jpg?w=1200&h=0&q=100&dpr=1&fit=crop&s=Swd6JjpStebEzT6WARcoOA" alt="Đà Nẵng">
+                                <p class="name-location-1">ĐÀ NẴNG</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide indicators -->
+                <div class="slider-dots">
+                    <span class="dot active" onclick="goToSlide(0)"></span>
+                    <span class="dot" onclick="goToSlide(1)"></span>
+                    <span class="dot" onclick="goToSlide(2)"></span>
+                    <span class="dot" onclick="goToSlide(3)"></span>
+                    <span class="dot" onclick="goToSlide(4)"></span>
+                </div>
             </div>
         </div>
     </div>
@@ -431,36 +579,32 @@
                         <a href="{{ route('pages.hotel_detail', ['hotel_id' => $hotel->hotel_id]) }}" class="group-offers">
                             <div class="shape-in">
                                 @if ($hotel->images->isNotEmpty())
-                                    <img class="image-hotel-2"
-                                        src="{{ asset('storage/images/' . $hotel->images->first()->image_url) }}" alt="">
+                                    <img class="image-hotel-2" src="{{ asset('storage/images/' . $hotel->images->first()->image_url) }}" alt="">
                                 @else
-                                    <img class="image-hotel-2" src="{{ asset('images/defaullt-image.png') }}" alt="">
+                                    <img class="image-hotel-2" src="{{ asset('images/default-image.png') }}" alt="">
                                 @endif
-
+        
                                 <div class="group-info-hotel">
                                     <p class="info-hotel-name m-0">{{ $hotel->hotel_name }}</p>
-
                                     <p style="color: #2e75d3" class="info-hotel-location m-0">
                                         <i class="fa-solid fa-location-dot fa-xl"></i>
                                         {{ $hotel->location }},
                                         {{ $hotel->city->city_name }}
                                     </p>
-                                    <p style="color: #FF3366" class="info-hotel-reviews m-0"><i
-                                            class="fa-regular fa-comment"></i>
+                                    <p style="color: #FF3366" class="info-hotel-reviews m-0">
+                                        <i class="fa-regular fa-comment"></i>
                                         {{ $hotel->reviews->count() }} Đánh giá
                                     </p>
-
                                     <p class="info-hotel-price-old mb-0 mt-5 pt-5">
                                         {{ number_format($hotel->average_price_sale, 0, ',', '.') }} VNĐ
                                     </p>
                                     <div class="row group-heart-price">
-                                        <div class="col-md-6">
+                                        <div class="col col-md-6 col-sm-4 col-xs-4">
                                             <a href="#" class="heart-icon" data-hotel-id="{{ $hotel->hotel_id }}">
-                                                <i
-                                                    class="fa-regular fa-heart @if ($hotel->is_favorite) fa-solid red @endif"></i>
+                                                <i class="fa-regular fa-heart @if ($hotel->is_favorite) fa-solid red @endif"></i>
                                             </a>
                                         </div>
-                                        <div class="col-md-6 text-right">
+                                        <div class="col col-md-6 col-sm-8 col-xs-8 text-right">
                                             <span class="info-hotel-price-new">
                                                 {{ number_format($hotel->average_price, 0, ',', '.') }} VNĐ
                                             </span>

@@ -42,13 +42,18 @@
  .famous-hotel,
  .popular-destination,
  .our-offers {
-     scale: 0.93;
+     /* scale: 0.93; */
+     /* max-width: 1200px; */
+     /* margin: 0 auto; */
  }
-
+/* Header */
  .search-bar-staynest-home {
      scale: .87;
  }
-
+ .header-staynest-home>* {
+    position: relative;
+    z-index: 3;
+}
  .header-staynest-home {
      position: relative;
      background-image: url('../images/banner_01.png');
@@ -75,10 +80,6 @@
      padding-bottom: 10%;
  }
 
- .header-staynest-home>* {
-     position: relative;
-     z-index: 3;
- }
 
  .logo-staynest {
      display: flex;
@@ -348,7 +349,202 @@
      color: #006eff !important;
      backdrop-filter: blur(5px) !important;
  }
+/* Responsive navbar menu  homepage*/
+.sidebar-menu {
+    position: fixed;
+    top: 0;
+    left: -300px;
+    width: 300px;
+    height: 100vh;
+    background-color: #222;
+    z-index: 1050;
+    transition: left 0.3s ease;
+    overflow-y: auto;
+    padding: 0;
+    box-shadow: 3px 0 10px rgba(0, 0, 0, 0.2);
+}
 
+.sidebar-menu.show {
+    left: 0;
+}
+
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1040;
+    display: none;
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: #1a1a1a;
+    border-bottom: 1px solid #333;
+}
+
+.sidebar-section {
+    padding: 1rem;
+    border-bottom: 1px solid #333;
+}
+
+.sidebar-title {
+    color: #ccc;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+    letter-spacing: 1px;
+}
+
+.sidebar-menu .nav-link {
+    color: #fff;
+    padding: 0.5rem 0;
+    opacity: 0.8;
+    transition: all 0.2s;
+}
+
+.sidebar-menu .nav-link:hover {
+    opacity: 1;
+    padding-left: 5px;
+}
+
+.sidebar-user-info {
+    color: #fff;
+}
+
+.sidebar-link {
+    display: block;
+    color: #fff;
+    padding: 0.5rem 0;
+    text-decoration: none;
+    opacity: 0.8;
+    transition: all 0.2s;
+}
+
+.sidebar-link:hover {
+    opacity: 1;
+    padding-left: 5px;
+    color: #fff;
+}
+
+.sidebar-auth-links {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Animation for menu toggler */
+.navbar-toggler {
+    border: none;
+    padding: 0.5rem;
+    transition: all 0.3s;
+}
+
+.navbar-toggler:focus {
+    box-shadow: none;
+}
+
+/* Custom styling for btn-close in dark mode */
+.btn-close-white {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 991.98px) {
+    .navbar-toggler {
+        display: block;
+    }
+}
+/* Social icon hover effects */
+.social-header .nav-link {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.social-header .nav-link:hover i {
+    transform: scale(1.2);
+}
+
+/* Facebook icon */
+.social-header .fa-facebook:hover {
+    color: #1877f2;
+}
+
+/* Twitter/X icon */
+.social-header .fa-x-twitter:hover {
+    color: #1da1f2;
+}
+
+/* YouTube icon */
+.social-header .fa-youtube:hover {
+    color: #ff0000;
+}
+
+/* Instagram icon */
+.social-header .fa-instagram:hover {
+    color: #c32aa3;
+}
+
+/* TikTok icon */
+.social-header .fa-tiktok:hover {
+    color: #25f4ee;
+}
+
+/* Navigation icon effects */
+.menu-attribute .nav-link i {
+    transition: transform 0.3s ease;
+}
+
+.menu-attribute .nav-link:hover i {
+    transform: translateX(3px);
+}
+
+/* Fixed spacing for icons in sidebar */
+#sidebarMenu .nav-link i {
+    width: 24px;
+    text-align: center;
+    margin-right: 8px;
+}
+
+/* Search button hover effect */
+.button-search-header .btn:hover i {
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Book Now button enhancement */
+.header-btn-book-now {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.header-btn-book-now:hover i {
+    transform: translateY(-2px);
+}
+
+/* Makes icons in dropdown menu align better */
+.dropdown-item i {
+    width: 20px;
+    text-align: center;
+}
  /*  */
 
  .slogan-staynest p {
@@ -524,7 +720,7 @@ outline: none;
      pointer-events: none;
  }
 
- /* slider Carousel */
+ /* Khách sạn nổi tiếng */
  .title {
      font-size: 35px;
      font-weight: 600;
@@ -544,8 +740,6 @@ outline: none;
 
  .card {
      flex: 0 0 25%;
-     /* Show 4 cards at a time */
-     /* max-width: 25%; */
      padding: 10px;
      border: none !important;
  }
@@ -570,21 +764,125 @@ outline: none;
      box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
      scale: 1.01;
  }
+/* Điểm đến thịnh hành */
+.link-popular-destination {
+    text-decoration: none;
+    font-size: 30px;
+    font-weight: 700;
+    color: #fff;
+    position: relative;
+    display: block;
+}
 
- .link-popular-destination {
-     text-decoration: none;
-     font-size: 30px;
-     font-weight: 700;
-     color: #fff;
-     position: relative;
- }
+.link-popular-destination .name-location-1 {
+    position: absolute;
+    top: 10px;
+    left: 30px;
+}
 
- .link-popular-destination .name-location-1 {
-     position: absolute;
-     top: 10px;
-     left: 30px;
- }
+/* .image-destitation-1 {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+} */
 
+/* Header Trang Chủ*/
+.destination-slider {
+    position: relative;
+    margin: 0 auto;
+    padding: 0 0 40px;
+}
+
+.slider-container {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    border-radius: 8px;
+}
+
+.slider-track {
+    display: flex;
+    transition: transform 0.5s ease;
+}
+
+.slide {
+    min-width: 100%;
+    height: 200px;
+    position: relative;
+}
+
+@media (min-width: 576px) {
+    .slide {
+        height: 300px;
+    }
+}
+
+.slider-nav button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 50%;
+    font-size: 16px;
+}
+
+.prev-slide {
+    left: 10px;
+}
+
+.next-slide {
+    right: 10px;
+}
+
+.slider-dots {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.dot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin: 0 5px;
+    background-color: #bbb;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.dot.active {
+    background-color: #717171;
+}
+
+@media (max-width: 768px) {
+    .link-popular-destination {
+        font-size: 24px;
+    }
+}
+
+@media (max-width: 576px) {
+    .link-popular-destination {
+        font-size: 20px;
+    }
+    
+    .link-popular-destination .name-location-1 {
+        top: 5px;
+        left: 15px;
+    }
+    .image-destitation-1 {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+}
+/*  */
  .next-btn,
  .prev-btn {
      position: absolute;
@@ -707,7 +1005,7 @@ outline: none;
      color: #ffff;
  }
 
-
+/* Ưu đãi của chúng tôi  */
  .our-offers-card {
      box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
      padding: 10px !important;
@@ -809,7 +1107,7 @@ outline: none;
          max-width: 100%;
      }
  }
-
+/* Ưu đãi của chứng tôi  */
 
  .fa-heart.red {
      color: red;
@@ -1583,11 +1881,11 @@ outline: none;
  }
 
  /*  */
- @media only screen and (max-width: 992px) {
+ /* @media only screen and (max-width: 992px) {
      .social-header li a i {
          display: none;
      }
- }
+ } */
 
  @media only screen and (max-width: 768px) {
      .title-search-label {

@@ -189,13 +189,11 @@
 
     .btn-sm {
         padding: 6px 12px;
-        /* Kích thước nhỏ hơn */
         font-size: 12px;
     }
 
     .mt-2 {
         margin-top: 8px;
-        /* Khoảng cách trên */
     }
 
     .btn-primary {
@@ -205,6 +203,71 @@
     .btn-primary:hover {
         background-color: #0056b3;
     }
+    /* Add these to your existing CSS */
+@media (max-width: 767px) {
+    .hotel-card {
+        margin-bottom: 15px;
+    }
+
+    .hotel-image {
+        height: 150px; /* Smaller image height for mobile */
+    }
+    .hotel-info {
+        padding: 10px;
+    }
+    .hotel-name {
+        font-size: 1rem;
+        margin-bottom: 3px;
+        text-align: left;
+        color: #222;
+        display: -webkit-box;
+        -webkit-line-clamp: 1; /* Giới hạn 2 dòng */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis; /* Hiển thị dấu ... khi text bị cắt */
+        line-height: 1.3; /* Khoảng cách giữa các dòng */
+        max-height: 2.6em; /* 2 lần line-height để đảm bảo hiển thị đúng 2 dòng */
+        word-break: break-word; 
+    }
+
+    .hotel-location {
+        font-size: 0.8rem;
+        margin-bottom: 5px;
+        text-align: left;
+    }
+
+    .hotel-price {
+        margin-bottom: 5px;
+        text-align: left;
+    }
+    .info-hotel-reviews{
+        text-align: left;
+    }
+    .price-old,
+    .price-new {
+        font-size: 0.9rem;
+        display: block;
+        width: 100%;
+    }
+
+    .hotel-rating span {
+        font-size: 1rem;
+    }
+
+    .btn-sm {
+        padding: 5px 10px;
+        font-size: 11px;
+        width: 100%;
+    }
+    .hotel-rating {
+        margin-bottom: 0px !important;
+        text-align: left;
+    }
+    .hotel-card{
+        margin-bottom: 0px !important;
+    }
+   
+}
 </style>
 
 <section class="all-hotels pt-4">
@@ -232,7 +295,7 @@
         <!-- Danh sách khách sạn -->
         <div class="row">
             @foreach($hotels as $hotel)
-                <div class="col-md-3 mb-4">
+                <div class="col-6 col-md-3 mb-4">
                     <div class="hotel-card">
                         <!-- Hiển thị ảnh đầu tiên -->
                         @if($hotel->images->isNotEmpty())

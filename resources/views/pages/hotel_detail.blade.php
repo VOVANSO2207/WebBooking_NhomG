@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 <link rel="stylesheet" href="{{ asset('css/hotel_detail.css') }}">
+<script src="{{ asset('js/hotel_detail.js') }}"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <!--  -->
 @section('header')
@@ -47,121 +48,354 @@
         </div>
 
         <!-- Modal -->
-        <div class="modal fade" id="imageModal" data-bs-backdrop="static" tabindex="-1"
-            aria-labelledby="imageModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="imageModalLabel">Tất cả hình ảnh</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body p-5">
-                        <div class="row">
-                            <div class="staynest-image-swiper mb-3">
-                                <swiper-container class="mySwiper" pagination="true" pagination-clickable="true"
-                                    navigation="true" space-between="30" loop="true">
-                                    @foreach ($hotel->images as $image)
-                                        <swiper-slide>
-                                            <img src="{{ asset('storage/images/' . $image->image_url) }}"
-                                                alt="{{ $image->image_url }}"
-                                                style="object-fit: cover; width: 100%; height: 500px;" />
-                                        </swiper-slide>
-                                    @endforeach
-                                </swiper-container>
-                            </div>
-                            @foreach ($hotel->images as $image)
-                                <div class="col-md-4 mb-3 review-images-details">
-                                    <img src="{{ asset('storage/images/' . $image->image_url) }}"
-                                        alt="{{ $image->image_url }}" style="object-fit: cover;"
-                                        class="img-fluid modal-image-alls" />
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
+        <div class="modal fade hotel_detail" id="imageModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-gradient-primary text-white">
+                <h5 class="modal-title" id="imageModalLabel">
+                    <i class="fas fa-images me-2"></i>Bộ sưu tập hình ảnh {{ $hotel->name }}
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-        </div>
-
-        <div class="detail-location-shape m-0">
-            <span>
-                {{ $hotel->city->city_name }}
-            </span>
-        </div>
-        <div class="detail-info-top">
-            <div class="detail-hotel-card m-0">
-                <span class="hotel-name">{{ $hotel->hotel_name }}</span>
-                <div class="rating">
-                    @for ($i = 1; $i <= 5; $i++)
-                        @if ($i <= $hotel->rating)
-                            <span class="star-1">★</span>
-                        @else
-                            <span class="star emty">☆</span>
-                        @endif
-                    @endfor
-                </div>
-                <span class="price-label">Giá phòng từ</span>
-            </div>
-            <div class="detail-info-middle mt-2">
-                <div class="row">
-                    <div class="col-md-8 detail-left-info">
-                        <h5 class="section-title">Giới thiệu</h5>
-                        <p class="detail-description">
-                            <span id="more-text" style="display: none;">
-                                {!! $hotel->description !!}
-                            </span>
-                        </p>
+            
+            <div class="modal-body p-0">
+                <!-- Phần hiển thị hình ảnh chính và điều hướng -->
+                <div class="staynest-image-swiper position-relative">
+                    <div class="image-counter-badge position-absolute top-0 end-0 m-3 px-3 py-2 bg-dark bg-opacity-75 text-white rounded-pill z-index-1">
+                        <span class="current-slide">1</span>/<span class="total-slides">{{ count($hotel->images) }}</span>
                     </div>
-                    <div class="col-md-4 detail-right-info">
-                        <span class="detail-price-main">
-                            @if ($hotel->rooms->isNotEmpty())
-                                <p class="price">{{ number_format($hotel->rooms->min('price'), 0, ',', '.') }} VND/ đêm
-                                </p>
-                            @else
-                                <p class="price">Chưa có giá  </p>
-                            @endif
-                        </span>
-                        <div class="detail-map ratio ratio-16x9 mb-2">
-                            <iframe
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.4976450036565!2d106.69522897480486!3d10.773145589375437!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f38cdaf80a5%3A0x18fb7c58d919b591!2zMTY0IMSQLiBMw6ogVGjDoW5oIFTDtG4sIFBoxrDhu51uZyBC4bq_biBUaMOgbmgsIFF14bqtbiAxLCBI4buTIENow60gTWluaCwgVmnhu4d0IE5hbQ!5e0!3m2!1svi!2s!4v1730039298467!5m2!1svi!2s"
-                                width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
-                                referrerpolicy="no-referrer-when-downgrade"></iframe>
-                        </div>
-                        <div class="detail-address mt-2">
-                            <i class="fa-solid fa-location-dot fa-xl me-2"></i>
-                            <span>{{ $hotel->location }}, {{ $hotel->city->city_name }}</span>
-                        </div>
-                        <div class="detail-button">
-                            <a href="#" class="detail-btn-book-room" id="bookNowBtn">Đặt Phòng Ngay</a>
-                        </div>
-                    </div>
-                </div>
-                <hr>
-                <div class="hotel-amenities">
-                    <div class="row">
-                        <div class="col-md-6 detail-title-amenities">Tiện nghi khách sạn </div>
-                        @if (count($hotel->amenities) < 12)
-                            <div class="col-md-6"><a href="#" class="xem-tat-ca"></a></div>
-                        @else
-                            <div class="col-md-6"><a href="#" class="xem-tat-ca">Xem tất cả ></a></div>
-                        @endif
-                    </div>
-                    <div class="info-amenities d-flex justify-content-center">
-                        <div class="row">
-                            @if ($hotel->amenities->IsEmpty())
-                                <p>Khách sạn không có tiện nghi</p>
-                            @else
-                                @foreach ($hotel->amenities as $amenity)
-                                    <div class="col-6 col-md-3 amenity-item">
-                                        <i class="fas fa-check-circle amenity-icon"></i>
-                                        {{ $amenity->amenity_name }}
+                    
+                    <swiper-container class="mySwiper" pagination="true" pagination-clickable="true" navigation="true" space-between="30" loop="true">
+                        @foreach ($hotel->images as $key => $image)
+                            <swiper-slide data-category="{{ $image->category ?? 'all' }}">
+                                <div class="position-relative">
+                                    <img src="{{ asset('storage/images/' . $image->image_url) }}" alt="{{ $image->description ?? $hotel->name }}" class="main-preview-image" />
+                                    
+                                    <!-- Caption với thông tin chi tiết -->
+                                    <div class="image-caption position-absolute bottom-0 left-0 w-100 p-3 bg-dark bg-opacity-50 text-white">
+                                        <h6 class="mb-1">{{ $image->title ?? 'Phòng ' . ($key + 1) }}</h6>
+                                        <p class="mb-0 small">{{ $image->description ?? 'Khám phá không gian tuyệt vời của chúng tôi' }}</p>
                                     </div>
-                                @endforeach
-                            @endif
+                                </div>
+                            </swiper-slide>
+                        @endforeach
+                    </swiper-container>
+                    
+                    <!-- Chức năng bổ sung -->
+                    <div class="image-controls position-absolute bottom-0 end-0 m-3 z-index-1">
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-light" id="fullscreenBtn" title="Xem toàn màn hình">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                            <button class="btn btn-sm btn-light" id="shareBtn" title="Chia sẻ">
+                                <i class="fas fa-share-alt"></i>
+                            </button>
+                            <button class="btn btn-sm btn-light" id="favoriteBtn" title="Lưu vào yêu thích">
+                                <i class="far fa-heart"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
+                
+                <!-- Bộ lọc hình ảnh -->
+                <div class="filter-container p-3 bg-light border-top border-bottom">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <div class="image-filter-tabs">
+                                <ul class="nav nav-pills">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" data-filter="all" href="#">Tất cả</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-filter="room" href="#">Phòng ngủ</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-filter="bathroom" href="#">Phòng tắm</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-filter="amenities" href="#">Tiện ích</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-filter="exterior" href="#">Bên ngoài</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <div class="view-options">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-outline-secondary active" data-view="grid">
+                                        <i class="fas fa-th"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary" data-view="list">
+                                        <i class="fas fa-list"></i>
+                                    </button>
+                                </div>
+                                @if(isset($room) && $room)
+                                    <a href="{{ route('rooms.book', $room->id) }}" class="btn btn-primary ms-2">
+                                        <i class="fas fa-calendar-check me-1"></i> Đặt phòng ngay
+                                    </a>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Bộ sưu tập hình ảnh thumbnail -->
+                <div class="p-3">
+                    <div class="row g-3 thumbnail-gallery" id="imageGallery">
+                        @foreach ($hotel->images as $key => $image)
+                            <div class="col-6 col-md-3 col-lg-2 thumbnail-item" data-category="{{ $image->category ?? 'all' }}">
+                                <div class="card h-100 image-card">
+                                    <div class="position-relative">
+                                        <img src="{{ asset('storage/images/' . $image->image_url) }}" alt="{{ $image->description ?? $hotel->name }}" class="card-img-top thumbnail-image" data-index="{{ $key }}" />
+                                        @if(isset($image->is_featured) && $image->is_featured)
+                                            <span class="position-absolute top-0 start-0 badge bg-primary m-2">
+                                                <i class="fas fa-star me-1"></i> Nổi bật
+                                            </span>
+                                        @endif
+                                    </div>
+                                    <div class="card-body p-2">
+                                        <h6 class="card-title fs-6 mb-0 text-truncate">{{ $image->title ?? 'Phòng ' . ($key + 1) }}</h6>
+                                        <p class="card-text small text-muted text-truncate">{{ $image->short_description ?? 'Xem chi tiết' }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                
+                <!-- Thông tin phòng nếu đang xem chi tiết phòng -->
+                @if(isset($room) && $room)
+                    <div class="room-info-container p-3 bg-light border-top">
+                        <div class="row align-items-center">
+                            <div class="col-md-7">
+                                <h5>{{ $room->name }}</h5>
+                                <p class="mb-2">{{ $room->short_description }}</p>
+                                <div class="d-flex flex-wrap gap-2 mb-2">
+                                    <span class="badge bg-info text-dark">
+                                        <i class="fas fa-user-friends me-1"></i> {{ $room->capacity }} khách
+                                    </span>
+                                    <span class="badge bg-info text-dark">
+                                        <i class="fas fa-bed me-1"></i> {{ $room->bed_type }}
+                                    </span>
+                                    <span class="badge bg-info text-dark">
+                                        <i class="fas fa-ruler-combined me-1"></i> {{ $room->size }} m²
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-5 text-md-end">
+                                <div class="price-container">
+                                    <span class="text-muted text-decoration-line-through">{{ number_format($room->original_price, 0, ',', '.') }}đ</span>
+                                    <span class="fs-4 text-danger fw-bold ms-2">{{ number_format($room->price, 0, ',', '.') }}đ</span>
+                                    <span class="text-muted">/đêm</span>
+                                </div>
+                                <div class="mt-2">
+                                    <a href="{{ route('rooms.book', $room->id) }}" class="btn btn-success">
+                                        <i class="fas fa-calendar-check me-1"></i> Đặt phòng ngay
+                                    </a>
+                                    <a href="{{ route('rooms.show', $room->id) }}" class="btn btn-outline-primary ms-2">Xem chi tiết</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+            </div>
+            
+            <!-- Modal footer với tùy chọn và thông tin bổ sung -->
+            <div class="modal-footer justify-content-between">
+                <div class="hotel-rating">
+                    <span class="badge bg-success"><i class="fas fa-star me-1"></i> {{ $hotel->rating ?? '4.5' }}/5</span>
+                    <small class="text-muted ms-2">{{ $hotel->review_count ?? '120' }} đánh giá</small>
+                </div>
+                <div>
+                    @if(isset($hotel->virtual_tour_url) && $hotel->virtual_tour_url)
+                        <a href="{{ $hotel->virtual_tour_url }}" target="_blank" class="btn btn-outline-primary me-2">
+                            <i class="fas fa-vr-cardboard me-1"></i> Tour 360°
+                        </a>
+                    @endif
+                    @if(isset($hotel->video_url) && $hotel->video_url)
+                        <a href="{{ $hotel->video_url }}" target="_blank" class="btn btn-outline-primary me-2">
+                            <i class="fas fa-video me-1"></i> Xem video
+                        </a>
+                    @endif
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
             </div>
         </div>
+    </div>
+</div>
+      <!-- Improved Hotel Detail Page Structure -->
+<div class="hotel-detail-container">
+    <!-- Header Section with Hotel Name and Hero Banner -->
+    <div class="hotel-hero">
+      <div class="container">
+        <div class="hotel-header">
+          <div class="hotel-title-section">
+            <h1 class="hotel-name">{{ $hotel->hotel_name }}</h1>
+            <div class="hotel-rating">
+              @for ($i = 1; $i <= 5; $i++)
+                @if ($i <= $hotel->rating)
+                  <i class="fas fa-star filled"></i>
+                @else
+                  <i class="fas fa-star empty"></i>
+                @endif
+              @endfor
+              <span class="rating-text">{{ $hotel->rating }}/5 ({{ $totalReviews }} đánh giá)</span>
+            </div>
+            <div class="hotel-location">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>{{ $hotel->location }}, {{ $hotel->city->city_name }}</span>
+            </div>
+          </div>
+          
+          <div class="quick-booking-card">
+            <div class="price-display">
+              <div class="price-label">Giá từ</div>
+              @if ($hotel->rooms->isNotEmpty())
+                <div class="price-value">{{ number_format($hotel->rooms->min('price'), 0, ',', '.') }} <span class="price-unit">VND/đêm</span></div>
+              @else
+                <div class="price-value unavailable">Chưa có giá</div>
+              @endif
+            </div>
+            <a href="#bookingSection" class="btn-book-now">
+              <i class="fas fa-calendar-check"></i> Đặt Ngay
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Main Content Section -->
+    <div class="container">
+      <div class="hotel-content-wrapper">
+        <!-- Left Column - Main Content -->
+        <div class="main-content">
+          <!-- About Section -->
+          <section class="content-section hotel-about">
+            <h2 class="section-title">Giới thiệu</h2>
+            <div class="description-content">
+              {!! $hotel->description !!}
+            </div>
+            
+            <!-- Highlights Box -->
+            <div class="highlights-box">
+              <h3 class="highlights-title"><i class="fas fa-award"></i> Điểm nổi bật</h3>
+              <div class="highlights-grid">
+                <div class="highlight-item">
+                  <i class="fas fa-check-circle"></i>
+                  <span>Vị trí trung tâm, thuận tiện di chuyển</span>
+                </div>
+                <div class="highlight-item">
+                  <i class="fas fa-check-circle"></i>
+                  <span>Phòng rộng rãi, trang thiết bị hiện đại</span>
+                </div>
+                <div class="highlight-item">
+                  <i class="fas fa-check-circle"></i>
+                  <span>Dịch vụ chuyên nghiệp, thân thiện</span>
+                </div>
+              </div>
+            </div>
+          </section>
+  
+          <!-- Amenities Section -->
+          <div class="hotel-amenities">
+            <div class="amenities-header">
+              <h3 class="amenities-title">Tiện nghi khách sạn</h3>
+              @if (count($hotel->amenities) > 8)
+                <button class="view-all-btn" id="viewAllAmenities">
+                  <span class="view-text">Xem tất cả</span>
+                  <i class="fas fa-chevron-down"></i>
+                </button>
+              @endif
+            </div>
+            
+            <div class="amenities-container" id="amenitiesContainer">
+              @if ($hotel->amenities->IsEmpty())
+                <div class="no-amenities">
+                  <i class="fas fa-info-circle"></i>
+                  <p>Khách sạn không có thông tin về tiện nghi</p>
+                </div>
+              @else
+                <div class="amenities-grid">
+                  @foreach ($hotel->amenities->take(8) as $key => $amenity)
+                    <div class="amenity-item">
+                      <div class="amenity-icon">
+                        <i class="fas fa-check-circle"></i>
+                      </div>
+                      <div class="amenity-name">{{ $amenity->amenity_name }}</div>
+                    </div>
+                  @endforeach
+                  
+                  <!-- Hidden amenities that will be shown when "View All" is clicked -->
+                  @if (count($hotel->amenities) > 8)
+                    <div class="hidden-amenities">
+                      @foreach ($hotel->amenities->skip(8) as $key => $amenity)
+                        <div class="amenity-item hidden-amenity">
+                          <div class="amenity-icon">
+                            <i class="fas fa-check-circle"></i>
+                          </div>
+                          <div class="amenity-name">{{ $amenity->amenity_name }}</div>
+                        </div>
+                      @endforeach
+                    </div>
+                  @endif
+                </div>
+              @endif
+            </div>
+          </div>
+        </div>
+  
+        <!-- Right Column - Sidebar -->
+        <div class="hotel-sidebar">
+          <!-- Map Card -->
+          <div class="sidebar-card map-card">
+            <h3 class="card-title"><i class="fas fa-map-marked-alt"></i> Vị trí</h3>
+            <div class="map-container ratio ratio-4x3">
+              <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.4976450036565!2d106.69522897480486!3d10.773145589375437!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f38cdaf80a5%3A0x18fb7c58d919b591!2zMTY0IMSQLiBMw6ogVGjDoW5oIFTDtG4sIFBoxrDhu51uZyBC4bq_biBUaMOgbmgsIFF14bqtbiAxLCBI4buTIENow60gTWluaCwgVmnhu4d0IE5hbQ!5e0!3m2!1svi!2s!4v1730039298467!5m2!1svi!2s"
+                style="border:0;" allowfullscreen="" loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade">
+              </iframe>
+            </div>
+            <div class="location-features">
+              <div class="feature-item">
+                <i class="fas fa-walking"></i>
+                <span>Gần trung tâm thành phố</span>
+              </div>
+              <div class="feature-item">
+                <i class="fas fa-utensils"></i>
+                <span>Nhiều nhà hàng xung quanh</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Booking Card -->
+          <div class="sidebar-card booking-card">
+            <h3 class="card-title"><i class="fas fa-bookmark"></i> Đặt phòng</h3>
+            <div class="price-summary">
+              <div class="price-label">Giá phòng từ</div>
+              @if ($hotel->rooms->isNotEmpty())
+                <div class="price-value">
+                  <span class="amount">{{ number_format($hotel->rooms->min('price'), 0, ',', '.') }}</span>
+                  <span class="unit">VND / đêm</span>
+                </div>
+              @else
+                <div class="price-value unavailable">Chưa có giá cho khách sạn này</div>
+              @endif
+            </div>
+            <a href="#bookingSection" class="btn-book-room">
+              <i class="fas fa-calendar-check"></i> Đặt Phòng Ngay
+            </a>
+            <div class="booking-note">
+              <i class="fas fa-info-circle"></i>
+              <span>Không mất phí đặt phòng</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
         <div class="group-detail-book-room" id="bookingSection">
             @if ($rooms->IsEmpty())
                 <p> </p>
@@ -612,6 +846,25 @@
 </div>
 
 <script>
+    // JavaScript để xử lý việc xem tất cả tiện nghi
+document.addEventListener('DOMContentLoaded', function() {
+    const viewAllBtn = document.getElementById('viewAllAmenities');
+    
+    if (viewAllBtn) {
+        viewAllBtn.addEventListener('click', function() {
+            const hiddenAmenities = document.querySelectorAll('.hidden-amenity');
+            const isActive = this.classList.contains('active');
+            
+            hiddenAmenities.forEach(item => {
+                item.style.display = isActive ? 'none' : 'flex';
+            });
+            
+            this.classList.toggle('active');
+            const viewText = this.querySelector('.view-text');
+            viewText.textContent = isActive ? 'Xem tất cả' : 'Thu gọn';
+        });
+    }
+});
     function showLoginModal() {
         const loginModal = new bootstrap.Modal(document.getElementById('loginRequiredModal'));
         loginModal.show();

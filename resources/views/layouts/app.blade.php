@@ -63,7 +63,7 @@
             border-radius: 30px;
             font-size: 20px;
             cursor: pointer;
-            z-index: 1000;
+            z-index: 9999;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
             opacity: 0;
             pointer-events: none;

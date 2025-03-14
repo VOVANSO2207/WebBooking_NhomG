@@ -33,41 +33,48 @@ class AppServiceProvider extends ServiceProvider
     {
         //
         Schema::defaultStringLength(191);
-        // Lấy danh sách thành phố và chia sẻ với tất cả các views
-        $cities = Cities::all();
-        View::share('cities', $cities);
 
-        $room_images = RoomImages::all();
-        View::share('room_images', $room_images);
+        // Chỉ thực hiện truy vấn database khi không phải đang trong quá trình build/deploy
+        if (app()->environment() !== 'testing' && !app()->runningInConsole() && config('app.env') !== 'production' || env('DB_CONNECTION') !== 'none') {
+            try {
+                // Lấy danh sách thành phố và chia sẻ với tất cả các views
+                $cities = Cities::all();
+                View::share('cities', $cities);
 
-        $hotel_images = HotelImages::all();
-        View::share('hotel_images', $hotel_images);
+                $room_images = RoomImages::all();
+                View::share('room_images', $room_images);
 
-        $get_hotels = Hotel::orderBy('rating', 'desc')->get();
-        View::share('get_hotels_desc', $get_hotels);
+                $hotel_images = HotelImages::all();
+                View::share('hotel_images', $hotel_images);
 
-        $get_hotels = Hotel::orderBy('rating', 'desc')->get();
-        View::share('get_hotels_desc', $get_hotels);
+                $get_hotels = Hotel::orderBy('rating', 'desc')->get();
+                View::share('get_hotels_desc', $get_hotels);
 
-        $hotel_amenities_ser = HotelAmenities::all();
-        View::share('hotel_amenities_ser', $hotel_amenities_ser);
+                $hotel_amenities_ser = HotelAmenities::all();
+                View::share('hotel_amenities_ser', $hotel_amenities_ser);
 
+                // Đếm số lượng khách sạn trong thành phố
+                $cityId = '';
+                $city = Cities::find($cityId);
+                $cityName = $city ? $city->name : ''; // fallback nếu không tìm thấy thành phố
+
+                // Đếm số lượng khách sạn trong thành phố
+                $hotelCount = Hotel::where('city_id', $cityId)->count();
+
+                // Chia sẻ với tất cả view
+                view()->share('hotelCount', $hotelCount);
+                view()->share('cityName', $cityName);
+            } catch (\Exception $e) {
+                // Xử lý lỗi kết nối database trong quá trình boot
+                // Không làm gì, cho phép ứng dụng tiếp tục hoạt động
+            }
+        }
+
+        // Các validator không phụ thuộc vào database, nên vẫn giữ lại
         // Quy tắc kiểm tra không có khoảng trắng trong email
         Validator::extend('no_spaces_in_email', function ($attribute, $value, $parameters, $validator) {
             return !preg_match('/\s/', $value); // Kiểm tra nếu có khoảng trắng
         });
-
-        // Đếm số lượng khách sạn trong thành phố
-        $cityId = '';
-        $city = Cities::find($cityId);
-        $cityName = $city ? $city->name : ''; // fallback nếu không tìm thấy thành phố
-
-        // Đếm số lượng khách sạn trong thành phố
-        $hotelCount = Hotel::where('city_id', $cityId)->count();
-
-        // Chia sẻ với tất cả view
-        view()->share('hotelCount', $hotelCount);
-        view()->share('cityName', $cityName);
 
         // Quy tắc kiểm tra tên miền hợp lệ
         Validator::extend('valid_domain', function ($attribute, $value, $parameters, $validator) {
@@ -81,6 +88,7 @@ class AppServiceProvider extends ServiceProvider
             // Kiểm tra tên miền có tồn tại không
             return checkdnsrr($domain, 'MX');
         });
+        
         // Quy tắc kiểm tra tên miền cấp cao (phần mở rộng)
         Validator::extend('valid_top_level_domain', function ($attribute, $value, $parameters, $validator) {
             $emailParts = explode('@', $value);

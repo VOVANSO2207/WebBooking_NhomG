@@ -18,11 +18,62 @@
 @endsection
 @section('content')
 <div class="container filter-hotel mt-5">
+    <!-- Mobile Controls - Chỉ hiển thị trên mobile/tablet -->
+    <div class="mobile-controls d-block d-lg-none">
+        <div class="d-flex justify-content-between align-items-center p-3">
+            <button id="filter-toggle" class="btn btn-outline-primary">
+                <i class="fas fa-filter"></i> Bộ lọc
+            </button>
+            <button id="sort-toggle" class="btn btn-outline-primary">
+                <i class="fas fa-sort"></i> Sắp xếp
+            </button>
+        </div>
+        
+        <!-- Hiển thị thông tin đặt phòng dạng thẻ cho mobile -->
+        <div class="booking-info-card p-3 mb-3">
+            <h5 class="booking-info-title">Thông tin đặt phòng</h5>
+            <div class="booking-info-content">
+                <div class="row">
+                    <div class="col-6 mb-2">
+                        <div class="info-item">
+                            <i class="far fa-calendar-alt text-primary"></i>
+                            <span>Ngày đi: {{ isset($daterange) ? explode(' - ', $daterange)[0] : '' }}</span>
+                        </div>
+                    </div>
+                    <div class="col-6 mb-2">
+                        <div class="info-item">
+                            <i class="far fa-calendar-check text-primary"></i>
+                            <span>Ngày về: {{ isset($daterange) ? explode(' - ', $daterange)[1] : '' }}</span>
+                        </div>
+                    </div>
+                    <div class="col-6 mb-2">
+                        <div class="info-item">
+                            <i class="fas fa-door-open text-primary"></i>
+                            <span>Số phòng: {{ $rooms }}</span>
+                        </div>
+                    </div>
+                    <div class="col-6 mb-2">
+                        <div class="info-item">
+                            <i class="fas fa-user-friends text-primary"></i>
+                            <span>Người lớn: {{ $adults }}</span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="info-item">
+                            <i class="fas fa-child text-primary"></i>
+                            <span>Trẻ em: {{ $children }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="counter-hotel">
         <h3>Có {{ $hotelCount }} khách sạn tại {{ $cityName }}</h3>
     </div>
     <div class="row d-flex thu-nho">
-        <div class="col-md-3 filter">
+        <div class="col-lg-3 filter d-none d-lg-block">
             <div class="header_title">
                 <h3>Bộ lọc</h3>
             </div>
@@ -94,8 +145,8 @@
             </div>
         </div>
 
-        <div class="col-md-9">
-            <div class="tab_control">
+        <div class="col-lg-9">
+            <div class="tab_control d-none d-lg-block">
                 <ul class="tab_list d-flex">
                     <span class="text_first">Sắp xếp:</span>
                     <li>
@@ -123,7 +174,7 @@
 
             <div class="tab_content">
                 <div id="low-to-high" class="tab_item active hotels-container">
-                    <div class="d-flex">
+                    <div class="d-flex d-lg-flex d-md-none d-sm-none">
                         <p>Ngày đi: {{ isset($daterange) ? explode(' - ', $daterange)[0] : '' }} </p>
                         <p class="ms-2">Ngày về: {{ isset($daterange) ? explode(' - ', $daterange)[1] : '' }} </p>
                         <p class="ms-2">Số phòng: {{ $rooms }} </p>
@@ -150,7 +201,7 @@
                                     </swiper-container>
                                 </div>
                                 <div class="hotel-info row">
-                                    <div class="col-md-9">
+                                    <div class="col-lg-9 col-md-8 col-12">
                                         <p class="reviews">Có tất cả {{ $hotel->reviews_count }} lượt đánh giá </p>
                                         <h4 class="location_hotel">
                                             <i class="fas fa-map-marker-alt icon-location" style="color: #3B79C9;"></i>
@@ -181,7 +232,7 @@
                                             @endfor
                                         </div>
                                     </div>
-                                    <div class="col-md-3 status-button">
+                                    <div class="col-lg-3 col-md-4 col-12 status-button">
                                         <div class="status">
                                             @foreach ($hotel->rooms as $room)
                                             @if ($room->roomType)
@@ -193,7 +244,6 @@
                                         <a href="{{ route('pages.hotel_detail', ['hotel_id' => $hotel->hotel_id]) }}"
                                             class="book-now" style="text-decoration: none;">Xem phòng</a>
                                     </div>
-                                    {{-- {{dd($hotel)}} --}}
                                 </div>
                             </div>
                         @endforeach
@@ -224,7 +274,7 @@
                                     </swiper-container>
                                 </div>
                                 <div class="hotel-info row">
-                                    <div class="col-md-9">
+                                    <div class="col-lg-9 col-md-8 col-12">
                                         <p class="reviews">Có {{ $hotel->rating }} lượt đánh giá</p>
                                         <h4 class="location_hotel">
                                             <i class="fas fa-map-marker-alt icon-location" style="color: #3B79C9;"></i>
@@ -258,7 +308,7 @@
                                             @endfor
                                         </div>
                                     </div>
-                                    <div class="col-md-3 status-button">
+                                    <div class="col-lg-3 col-md-4 col-12 status-button">
                                         <div class="status">
                                             @if($rooms && $rooms instanceof \Illuminate\Support\Collection)
                                                 @foreach ($rooms as $room)
@@ -282,6 +332,126 @@
         </div>
     </div>
 </div>
+
+<!-- Overlay cho bộ lọc (mobile/tablet) -->
+<div id="filter-overlay" class="filter-overlay">
+    <div class="filter-content">
+        <div class="filter-header">
+            <h3>Bộ lọc</h3>
+            <button id="close-filter" class="close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        
+        <!-- Sao chép nội dung từ phần filter -->
+        <div class="filter-body">
+            <span class="line"></span>
+            <div class="price-slider">
+                <h2>Giá mỗi đêm</h2>
+                <div class="wrapper">
+                    <div class="slider">
+                        <div class="progress"></div>
+                    </div>
+                    <div class="range-input">
+                        <input type="range" class="range-min" min="0" max="10000" value="2500" step="100">
+                        <input type="range" class="range-max" min="0" max="10000" value="7500" step="100">
+                    </div>
+                    <div class="price-input">
+                        <div class="field">
+                            <span>Thấp nhất</span>
+                            <input type="number" class="input-min" value="2500" readonly>
+                        </div>
+                        <div class="separator">-</div>
+                        <div class="field">
+                            <span>Cao nhất</span>
+                            <input type="number" class="input-max" value="7500" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="Popular_filters">
+                <h2>Bộ lọc phổ biến</h2>
+                <div class="option d-flex justify-content-between align-items-center">
+                    <p>Nhiều đánh giá</p>
+                    <input type="checkbox" class="check_filter" data-filter="high_rating">
+                </div>
+                <div class="option d-flex justify-content-between align-items-center">
+                    <p>Khuyến mãi</p>
+                    <input type="checkbox" class="check_filter" data-filter="promotions">
+                </div>
+                <div class="option d-flex justify-content-between align-items-center">
+                    <p>Phòng đơn</p>
+                    <input type="checkbox" class="check_filter" data-filter="single_room">
+                </div>
+                <div class="option d-flex justify-content-between align-items-center">
+                    <p>Phòng đôi</p>
+                    <input type="checkbox" class="check_filter" data-filter="double_room">
+                </div>
+            </div>
+
+            <span class="line"></span>
+
+            <div class="rating-container mt-3 mb-3">
+                <h2 class="rating-title">Hạng sao khách sạn</h2>
+                <div class="star-container">
+                    <button class="star-button check_filter" data-filter="two_start">2 ★</button>
+                    <button class="star-button check_filter" data-filter="three_start">3 ★</button>
+                    <button class="star-button check_filter active" data-filter="four_start">4 ★</button>
+                    <button class="star-button check_filter" data-filter="five_start">5 ★</button>
+                </div>
+            </div>
+            <div class="line"></div>
+            <div class="amenities_hotel mt-3">
+                <h2 class="title_top">Tiện nghi khách sạn</h2>
+                @foreach ($amenities as $amenity)
+                    <div class="option d-flex justify-content-between align-items-center">
+                        <p>{{ $amenity->amenity_name }}</p>
+                        <input type="checkbox" class="check_filter" data-filter="hotel_amenities"
+                            data-amenity-id="{{ $amenity->amenity_id }}">
+                    </div>
+                @endforeach
+            </div>
+        </div>
+        
+        <div class="filter-footer">
+            <button id="apply-filter" class="btn btn-primary btn-block">Áp dụng</button>
+        </div>
+    </div>
+</div>
+
+<!-- Sheet cho sắp xếp (mobile/tablet) -->
+<div id="sort-sheet" class="sort-sheet">
+    <div class="sort-content">
+        <div class="sort-header">
+            <h3>Sắp xếp theo</h3>
+            <button id="close-sort" class="close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        
+        <div class="sort-options">
+            <div class="sort-option">
+                <input type="radio" id="low_price" class="check_filter" data-filter="low_price">
+                <label for="mobile-low-price">Giá rẻ</label>
+            </div>
+            <div class="sort-option">
+                <input type="radio" id="high_price" class="check_filter" data-filter="high_price">
+                <label for="mobile-high-price">Giá đắt</label>
+            </div>
+            <div class="sort-option">
+                <input type="radio" id="high_rating" class="check_filter" data-filter="high_rating">
+                <label for="mobile-high-rating">Đánh giá nhiều nhất</label>
+            </div>
+            <div class="sort-option">
+                <input type="radio" id="desc_rating" class="check_filter" data-filter="desc_rating">
+                <label for="mobile-desc-rating">Xếp hạng sao</label>
+            </div>
+        </div>
+        
+        <div class="sort-footer">
+            <button id="apply-sort" class="btn btn-primary btn-block">Áp dụng</button>
+        </div>
+    </div>
+</div>
+
+<!-- Màn phủ khi overlay/sheet mở -->
+<div id="overlay-backdrop" class="overlay-backdrop"></div>
 @section('footer')
     @include('partials.footer')
 @endsection

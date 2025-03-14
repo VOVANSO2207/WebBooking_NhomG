@@ -35,7 +35,6 @@
 
     .menu-attribute {
         flex-direction: column;
-        align-items: center;
     }
 
     .header-staynest .solgan-staynest p:first-child {
@@ -47,13 +46,15 @@
 .search-bar-staynest {
     padding: 20px;
     margin: 20px 0;
-    scale: 0.85;
+    /* scale: 0.85; */
 }
 
 @media (max-width: 768px) {
     .search-bar-staynest {
-        flex-direction: column;
-        align-items: center;
+        scale: 1 !important;
+        h2{
+            font-size: 20px;
+        }
     }
 
     .search-bar-staynest .col-md-3,
@@ -89,12 +90,314 @@
 }
 
 @media (max-width: 576px) {
+    /* HOME PAGE */
     .link-social {
         width: 30px;
         height: 30px;
     }
+    .slogan-staynest p {
+        font-size: 25px;
+    }
+    .famous-hotel .shape .btn-book-now {
+        padding: 3px 20px;
+        margin-top: -2px;
+        display: inline-block;
+        background: #3b79c9;
+        color: #fff; 
+    }
+    .info-hotel-price-old{
+        margin: 0px  !important;
+        padding: 0px !important;
+    }
+   .carousel-wrapper2 .shape-in {
+        height: auto;
+    }
+    .latest-blogs{
+        padding-top: 0px;
+        .title{
+            margin-top: 0px !important;
+            text-align: left;
+        }
+    }
+    .our-offers{
+        padding-bottom: 0px !important;
+    }
+    .button-search-header {
+        button{
+            padding: 10px;
+        }
+    }
+    .hotel_detail{
+        .image-detail-card{
+            margin: 0px !important;
+            .large-img{
+                img{
+                    height: auto;
+                    margin-bottom: 10px;
+                }
+                
+            }
+        }
+        .modal-body{
+            padding: 20px !important;
+        }
+    }
+    .Popular_filters .city-filters{
+        gap: 0px;
+        .city-option{
+            margin-right: 10px;
+        }
+    }
+    
+}
+/* CSS cho responsive search result */
+@media (max-width: 991px) {
+    .filter {
+        display: none; 
+    }
+    
+    .mobile-controls {
+        display: block !important;
+        background-color: #fff;
+        box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+        margin-bottom: 15px;
+        border-radius: 8px;
+    }
+    
+    .tab_control {
+        display: none; /* Ẩn tab control trên desktop */
+    }
+    
+    .tab_content .d-flex {
+        display: none !important; /* Ẩn thông tin đặt phòng dạng ngang */
+    }
+    
+    .booking-info-card {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        box-shadow: 0px 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .booking-info-title {
+        font-size: 16px;
+        margin-bottom: 10px;
+        color: #3B79C9;
+    }
+    
+    
+    .info-item i {
+        margin-right: 8px;
+        width: 16px;
+    }
+    
+    .counter-hotel h3 {
+        font-size: 18px;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+    
+    /* Hotel cards - adjust spacing */
+    .hotel-card {
+        margin-bottom: 20px;
+    }
 }
 
+/* Overlay cho bộ lọc */
+.filter-overlay {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 85%;
+    max-width: 350px;
+    height: 100%;
+    background-color: #fff;
+    z-index: 1050;
+    transition: left 0.3s ease;
+    overflow-y: auto;
+    box-shadow: 2px 0px 10px rgba(0,0,0,0.2);
+}
+
+.filter-overlay.active {
+    left: 0;
+}
+
+.filter-header, .sort-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    flex-shrink: 0;
+}
+
+.filter-body {
+    padding: 15px;
+    overflow-y: auto;
+    height: calc(100% - 120px);
+}
+
+.filter-footer, .sort-footer {
+    padding: 15px;
+    border-top: 1px solid #eee;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: #fff;
+    z-index: 2;
+    flex-shrink: 0;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Sheet cho sắp xếp */
+.sort-sheet {
+    position: fixed;
+    bottom: -100%;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    z-index: 1050;
+    transition: bottom 0.3s ease;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    box-shadow: 0px -2px 10px rgba(0,0,0,0.1);
+    max-height: 80vh;
+    overflow: hidden; 
+    display: flex;
+    flex-direction: column;
+}
+
+.sort-sheet.active {
+    bottom: 0;
+}
+
+.sort-content {
+    position: relative;
+    padding-bottom: 15px;
+    padding-bottom: 70px; 
+    max-height: 80vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+
+.sort-options {
+    padding: 15px;
+    max-height: 300px; 
+    overflow-y: auto; 
+    flex-grow: 1;
+    -webkit-overflow-scrolling: touch;
+}
+
+.sort-option {
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.sort-option:last-child {
+    border-bottom: none;
+}
+
+.sort-option label {
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+/* Backdrop khi overlay/sheet mở */
+.overlay-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 1040;
+    display: none;
+}
+
+.overlay-backdrop.active {
+    display: block;
+}
+
+.btn-block {
+    display: block;
+    width: 100%;
+}
+
+/* Điều chỉnh bố cục cho tablet */
+@media (min-width: 768px) and (max-width: 991px) {
+    .hotel-info {
+        padding: 15px;
+    }
+    
+    .booking-info-card {
+        margin: 0 15px 15px;
+    }
+}
+
+/* Điều chỉnh cho mobile */
+@media (max-width: 767px) {
+    .hotel-card {
+        flex-direction: column;
+        .sale-badge{
+            z-index: 1050;
+        }
+    }
+    
+    .hotel-image {
+        width: 100%;
+    }
+    .hotel-info {
+        padding: 15px;
+    }
+    
+    .status-button {
+        margin-top: 15px;
+        text-align: center;
+    }
+    
+    .booking-info-card {
+        margin: 0 10px 15px;
+    }
+    
+    .hotel-info .col-md-9,
+    .hotel-info .col-md-3 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+    
+    .counter-hotel h3 {
+        font-size: 16px;
+    }
+}
+@media (max-height: 500px) {
+    .sort-sheet {
+        max-height: 100vh; 
+    }
+    
+    .sort-header {
+        padding: 10px 15px; 
+    }
+    
+    .sort-footer {
+        padding: 10px 15px; 
+    }
+    
+    .sort-options {
+        padding: 5px 15px; 
+    }
+    
+    .sort-option {
+        padding: 8px 0;
+    }
+}
 /* Large devices (desktops, 1200px and up) */
 @media (min-width: 1200px) {}
 
