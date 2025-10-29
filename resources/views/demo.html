@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Banner với nút đổi ảnh</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      padding: 20px;
+    }
+    
+    .banner-container {
+      position: relative;
+      width: 100%;
+      max-width: 1000px;
+      height: 400px;
+      margin: 0 auto;
+      overflow: hidden;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    .banner {
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 1;
+      transform: scale(1);
+      transition: all 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    
+    /* Hiệu ứng đổi banner mới */
+    .banner-exit {
+      opacity: 0;
+      transform: scale(1.05) translateY(20px);
+      filter: blur(2px);
+    }
+    
+    .banner-enter {
+      opacity: 0;
+      transform: scale(0.95) translateY(-20px);
+      filter: blur(2px);
+    }
+    
+    .banner-button {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: rgba(255, 255, 255, 0.8);
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+      z-index: 10;
+    }
+    
+    .banner-button:hover {
+      background-color: white;
+      transform: scale(1.1);
+    }
+    
+    .banner-icon {
+      width: 24px;
+      height: 24px;
+    }
+    
+    .banner-dropdown {
+      position: absolute;
+      top: 80px;
+      right: 20px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      width: 300px;
+      max-height: 300px;
+      overflow-y: auto;
+      display: none;
+      z-index: 10;
+      padding: 10px;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: all 0.3s ease;
+    }
+    
+    .banner-dropdown.active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .thumbnail-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: space-between;
+    }
+    
+    .thumbnail {
+      width: calc(50% - 5px);
+      height: 80px;
+      border-radius: 4px;
+      cursor: pointer;
+      object-fit: cover;
+      transition: all 0.3s ease;
+      opacity: 0.9;
+      transform: scale(0.95);
+      filter: brightness(90%);
+    }
+    
+    /* Hiệu ứng hover cho thumbnail */
+    .thumbnail:hover {
+      transform: scale(1.05);
+      opacity: 1;
+      filter: brightness(110%);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      z-index: 1;
+    }
+    
+    .banner-dropdown.active .thumbnail {
+      animation: slideUp 0.3s ease forwards;
+    }
+    
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: scale(0.95) translateY(10px);
+      }
+      to {
+        opacity: 0.9;
+        transform: scale(0.95) translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="banner-container">
+    <div class="banner" id="current-banner"></div>
+    <button class="banner-button" id="banner-toggle">
+      <svg class="banner-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+        <polyline points="21 15 16 10 5 21"></polyline>
+      </svg>
+    </button>
+    <div class="banner-dropdown" id="banner-dropdown">
+      <div class="thumbnail-container" id="thumbnail-container"></div>
+    </div>
+  </div>
+  <script>
+    function findSecondLargest(arr) {
+  // Kiểm tra nếu mảng rỗng hoặc chỉ có một phần tử
+  if (!arr || arr.length < 2) {
+    return null;
+  }
+  // Sắp xếp mảng theo thứ tự giảm dần
+  const sortedArr = [...arr].sort((a, b) => b - a);
+  
+  // Tìm phần tử khác với số lớn nhất
+  const largest = sortedArr[0];
+  for (let i = 1; i < sortedArr.length; i++) {
+    if (sortedArr[i] !== largest) {
+      return sortedArr[i];
+    }
+  }
+  
+  // Nếu tất cả phần tử đều giống nhau
+  return null;
+}
+
+// Ví dụ sử dụng
+const array1 = [10, 5, 8, 20, 3, 10];
+console.log(findSecondLargest(array1)); // Kết quả: 10
+  </script>
+  <script>
+    const banners = [
+      'https://images.pexels.com/photos/3935702/pexels-photo-3935702.jpeg?auto=compress&cs=tinysrgb&w=1200',
+      'https://images.pexels.com/photos/2559941/pexels-photo-2559941.jpeg?auto=compress&cs=tinysrgb&w=1200',
+      'https://images.pexels.com/photos/2387873/pexels-photo-2387873.jpeg?auto=compress&cs=tinysrgb&w=1200',
+      'https://images.pexels.com/photos/1287145/pexels-photo-1287145.jpeg?auto=compress&cs=tinysrgb&w=1200',
+      'https://images.pexels.com/photos/3617500/pexels-photo-3617500.jpeg?auto=compress&cs=tinysrgb&w=1200',
+      'https://images.pexels.com/photos/2662116/pexels-photo-2662116.jpeg?auto=compress&cs=tinysrgb&w=1200'
+    ];
+    
+    const currentBanner = document.getElementById('current-banner');
+    const bannerToggle = document.getElementById('banner-toggle');
+    const bannerDropdown = document.getElementById('banner-dropdown');
+    const thumbnailContainer = document.getElementById('thumbnail-container');
+    
+    currentBanner.style.backgroundImage = `url(${banners[0]})`;
+    
+    banners.forEach((banner, index) => {
+      const thumbnail = document.createElement('img');
+      thumbnail.src = banner;
+      thumbnail.className = 'thumbnail';
+      thumbnail.alt = `Banner ${index + 1}`;
+      thumbnail.style.animationDelay = `${index * 0.05}s`;
+      
+      thumbnail.addEventListener('click', () => {
+        changeBanner(banner);
+        bannerDropdown.classList.remove('active');
+      });
+      
+      thumbnailContainer.appendChild(thumbnail);
+    });
+    
+    bannerToggle.addEventListener('click', () => {
+      bannerDropdown.classList.toggle('active');
+    });
+    
+    function changeBanner(newBannerUrl) {
+      currentBanner.classList.add('banner-exit');
+      
+      const newBanner = document.createElement('div');
+      newBanner.className = 'banner banner-enter';
+      newBanner.style.backgroundImage = `url(${newBannerUrl})`;
+      
+      document.querySelector('.banner-container').appendChild(newBanner);
+      
+      void newBanner.offsetWidth;
+      
+      setTimeout(() => {
+        newBanner.classList.remove('banner-enter');
+      }, 10);
+      
+      setTimeout(() => {
+        currentBanner.remove();
+        newBanner.id = 'current-banner';
+        currentBanner = newBanner;
+      }, 800);
+    }
+    
+    document.addEventListener('click', (event) => {
+      if (!bannerToggle.contains(event.target) && !bannerDropdown.contains(event.target)) {
+        bannerDropdown.classList.remove('active');
+      }
+    });
+  </script>
+</body>
+</html> 
+  

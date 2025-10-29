@@ -15,12 +15,11 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             UsersTableSeeder::class,
+            NotificationsTableSeeder::class,
             HotelTableSeeder::class,
             ReviewsTableSeeder::class,
             FavoriteHotelTableSeeder::class,
             HotelAmenitiesTableSeeder::class,
-            HotelImageTableSeeder::class,
-            NotificationsTableSeeder::class,
             OrderHistoryTableSeeder::class,
             PaymentsTableSeeder::class,
             PostsTableSeeder::class,
@@ -32,6 +31,7 @@ class DatabaseSeeder extends Seeder
             RoomImageTableSeeder::class,
             RoomsTableSeeder::class,
             RoomTypeTableSeeder::class,
+            HotelImageTableSeeder::class,
             BookingTableSeeder::class,
             CitiesTableSeeder::class,
         ]);

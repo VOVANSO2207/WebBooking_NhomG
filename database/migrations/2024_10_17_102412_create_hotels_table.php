@@ -17,8 +17,6 @@ return new class extends Migration {
             $table->integer('city_id');
             $table->text('description');
             $table->decimal('rating');
-            $table->decimal('price_old', 15, 2);
-            $table->decimal('price_new', 15, 2);
             $table->timestamps();
         });
     }

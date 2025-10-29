@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Notifications;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\User;
 
 class NotificationsTableSeeder extends Seeder
 {

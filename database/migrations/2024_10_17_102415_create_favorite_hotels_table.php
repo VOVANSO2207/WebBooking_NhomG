@@ -18,7 +18,6 @@ return new class extends Migration
             $table->foreign('favorite_id')->references('hotel_id')->on('hotels');
             $table->integer('user_id');
             $table->integer('hotel_id');
-            $table->foreign('hotel_id')->references('user_id')->on('user');
             $table->timestamps();
         });
 

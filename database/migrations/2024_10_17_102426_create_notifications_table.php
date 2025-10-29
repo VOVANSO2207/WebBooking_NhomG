@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::create('notifications', function (Blueprint $table) {
             $table->increments('notification_id');
             $table->integer('user_id');
-            $table->foreign('user_id')->references('user_id')->on('user');
             $table->text('message');
             $table->string('status');
             $table->timestamps();

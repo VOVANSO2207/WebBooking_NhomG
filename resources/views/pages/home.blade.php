@@ -3,181 +3,141 @@
 
 @section('title', 'Trang chủ')
 <link rel="stylesheet" href="{{ asset('css/home.css') }}">
-<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script> -->
-
-<!-- <script>
-    // Datepicker
-    function initializeDateRangePicker() {
-        const startDate = moment(); // Ngày hiện tại
-        const endDate = moment().add(1, 'days'); // Ngày hiện tại + 7 ngày
-
-        $('input[name="daterange"]').daterangepicker({
-            startDate: startDate,
-            endDate: endDate,
-            minDate: startDate, // Ngày hiện tại là ngày nhỏ nhất
-            opens: 'center',
-            locale: {
-                format: 'DD/MM/YYYY'
-            }
-        }, function(start, end) {
-            // Cập nhật giá trị của input khi người dùng chọn
-            $('input[name="daterange"]').val(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
-        });
-
-        // Cập nhật giá trị mặc định cho input
-        $('input[name="daterange"]').val(startDate.format('DD/MM/YYYY') + ' - ' + endDate.format('DD/MM/YYYY'));
-    }
-
-    $(document).ready(function() {
-        $('.select2').select2(); // Khởi tạo Select2 cho các phần tử có class "select2"
-    });
-
-    $(document).ready(function() {
-        initializeDateRangePicker(); // Gọi hàm khởi tạo
-    });
-</script> -->
 {{-- https://images.unsplash.com/photo-1564501049412-61c2a3083791?q=80&w=2000 --}}
 @section('content')
 <section class="header-staynest-home">
     <section class="top-header header-staynest m-0">
-        <a href="{{asset('/')}}" class="d-flex align-items-center justify-content-center logo-staynest">
-            <img src="{{ asset('/images/logo_staynest_white_color.png') }}" alt="Logo" width="50px">
-            <h2 class="ms-2 mb-0 text-light">StayNest</h2>
-        </a>
         <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container">
                 <!-- Toggler Button -->     
-            <div class="d-flex align-items-center">
-                <button class="navbar-toggler" type="button" id="sidebarToggler" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-              
-            </div>
-                <!-- Sidebar Overlay -->
-                <div class="sidebar-overlay" id="sidebarOverlay"></div>
-
-                <!-- Sidebar Menu -->
-                <div class="sidebar-menu" id="sidebarMenu">
-                    <div class="sidebar-header">
-                        <h4 class="text-light">StayNest Menu</h4>
-                        <button type="button" class="btn-close btn-close-white" id="sidebarClose" aria-label="Close"></button>
-                    </div>
-                    
-                    <!-- Social Links -->
-                    <div class="sidebar-section">
-                        <h6 class="sidebar-title">Kết nối</h6>
-                        <ul class="navbar-nav social-header">
-                            <li class="nav-item">
-                                <a class="nav-link" href="#"><i class="fa-brands fa-facebook fa-lg"></i> Facebook</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#"><i class="fa-brands fa-x-twitter fa-lg"></i> Twitter</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#"><i class="fa-brands fa-youtube fa-lg"></i> YouTube</a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- Navigation Links -->
-                    <div class="sidebar-section">
-                        <h6 class="sidebar-title">Điều hướng</h6>
-                        <ul class="navbar-nav mb-2 mb-lg-0 menu-attribute">
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{asset('/')}}">
-                                    <i class="fa-solid fa-house me-1"></i> TRANG CHỦ
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{asset('introduce')}}">
-                                    <i class="fa-solid fa-info-circle me-1"></i> GIỚI THIỆU
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{route('hotels.index')}}">
-                                    <i class="fa-solid fa-hotel me-1"></i> PHÒNG KHÁCH SẠN
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{route('blog')}}">
-                                    <i class="fa-solid fa-newspaper me-1"></i> TIN TỨC
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{route('contact')}}">
-                                    <i class="fa-solid fa-envelope me-1"></i> LIÊN HỆ
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{route('contact')}}">
-                                    <i class="fa-solid fa-lightbulb me-1"></i> Ý TƯỞNG
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{route('contact')}}">
-                                    <i class="fa-solid fa-paint-brush me-1"></i> SÁNG TẠO
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- Profile Section for Mobile -->
-                    <div class="sidebar-section">
-                        <h6 class="sidebar-title">Tài khoản</h6>
-                        @if (auth()->check())
-                            <div class="sidebar-user-info">
-                                <div class="d-flex align-items-center mb-3">
-                                    <img src="{{ Auth::check() && Auth::user()->avatar ? asset('storage/images/' . Auth::user()->avatar) : asset('images/user-profile.png') }}"
-                                        alt="Avatar" class="img-fluid rounded-circle me-2"
-                                        style="width: 40px; height: 40px; object-fit: cover;">
-                                    <div>
-                                        <p class="m-0 fw-bold">{{ Auth::user()->username }}</p>
-                                    </div>
-                                </div>
-                                <div class="sidebar-user-links">
-                                    <a href="{{ route('pages.account') }}" class="sidebar-link">
-                                        <i class="fa-solid fa-user me-2"></i> Tài Khoản
-                                    </a>
-                                    <a href="{{ route('pages.account') }}?tab=nav-contact" class="sidebar-link">
-                                        <i class="fa-solid fa-heart me-2"></i> Yêu Thích
-                                    </a>
-                                    <a href="{{ route('pages.account') }}?tab=nav-profile" class="sidebar-link">
-                                        <i class="fa-solid fa-file-invoice me-2"></i> Hóa Đơn
-                                    </a>
-                                    <a href="{{route('viewVoucherUser')}}" class="sidebar-link">
-                                        <i class="fa-solid fa-ticket me-2"></i> Voucher
-                                    </a>
-                                    <a href="#" class="sidebar-link text-danger" onclick="event.preventDefault(); document.getElementById('sidebar-logout-form').submit();">
-                                        <i class="fa-solid fa-sign-out-alt me-2"></i> Đăng Xuất
-                                    </a>
-                                    <form id="sidebar-logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </div>
-                        @else
-                            <div class="sidebar-auth-links">
-                                <a href="{{ route('login') }}" class="btn btn-outline-light w-100 mb-2">
-                                    <i class="fa-solid fa-sign-in-alt me-2"></i> Đăng nhập
-                                </a>
-                                <a href="{{ url('register') }}" class="btn btn-light w-100">
-                                    <i class="fa-solid fa-user-plus me-2"></i> Đăng ký
-                                </a>
-                            </div>
-                        @endif
-                    </div>
+                <div class="d-flex align-items-center">
+                    <button class="navbar-toggler" type="button" id="sidebarToggler" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
                 </div>
+            <!-- Sidebar Overlay -->
+            <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+            <!-- Sidebar Menu -->
+            <div class="sidebar-menu" id="sidebarMenu">
+                <div class="sidebar-header">
+                    <h4 class="text-light">StayNest Menu</h4>
+                    <button type="button" class="btn-close btn-close-white" id="sidebarClose" aria-label="Close"></button>
+                </div>
+                
+                <!-- Social Links -->
+                <div class="sidebar-section">
+                    <h6 class="sidebar-title">Kết nối</h6>
+                    <ul class="navbar-nav social-header">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"><i class="fa-brands fa-facebook fa-lg"></i> Facebook</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"><i class="fa-brands fa-x-twitter fa-lg"></i> Twitter</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"><i class="fa-brands fa-youtube fa-lg"></i> YouTube</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Navigation Links -->
+                <div class="sidebar-section">
+                    <h6 class="sidebar-title">Điều hướng</h6>
+                    <ul class="navbar-nav mb-2 mb-lg-0 menu-attribute">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{asset('/')}}">
+                                <i class="fa-solid fa-house me-1"></i> TRANG CHỦ
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{asset('introduce')}}">
+                                <i class="fa-solid fa-info-circle me-1"></i> GIỚI THIỆU
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('hotels.index')}}">
+                                <i class="fa-solid fa-hotel me-1"></i> PHÒNG KHÁCH SẠN
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('blog')}}">
+                                <i class="fa-solid fa-newspaper me-1"></i> TIN TỨC
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('contact')}}">
+                                <i class="fa-solid fa-envelope me-1"></i> LIÊN HỆ
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('contact')}}">
+                                <i class="fa-solid fa-lightbulb me-1"></i> Ý TƯỞNG
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('contact')}}">
+                                <i class="fa-solid fa-paint-brush me-1"></i> SÁNG TẠO
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Profile Section for Mobile -->
+                <div class="sidebar-section">
+                    <h6 class="sidebar-title">Tài khoản</h6>
+                    @if (auth()->check())
+                        <div class="sidebar-user-info">
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="{{ Auth::check() && Auth::user()->avatar ? asset('storage/images/' . Auth::user()->avatar) : asset('images/user-profile.png') }}"
+                                    alt="Avatar" class="img-fluid rounded-circle me-2"
+                                    style="width: 40px; height: 40px; object-fit: cover;">
+                                <div>
+                                    <p class="m-0 fw-bold">{{ Auth::user()->username }}</p>
+                                </div>
+                            </div>
+                            <div class="sidebar-user-links">
+                                <a href="{{ route('pages.account') }}" class="sidebar-link">
+                                    <i class="fa-solid fa-user me-2"></i> Tài Khoản
+                                </a>
+                                <a href="{{ route('pages.account') }}?tab=nav-contact" class="sidebar-link">
+                                    <i class="fa-solid fa-heart me-2"></i> Yêu Thích
+                                </a>
+                                <a href="{{ route('pages.account') }}?tab=nav-profile" class="sidebar-link">
+                                    <i class="fa-solid fa-file-invoice me-2"></i> Hóa Đơn
+                                </a>
+                                <a href="{{route('viewVoucherUser')}}" class="sidebar-link">
+                                    <i class="fa-solid fa-ticket me-2"></i> Voucher
+                                </a>
+                                <a href="#" class="sidebar-link text-danger" onclick="event.preventDefault(); document.getElementById('sidebar-logout-form').submit();">
+                                    <i class="fa-solid fa-sign-out-alt me-2"></i> Đăng Xuất
+                                </a>
+                                <form id="sidebar-logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                    @csrf
+                                </form>
+                            </div>
+                        </div>
+                    @else
+                        <div class="sidebar-auth-links">
+                            <a href="{{ route('login') }}" class="btn btn-outline-light w-100 mb-2">
+                                <i class="fa-solid fa-sign-in-alt me-2"></i> Đăng nhập
+                            </a>
+                            <a href="{{ url('register') }}" class="btn btn-light w-100">
+                                <i class="fa-solid fa-user-plus me-2"></i> Đăng ký
+                            </a>
+                        </div>
+                    @endif
+                </div>
+            </div>
 
                 <!-- Desktop Navigation -->
                 <div class="collapse navbar-collapse justify-content-between" id="navbarContent">
+                    <!-- Logo and Brand -->
+                    <a href="{{asset('/')}}" class="d-flex align-items-center justify-content-center logo-staynest">
+                        <img src="{{ asset('/images/logo_staynest_white_color.png') }}" alt="Logo" width="50px">
+                        <h2 class="ms-2 mb-0 text-light">StayNest</h2>
+                    </a>
+                    
                     <!-- Navigation Links -->
                     <ul class="navbar-nav mb-2 mb-lg-0 menu-attribute">
                         <li class="nav-item"><a class="nav-link" href="{{asset('/')}}">TRANG CHỦ</a></li>
@@ -186,9 +146,8 @@
                         <li class="nav-item"><a class="nav-link" href="{{route('blog')}}">TIN TỨC</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{route('contact')}}">LIÊN HỆ</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{route('contact')}}">Ý TƯỞNG</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{route('contact')}}">SÁNG TẠO</a></li>
                     </ul>
-
+                    
                     <!-- Profile Section -->
                     <div class="profile-header col-md-2">
                         @if (auth()->check())
@@ -261,8 +220,9 @@
                         @else
                             <!-- Nếu chưa đăng nhập -->
                             <div class="group-left-header">
-                                <a href="{{ route('login') }}" class="login">Đăng nhập/</a>
-                                <a href="{{ url('register') }}" class="register ms-2">Đăng ký</a>
+                                <a href="{{ route('login') }}" class="login">Đăng nhập</a>
+                                <span class="text-light mx-1">/</span>
+                                <a href="{{ url('register') }}" class="register">Đăng ký</a>
                             </div>
                         @endif
                     </div>
@@ -271,11 +231,18 @@
         </nav>
     </section>
     <div class="middle-staynest-home mt-5">
+        <div class="slogan-staynest container">
+            <h1 class="main-heading">ĐẶT PHÒNG NHANH TẬN HƯỞNG NGAY</h1>
+            <p class="header-text-muted">Khám phá du lịch với dịch vụ đặt phòng nhanh chóng và tiện lợi. Hãy bắt đầu
+                hành trình của bạn ngay hôm nay!</p>
+        </div>
+        
         <div class="search-bar-staynest-home color-light container">
-            <form action="{{ route('hotels.search') }}" method="GET" class="row d-flex justify-content-center">
+            <form action="{{ route('hotels.search') }}" method="GET" class="row d-flex justify-content-center search-form">
                 @csrf
                 <div class="col-md-3 search-header">
                     <div class="form-group">
+                        <label for="location" class="search-label">Địa điểm</label>
                         <select name="location" class="form-control-staynest select2" style="width: 100%;" tabindex="-1"
                             aria-hidden="true" required>
                             @if ($cities->isEmpty())
@@ -291,13 +258,15 @@
                     </div>
                 </div>
                 <div class="col-md-3">
+                    <label for="daterange" class="search-label">Ngày đặt phòng</label>
                     <div class="date-picker-search border">
                         <i class="fa-regular fa-calendar-days ps-2"></i>
                         <input class="datepicker-staynest form-control p-0 ms-2" type="text" name="daterange"
                             readonly />
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
+                    <label class="search-label">Số người & phòng</label>
                     <div class="num-people border">
                         <div class="number">
                             <span id="people-summary">1 người lớn, </span>
@@ -334,20 +303,54 @@
                     </div>
                 </div>
                 <div class="col-md-2 search-header button-search-header">
-                    <button type="submit" class="btn btn-primary" style="width: 100%; height: 47px;">Tìm Khách
-                        Sạn</button>
+                    <label class="search-label">&nbsp;</label>
+                    <button type="submit" class="btn btn-primary">Tìm Khách Sạn</button>
                 </div>
             </form>
         </div>
-        <div class="slogan-staynest container">
-            <p>ĐẶT PHÒNG NHANH TẬN HƯỞNG NGAY</p>
-            <p class="header-text-muted">Khám phá du lịch với dịch vụ đặt phòng nhanh chóng và tiện lợi. Hãy bắt đầu
-                hành trình
-                của bạn ngay hôm
-                nay!</p>
-        </div>
+        
         <div class="button-book d-flex justify-content-center">
-            <a href="#" class="header-btn-book-now">ĐẶT NGAY</a>
+            <a href="{{route('hotels.index')}}" class="header-btn-book-now">ĐẶT NGAY</a>
+        </div>
+    </div>
+    <div class="banner-change-container">
+        <button class="banner-change-btn" id="changeBannerBtn" title="Đổi hình nền">
+            <i class="fa-solid fa-th-large"></i>
+        </button>
+    </div>
+    <div class="banner-modal" id="bannerModal">
+        <div class="banner-modal-content">
+            <div class="banner-modal-header">
+                <h3 class="banner-modal-title">Chọn hình nền</h3>
+                <button class="banner-modal-close" id="closeModal">&times;</button>
+            </div>
+            <div class="banner-options">
+                <div class="banner-option selected" data-url="https://images.unsplash.com/photo-1564501049412-61c2a3083791?q=80&w=2000">
+                    <img src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?q=80&w=2000" alt="Banner 1">
+                    <div class="banner-option-name">Mặc định</div>
+                </div>
+                <div class="banner-option" data-url="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=2000">
+                    <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=2000" alt="Banner 2">
+                    <div class="banner-option-name">Phòng sang trọng</div>
+                </div>
+                <div class="banner-option" data-url="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?q=80&w=2000">
+                    <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?q=80&w=2000" alt="Banner 3">
+                    <div class="banner-option-name">View biển</div>
+                </div>
+                <div class="banner-option" data-url="https://images.unsplash.com/photo-1540541338287-41700207dee6?q=80&w=2000">
+                    <img src="https://images.unsplash.com/photo-1540541338287-41700207dee6?q=80&w=2000" alt="Banner 4">
+                    <div class="banner-option-name">Hồ bơi</div>
+                </div>
+                <div class="banner-upload-option" id="uploadBannerOption">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <span>Tải lên hình ảnh</span>
+                    <input type="file" accept="image/*" id="bannerUpload" style="display: none;">
+                </div>
+            </div>
+            <div class="banner-modal-footer">
+                <button class="banner-action-btn banner-cancel-btn" id="cancelBannerChange">Hủy</button>
+                <button class="banner-action-btn banner-apply-btn" id="applyBannerChange">Áp dụng</button>
+            </div>
         </div>
     </div>
 </section>
@@ -415,7 +418,7 @@
         <div class="voucher-banner">
             <div class="banner-header">
                 <div class="banner-title">
-                    <span class="title-emoji">✨</span> Ưu đãi đặc biệt tháng 11
+                    <span class="title-emoji">✨</span> Ưu đãi đặc biệt  <span class="month"></span>
                 </div>
                 <div class="banner-subtitle">Khám phá ngay ưu đãi hấp dẫn</div>
             </div>
